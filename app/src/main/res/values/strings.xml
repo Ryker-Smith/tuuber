@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">hello3</string>
     <string name="message">Hello World</string>
+    <string name="title_activity_screen03__main_menu">screen03_MainMenu</string>
 </resources>
