@@ -67,14 +67,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         UserNameLabel= new Label (HorizontalArrangement2);
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
-        //UserNameLabel.WidthPercent(40);
+
         UserName= new TextBox (HorizontalArrangement2);
         UserName.BackgroundColor(Component.COLOR_WHITE);
         UserName.Text("htna.roe@tcfe.ie");
 
         HorizontalArrangement4 = new HorizontalArrangement(VerticalArrangement1);
         PasswordLabel = new Label(HorizontalArrangement4);
-        //PasswordLabel.WidthPercent(40);
+
         PasswordLabel.Text("Password");
         PasswordLabel.FontBold(true);
         Password = new PasswordTextBox(HorizontalArrangement4);
@@ -84,16 +84,35 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Image2 = new Image(HorizontalArrangement4);
         Image2.Picture("img_icon_fast.png");
         LoginButton = new Button (HorizontalArrangement3);
+        LoginButton.Shape(Component.BUTTON_SHAPE_ROUNDED);
+        LoginButton.BackgroundColor(Component.COLOR_BLACK);
+        LoginButton.FontBold(true);
+        LoginButton.TextColor(Component.COLOR_LTGRAY);
+        LoginButton.FontTypeface(Component.TYPEFACE_SANSSERIF);
         LoginButton.Text("Login");
         Image3 = new Image(HorizontalArrangement4);
-//        Image3.Picture("img_carlogo.png");
+        HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1,HorizontalArrangement2};
+//        for (HorizontalArrangement y : x) {
+//
+//        }
 
-        localDB = new TinyDB(this);
+//        LoginButton= buttonPrepare ( new Button ());
+
+//        localDB = new TinyDB(Login);
+//        if (localDB != null) try {
+//
+////            localDB.StoreValue("TestTag", "67890");
+//        } catch (Exception e) {
+////            e.printStackTrace();
+//            Notifier1.ShowMessageDialog("JSON Exception", "Information", "OK");
+//        }
         String prevName = (String) localDB.GetValue("Username","-1");
         if ( !prevName.equals("-1")) {
             UserName.Text(prevName);
         }
-        localDB.StoreValue("TestTag", "67890");
+        localDB.ClearTag("TestTag");
+//        localDB.GetTags();
+
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
     }
@@ -124,19 +143,18 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
         else {
             // do something
+            return false;
         }
         // here is where you'd check for other events of your app...
-        return false;
+
     }
 
     public void webGotText(String status, String textOfResponse) {
-        LoginButton.Text(status);
+//        LoginButton.Text(status);
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-
-                localDB.StoreValue("Username", 22);
 
                 ActivityStarter nextScreen = new ActivityStarter(this);
                 nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen03_MainMenu");
@@ -154,5 +172,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
+
+//    Button buttonPrepare (Button item) {
+//        return item;
+//    }
 
 }
