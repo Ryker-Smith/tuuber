@@ -70,7 +70,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         UserName= new TextBox (HorizontalArrangement2);
         UserName.BackgroundColor(Component.COLOR_WHITE);
-        UserName.Text("htna.roe@tcfe.ie");
+        UserName.Text("testing.this@tcfe.ie");
 
         HorizontalArrangement4 = new HorizontalArrangement(VerticalArrangement1);
         PasswordLabel = new Label(HorizontalArrangement4);
@@ -106,11 +106,11 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 ////            e.printStackTrace();
 //            Notifier1.ShowMessageDialog("JSON Exception", "Information", "OK");
 //        }
-        String prevName = (String) localDB.GetValue("Username","-1");
-        if ( !prevName.equals("-1")) {
-            UserName.Text(prevName);
-        }
-        localDB.ClearTag("TestTag");
+//        String prevName = (String) localDB.GetValue("Username","-1");
+//        if ( !prevName.equals("-1")) {
+//            UserName.Text(prevName);
+//        }
+//        localDB.ClearTag("TestTag");
 //        localDB.GetTags();
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
