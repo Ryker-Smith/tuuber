@@ -14,6 +14,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     Notifier Messages;
     Image Header;
 
+
     protected void $define() {
 
         MainMenu = new VerticalArrangement(this);

@@ -12,6 +12,8 @@ import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
+import com.google.appinventor.components.runtime.TableArrangement;
+import com.google.appinventor.components.runtime.TableLayout;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
@@ -47,6 +49,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private String pIDsend, LoginResult, LoginList_JSON;
     private PasswordTextBox Password;
 
+    TableArrangement testTable;
+
     protected void $define() {
 
         Login = new VerticalArrangement(this);
@@ -64,10 +68,21 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         VerticalArrangement1 = new VerticalArrangement (Login);
         HorizontalArrangement1 = new HorizontalArrangement(VerticalArrangement1);
         LoginWeb = new Web(Login);
-        Image4 = new Image(VerticalArrangement1);
+//        Image4 = new Image(VerticalArrangement1);
 
         HorizontalArrangement2 = new HorizontalArrangement(VerticalArrangement1);
-        UserNameLabel= new Label (HorizontalArrangement2);
+//        testTable = new TableArrangement(this);
+//        testTable.Columns(2);
+//        testTable.Rows(8);
+//        testTable.$add(testTable.Da);
+//        testTable.getView(testTable.Row(1),testTable.Column(1));
+////        Tabl
+//        testTable.$add(Header);
+//
+//
+//        testTable.$add( testTable.Row(1), testTable.Column(1),);
+//        testTable.
+        UserNameLabel= new Label (Login);
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
 
