@@ -30,7 +30,7 @@ import org.json.JSONObject;
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
 //    private TextBox;
-    private Button LoginButton;
+    private Button LoginButton, RegisterButton;
     private Image Header, Image2, Image3, Image4;
 
     private Web LoginWeb;
@@ -57,6 +57,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         Header = new Image (Login);
         Header.Picture("img_carlogo.png");
+
+        RegisterButton = new Button(Login);
+        RegisterButton.Text("Register");
 
         VerticalArrangement1 = new VerticalArrangement (Login);
         HorizontalArrangement1 = new HorizontalArrangement(VerticalArrangement1);
@@ -115,6 +118,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -131,6 +135,16 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             LoginWeb.Get();
             return true;
         }
+
+        else if (component.equals(RegisterButton) && eventName.equals("Click")) {
+
+            ActivityStarter nextScreen = new ActivityStarter(this);
+            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen06_Register");
+            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
+            nextScreen.StartActivity();
+            return true;
+        }
+
         else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
 
             String stringSent =  (String) params[0];

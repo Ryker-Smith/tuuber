@@ -27,7 +27,8 @@
         <activity
             android:name=".screen09_Settings"
             android:label="@string/title_activity_screen09__settings"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screen06_Register"></activity>
     </application>
 
 </manifest>
