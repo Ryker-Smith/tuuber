@@ -149,5 +149,19 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         GetRouteWeb = new Web(Routes);
         Web3 = new Web(Routes);
 
+        EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
+
+    }
+
+    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        if (component.equals(MainMenu) && eventName.equals("Click")) {
+
+            ActivityStarter nextScreen = new ActivityStarter(this);
+            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen03_MainMenu");
+            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
+            nextScreen.StartActivity();
+            return true;
+        }
+        return true;
     }
 }
