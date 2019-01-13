@@ -21,6 +21,8 @@ import com.google.appinventor.components.runtime.Web;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.MalformedURLException;
 //import gnu.lists.FString;
 
 // Research:  http://loopj.com/android-async-http/
@@ -30,13 +32,20 @@ import org.json.JSONObject;
 public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     settingsOnline settings = new settingsOnline();
-    String version = settings.get("tuuber2019_version");
+    String version;
 
     protected void $define() {
 
         VerticalArrangement Settings = new VerticalArrangement(this);
         TextBox versionBox = new TextBox(Settings);
         versionBox.Text(version);
+
+        try {
+            version = settings.get("tuuber2019_version");
+        }
+        catch (MalformedURLException error) {
+            error.getStackTrace();
+        }
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
