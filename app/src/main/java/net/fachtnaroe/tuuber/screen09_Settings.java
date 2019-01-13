@@ -29,13 +29,14 @@ import org.json.JSONObject;
 
 public class screen09_Settings extends Form implements HandlesEventDispatching {
 
-    //    private TextBox;
-    private Button LoginButton;
-    private Image Header, Image2, Image3, Image4;
-
+    settingsOnline settings = new settingsOnline();
+    String version = settings.get("tuuber2019_version");
 
     protected void $define() {
 
+        VerticalArrangement Settings = new VerticalArrangement(this);
+        TextBox versionBox = new TextBox(Settings);
+        versionBox.Text(version);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
