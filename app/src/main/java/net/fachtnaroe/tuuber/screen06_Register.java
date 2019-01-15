@@ -92,9 +92,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
     }
 
-   // public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-       // if (component.equals(Create) && eventName.equals("Click"))
-   // }
+    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        if (component.equals(Create) && eventName.equals("Click")) {
+        }
+        return true;
+    }
+
 
 
 
