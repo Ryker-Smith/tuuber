@@ -31,11 +31,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Web detailsWeb, passwordWeb;
     Notifier messages;
     String version;
-    TextBox versionBox, debugBox, phoneBox, eMailBox, userBox;
+    TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button debugButton, submitDetails, submitPassword;
-    Label phoneLabel, eMailLabel, userLabel, oldPassLabel, newPassLabel, confirmPassLabel;
-    HorizontalArrangement userHz, phoneHz, eMailHz, oldPassHz,newPassHz, confirmHz;
+    Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
+    HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz,newPassHz, confirmHz;
     VerticalArrangement detailsVt, passwordVt;
 
     protected void $define() {
@@ -47,12 +47,17 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         passwordWeb = new Web(Settings);
 
         detailsVt = new VerticalArrangement(Settings);
-        userHz = new HorizontalArrangement(detailsVt);
-        userLabel = new Label(userHz);
-        userLabel.Text("Name:");
-        userBox = new TextBox(userHz);
-        userBox.Text("["+ this.startupValue+"]");
-        userBox.Enabled(false);
+        userFirstHz = new HorizontalArrangement(detailsVt);
+        userFirstLabel = new Label(userFirstHz);
+        userFirstLabel.Text("First name:");
+        userFirstBox = new TextBox(userFirstHz);
+        userFirstBox.Text("["+ this.startupValue+"]");
+
+        userFamilyHz = new HorizontalArrangement(detailsVt);
+        userFamilyLabel = new Label(userFamilyHz);
+        userFamilyLabel.Text("Family name:");
+        userFamilyBox = new TextBox(userFamilyHz);
+        userFamilyBox.Text("["+ this.startupValue+"]");
 
         phoneHz = new HorizontalArrangement(detailsVt);
         phoneLabel=new Label(phoneHz);
@@ -126,9 +131,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             dbg(settings.lastValue);
             return true;
         }
-        else if (component.equals(debugButton) && eventName.equals("Click")) {
-            versionBox.Text(version);
-            dbg(settings.lastValue);
+        else if (component.equals(submitDetails) && eventName.equals("Click")) {
+
             return true;
         }
         else if (component.equals(detailsWeb) && eventName.equals("GotText")) {
@@ -150,7 +154,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 // do something
                 eMailBox.Text(parser.getString("email"));
                 phoneBox.Text(parser.getString("phone"));
-                userBox.Text(parser.getString("first")+" "+parser.getString("family"));
+                userFirstBox.Text(parser.getString("first"));
+                userFamilyBox.Text(parser.getString("family"));
             } else {
                 messages.ShowMessageDialog("Error getting details", "Information", "OK");
             }
