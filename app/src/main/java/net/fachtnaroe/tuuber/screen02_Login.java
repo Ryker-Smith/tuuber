@@ -13,11 +13,9 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TableArrangement;
-import com.google.appinventor.components.runtime.TableLayout;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
-import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 //import com.google.appinventor.components.runtime.util;
 
@@ -39,8 +37,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private VerticalArrangement Login;
     private Notifier Notifier1;
 
-    private VerticalArrangement VerticalArrangement1;
-    private HorizontalArrangement HorizontalArrangement1, HorizontalArrangement2, HorizontalArrangement3, HorizontalArrangement4;
+    private HorizontalArrangement HorizontalArrangement1, usernameHz, loginHz, passwordHz;
 
     private Label UserNameLabel, PasswordLabel;
     private TextBox UserName;
@@ -68,51 +65,37 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
 
-        VerticalArrangement1 = new VerticalArrangement (Login);
-        HorizontalArrangement1 = new HorizontalArrangement(VerticalArrangement1);
         LoginWeb = new Web(Login);
-//        Image4 = new Image(VerticalArrangement1);
 
-        HorizontalArrangement2 = new HorizontalArrangement(VerticalArrangement1);
-//        testTable = new TableArrangement(this);
-//        testTable.Columns(2);
-//        testTable.Rows(8);
-//        testTable.$add(testTable.Da);
-//        testTable.getView(testTable.Row(1),testTable.Column(1));
-////        Tabl
-//        testTable.$add(Header);
-//
-//
-//        testTable.$add( testTable.Row(1), testTable.Column(1),);
-//        testTable.
-        UserNameLabel= new Label (Login);
+        usernameHz = new HorizontalArrangement(Login);
+
+        UserNameLabel= new Label (usernameHz);
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
 
-        UserName= new TextBox (HorizontalArrangement2);
+        UserName= new TextBox (usernameHz);
         UserName.BackgroundColor(Component.COLOR_WHITE);
         UserName.Text("testing.this@tcfe.ie");
 
-        HorizontalArrangement4 = new HorizontalArrangement(VerticalArrangement1);
-        PasswordLabel = new Label(HorizontalArrangement4);
-
+        passwordHz = new HorizontalArrangement(Login);
+        PasswordLabel = new Label(passwordHz);
         PasswordLabel.Text("Password");
         PasswordLabel.FontBold(true);
-        Password = new PasswordTextBox(HorizontalArrangement4);
+        Password = new PasswordTextBox(passwordHz);
         Password.Text("tcfetcfe");
 
-        HorizontalArrangement3 = new HorizontalArrangement(VerticalArrangement1);
-        Image2 = new Image(HorizontalArrangement4);
-        Image2.Picture("img_icon_fast.png");
-        LoginButton = new Button (HorizontalArrangement3);
+        loginHz = new HorizontalArrangement(Login);
+//        Image2 = new Image(passwordHz);
+//        Image2.Picture("img_icon_fast.png");
+        LoginButton = new Button (loginHz);
         LoginButton.Shape(Component.BUTTON_SHAPE_ROUNDED);
         LoginButton.BackgroundColor(Component.COLOR_BLACK);
         LoginButton.FontBold(true);
         LoginButton.TextColor(Component.COLOR_LTGRAY);
         LoginButton.FontTypeface(Component.TYPEFACE_SANSSERIF);
         LoginButton.Text("Login");
-        Image3 = new Image(HorizontalArrangement4);
-        HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1,HorizontalArrangement2};
+        Image3 = new Image(passwordHz);
+        HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1, usernameHz};
 //        for (HorizontalArrangement y : x) {
 //
 //        }

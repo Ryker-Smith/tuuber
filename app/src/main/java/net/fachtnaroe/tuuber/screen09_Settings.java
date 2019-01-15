@@ -152,7 +152,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("pID").equals(settings.pID)) { //using matching pID to check success
                 // do something
-                eMailBox.Text(parser.getString("email"));
+                fr_aPerson myPersonsDetails = new fr_aPerson();
+
+                myPersonsDetails.email=parser.getString("email");
+                eMailBox.Text(myPersonsDetails.email);
+
                 phoneBox.Text(parser.getString("phone"));
                 userFirstBox.Text(parser.getString("first"));
                 userFamilyBox.Text(parser.getString("family"));
