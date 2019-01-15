@@ -32,7 +32,7 @@ import org.json.JSONObject;
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
 //    private TextBox;
-    private Button LoginButton, RegisterButton;
+    private Button LoginButton, RegisterButton, DebugButton;
     private Image Header, Image2, Image3, Image4;
 
     private Web LoginWeb;
@@ -61,6 +61,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         Header = new Image (Login);
         Header.Picture("img_carlogo.png");
+
+        DebugButton = new Button(Login);
+        DebugButton.Text("Debug");
 
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
@@ -132,6 +135,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 //        localDB.GetTags();
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
+        EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
     }
@@ -155,6 +159,16 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
             ActivityStarter nextScreen = new ActivityStarter(this);
             nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen06_Register");
+            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
+            nextScreen.StartActivity();
+            return true;
+        }
+
+        else if (component.equals(DebugButton) && eventName.equals("Click")) {
+
+            ActivityStarter nextScreen = new ActivityStarter(this);
+            nextScreen.ExtraValue( "2"); // for testing
+            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen09_Settings");
             nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
             nextScreen.StartActivity();
             return true;
