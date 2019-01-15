@@ -27,6 +27,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, PasswordReEnter, Password1Label;
     private TextBox Telephone,eMail, LastName, FirstName, Password1, Password2;
+    private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
     private Web Web1;
     private Notifier Terms_Conditions_Notifier, CheckedBox_Notifier;
 
@@ -87,8 +88,13 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         CheckedBox_Notifier = new Notifier(Register);
 
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Web1", "GotText");
 
     }
+
+   // public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+       // if (component.equals(Create) && eventName.equals("Click"))
+   // }
 
 
 
