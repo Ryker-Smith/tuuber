@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     settingsOnline settings = new settingsOnline();
+    fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, passwordWeb;
     Notifier messages;
     String version;
@@ -114,6 +115,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "detailsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "passwordWeb", "GotText");
+        EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
 
 
         detailsWeb.Url(settings.baseURL
@@ -135,6 +137,13 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
             return true;
         }
+        else if (component.equals(eMailBox) && eventName.equals("LostFocus")) {
+            fr_aPerson tempPerson=new fr_aPerson();
+            tempPerson.email=eMailBox.Text();
+            if (!tempPerson.validEmail()) {
+                submitDetails.Enabled(false);
+            }
+        }
         else if (component.equals(detailsWeb) && eventName.equals("GotText")) {
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
@@ -152,14 +161,17 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("pID").equals(settings.pID)) { //using matching pID to check success
                 // do something
-                fr_aPerson myPersonsDetails = new fr_aPerson();
 
-                myPersonsDetails.email=parser.getString("email");
-                eMailBox.Text(myPersonsDetails.email);
+                thisPersonsDetails.email=parser.getString("email");
+                thisPersonsDetails.first=parser.getString("first");
+                thisPersonsDetails.family=parser.getString("family");
+                thisPersonsDetails.phone=parser.getString("phone");
 
-                phoneBox.Text(parser.getString("phone"));
-                userFirstBox.Text(parser.getString("first"));
-                userFamilyBox.Text(parser.getString("family"));
+                eMailBox.Text(thisPersonsDetails.email);
+                phoneBox.Text(thisPersonsDetails.phone);
+                userFirstBox.Text(thisPersonsDetails.first);
+                userFamilyBox.Text(thisPersonsDetails.family);
+
             } else {
                 messages.ShowMessageDialog("Error getting details", "Information", "OK");
             }
