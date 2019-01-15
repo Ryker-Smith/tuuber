@@ -24,10 +24,10 @@ import javax.xml.parsers.SAXParserFactory;
 public class settingsOnline {
 
     public String baseURL = "";
-    public String sessionID="";
-    public String pID="";
+    public String sessionID="a1b2c3d4";
+    public String pID="2";
     public String lastValue;
-    public final String defaultURL="https://fachtnaroe.net/qnd?";
+    public final String defaultURL="https://fachtnaroe.net/tuuber-2019";
     public final String fileLocation="settings.txt";
     public String status;
 

@@ -125,7 +125,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 ////            localDB.StoreValue("TestTag", "67890");
 //        } catch (Exception e) {
 ////            e.printStackTrace();
-//            Notifier1.ShowMessageDialog("JSON Exception", "Information", "OK");
+//            messages.ShowMessageDialog("JSON Exception", "Information", "OK");
 //        }
 //        String prevName = (String) localDB.GetValue("Username","-1");
 //        if ( !prevName.equals("-1")) {
@@ -168,6 +168,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
             ActivityStarter nextScreen = new ActivityStarter(this);
             nextScreen.ExtraValue( "2"); // for testing
+
+            //nextScreen.
             nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen09_Settings");
             nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
             nextScreen.StartActivity();
