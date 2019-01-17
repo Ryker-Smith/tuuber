@@ -28,7 +28,13 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     protected void $define() {
         Matches = new VerticalArrangement(this);
+        HorizontalArragment1=new HorizontalArrangement(Matches);
+        VerticalArrangment1=new VerticalArrangement(Matches);
+        VerticalArrangment2=new VerticalArrangement(Matches);
         MainMenu = new Button(HorizontalArragment1);
+        HorizontalArragment1=new HorizontalArrangement(Matches);
+        HorizontalArragment2=new HorizontalArrangement(Matches);
+        HorizontalArragment3=new HorizontalArrangement(Matches);
         SelectMyRout = new Button (HorizontalArragment1);
         MyRouteList = new ListPicker(VerticalArrangment2);
         Label_1 = new Label(HorizontalArragment2);

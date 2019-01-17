@@ -13,18 +13,19 @@ public class ak_aPerson {
         // The constructor
     }
 
-    public boolean validEmail () {
+    public boolean validEmail() {
         String temp;
         temp = email;
         Integer loop;
         for (loop = 0; loop <= email.length(); loop++) {
             System.out.print(temp.toCharArray()[loop]);
-        }
-        return true;
-    }
 
-    public  boolean validPhone () {
-        return true;
+        }
+
+         boolean validPhone;
+        {
+            return true;
+        }
     }
 }
 
