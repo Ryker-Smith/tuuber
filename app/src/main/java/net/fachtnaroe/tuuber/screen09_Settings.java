@@ -32,9 +32,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
     String version;
-    TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox;
+    TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, centralDebugBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
-    Button debugButton, submitDetails, submitPassword;
+    Button debugButton, submitDetails, submitPassword, temp;
     Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
     HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz,newPassHz, confirmHz;
     VerticalArrangement detailsVt, passwordVt;
@@ -74,6 +74,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         submitDetails = new Button(detailsVt);
         submitDetails.Text("Save changes");
+        temp = new Button(detailsVt);
+        temp.Text("Test this");
+        centralDebugBox = new TextBox(detailsVt);
+        centralDebugBox.WidthPercent(100);
 //
         passwordVt = new VerticalArrangement(Settings);
         oldPassHz = new HorizontalArrangement(passwordVt);
@@ -122,6 +126,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
 
+        EventDispatcher.registerEventForDelegation(this, "temp", "Click");
 
         detailsWeb.Url(settings.baseURL
                 + "?action=GET"
@@ -136,6 +141,13 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         if (component.equals(debugButton) && eventName.equals("Click")) {
             versionBox.Text(version);
             dbg(settings.lastValue);
+            return true;
+        }
+        else if (component.equals(temp) && eventName.equals("Click")) {
+//            ak_aPerson myP = new ak_aPerson();
+//            myP.email="me@here.ie";
+////            eMailBox.toString("S");
+//            myP.validEmail(centralDebugBox);
             return true;
         }
         else if (component.equals(submitDetails) && eventName.equals("Click")) {
