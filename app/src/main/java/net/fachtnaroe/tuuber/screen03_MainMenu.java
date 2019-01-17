@@ -46,6 +46,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
             ActivityStarter nextScreen = new ActivityStarter(this);
             nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen04_Matches");
+            nextScreen.ExtraValue("2");
             nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
             nextScreen.StartActivity();
             return true;

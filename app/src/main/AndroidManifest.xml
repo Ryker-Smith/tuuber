@@ -30,7 +30,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen06_Register" />
         <activity android:name=".screen07_Routes" />
-        <activity android:name=".screen10_TermsAndConditions"></activity>
+        <activity android:name=".screen10_TermsAndConditions" />
+        <activity android:name=".screen04_Matches" />
     </application>
 
 </manifest>
