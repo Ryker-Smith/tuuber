@@ -2,17 +2,43 @@ package net.fachtnaroe.tuuber;
 
 import com.google.appinventor.components.runtime.TextBox;
 
-public class fr_aPerson {
+/* This class is only for testing:
+    the objective would be to have the ability to transfer all screen elements
+    corresponding to a person back and forth from their object in one line;
+    which is distinct from the mechanism where each screen/data element
+    has to be assigned/transferred on an individual line.
+
+    This would use an array to be initialised similar to:
+    TextBox[] personalDetails = {userFirstBox,userFamilyBox,eMailBox,phoneBox};
+
+ */
+
+
+public class experimental_doNotUseThis  {
     public String first;
     public String family;
     public String email;
     public String phone;
     public Integer pID;
+    TextBox[] screenData;
 
     private final Integer minPhoneSize=8;
 
-    public fr_aPerson() {
+    public experimental_doNotUseThis() {
         // The default constructor
+        screenData=new TextBox[4];
+    }
+
+    private void update(){
+        first = screenData[0].Text();
+        family = screenData[1].Text();
+        email = screenData[2].Text();
+        phone = screenData[3].Text();
+    }
+
+    public experimental_doNotUseThis(TextBox[] personalData) {
+        screenData=personalData;
+        this.update();
     }
 
     public boolean validData() {
@@ -83,8 +109,8 @@ public class fr_aPerson {
         // (will have ASCII values outside of 48 ... 57
         for (loop=0; loop <= temp.length()-1; loop++) {
             if ((temp.toCharArray()[loop] < 48) ||
-                (temp.toCharArray()[loop] > 57) )
-                {
+                    (temp.toCharArray()[loop] > 57) )
+            {
                 return false; // found non-numeric
             }
         }

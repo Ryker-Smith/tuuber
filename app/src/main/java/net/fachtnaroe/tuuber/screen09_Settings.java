@@ -29,7 +29,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     settingsOnline settings = new settingsOnline();
     fr_aPerson thisPersonsDetails = new fr_aPerson();
-    Web detailsWeb, passwordWeb;
+    Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
     String version;
     TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox;
@@ -45,7 +45,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         settings.pID="4";
         detailsWeb = new Web(Settings);
+        detailsWebSave=new Web(Settings);
         passwordWeb = new Web(Settings);
+        passwordWebSave = new Web(Settings);
 
         detailsVt = new VerticalArrangement(Settings);
         userFirstHz = new HorizontalArrangement(detailsVt);
@@ -114,8 +116,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "detailsWeb", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "detailsWebSave", "GotText");
         EventDispatcher.registerEventForDelegation(this, "passwordWeb", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "passwordWebSave", "GotText");
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
+        EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
 
 
         detailsWeb.Url(settings.baseURL
@@ -134,7 +139,23 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (component.equals(submitDetails) && eventName.equals("Click")) {
-
+            // copy from screen elements to data
+            thisPersonsDetails.email=eMailBox.Text();
+            thisPersonsDetails.first=userFirstBox.Text();
+            thisPersonsDetails.family=userFamilyBox.Text();
+            thisPersonsDetails.phone=phoneBox.Text();
+            // prepare to pass to back end
+            detailsWebSave.Url(settings.baseURL
+                    + "?action=PUT"
+                    + "&entity=person"
+                    + "&pID=" + settings.pID
+                    + "&sessionID=" + settings.sessionID
+                    + "&first=" +thisPersonsDetails.first
+                    + "&family=" + thisPersonsDetails.family
+                    + "&email=" + thisPersonsDetails.email
+                    + "&phone=" + thisPersonsDetails.phone
+            );
+            detailsWebSave.Get();
             return true;
         }
         else if (component.equals(eMailBox) && eventName.equals("LostFocus")) {
@@ -144,10 +165,23 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 submitDetails.Enabled(false);
             }
         }
+        else if (component.equals(phoneBox) && eventName.equals("LostFocus")) {
+            fr_aPerson tempPerson=new fr_aPerson();
+            tempPerson.phone=phoneBox.Text();
+            if (!tempPerson.validPhone()) {
+                submitDetails.Enabled(false);
+            }
+        }
         else if (component.equals(detailsWeb) && eventName.equals("GotText")) {
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             detailsGotText(status, textOfResponse);
+            return true;
+        }
+        else if (component.equals(detailsWebSave) && eventName.equals("GotText")) {
+            String status = params[1].toString();
+            String textOfResponse = (String) params[3];
+            detailsSaveGotText(status, textOfResponse);
             return true;
         }
         else if (component.equals(passwordWeb) && eventName.equals("GotText")) {
@@ -159,9 +193,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     public void detailsGotText(String status, String textOfResponse) {
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
-            if (parser.getString("pID").equals(settings.pID)) { //using matching pID to check success
+            if (parser.getString("pID").equals(settings.pID)) {
+                //using matching pID to check success
                 // do something
-
                 thisPersonsDetails.email=parser.getString("email");
                 thisPersonsDetails.first=parser.getString("first");
                 thisPersonsDetails.family=parser.getString("family");
@@ -174,6 +208,24 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
             } else {
                 messages.ShowMessageDialog("Error getting details", "Information", "OK");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            messages.ShowMessageDialog("JSON Exception", "Information", "OK");
+        }
+        else {
+            messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        }
+    }
+
+    public void detailsSaveGotText(String status, String textOfResponse) {
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            if (parser.getString("result").equals("OK")) {
+                // do something
+                Form.finishActivity();
+            } else {
+                messages.ShowMessageDialog("Error saving details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
