@@ -44,11 +44,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
         if (component.equals(Matches) && eventName.equals("Click")) {
 
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen04_Matches");
-            nextScreen.ExtraValue("2");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
+            switchForm("screen04_Matches");
+
             return true;
         }
 
