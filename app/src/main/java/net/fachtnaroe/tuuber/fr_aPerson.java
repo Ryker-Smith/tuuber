@@ -88,6 +88,7 @@ public class fr_aPerson {
                 return false; // found non-numeric
             }
         }
+
         // if we made it this far, all is good
         return true;
     }

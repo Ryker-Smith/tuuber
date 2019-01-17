@@ -213,6 +213,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 thisPersonsDetails.family=parser.getString("family");
                 thisPersonsDetails.phone=parser.getString("phone");
 
+
                 eMailBox.Text(thisPersonsDetails.email);
                 phoneBox.Text(thisPersonsDetails.phone);
                 userFirstBox.Text(thisPersonsDetails.first);
@@ -235,6 +236,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
+//                <block type="controls_openAnotherScreen" id="0T9@Zj[!|+x=~y8V7Z7G">
                 Form.finishActivity();
             } else {
                 messages.ShowMessageDialog("Error saving details", "Information", "OK");
