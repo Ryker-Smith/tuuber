@@ -1,7 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import com.google.appinventor.components.runtime.TextBox;
-
 import static java.lang.System.out;
 
 public class ak_aPerson {
@@ -15,33 +13,19 @@ public class ak_aPerson {
         // The constructor
     }
 
-    public boolean validEmail (TextBox DebugBox) {
+    public boolean validEmail() {
         String temp;
         temp = email;
-        Integer atCount=0;
-        Integer spaceCount=0;
         Integer loop;
-        for (loop = 0; loop <= email.length() -1; loop++) {
-            Character a=temp.toCharArray()[loop];
-            DebugBox.Text( DebugBox.Text().concat(" "+a.toString()));
-            if (temp.toCharArray()[loop] == '@') {
-                atCount++;
-            }
-            if (temp.toCharArray()[loop] == ' ') {
-                spaceCount++;
-            }
-        }
-        if (atCount != 1) {
-            return false;
-        }
-        if (spaceCount != 0) {
-            return false;
-        }
-        return true;
-    }
+        for (loop = 0; loop <= email.length(); loop++) {
+            System.out.print(temp.toCharArray()[loop]);
 
-    public  boolean validPhone () {
-        return true;
+        }
+
+         boolean validPhone;
+        {
+            return true;
+        }
     }
 }
 
