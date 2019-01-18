@@ -3,6 +3,7 @@ package net.fachtnaroe.tuuber;
 //import android.support.v7.app.AppCompatActivity;
 //import android.os.Bundle;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.appinventor.components.runtime.ActivityStarter;
@@ -50,17 +51,22 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         Send.Text("SendMessege");
         MyRouteList.Text("Routs List");
         EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
-
+        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (component.equals(MainMenu) && eventName.equals("Click")) {
-        switchForm("screen03_MainMenu");
-
-            return true;
-
+        if (eventName.equals("BackPressed")) {
+//            if (this.BackPressed()) {
+                // one of the above should be redundant
+                closeForm(new Intent());
+//            }
         }
+        else if (component.equals(MainMenu) && eventName.equals("Click")) {
+                switchForm("screen03_MainMenu");
 
-        return true;}
+                return true;
+        }
+        return true;
+    }
 
 }
