@@ -15,11 +15,16 @@ import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListPicker;
+import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.util.YailList;
 
 import java.net.URL;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
@@ -42,6 +47,19 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         HorizontalArragment3 = new HorizontalArrangement(Matches);
         SelectMyRout = new Button(HorizontalArragment1);
         MyRouteList = new ListPicker(VerticalArrangment2);
+
+        List listItems = new ArrayList();
+        String data="adding";
+        listItems.add(data);
+        listItems.add("more");
+        listItems.add("Stuff");
+        data="like this";
+        listItems.add(data);
+        YailList tempData=YailList.makeList(listItems);
+
+        ListView tempPicker = new ListView(Matches);
+
+        tempPicker.Elements(tempData);
         Label_1 = new Label(HorizontalArragment2);
         Chatbox1 = new TextBox(HorizontalArragment3);
         Send = new Button(HorizontalArragment3);
@@ -56,16 +74,18 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         if (eventName.equals("BackPressed")) {
-//            if (this.BackPressed()) {
-                // one of the above should be redundant
-                closeForm(new Intent());
-//            }
+
+            System.err.println("In");
+            finishActivity();
+            System.err.println("Out");
+
         }
         else if (component.equals(MainMenu) && eventName.equals("Click")) {
                 switchForm("screen03_MainMenu");
 
                 return true;
         }
+
         return true;
     }
 
