@@ -22,6 +22,8 @@ import com.google.appinventor.components.runtime.util.YailList;
 
 import java.net.URL;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
@@ -56,6 +58,16 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         SelectMyRout.Text("Select Rout");
         Send.Text("SendMessege");
         MyRouteList.Text("Routs List");
+
+        List listItems = new ArrayList();
+        String data="adding";
+        listItems.add(data);
+        listItems.add("more");
+        listItems.add("Stuff");
+        data="like this";
+        listItems.add(data);
+        YailList tempData=YailList.makeList(listItems);
+        
         EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
