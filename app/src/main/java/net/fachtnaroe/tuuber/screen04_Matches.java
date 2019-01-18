@@ -67,7 +67,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         data="like this";
         listItems.add(data);
         YailList tempData=YailList.makeList(listItems);
-        
+
         EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
