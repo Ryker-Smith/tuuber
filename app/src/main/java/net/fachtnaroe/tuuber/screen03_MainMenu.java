@@ -27,7 +27,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Routes.Text("Routes");
         Matches = new Button(this);
         Matches.Text("Matches");
-
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
