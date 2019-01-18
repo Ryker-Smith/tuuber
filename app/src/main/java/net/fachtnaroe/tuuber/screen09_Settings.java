@@ -125,7 +125,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "passwordWebSave", "GotText");
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
-
+        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
         EventDispatcher.registerEventForDelegation(this, "temp", "Click");
 
         detailsWeb.Url(settings.baseURL
