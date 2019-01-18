@@ -121,58 +121,53 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
+        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (component.equals(LoginButton) && eventName.equals("Click")) {
-
-            LoginWeb.Url(
-                    baseURL +
-                    "email=" +
-                    UserName.Text() +
-                    "&password=" +
-                    Password.Text() +
-                    "&cmd=LOGIN"
-            );
-            LoginWeb.Get();
+        if (eventName.equals("BackPressed")) {
             return true;
         }
+        else if (component.equals(LoginButton) && eventName.equals("Click")) {
 
-        else if (component.equals(RegisterButton) && eventName.equals("Click")) {
+                LoginWeb.Url(
+                        baseURL +
+                                "email=" +
+                                UserName.Text() +
+                                "&password=" +
+                                Password.Text() +
+                                "&cmd=LOGIN"
+                );
+                LoginWeb.Get();
+                return true;
+            }
 
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen06_Register");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
-            return true;
-        }
+            else if (component.equals(RegisterButton) && eventName.equals("Click")) {
+                switchForm("screen06_Register");
+                return true;
+            }
 
-        else if (component.equals(DebugButton) && eventName.equals("Click")) {
+            else if (component.equals(DebugButton) && eventName.equals("Click")) {
 
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ExtraValue( "2"); // for testing
+                switchForm("screen09_Settings");
+                return true;
+            }
 
-            //nextScreen.
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen09_Settings");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
-            return true;
-        }
+            else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
 
-        else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
+                String stringSent =  (String) params[0];
+                Integer status = (Integer) params[1];
+                String encoding = (String) params[2];
+                String textOfResponse = (String) params[3];
 
-            String stringSent =  (String) params[0];
-            Integer status = (Integer) params[1];
-            String encoding = (String) params[2];
-            String textOfResponse = (String) params[3];
+                webGotText(status.toString(), textOfResponse);
+                return true;
+            }
+            else {
+                // do something
+                return false;
+            }
 
-            webGotText(status.toString(), textOfResponse);
-            return true;
-        }
-        else {
-            // do something
-            return false;
-        }
         // here is where you'd check for other events of your app...
 
     }
