@@ -11,14 +11,13 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TextBox;
+import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 //import com.google.appinventor.components.runtime.util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.MalformedURLException;
 //import gnu.lists.FString;
 
 // Research:  http://loopj.com/android-async-http/
@@ -32,6 +31,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
     String version;
+    TinyDB localDB;
     TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, centralDebugBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button debugButton, submitDetails, submitPassword, temp;
@@ -42,8 +42,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         VerticalArrangement Settings = new VerticalArrangement(this);
+        localDB= new TinyDB(Settings);
+        settings.pID=localDB.GetValue("pID",-1).toString();
 
-        settings.pID="4";
         detailsWeb = new Web(Settings);
         detailsWebSave=new Web(Settings);
         passwordWeb = new Web(Settings);
@@ -71,13 +72,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         eMailLabel = new Label(eMailHz);
         eMailLabel.Text("eMail:");
         eMailBox = new TextBox(eMailHz);
+        w100listTB(eMailBox, phoneBox, userFamilyBox, userFirstBox);
 
         submitDetails = new Button(detailsVt);
         submitDetails.Text("Save changes");
-        temp = new Button(detailsVt);
-        temp.Text("Test this");
-        centralDebugBox = new TextBox(detailsVt);
-        centralDebugBox.WidthPercent(100);
+//        temp = new Button(detailsVt);
+//        temp.Text("Test this");
+//        centralDebugBox = new TextBox(detailsVt);
+//        centralDebugBox.WidthPercent(100);
 //
         passwordVt = new VerticalArrangement(Settings);
         oldPassHz = new HorizontalArrangement(passwordVt);
@@ -93,28 +95,31 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         confirmHz=new HorizontalArrangement(passwordVt);
         confirmPassLabel = new Label(confirmHz);
         confirmPassLabel.Text("Confirm new:");
+        confirmPassBox = new PasswordTextBox(confirmHz);
+
         submitPassword = new Button(passwordVt);
         submitPassword.Text("Change now");
 
-        versionBox = new TextBox(Settings);
-        debugButton = new Button(Settings);
-        debugButton.Text("Debug");
-        debugBox = new TextBox(Settings);
-        debugBox.MultiLine(true);
-        debugBox.HeightPercent(100);
-        debugBox.WidthPercent(100);
+        w100listPTB(oldPassBox, newPassBox, confirmPassBox);
 
-        try {
-            version = settings.get("tuuber2019_version");
-            dbg(settings.baseURL);
-        }
-        catch (MalformedURLException error) {
-            error.getStackTrace();
-            dbg("Error");
-        }
+//        versionBox = new TextBox(Settings);
+//        debugButton = new Button(Settings);
+//        debugButton.Text("Debug");
+//        debugBox = new TextBox(Settings);
+//        debugBox.MultiLine(true);
+//        debugBox.HeightPercent(100);
+//        debugBox.WidthPercent(100);
+//        try {
+//            version = settings.get("tuuber2019_version");
+//            dbg(settings.baseURL);
+//
+//        }
+//        catch (MalformedURLException error) {
+//            error.getStackTrace();
+//            dbg("Error");
+//        }
 
-        dbg("Starting");
-        versionBox.Text(version);
+//        versionBox.Text(version);
         messages = new Notifier(Settings);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
@@ -236,7 +241,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-//                <block type="controls_openAnotherScreen" id="0T9@Zj[!|+x=~y8V7Z7G">
                 Form.finishActivity();
             } else {
                 messages.ShowMessageDialog("Error saving details", "Information", "OK");
@@ -251,6 +255,34 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     void dbg (String debugMsg) {
-        debugBox.Text( debugMsg + "\n" + debugBox.Text());
+        System.err.print( debugMsg + "\n" + debugBox.Text());
     }
+
+    void w100 (TextBox t) {
+        t.WidthPercent(100);
+    }
+
+    void w100listTB(TextBox... t) {
+        // This function takes a list of TextBox'es and sets them to 100% width
+        // Other common settings may be applied this way.
+        int i=0;
+        int len = t.length;
+        while ((i < len) && (t[i] != null)) {
+            t[i].WidthPercent(100);
+            i++;
+        }
+    }
+
+    void w100listPTB (PasswordTextBox... t) {
+        // This function takes a list of TextBox'es and sets them to 100% width
+        // Other common settings may be applied this way.
+        int i=0;
+        int len = t.length;
+        while ((i < len) && (t[i] != null)) {
+            t[i].WidthPercent(100);
+            i++;
+        }
+    }
+
+
 }

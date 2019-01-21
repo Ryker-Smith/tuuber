@@ -73,7 +73,7 @@ public class settingsOnline {
             }
         }
 
-        URL target = new URL(baseURL.concat("method=GET&name="+name));
+        URL target = new URL(baseURL.concat("?method=GET&name="+name));
         new getDataFromWebInBackground().execute(target);
         return lastValue;
     }

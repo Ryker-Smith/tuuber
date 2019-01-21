@@ -50,17 +50,19 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        this.BackgroundImage("img_splashcanvas.png");
         Login = new VerticalArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
-        Login.Image("img_splashcanvas.png");
+//        Login.Image("img_splashcanvas.png");
         Notifier1 = new Notifier(Login);
 
         Header = new Image (Login);
         Header.Picture("img_carlogo.png");
 
         DebugButton = new Button(Login);
-        DebugButton.Text("Debug");
+        DebugButton.Text("Go straight to the settings screen");
+        DebugButton.FontSize(8);
 
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
@@ -102,20 +104,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
 //        LoginButton= buttonPrepare ( new Button ());
 
-//        localDB = new TinyDB(Login);
-//        if (localDB != null) try {
-//
-////            localDB.StoreValue("TestTag", "67890");
-//        } catch (Exception e) {
-////            e.printStackTrace();
-//            messages.ShowMessageDialog("JSON Exception", "Information", "OK");
-//        }
-//        String prevName = (String) localDB.GetValue("Username","-1");
-//        if ( !prevName.equals("-1")) {
-//            UserName.Text(prevName);
-//        }
-//        localDB.ClearTag("TestTag");
-//        localDB.GetTags();
+        localDB = new TinyDB(Login);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
@@ -178,12 +167,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-
-                ActivityStarter nextScreen = new ActivityStarter(this);
-                nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen03_MainMenu");
-                nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-                nextScreen.StartActivity();
-
+                localDB.StoreValue("pID", parser.getString("pID"));
+                switchForm("screen03_MainMenu");
             } else {
                 Notifier1.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }
@@ -196,8 +181,5 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
     }
 
-//    Button buttonPrepare (Button item) {
-//        return item;
-//    }
 
 }
