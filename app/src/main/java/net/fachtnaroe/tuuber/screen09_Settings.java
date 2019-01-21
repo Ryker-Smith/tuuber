@@ -41,6 +41,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        this.BackgroundImage("thumb-1920-426364.jpg");
         VerticalArrangement Settings = new VerticalArrangement(this);
         localDB= new TinyDB(Settings);
         settings.pID=localDB.GetValue("pID",-1).toString();
@@ -175,6 +176,19 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             detailsWebSave.Get();
             return true;
         }
+        else if (component.equals(submitPassword) && eventName.equals("Click")) {
+            // prepare to pass to back end
+            passwordWebSave.Url(settings.baseURL
+                    + "?cmd=CHPWD"
+                    + "&pID=" + settings.pID
+                    + "&sessionID=" + settings.sessionID
+                    + "&op=" +oldPassBox.Text()
+                    + "&np=" + newPassBox.Text()
+                    + "&cp=" + confirmPassBox.Text()
+            );
+            passwordWebSave.Get();
+            return true;
+        }
         else if (component.equals(eMailBox) && eventName.equals("LostFocus")) {
             fr_aPerson tempPerson=new fr_aPerson();
             tempPerson.email=eMailBox.Text();
@@ -201,7 +215,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             detailsSaveGotText(status, textOfResponse);
             return true;
         }
-        else if (component.equals(passwordWeb) && eventName.equals("GotText")) {
+        else if (component.equals(passwordWebSave) && eventName.equals("GotText")) {
+            String status = params[1].toString();
+            String textOfResponse = (String) params[3];
+            passwordSaveGotText(status, textOfResponse);
             return true;
         }
         return false;
@@ -254,6 +271,25 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
     }
 
+    public void passwordSaveGotText(String status, String textOfResponse) {
+        JSONObject parser;
+        if (status.equals("200") ) try {
+            parser = new JSONObject(textOfResponse);
+            if (parser.getString("result").equals("OK")) {
+                // do something
+                Form.finishActivity();
+            } else {
+                messages.ShowMessageDialog("Error changing password", "Information", "OK");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            messages.ShowMessageDialog("Server says: password not changed", "Information", "OK");
+        }
+        else {
+            messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        }
+    }
+
     void dbg (String debugMsg) {
         System.err.print( debugMsg + "\n" + debugBox.Text());
     }
@@ -269,6 +305,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         int len = t.length;
         while ((i < len) && (t[i] != null)) {
             t[i].WidthPercent(100);
+            t[i].BackgroundColor(Component.COLOR_NONE);
+            t[i].FontBold(true);
             i++;
         }
     }
@@ -280,6 +318,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         int len = t.length;
         while ((i < len) && (t[i] != null)) {
             t[i].WidthPercent(100);
+            t[i].BackgroundColor(Component.COLOR_NONE);
+            t[i].FontBold(true);
             i++;
         }
     }
