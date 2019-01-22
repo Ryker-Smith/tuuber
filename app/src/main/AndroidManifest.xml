@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".screen05_Messages"
+            android:name=".screen05_Chats"
             android:label="@string/title_activity_screen05__messages"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".screen02_Login">
