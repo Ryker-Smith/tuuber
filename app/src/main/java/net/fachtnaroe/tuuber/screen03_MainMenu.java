@@ -40,25 +40,23 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, "Routes", "Click");
         EventDispatcher.registerEventForDelegation(this, "Matches", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Chats", "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
         if (component.equals(Matches) && eventName.equals("Click")) {
-
             switchForm("screen04_Matches");
-
+            return true;
+        }
+        else if (component.equals(Chats) && eventName.equals("Click")) {
+            switchForm("screen05_Chats");
             return true;
         }
 
         else if (component.equals(Routes) && eventName.equals("Click")) {
-
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen07_Routes");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
+            switchForm("screen07_Routes");
             return true;
         }
-
-    return true;
+        return false;
     }
 }
