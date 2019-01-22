@@ -103,36 +103,22 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         w100listPTB(oldPassBox, newPassBox, confirmPassBox);
 
-//        versionBox = new TextBox(Settings);
-//        debugButton = new Button(Settings);
-//        debugButton.Text("Debug");
-//        debugBox = new TextBox(Settings);
-//        debugBox.MultiLine(true);
-//        debugBox.HeightPercent(100);
-//        debugBox.WidthPercent(100);
-//        try {
-//            version = settings.get("tuuber2019_version");
-//            dbg(settings.baseURL);
-//
-//        }
-//        catch (MalformedURLException error) {
-//            error.getStackTrace();
-//            dbg("Error");
-//        }
-
-//        versionBox.Text(version);
         messages = new Notifier(Settings);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "detailsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "detailsWebSave", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "passwordWeb", "GotText");
+//        EventDispatcher.registerEventForDelegation(this, "passwordWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "passwordWebSave", "GotText");
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
-        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
         EventDispatcher.registerEventForDelegation(this, "temp", "Click");
+
+        EventDispatcher.registerEventForDelegation(this, "Settings", "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, "Settings", "onStop");
+        EventDispatcher.registerEventForDelegation(this, "Settings", "onDestroy");
+        EventDispatcher.registerEventForDelegation(this, "Settings", "");
 
         detailsWeb.Url(settings.baseURL
                 + "?action=GET"
@@ -144,16 +130,15 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (component.equals(debugButton) && eventName.equals("Click")) {
-            versionBox.Text(version);
-            dbg(settings.lastValue);
-            return true;
-        }
-        else if (component.equals(temp) && eventName.equals("Click")) {
-//            ak_aPerson myP = new ak_aPerson();
-//            myP.email="me@here.ie";
-////            eMailBox.toString("S");
-//            myP.validEmail(centralDebugBox);
+        dbg("dispatchEvent: " + componentName + " " + eventName);
+        if (eventName.equals("BackPressed")) {
+            dbg("A");
+//            this.closeForm( this.getIntent() );
+            dbg("B");
+//            this.clear();
+            dbg("C");
+            this.finishActivity();
+            dbg("D");
             return true;
         }
         else if (component.equals(submitDetails) && eventName.equals("Click")) {
@@ -204,18 +189,21 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
         }
         else if (component.equals(detailsWeb) && eventName.equals("GotText")) {
+            dbg((String) params[0]);
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             detailsGotText(status, textOfResponse);
             return true;
         }
         else if (component.equals(detailsWebSave) && eventName.equals("GotText")) {
+            dbg((String) params[0]);
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             detailsSaveGotText(status, textOfResponse);
             return true;
         }
         else if (component.equals(passwordWebSave) && eventName.equals("GotText")) {
+            dbg((String) params[0]);
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             passwordSaveGotText(status, textOfResponse);
@@ -234,7 +222,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 thisPersonsDetails.first=parser.getString("first");
                 thisPersonsDetails.family=parser.getString("family");
                 thisPersonsDetails.phone=parser.getString("phone");
-
 
                 eMailBox.Text(thisPersonsDetails.email);
                 phoneBox.Text(thisPersonsDetails.phone);
@@ -291,7 +278,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n" + debugBox.Text());
+        System.err.print( debugMsg + "\n");
     }
 
     void w100 (TextBox t) {

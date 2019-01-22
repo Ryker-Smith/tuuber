@@ -168,6 +168,4 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
-
-
 }
