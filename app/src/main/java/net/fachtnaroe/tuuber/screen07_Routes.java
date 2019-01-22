@@ -113,16 +113,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         if (status.equals("200") ) try {
 
             ListOfRoutesFromWeb = new ArrayList<String>();
+
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("routes").equals("")) {
 
-                JSONArray array = parser.getJSONArray("routes");
-                for(int i = 0 ; i < array.length() ; i++){
+                JSONArray routesArray = parser.getJSONArray("routes");
+                for(int i = 0 ; i < routesArray.length() ; i++){
                     ListOfRoutesFromWeb.add(
                             "from "
-                            + array.getJSONObject(i).getString("origin")
+                            + routesArray.getJSONObject(i).getString("origin")
                             + " to "
-                            + array.getJSONObject(i).getString("destination")
+                            + routesArray.getJSONObject(i).getString("destination")
                     );
                 }
                 YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
