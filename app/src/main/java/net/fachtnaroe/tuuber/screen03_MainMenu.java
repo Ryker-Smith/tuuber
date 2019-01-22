@@ -1,7 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import android.preference.PreferenceActivity;
-
 import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
@@ -14,10 +12,10 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches;
+    private Button Routes, Matches, Messages;
 
     VerticalArrangement MainMenu;
-    Notifier Messages;
+    Notifier MessagesPopup;
     Image Header;
 
 
@@ -28,12 +26,14 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MainMenu.Image("img_splashcanvas.png");
-        Messages = new Notifier(MainMenu);
+        MessagesPopup = new Notifier(MainMenu);
 
         Routes = new Button(MainMenu);
         Routes.Text("Routes");
         Matches = new Button(MainMenu);
         Matches.Text("Matches");
+        Messages = new Button(MainMenu);
+        Messages.Text("Messages");
 
         Header = new Image(MainMenu);
         Header.Picture("img_carlogo.png");
