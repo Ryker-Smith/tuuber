@@ -38,7 +38,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     protected void $define() {
         Matches = new VerticalArrangement(this);
         Matches.Image("img_splashcanvas.png");
-        VerticalArrangment1 = new VerticalArrangement(Matches);
+//        VerticalArrangment1 = new VerticalArrangement(Matches);
         VerticalArrangment2 = new VerticalArrangement(Matches);
         TuuberWeb = new Web(Matches);
         HorizontalArragment1 = new HorizontalArrangement(Matches);
