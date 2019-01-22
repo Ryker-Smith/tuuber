@@ -4,9 +4,7 @@ package net.fachtnaroe.tuuber;
 //import android.os.Bundle;
 
 import android.content.Intent;
-import android.util.Log;
 
-import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -20,8 +18,6 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
 
-import java.net.URL;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +27,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement HorizontalArragment1, HorizontalArragment2, HorizontalArragment3;
     private ListPicker MyRouteList;
-    private YailList ListofRouts;
+    private ArrayList ListOfRouts;
+    private List listItem;
     private Label Label_1;
     private Web TuuberWeb;
     private TextBox Chatbox1;
@@ -40,34 +37,33 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     protected void $define() {
         Matches = new VerticalArrangement(this);
-
+        Matches.Image("img_splashcanvas.png");
         VerticalArrangment1 = new VerticalArrangement(Matches);
         VerticalArrangment2 = new VerticalArrangement(Matches);
         TuuberWeb = new Web(Matches);
         HorizontalArragment1 = new HorizontalArrangement(Matches);
         HorizontalArragment2 = new HorizontalArrangement(Matches);
         HorizontalArragment3 = new HorizontalArrangement(Matches);
-        MainMenu = new Button(HorizontalArragment1);
+        MainMenu =  new Button(HorizontalArragment1);
         SelectMyRout = new Button(HorizontalArragment2);
         MyRouteList = new ListPicker(VerticalArrangment2);
         Label_1 = new Label(HorizontalArragment2);
         Chatbox1 = new TextBox(HorizontalArragment3);
         Send = new Button(HorizontalArragment3);
-        ListofRouts= new YailList();
         Label_1.Text("Star Chat by Clicking on Send ");
         MainMenu.Text("MainMenu");
         SelectMyRout.Text("Select Rout");
         Send.Text("SendMessege");
         MyRouteList.Text("Routs List");
-        List listItems = new ArrayList();
-
+        ListOfRouts = new ArrayList();
         String data="adding";
-        listItems.add(data);
-        listItems.add("more");
-        listItems.add("Stuff");
+        ListOfRouts.add(data);
+        ListOfRouts.add("more");
+        ListOfRouts.add("Stuff");
         data="like this";
-        listItems.add(data);
-        YailList tempData=YailList.makeList(listItems);
+        ListOfRouts.add(data);
+        YailList tempData=YailList.makeList(ListOfRouts);
+        MyRouteList.Elements(tempData);
         EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
