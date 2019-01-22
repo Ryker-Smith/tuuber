@@ -12,7 +12,7 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Messages;
+    private Button Routes, Matches, Chats;
 
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
@@ -32,8 +32,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Routes.Text("Routes");
         Matches = new Button(MainMenu);
         Matches.Text("Matches");
-        Messages = new Button(MainMenu);
-        Messages.Text("Messages");
+        Chats = new Button(MainMenu);
+        Chats.Text("Chats");
 
         Header = new Image(MainMenu);
         Header.Picture("img_carlogo.png");
