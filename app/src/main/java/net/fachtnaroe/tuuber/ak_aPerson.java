@@ -15,16 +15,16 @@ public class ak_aPerson {
     }
 
     public boolean validEmail() {
-        int dog= 0;
+        int symbol= 0;
         String temp = this.email;
         Integer loop;
         for (loop = 0; loop <= email.length(); loop++) {
             System.out.print(temp.toCharArray()[loop]);
             if (temp.toCharArray()[loop] == '@'){
-                dog = dog+1;
+                symbol = symbol+1;
             }
         }
-        if (dog != 1 ){
+        if (symbol != 1 ){
             return false;
         }
         return true;
