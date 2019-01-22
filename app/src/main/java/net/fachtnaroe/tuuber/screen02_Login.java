@@ -46,15 +46,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private String pIDsend, LoginResult, LoginList_JSON;
     private PasswordTextBox Password;
 
-    TableArrangement testTable;
-
     protected void $define() {
 
         this.BackgroundImage("img_splashcanvas.png");
         Login = new VerticalArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
-//        Login.Image("img_splashcanvas.png");
         Notifier1 = new Notifier(Login);
 
         Header = new Image (Login);
@@ -87,8 +84,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Password.Text("tcfetcfe");
 
         loginHz = new HorizontalArrangement(Login);
-//        Image2 = new Image(passwordHz);
-//        Image2.Picture("img_icon_fast.png");
         LoginButton = new Button (loginHz);
         LoginButton.Shape(Component.BUTTON_SHAPE_ROUNDED);
         LoginButton.BackgroundColor(Component.COLOR_BLACK);
@@ -98,11 +93,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         LoginButton.Text("Login");
         Image3 = new Image(passwordHz);
         HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1, usernameHz};
-//        for (HorizontalArrangement y : x) {
-//
-//        }
-
-//        LoginButton= buttonPrepare ( new Button ());
 
         localDB = new TinyDB(Login);
 
@@ -135,13 +125,11 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 switchForm("screen06_Register");
                 return true;
             }
-
             else if (component.equals(DebugButton) && eventName.equals("Click")) {
 
                 switchForm("screen09_Settings");
                 return true;
             }
-
             else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
 
                 String stringSent =  (String) params[0];
