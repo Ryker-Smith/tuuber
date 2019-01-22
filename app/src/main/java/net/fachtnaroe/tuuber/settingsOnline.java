@@ -27,7 +27,7 @@ public class settingsOnline {
     public String sessionID="a1b2c3d4";
     public String pID="2";
     public String lastValue;
-    public final String defaultURL="https://fachtnaroe.net/tuuber-test";
+    public final String defaultURL="https://fachtnaroe.net/tuuber";
     public final String fileLocation="settings.txt";
     public String status;
 
