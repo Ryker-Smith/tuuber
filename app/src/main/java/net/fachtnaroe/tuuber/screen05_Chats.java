@@ -12,7 +12,7 @@ import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 
-public class screen05_Messages extends Form implements HandlesEventDispatching {
+public class screen05_Chats extends Form implements HandlesEventDispatching {
 
     private Button Routes, Matches;
 

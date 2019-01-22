@@ -40,6 +40,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     protected void $define() {
         Matches = new VerticalArrangement(this);
+
         VerticalArrangment1 = new VerticalArrangement(Matches);
         VerticalArrangment2 = new VerticalArrangement(Matches);
         TuuberWeb = new Web(Matches);
@@ -58,8 +59,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         SelectMyRout.Text("Select Rout");
         Send.Text("SendMessege");
         MyRouteList.Text("Routs List");
-
         List listItems = new ArrayList();
+
         String data="adding";
         listItems.add(data);
         listItems.add("more");
@@ -67,7 +68,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         data="like this";
         listItems.add(data);
         YailList tempData=YailList.makeList(listItems);
-
         EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
