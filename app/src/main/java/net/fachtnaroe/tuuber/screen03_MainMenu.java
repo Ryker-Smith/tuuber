@@ -23,15 +23,17 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        Routes = new Button(this);
-        Routes.Text("Routes");
-        Matches = new Button(this);
-        Matches.Text("Matches");
+
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MainMenu.Image("img_splashcanvas.png");
         Messages = new Notifier(MainMenu);
+
+        Routes = new Button(MainMenu);
+        Routes.Text("Routes");
+        Matches = new Button(MainMenu);
+        Matches.Text("Matches");
 
         Header = new Image(MainMenu);
         Header.Picture("img_carlogo.png");
