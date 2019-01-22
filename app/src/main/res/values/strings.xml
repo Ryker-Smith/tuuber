@@ -3,4 +3,6 @@
     <string name="message">Hello World</string>
     <string name="title_activity_screen03__main_menu">screen03_MainMenu</string>
     <string name="title_activity_screen09__settings">screen09_Settings</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_screen05__messages">screen05_Messages</string>
 </resources>
