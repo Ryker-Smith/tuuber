@@ -21,11 +21,16 @@ import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
+import com.google.appinventor.components.runtime.util.YailList;
 
 //import com.google.appinventor.components.runtime.util;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 //import gnu.lists.FString;
 
 // Research:  http://loopj.com/android-async-http/
@@ -49,6 +54,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private ListPicker OriginList, DestinationList, OriginList2, DestinationList2;
     private CheckBox Mon, Tue, Wed, Thurs, Fri;;
     Integer pID;
+    private List<String> ListOfRoutesFromWeb;
 
     protected void $define() {
 
@@ -68,6 +74,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         routesDisplay = new ListView(Routes);
         routesDisplay.WidthPercent(100);
         routesDisplay.HeightPercent(40);
+        routesDisplay.TextColor(Component.COLOR_WHITE);
 
         saveRouteWeb = new Web(Routes);
         messagesPopUp = new Notifier(Routes);
@@ -102,11 +109,24 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
     public void getRouteWebGotText(String status, String textOfResponse) {
+        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         if (status.equals("200") ) try {
+
+            ListOfRoutesFromWeb = new ArrayList<String>();
             JSONObject parser = new JSONObject(textOfResponse);
-            if (parser.getString("pID").equals(settings.pID)) {
-                //using matching pID to check success
-                // do something
+            if (!parser.getString("routes").equals("")) {
+
+                JSONArray array = parser.getJSONArray("routes");
+                for(int i = 0 ; i < array.length() ; i++){
+                    ListOfRoutesFromWeb.add(
+                            "from "
+                            + array.getJSONObject(i).getString("origin")
+                            + " to "
+                            + array.getJSONObject(i).getString("destination")
+                    );
+                }
+                YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
+                routesDisplay.Elements(tempData);
 
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
