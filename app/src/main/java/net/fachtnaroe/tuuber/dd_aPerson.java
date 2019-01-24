@@ -1,36 +1,22 @@
 package net.fachtnaroe.tuuber;
 
 public class dd_aPerson {
-    public String First;
-    public String Family;
-    public String email;
-    public String phone;
-    public Integer pID;
+    String First;
+    String Family;
+    String eMail;
+    String phone;
 
-    public dd_aPerson() {
-
-    }
-
-    public boolean validemail () {
-        String temp;
-        temp = email;
-        Integer loop;
-
-        for (loop = 0; loop <= email.length(); loop++) {
-            System.out.print(temp.toCharArray()[loop]);
-        }
+    public boolean valid_eMail() {
         return true;
     }
 
-    public boolean validphone () {
-        String temp;
-        temp = phone;
-        Integer loop;
-
-        for (loop = 0; loop <= phone.length(); loop++) {
-            System.out.print(temp.toCharArray()[loop]);
+    public boolean valid_phone() {
+        if (phone.length() <= 9) {
+            return false;
         }
-
+        else if (phone.length() >= 11) {
+            return false;
+        }
         return true;
     }
 }
