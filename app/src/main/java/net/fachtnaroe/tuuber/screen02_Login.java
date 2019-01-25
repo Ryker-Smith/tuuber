@@ -57,7 +57,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Notifier1 = new Notifier(Login);
 
         Header = new Image (Login);
-        Header.Picture("img_carlogo.png");
+//        Header.Picture("img_carlogo.png");
 
         DebugButton = new Button(Login);
         DebugButton.Text("Go straight to the settings screen");
