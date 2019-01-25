@@ -16,6 +16,7 @@ import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 //import com.google.appinventor.components.runtime.util;
 
@@ -34,7 +35,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private Image Header, Image2, Image3, Image4;
 
     private Web LoginWeb;
-    private VerticalArrangement Login;
+    private VerticalScrollArrangement Login;
     private Notifier Notifier1;
 
     private HorizontalArrangement HorizontalArrangement1, usernameHz, loginHz, passwordHz;
@@ -49,7 +50,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         this.BackgroundImage("img_splashcanvas.png");
-        Login = new VerticalArrangement(this);
+
+        Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
         Notifier1 = new Notifier(Login);
