@@ -23,8 +23,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
     private TableArrangement TableArrangement1;
     private CheckBox TCAgree;
-    private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, PasswordReEnter, Password1Label;
-    private TextBox Telephone,eMail, LastName, FirstName, Password1, Password2;
+    private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, PasswordLabel, Password1Label;
+    private TextBox Telephone,eMail, LastName, FirstName, Password, ConfirmPassword;
     private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
     private Web Creation;
     private Notifier Terms_Conditions_Notifier, CheckedBox_Notifier;
@@ -59,12 +59,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Image2 = new Image (Register);
         Password1Label = new Label (PasswordHZ);
         Password1Label.Text ("CreatePassword");
-        Password1 = new TextBox (PasswordHZ);
-        Password1.Text ("Password");
-        PasswordReEnter = new Label (ConfirmPasswordHZ);
-        PasswordReEnter.Text ("ConfirmPassword");
-        Password2 = new TextBox (ConfirmPasswordHZ);
-        Password2.Text ("Confirm");
+        Password = new TextBox (PasswordHZ);
+        Password.Text ("Password");
+        PasswordLabel = new Label (ConfirmPasswordHZ);
+        PasswordLabel.Text ("ConfirmPassword");
+        ConfirmPassword = new TextBox (ConfirmPasswordHZ);
+        ConfirmPassword.Text ("Confirm");
         Image3 = new Image (Register);
 
         TermsConditionsHZ = new HorizontalArrangement(Register);
@@ -107,7 +107,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                             "&phone=" +
                             Telephone.Text() +
                             "&email=" +
-                            eMail.Text()
+                            eMail.Text() +
+                            "&pw=" +
+                            ConfirmPassword.Text()
             );
             Creation.Get();
             return true;
