@@ -95,9 +95,13 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         if (component.equals(Create) && eventName.equals("Click")) {
             User.phone = Telephone.Text();
             if (!User.valid_phone()) {
+                CheckedBox_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
                 return true;
             }
-
+            if (!Password.Text().equals(ConfirmPassword.Text())) {
+                CheckedBox_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
+                return true;
+            }
             Creation.Url(
                     baseURL +
                             "entity=person&action=POST&first=" +

@@ -11,11 +11,20 @@ public class dd_aPerson {
     }
 
     public boolean valid_phone() {
-        if (phone.length() <= 9) {
+        if (phone.length() <= 8) {
             return false;
         }
-        else if (phone.length() >= 11) {
+        else if (phone.length() >= 20) {
             return false;
+        }
+        int i;
+        for(i=0;i<=phone.length()-1;i++){
+            char c=phone.charAt(i);
+            //character checked if non-numeric
+            if ((((int) c) <48) || (((int)c) >57)) {
+                return false;
+
+            }
         }
         return true;
     }
