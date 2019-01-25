@@ -98,6 +98,20 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 return true;
             }
 
+            Creation.Url(
+                    baseURL +
+                            "entity=person&action=POST&first=" +
+                            FirstName.Text() +
+                            "&family=" +
+                            LastName.Text() +
+                            "&phone=" +
+                            Telephone.Text() +
+                            "&email=" +
+                            eMail.Text()
+            );
+            Creation.Get();
+            return true;
+
         }
         return true;
     }
