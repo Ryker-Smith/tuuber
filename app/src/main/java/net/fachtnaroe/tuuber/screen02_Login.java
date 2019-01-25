@@ -164,7 +164,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            Notifier1.ShowMessageDialog("JSON Exception", "Information", "OK");
+            Notifier1.ShowMessageDialog("JSON Exception (check password)", "Information", "OK");
         }
         else {
             Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");
