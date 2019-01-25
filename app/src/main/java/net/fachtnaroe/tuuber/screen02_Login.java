@@ -46,21 +46,20 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private String pIDsend, LoginResult, LoginList_JSON;
     private PasswordTextBox Password;
 
-    TableArrangement testTable;
-
     protected void $define() {
 
+        this.BackgroundImage("img_splashcanvas.png");
         Login = new VerticalArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
-        Login.Image("img_splashcanvas.png");
         Notifier1 = new Notifier(Login);
 
         Header = new Image (Login);
         Header.Picture("img_carlogo.png");
 
         DebugButton = new Button(Login);
-        DebugButton.Text("Debug");
+        DebugButton.Text("Go straight to the settings screen");
+        DebugButton.FontSize(8);
 
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
@@ -85,8 +84,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Password.Text("tcfetcfe");
 
         loginHz = new HorizontalArrangement(Login);
-//        Image2 = new Image(passwordHz);
-//        Image2.Picture("img_icon_fast.png");
         LoginButton = new Button (loginHz);
         LoginButton.Shape(Component.BUTTON_SHAPE_ROUNDED);
         LoginButton.BackgroundColor(Component.COLOR_BLACK);
@@ -96,83 +93,58 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         LoginButton.Text("Login");
         Image3 = new Image(passwordHz);
         HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1, usernameHz};
-//        for (HorizontalArrangement y : x) {
-//
-//        }
 
-//        LoginButton= buttonPrepare ( new Button ());
-
-//        localDB = new TinyDB(Login);
-//        if (localDB != null) try {
-//
-////            localDB.StoreValue("TestTag", "67890");
-//        } catch (Exception e) {
-////            e.printStackTrace();
-//            messages.ShowMessageDialog("JSON Exception", "Information", "OK");
-//        }
-//        String prevName = (String) localDB.GetValue("Username","-1");
-//        if ( !prevName.equals("-1")) {
-//            UserName.Text(prevName);
-//        }
-//        localDB.ClearTag("TestTag");
-//        localDB.GetTags();
+        localDB = new TinyDB(Login);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
+        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (component.equals(LoginButton) && eventName.equals("Click")) {
-
-            LoginWeb.Url(
-                    baseURL +
-                    "email=" +
-                    UserName.Text() +
-                    "&password=" +
-                    Password.Text() +
-                    "&cmd=LOGIN"
-            );
-            LoginWeb.Get();
+        if (eventName.equals("BackPressed")) {
             return true;
         }
+        else if (component.equals(LoginButton) && eventName.equals("Click")) {
 
-        else if (component.equals(RegisterButton) && eventName.equals("Click")) {
+                LoginWeb.Url(
+                        baseURL +
+                                "email=" +
+                                UserName.Text() +
+                                "&password=" +
+                                Password.Text() +
+                                "&cmd=LOGIN"
+                );
+                LoginWeb.Get();
+                return true;
+            }
 
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen06_Register");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
-            return true;
-        }
+            else if (component.equals(RegisterButton) && eventName.equals("Click")) {
+                switchForm("screen06_Register");
+                return true;
+            }
+            else if (component.equals(DebugButton) && eventName.equals("Click")) {
 
-        else if (component.equals(DebugButton) && eventName.equals("Click")) {
+                switchForm("screen09_Settings");
+                return true;
+            }
+            else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
 
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ExtraValue( "2"); // for testing
+                String stringSent =  (String) params[0];
+                Integer status = (Integer) params[1];
+                String encoding = (String) params[2];
+                String textOfResponse = (String) params[3];
 
-            //nextScreen.
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen09_Settings");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
-            return true;
-        }
+                webGotText(status.toString(), textOfResponse);
+                return true;
+            }
+            else {
+                // do something
+                return false;
+            }
 
-        else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
-
-            String stringSent =  (String) params[0];
-            Integer status = (Integer) params[1];
-            String encoding = (String) params[2];
-            String textOfResponse = (String) params[3];
-
-            webGotText(status.toString(), textOfResponse);
-            return true;
-        }
-        else {
-            // do something
-            return false;
-        }
         // here is where you'd check for other events of your app...
 
     }
@@ -183,12 +155,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-
-                ActivityStarter nextScreen = new ActivityStarter(this);
-                nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen03_MainMenu");
-                nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-                nextScreen.StartActivity();
-
+                localDB.StoreValue("pID", parser.getString("pID"));
+                switchForm("screen03_MainMenu");
             } else {
                 Notifier1.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }
@@ -200,9 +168,4 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
-
-//    Button buttonPrepare (Button item) {
-//        return item;
-//    }
-
 }

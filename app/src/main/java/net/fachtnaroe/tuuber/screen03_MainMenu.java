@@ -1,7 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import android.preference.PreferenceActivity;
-
 import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
@@ -14,52 +12,58 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches;
+    private Button Routes, Matches, Chats, Settings;
 
     VerticalArrangement MainMenu;
-    Notifier Messages;
+    Notifier MessagesPopup;
     Image Header;
 
 
     protected void $define() {
 
-        Routes = new Button(this);
-        Routes.Text("Routes");
-        Matches = new Button(this);
-        Matches.Text("Matches");
 
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MainMenu.Image("img_splashcanvas.png");
-        Messages = new Notifier(MainMenu);
+        MessagesPopup = new Notifier(MainMenu);
+
+        Routes = new Button(MainMenu);
+        Routes.Text("Routes");
+        Matches = new Button(MainMenu);
+        Matches.Text("Matches");
+        Chats = new Button(MainMenu);
+        Chats.Text("Chats");
+        Settings = new Button(MainMenu);
+        Settings.Text("Settings");
 
         Header = new Image(MainMenu);
         Header.Picture("img_carlogo.png");
 
         EventDispatcher.registerEventForDelegation(this, "Routes", "Click");
         EventDispatcher.registerEventForDelegation(this, "Matches", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Chats", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Settings", "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
         if (component.equals(Matches) && eventName.equals("Click")) {
-
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen04_Matches");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
+            switchForm("screen04_Matches");
+            return true;
+        }
+        else if (component.equals(Chats) && eventName.equals("Click")) {
+            switchForm("screen05_Chats");
             return true;
         }
 
         else if (component.equals(Routes) && eventName.equals("Click")) {
-
-            ActivityStarter nextScreen = new ActivityStarter(this);
-            nextScreen.ActivityClass("net.fachtnaroe.tuuber.screen07_Routes");
-            nextScreen.ActivityPackage("net.fachtnaroe.tuuber");
-            nextScreen.StartActivity();
+            switchForm("screen07_Routes");
             return true;
         }
-
-    return true;
+        else if (component.equals(Settings) && eventName.equals("Click")) {
+            switchForm("screen09_Settings");
+            return true;
+        }
+        return false;
     }
 }
