@@ -6,8 +6,14 @@ public class dd_aPerson {
     String eMail;
     String phone;
 
-    public boolean valid_eMail() {
-        return true;
+    public boolean valid_eMail(char d) {
+        int count = 0;
+
+        for(int a=0; a < eMail.length(); a++) {
+            if(eMail.charAt(a) == d)
+                count++;
+        }
+        return false;
     }
 
     public boolean valid_phone() {
@@ -19,6 +25,7 @@ public class dd_aPerson {
         }
         int i;
         for(i=0;i<=phone.length()-1;i++){
+            //character checked individually
             char c=phone.charAt(i);
             //character checked if non-numeric
             if ((((int) c) <48) || (((int)c) >57)) {
@@ -26,6 +33,7 @@ public class dd_aPerson {
 
             }
         }
+        //phone is valid here
         return true;
     }
 }
