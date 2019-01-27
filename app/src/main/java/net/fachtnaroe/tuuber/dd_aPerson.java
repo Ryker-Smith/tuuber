@@ -6,10 +6,11 @@ public class dd_aPerson {
     String eMail;
     String phone;
 
-    public boolean valid_eMail(char d) {
+    public boolean valid_eMail() {
         int count = 0;
 
         for(int a=0; a < eMail.length(); a++) {
+            char d=eMail.charAt(a);
             if(eMail.charAt(a) == d)
                 count++;
         }
