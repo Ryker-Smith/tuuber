@@ -154,11 +154,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     public void webGotText(String status, String textOfResponse) {
 //        LoginButton.Text(status);
         String temp=new String();
+        dbg("In routine");
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             temp = parser.getString("result");
+            dbg("In IF");
             if (parser.getString("result").equals("OK")) {
                 // do something
+                dbg("In OK");
                 localDB.StoreValue("pID", parser.getString("pID"));
                 switchForm("screen03_MainMenu");
             } else {
@@ -172,4 +175,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
+
+    void dbg (String debugMsg) {
+        System.err.print( debugMsg + "\n");
+    }
+
 }
