@@ -153,8 +153,10 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     public void webGotText(String status, String textOfResponse) {
 //        LoginButton.Text(status);
+        String temp=new String();
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
+            temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 // do something
                 localDB.StoreValue("pID", parser.getString("pID"));
@@ -164,7 +166,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            Notifier1.ShowMessageDialog("JSON Exception (check password)", "Information", "OK");
+            Notifier1.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
         }
         else {
             Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");

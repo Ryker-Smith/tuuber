@@ -7,15 +7,15 @@ public class dd_aPerson {
     String phone;
 
     public boolean valid_eMail() {
-        int b = 0;
-        String at=this.eMail;
-        for(int a=0; a < at.length(); a++) {
-            System.out.print(at.toCharArray()[a]);
-            if (at.toCharArray()[a] == '@'){
-                b = b+1;
+        int atSymbolCount = 0;
+        String theEmailAddressToTest=this.eMail;
+        for(int a=0; a < theEmailAddressToTest.length(); a++) {
+//            System.out.print(theEmailAddressToTest.toCharArray()[a]);
+            if (theEmailAddressToTest.toCharArray()[a] == '@'){
+                atSymbolCount = atSymbolCount+1;
             }
         }
-        if (b !=1) {
+        if (atSymbolCount !=1) {
             return false;
         }
         return true;
