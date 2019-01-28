@@ -7,14 +7,18 @@ public class dd_aPerson {
     String phone;
 
     public boolean valid_eMail() {
-        int count = 0;
-
+        int b = 0;
+        String at=this.eMail;
         for(int a=0; a < eMail.length(); a++) {
-            char d=eMail.charAt(a);
-            if(eMail.charAt(a) == d)
-                count++;
+            System.out.print(at.toCharArray()[a]);
+            if (at.toCharArray()[a] == "@"){
+                a = a+1;
+            }
         }
-        return false;
+        if (b !=1) {
+            return false;
+        }
+        return true;
     }
 
     public boolean valid_phone() {
