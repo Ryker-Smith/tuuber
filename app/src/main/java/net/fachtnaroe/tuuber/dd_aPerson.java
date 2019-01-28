@@ -8,46 +8,59 @@ public class dd_aPerson {
 
 
     public boolean valid_eMail() {
-        dbg("In Routine");
         int atSymbolCount = 0;
         int dotCount = 0;
 
         String theEmailAddressToTest= new String();
         theEmailAddressToTest=this.eMail;
         String currentString = theEmailAddressToTest;
+        //string is split
         String[] separated = currentString.split("@");
+        // string checked for length
         if (separated[0].length() <1) {
             return false;
         }
-        for (int a = 0; a < theEmailAddressToTest.length(); a++) {
-//            System.out.print(theEmailAddressToTest.toCharArray()[a]);
-            // character presence checked
-            if (theEmailAddressToTest.charAt(a) == '@'){
+        //string checked for length
+        if (separated[1].length() <3) {
+            return false;
+        }
+        //loop created
+        for (int b = 0; b < theEmailAddressToTest.length(); b++) {
+            //character presence checked
+            if (theEmailAddressToTest.charAt(b) == '@'){
                 atSymbolCount++;
             }
-            if (theEmailAddressToTest.charAt(a) == '.'){
+        }
+        //loop created
+        for (int a = 0; a < separated[1].length(); a++) {
+//            System.out.print(theEmailAddressToTest.toCharArray()[a]);
+            // character presence checked
+            if (separated[1].charAt(a) == '.'){
                 dotCount++;
             }
         }
-        if (atSymbolCount !=1) {
-//            dbg("In OK");
+        // specific character count checked
+        if (dotCount <1) {
             return false;
         }
-        if (dotCount <1) {
-//            dbg("In OK");
+        // specific character count checked
+        if (atSymbolCount <1) {
             return false;
         }
         return true;
     }
 
     public boolean valid_phone() {
+        // checked if too short
         if (phone.length() <= 8) {
             return false;
         }
+        // checked if too long
         else if (phone.length() >= 20) {
             return false;
         }
         int i;
+        // loop created
         for(i=0;i<=phone.length()-1;i++){
             //character checked individually
             char c=phone.charAt(i);
