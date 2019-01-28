@@ -9,10 +9,10 @@ public class dd_aPerson {
     public boolean valid_eMail() {
         int b = 0;
         String at=this.eMail;
-        for(int a=0; a < eMail.length(); a++) {
+        for(int a=0; a < at.length(); a++) {
             System.out.print(at.toCharArray()[a]);
-            if (at.toCharArray()[a] == "@"){
-                a = a+1;
+            if (at.toCharArray()[a] == '@'){
+                b = b+1;
             }
         }
         if (b !=1) {
