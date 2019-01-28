@@ -6,16 +6,35 @@ public class dd_aPerson {
     String eMail;
     String phone;
 
+
     public boolean valid_eMail() {
+        dbg("In Routine");
         int atSymbolCount = 0;
-        String theEmailAddressToTest=this.eMail;
-        for(int a=0; a < theEmailAddressToTest.length(); a++) {
+        int dotCount = 0;
+
+        String theEmailAddressToTest= new String();
+        theEmailAddressToTest=this.eMail;
+        String currentString = theEmailAddressToTest;
+        String[] separated = currentString.split("@");
+        if (separated[0].length() <1) {
+            return false;
+        }
+        for (int a = 0; a < theEmailAddressToTest.length(); a++) {
 //            System.out.print(theEmailAddressToTest.toCharArray()[a]);
-            if (theEmailAddressToTest.toCharArray()[a] == '@'){
-                atSymbolCount = atSymbolCount+1;
+            // character presence checked
+            if (theEmailAddressToTest.charAt(a) == '@'){
+                atSymbolCount++;
+            }
+            if (theEmailAddressToTest.charAt(a) == '.'){
+                dotCount++;
             }
         }
         if (atSymbolCount !=1) {
+//            dbg("In OK");
+            return false;
+        }
+        if (dotCount <1) {
+//            dbg("In OK");
             return false;
         }
         return true;
@@ -41,4 +60,6 @@ public class dd_aPerson {
         //phone is valid here
         return true;
     }
+
+    void dbg (String debugMsg) { System.err.print( debugMsg + "\n"); }
 }
