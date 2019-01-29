@@ -42,16 +42,16 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         this.BackgroundImage("thumb-1920-426364.jpg");
-        VerticalArrangement Settings = new VerticalArrangement(this);
-        localDB= new TinyDB(Settings);
+        VerticalArrangement screen09_Settings = new VerticalArrangement(this);
+        localDB= new TinyDB(screen09_Settings);
         settings.pID=localDB.GetValue("pID",-1).toString();
 
-        detailsWeb = new Web(Settings);
-        detailsWebSave=new Web(Settings);
-        passwordWeb = new Web(Settings);
-        passwordWebSave = new Web(Settings);
+        detailsWeb = new Web(screen09_Settings);
+        detailsWebSave=new Web(screen09_Settings);
+        passwordWeb = new Web(screen09_Settings);
+        passwordWebSave = new Web(screen09_Settings);
 
-        detailsVt = new VerticalArrangement(Settings);
+        detailsVt = new VerticalArrangement(screen09_Settings);
         userFirstHz = new HorizontalArrangement(detailsVt);
         userFirstLabel = new Label(userFirstHz);
         userFirstLabel.Text("First name:");
@@ -82,7 +82,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 //        centralDebugBox = new TextBox(detailsVt);
 //        centralDebugBox.WidthPercent(100);
 //
-        passwordVt = new VerticalArrangement(Settings);
+        passwordVt = new VerticalArrangement(screen09_Settings);
         oldPassHz = new HorizontalArrangement(passwordVt);
         oldPassLabel = new Label(oldPassHz);
         oldPassLabel.Text("Old password:");
@@ -103,7 +103,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         w100listPTB(oldPassBox, newPassBox, confirmPassBox);
 
-        messages = new Notifier(Settings);
+        messages = new Notifier(screen09_Settings);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");

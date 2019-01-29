@@ -154,16 +154,16 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     public void webGotText(String status, String textOfResponse) {
 //        LoginButton.Text(status);
         String temp=new String();
-        dbg("In routine");
+//        dbg("In routine");
         if (status.equals("200") ) try {
-            dbg("In IF [" + textOfResponse + "]");
+//            dbg("In IF [" + textOfResponse + "]");
             JSONObject parser = new JSONObject(textOfResponse);
-            dbg("HI");
+//            dbg("HI");
             temp = parser.getString("result");
-            dbg("In IF");
+//            dbg("In IF");
             if (parser.getString("result").equals("OK")) {
                 // do something
-                dbg("In OK");
+//                dbg("In OK");
                 localDB.StoreValue("pID", parser.getString("pID"));
                 switchForm("screen03_MainMenu");
             } else {
