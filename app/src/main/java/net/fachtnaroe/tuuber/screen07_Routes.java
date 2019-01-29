@@ -1,6 +1,7 @@
 package net.fachtnaroe.tuuber;
 
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.renderscript.Sampler;
 
 import com.google.appinventor.components.runtime.Button;
@@ -56,9 +57,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private ListView routesDisplay;
     private TextBox TownSingle, TownsDecoded, DriverYN;
     private ListPicker OriginList, DestinationList, OriginList2, DestinationList2;
-    private CheckBox Mon, Tue, Wed, Thurs, Fri;;
+    private CheckBox Mon, Tue, Wen, Thu ,Fri;
     Integer pID;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
+    String Specify=new String("to");
 
     protected void $define() {
 
@@ -85,27 +87,26 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         messagesPopUp = new Notifier(RoutesScreen);
         getRouteWeb = new Web(RoutesScreen);
         TownsWeb = new Web(RoutesScreen);
-
         ListofDDT = new VerticalArrangement(RoutesScreen);
         Direction = new HorizontalArrangement(ListofDDT);
         Days = new HorizontalArrangement(RoutesScreen);
-        M = new CheckBox(Days);
-        T = new CheckBox(Days);
-        W = new CheckBox(Days);
-        Th = new CheckBox(Days);
-        F = new CheckBox(Days);
+        Mon = new CheckBox(Days);
+        Tue = new CheckBox(Days);
+        Wen = new CheckBox(Days);
+        Thu = new CheckBox(Days);
+        Fri = new CheckBox(Days);
         To = new Button(Direction);
-        Templemore = new ImagePicker(Direction);
         From = new Button(Direction);
         saveRouteWeb = new Web(RoutesScreen);
         To.Text("To");
         From.Text("From");
-        M.Text("M");
-        T.Text("T");
-        W.Text("W");
-        Th.Text("Th");
-        F.Text("F");
+        Mon.Text("M");
+        Tue.Text("T");
+        Wen.Text("W");
+        Thu.Text("Th");
+        Fri.Text("F");
         townsDisplay = new ListPicker(RoutesScreen);
+        Templemore = new ImagePicker(Direction);
         townsDisplay.Text("Press for list of towns");
 //        RoutsList = new ArrayList();
 
@@ -115,6 +116,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Delete = new Button(RoutesScreen);
         Save.Text("Save");
         Delete.Text("Delete");
+        Templemore.WidthPercent(10);
+        Templemore.HeightPercent(10);
+
 
         EventDispatcher.registerEventForDelegation(this, "RoutsList", "Click");
         EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
@@ -173,23 +177,68 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         }
         else if (component.equals(Save)&& eventName.equals("Click")){
+            if( (!Mon.Checked()) && (!Tue.Checked()) &&(!Wen.Checked()) &&(!Thu.Checked()) &&(!Fri.Checked()) ){
+                return true;
+
+            }
+            String temp = new String("");
+            if (Mon.Checked()){
+                temp = temp + "Mon=Y";
+                }
+            else {
+                temp = temp+ "Mon=N" ;
+            }
+            if (Tue.Checked()){
+                temp = temp + "Tue=Y";
+            }
+            else {
+                temp = temp+ "Tue=N";
+            }
+            if (Wen.Checked()){
+                temp = temp + "Wen=Y";
+            }
+            else {
+                temp = temp+ "Wen=N";
+            }
+            if (Thu.Checked()){
+                temp = temp + "Thu=Y";
+            }
+            else {
+                temp = temp+ "Thu=N";
+            }
+            if (Fri.Checked()){
+                temp = temp + "Fri=Y";
+            }
+            else {
+                temp = temp+ "Fri= N";
+            }
+            String Directions=new String();
+            if (Specify.equals("to")) {
+                Directions="&destination=Templemore&origin=" + townsDisplay.Text() ;
+            }
+            else {
+                Directions="&origin=Templemore&destination=" + townsDisplay.Text();
+            }
                 saveRouteWeb.Url(
 
                         baseURL
                                 + "?action=POST"
                                 + "&entity=ROUTE"
-                                + "&orgin=" + townsDisplay.Text()
+                                + Directions
+                                +temp
+
                 );
-
                 saveRouteWeb.Get();
+                return true;
         }
-            else if (component.equals(To)&& eventName.equals("Click")){
-            
-
-
-
+        else if (component.equals(To)&& eventName.equals("Click")){
+                Templemore.Image("Arrow_Right_Templemore.png");
+                Specify="to";
         }
-
+        else if (component.equals(From)&& eventName.equals("Click")) {
+            Templemore.Image("Arrow_Left_Templemore.png");
+            Specify="from";
+        }
         return true;
     }
 
@@ -261,7 +310,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     }
-
 
     void dbg (String debugMsg) {
         System.err.print( debugMsg + "\n");
