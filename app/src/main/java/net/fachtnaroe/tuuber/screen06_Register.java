@@ -10,7 +10,6 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
@@ -21,7 +20,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private Image Image1, Image2, Image3, Image4, Image5, Image6;
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
-    private TableArrangement TableArrangement1;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, PasswordLabel, Password1Label;
     private TextBox Telephone,eMail, LastName, FirstName, Password, ConfirmPassword;
@@ -88,7 +86,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "Creation_Notifier", "onClose");
+        EventDispatcher.registerEventForDelegation(this, "Creation_Notifier", "Click");
 
     }
 
@@ -129,14 +127,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             Creation.Get();
             Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
             return true;
-
-
-
+        }
+        if (component.equals(Creation_Notifier) && eventName.equals ("Click")) {
+            switchForm("Screen02_Login");
+            return true;
         }
         return true;
     }
-
-
-
-
 }
