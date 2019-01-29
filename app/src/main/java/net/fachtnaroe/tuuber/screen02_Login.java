@@ -31,7 +31,7 @@ import org.json.JSONObject;
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
 //    private TextBox;
-    private Button LoginButton, RegisterButton, DebugButton;
+    private Button LoginButton, RegisterButton;
     private Image Header, Image2, Image3, Image4;
 
     private Web LoginWeb;
@@ -58,10 +58,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         Header = new Image (Login);
 //        Header.Picture("img_carlogo.png");
-
-        DebugButton = new Button(Login);
-        DebugButton.Text("Go straight to the settings screen");
-        DebugButton.FontSize(8);
 
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
@@ -110,7 +106,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (component.equals(LoginButton) && eventName.equals("Click")) {
-
                 LoginWeb.Url(
                         baseURL +
                                 "email=" +
@@ -122,23 +117,15 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 LoginWeb.Get();
                 return true;
             }
-
             else if (component.equals(RegisterButton) && eventName.equals("Click")) {
                 switchForm("screen06_Register");
                 return true;
             }
-            else if (component.equals(DebugButton) && eventName.equals("Click")) {
-
-                switchForm("screen09_Settings");
-                return true;
-            }
             else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
-
                 String stringSent =  (String) params[0];
                 Integer status = (Integer) params[1];
                 String encoding = (String) params[2];
                 String textOfResponse = (String) params[3];
-
                 webGotText(status.toString(), textOfResponse);
                 return true;
             }
@@ -147,23 +134,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 return false;
             }
 
-        // here is where you'd check for other events of your app...
-
     }
 
     public void webGotText(String status, String textOfResponse) {
-//        LoginButton.Text(status);
         String temp=new String();
-//        dbg("In routine");
         if (status.equals("200") ) try {
-//            dbg("In IF [" + textOfResponse + "]");
             JSONObject parser = new JSONObject(textOfResponse);
-//            dbg("HI");
             temp = parser.getString("result");
-//            dbg("In IF");
             if (parser.getString("result").equals("OK")) {
-                // do something
-//                dbg("In OK");
                 localDB.StoreValue("pID", parser.getString("pID"));
                 switchForm("screen03_MainMenu");
             } else {
@@ -181,5 +159,4 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     void dbg (String debugMsg) {
         System.err.print( debugMsg + "\n");
     }
-
 }
