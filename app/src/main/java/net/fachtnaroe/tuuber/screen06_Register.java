@@ -94,6 +94,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         if (component.equals(Create) && eventName.equals("Click")) {
             User.phone = Telephone.Text();
+            User.eMail = eMail.Text();
+            if (!User.valid_eMail()) {
+                CheckedBox_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
+                return true;
+            }
             if (!User.valid_phone()) {
                 CheckedBox_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
                 return true;
@@ -102,6 +107,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 CheckedBox_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
                 return true;
             }
+            if (!TCAgree.Checked())
+                CheckedBox_Notifier.ShowMessageDialog("Terms and Conditions have not been agreed to", "Error", "Confirm");
+            
             Creation.Url(
                     baseURL +
                             "entity=person&action=POST&first=" +

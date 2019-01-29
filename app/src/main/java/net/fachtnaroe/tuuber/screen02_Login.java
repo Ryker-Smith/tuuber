@@ -156,7 +156,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         String temp=new String();
         dbg("In routine");
         if (status.equals("200") ) try {
+            dbg("In IF [" + textOfResponse + "]");
             JSONObject parser = new JSONObject(textOfResponse);
+            dbg("HI");
             temp = parser.getString("result");
             dbg("In IF");
             if (parser.getString("result").equals("OK")) {

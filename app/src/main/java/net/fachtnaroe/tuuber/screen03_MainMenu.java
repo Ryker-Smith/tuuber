@@ -25,7 +25,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
-        MainMenu.Image("img_splashcanvas.png");
+
         MessagesPopup = new Notifier(MainMenu);
 
         Routes = new Button(MainMenu);
