@@ -14,6 +14,9 @@ import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class screen06_Register extends Form implements HandlesEventDispatching {
 
     private Button Create, TermsConditions;
@@ -25,7 +28,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private TextBox Telephone,eMail, LastName, FirstName, Password, ConfirmPassword;
     private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
     private Web Creation;
-    private Notifier Creation_Notifier, Universal_Notifier;
+    private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
     private dd_aPerson User;
 
     protected void $define() {
@@ -41,28 +44,28 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TelephoneLabel = new Label(PhoneHZ);
         TelephoneLabel.Text ("Phone Number");
         Telephone = new TextBox(PhoneHZ);
-        Telephone.Text ("Phone");
+        Telephone.Text ("0123456789");
         eMailLabel = new Label(eMailHZ);
         eMailLabel.Text ("Email");
         eMail = new TextBox(eMailHZ);
-        eMail.Text ("EmailDetail");
+        eMail.Text ("");
         LastNameLabel = new Label(LastNameHZ);
         LastNameLabel.Text ("LastName");
         LastName = new TextBox (LastNameHZ);
-        LastName.Text ("Lastname");
+        LastName.Text ("John");
         FirstNameLabel = new Label (FirstNameHZ);
         FirstNameLabel.Text ("FirstName");
         FirstName = new TextBox (FirstNameHZ);
-        FirstName.Text ("Firstname");
+        FirstName.Text ("John");
         Image2 = new Image (Register);
         Password1Label = new Label (PasswordHZ);
         Password1Label.Text ("CreatePassword");
         Password = new TextBox (PasswordHZ);
-        Password.Text ("Password");
+        Password.Text ("abc");
         PasswordLabel = new Label (ConfirmPasswordHZ);
         PasswordLabel.Text ("ConfirmPassword");
         ConfirmPassword = new TextBox (ConfirmPasswordHZ);
-        ConfirmPassword.Text ("Confirm");
+        ConfirmPassword.Text ("abc");
         Image3 = new Image (Register);
 
         TermsConditionsHZ = new HorizontalArrangement(Register);
@@ -82,11 +85,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Creation = new Web(Register);
         Creation_Notifier = new Notifier(Register);
         Universal_Notifier = new Notifier(Register);
+        Web_Notifier = new Notifier(Register);
         User = new dd_aPerson();
 
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "Creation_Notifier", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Creation_Notifier", "Close");
 
     }
 
@@ -125,13 +129,45 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                             ConfirmPassword.Text()
             );
             Creation.Get();
-            Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
+
             return true;
         }
-        if (component.equals(Creation_Notifier) && eventName.equals ("Click")) {
-            switchForm("Screen02_Login");
+        else if (component.equals(Creation) && eventName.equals("GotText")){
+            String stringSent =  (String) params[0];
+            Integer status = (Integer) params[1];
+            String encoding = (String) params[2];
+            String textOfResponse = (String) params[3];
+
+            webGotText(status.toString(), textOfResponse);
             return true;
         }
         return true;
+    }
+    public void webGotText(String status, String textOfResponse) {
+//        LoginButton.Text(status);
+        String temp=new String();
+//        dbg("In routine");
+        if (status.equals("200") ) try {
+//            dbg("In IF [" + textOfResponse + "]");
+            JSONObject parser = new JSONObject(textOfResponse);
+//            dbg("HI");
+            temp = parser.getString("result");
+//            dbg("In IF");
+            if (parser.getString("result").equals("OK")) {
+                Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
+                // do something
+//                dbg("In OK");
+//                localDB.StoreValue("pID", parser.getString("pID"));
+//                switchForm("screen03_MainMenu");
+            } else {
+                Web_Notifier.ShowMessageDialog("Creation failed, check details", "Information", "OK");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            Web_Notifier.ShowMessageDialog("Creation failed, check details" + temp, "Information", "OK");
+        }
+        else {
+            Web_Notifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        }
     }
 }
