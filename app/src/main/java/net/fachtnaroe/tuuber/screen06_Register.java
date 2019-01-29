@@ -10,6 +10,7 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
+import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
@@ -25,10 +26,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, PasswordLabel, Password1Label;
-    private TextBox Telephone,eMail, LastName, FirstName, Password, ConfirmPassword;
+    private TextBox Telephone,eMail, LastName, FirstName;
     private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
     private Web Creation;
     private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
+    private PasswordTextBox Password, ConfirmPassword;
     private dd_aPerson User;
 
     protected void $define() {
@@ -60,11 +62,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Image2 = new Image (Register);
         Password1Label = new Label (PasswordHZ);
         Password1Label.Text ("CreatePassword");
-        Password = new TextBox (PasswordHZ);
+        Password = new PasswordTextBox (PasswordHZ);
         Password.Text ("abc");
         PasswordLabel = new Label (ConfirmPasswordHZ);
         PasswordLabel.Text ("ConfirmPassword");
-        ConfirmPassword = new TextBox (ConfirmPasswordHZ);
+        ConfirmPassword = new PasswordTextBox (ConfirmPasswordHZ);
         ConfirmPassword.Text ("abc");
         Image3 = new Image (Register);
 
@@ -90,7 +92,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "Creation_Notifier", "Close");
 
     }
 
@@ -98,6 +99,14 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         if (component.equals(Create) && eventName.equals("Click")) {
             User.phone = Telephone.Text();
             User.eMail = eMail.Text();
+            if (FirstName.Text().length() <1) {
+                Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "Confirm");
+                return true;
+            }
+            if (LastName.Text().length() <1){
+                Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "Confirm");
+                return true;
+            }
             if (!User.valid_eMail()) {
                 Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
                 return true;
@@ -146,19 +155,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     public void webGotText(String status, String textOfResponse) {
 //        LoginButton.Text(status);
         String temp=new String();
-//        dbg("In routine");
         if (status.equals("200") ) try {
-//            dbg("In IF [" + textOfResponse + "]");
             JSONObject parser = new JSONObject(textOfResponse);
-//            dbg("HI");
             temp = parser.getString("result");
-//            dbg("In IF");
             if (parser.getString("result").equals("OK")) {
                 Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
-                // do something
-//                dbg("In OK");
-//                localDB.StoreValue("pID", parser.getString("pID"));
-//                switchForm("screen03_MainMenu");
+                switchForm("screen02_Login");
             } else {
                 Web_Notifier.ShowMessageDialog("Creation failed, check details", "Information", "OK");
             }
