@@ -109,6 +109,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             }
             if (!TCAgree.Checked())
                 CheckedBox_Notifier.ShowMessageDialog("Terms and Conditions have not been agreed to", "Error", "Confirm");
+            
             Creation.Url(
                     baseURL +
                             "entity=person&action=POST&first=" +

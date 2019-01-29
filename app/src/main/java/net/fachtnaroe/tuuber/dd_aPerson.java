@@ -16,6 +16,9 @@ public class dd_aPerson {
         String currentString = theEmailAddressToTest;
         //string is split
         String[] separated = currentString.split("@");
+        if (separated.length < 2) {
+            return false;
+        }
         // string checked for length
         if (separated[0].length() <1) {
             return false;
