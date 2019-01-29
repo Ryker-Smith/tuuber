@@ -10,7 +10,6 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
@@ -21,13 +20,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private Image Image1, Image2, Image3, Image4, Image5, Image6;
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
-    private TableArrangement TableArrangement1;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, PasswordLabel, Password1Label;
     private TextBox Telephone,eMail, LastName, FirstName, Password, ConfirmPassword;
     private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
     private Web Creation;
-    private Notifier Terms_Conditions_Notifier, CheckedBox_Notifier;
+    private Notifier Creation_Notifier, Universal_Notifier;
     private dd_aPerson User;
 
     protected void $define() {
@@ -82,12 +80,13 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Image6 = new Image (CreateHZ);
 
         Creation = new Web(Register);
-        Terms_Conditions_Notifier = new Notifier(Register);
-        CheckedBox_Notifier = new Notifier(Register);
+        Creation_Notifier = new Notifier(Register);
+        Universal_Notifier = new Notifier(Register);
         User = new dd_aPerson();
 
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "Creation_Notifier", "Click");
 
     }
 
@@ -96,20 +95,22 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             User.phone = Telephone.Text();
             User.eMail = eMail.Text();
             if (!User.valid_eMail()) {
-                CheckedBox_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
+                Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
                 return true;
             }
             if (!User.valid_phone()) {
-                CheckedBox_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
+                Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
                 return true;
             }
             if (!Password.Text().equals(ConfirmPassword.Text())) {
-                CheckedBox_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
+                Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
                 return true;
             }
-            if (!TCAgree.Checked())
-                CheckedBox_Notifier.ShowMessageDialog("Terms and Conditions have not been agreed to", "Error", "Confirm");
-            
+            if (!TCAgree.Checked()) {
+                Universal_Notifier.ShowMessageDialog("Agree to Terms and Conditions", "Error", "Confirm");
+                return true;
+            }
+
             Creation.Url(
                     baseURL +
                             "entity=person&action=POST&first=" +
@@ -124,13 +125,13 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                             ConfirmPassword.Text()
             );
             Creation.Get();
+            Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
             return true;
-
+        }
+        if (component.equals(Creation_Notifier) && eventName.equals ("Click")) {
+            switchForm("Screen02_Login");
+            return true;
         }
         return true;
     }
-
-
-
-
 }
