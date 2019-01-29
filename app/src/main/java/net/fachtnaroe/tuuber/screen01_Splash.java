@@ -28,6 +28,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
                 nextScreenTimer.TimerEnabled(false);
                 switchForm("screen02_Login");
                 return true;
+
             }
             return false; // event not handled
     }
