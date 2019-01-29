@@ -116,7 +116,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("routes").equals("")) {
-
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for(int i = 0 ; i < routesArray.length() ; i++){
                     ListOfRoutesFromWeb.add(
@@ -128,7 +127,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
                 routesDisplay.Elements(tempData);
-
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
             }
@@ -141,8 +139,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
     }
 
-
     void dbg (String debugMsg) {
         System.err.print( debugMsg + "\n");
     }
+
 }
