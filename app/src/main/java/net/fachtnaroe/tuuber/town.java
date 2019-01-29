@@ -6,8 +6,6 @@ import com.google.appinventor.components.runtime.Web;
 
 import java.util.ArrayList;
 
-import gnu.math.RealNum;
-
 public class town {
     String name=new String("none");
     Integer population=-1;
