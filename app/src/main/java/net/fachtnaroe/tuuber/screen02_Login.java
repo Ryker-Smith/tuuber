@@ -160,7 +160,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             dbg("HI");
             temp = parser.getString("result");
-
+            dbg("In IF");
             if (parser.getString("result").equals("OK")) {
                 // do something
                 dbg("In OK");
