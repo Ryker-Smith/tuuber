@@ -19,7 +19,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
     Image logo;
     Label spacer;
     int thisIsA_Bad_Idea = 320;
-    int another_Bad_Idea = 3000;
+    int another_Bad_Idea = 1000;
 
     protected void $define(){
 
