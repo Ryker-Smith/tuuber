@@ -1,8 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.Component;
@@ -21,29 +18,23 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
     Button tempButton;
     Image logo;
     Label spacer;
+    int thisIsA_Bad_Idea = 320;
+    int another_Bad_Idea = 3000;
 
     protected void $define(){
 
         this.BackgroundColor(Component.COLOR_BLACK);
-//        this.BackgroundImage("tuuber_logo_002.9.png");
-//        Integer width = this.Width();
         Integer screenHeight = this.Height();
-//        dbg ("___Width: " + width.toString() );
-        dbg ("___Height: " + screenHeight.toString() );
-
         SplashScreen = new VerticalArrangement(this);
         SplashScreen.HeightPercent(100);
         SplashScreen.WidthPercent(100);
-//        SplashScreen.Image("tuuber_logo_002.png");
-//        SplashScreen.AlignVertical(Component.ALIGNMENT_CENTER);
         SplashScreen.AlignHorizontal(Component.ALIGNMENT_CENTER);
         spacer = new Label(SplashScreen);
         logo = new Image(SplashScreen);
         spacer.WidthPercent(100);
         logo.Picture("tuuber_logo_002.png");
         logo.ScalePictureToFit(false);
-//        logo.Width(320);
-        logo.Height(320);
+        logo.Height(thisIsA_Bad_Idea);
         Integer spacerHeight= ( screenHeight - logo.Height() );
         spacerHeight = screenHeight / 4 - logo.Height() /2;
         spacer.Height( spacerHeight );
@@ -52,10 +43,9 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         spacer.FontTypeface(Ev3Constants.FontType.NORMAL_FONT);
         spacer.TextAlignment(Component.ALIGNMENT_CENTER);
         spacer.Text("Loading...");
-        dbg ( "___spacer Height " + spacerHeight.toString() );
         nextScreenTimer = new Clock(SplashScreen);
         nextScreenTimer.TimerEnabled(false);
-        nextScreenTimer.TimerInterval(3000);
+        nextScreenTimer.TimerInterval(another_Bad_Idea);
         nextScreenTimer.TimerEnabled(true);
 //        tempButton = new Button(SplashScreen);
 
@@ -75,7 +65,5 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
             return false; // event not handled
     }
 
-    void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n");
-    }
+
 }

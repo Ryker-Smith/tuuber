@@ -278,7 +278,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n");
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 
     void w100 (TextBox t) {

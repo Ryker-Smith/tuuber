@@ -18,9 +18,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     Notifier MessagesPopup;
     Image Header;
 
-
     protected void $define() {
-
 
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
@@ -65,5 +63,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             return true;
         }
         return false;
+    }
+
+    void dbg (String debugMsg) {
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }
