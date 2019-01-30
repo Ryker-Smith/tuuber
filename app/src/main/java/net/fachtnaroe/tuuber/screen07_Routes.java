@@ -1,8 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import android.content.SharedPreferences;
-import android.renderscript.Sampler;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -10,7 +7,6 @@ import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
-import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListPicker;
 import com.google.appinventor.components.runtime.ListView;
@@ -26,7 +22,6 @@ import com.google.appinventor.components.runtime.util.YailList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +38,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     settingsOnline settings = new settingsOnline();
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
-    private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019?";
     private ArrayList RoutsList ;
     private HorizontalArrangement Direction, Days;
     private Label myRoutes;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
-    private Button MainMenu, To, From, Save, Delete;
+    private Button MainMenu, To, From, SaveRoute, Delete;
     TinyDB localDB;
     private CheckBox M, T, W, Th,F;
     private ListView routesDisplay;
@@ -95,9 +89,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Th = new CheckBox(Days);
         F = new CheckBox(Days);
         To = new Button(Direction);
-        Templemore = new ImagePicker(Direction);
         From = new Button(Direction);
-        saveRouteWeb = new Web(RoutesScreen);
         To.Text("To");
         From.Text("From");
         M.Text("M");
@@ -111,20 +103,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 //        YailList tempData=YailList.makeList(RoutsList);
 //        townsDisplay.Elements(tempData);
-        Save = new Button(RoutesScreen);
+        SaveRoute = new Button(RoutesScreen);
         Delete = new Button(RoutesScreen);
-        Save.Text("Save");
+        SaveRoute.Text("Save");
         Delete.Text("Delete");
 
         EventDispatcher.registerEventForDelegation(this, "RoutsList", "Click");
         EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "getRouteWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "TownsWeb", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "townsDisplay", "AfterPicking");
-        EventDispatcher.registerEventForDelegation(this, "Save", "Click");
-        EventDispatcher.registerEventForDelegation(this, "From", "Click");
-        EventDispatcher.registerEventForDelegation(this, "To", "Click");
-
         TownsWeb.Url(
                 baseURL + "&entity=town&action=LIST"
         );
@@ -168,27 +155,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             return true;
         }
 
-        else if (component.equals(townsDisplay)&& eventName.equals("AfterPicking")){
-            townsDisplay.Text(townsDisplay.Selection());
-
-        }
-        else if (component.equals(Save)&& eventName.equals("Click")){
-                saveRouteWeb.Url(
-
-                        baseURL
-                                + "?action=POST"
-                                + "&entity=ROUTE"
-                                + "&orgin=" + townsDisplay.Text()
-                );
-
-                saveRouteWeb.Get();
-        }
-            else if (component.equals(To)&& eventName.equals("Click")){
-            
 
 
-
-        }
 
         return true;
     }

@@ -1,9 +1,7 @@
 package net.fachtnaroe.tuuber;
 
 import android.app.ActivityManager;
-
 import com.google.appinventor.components.runtime.Web;
-
 import java.util.ArrayList;
 
 public class town {

@@ -153,7 +153,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         return true;
     }
     public void webGotText(String status, String textOfResponse) {
-//        LoginButton.Text(status);
+
         String temp=new String();
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
