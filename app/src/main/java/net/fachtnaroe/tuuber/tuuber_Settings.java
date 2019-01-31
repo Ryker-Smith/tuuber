@@ -22,24 +22,23 @@ public class tuuber_Settings {
 
     private String myTag="fr_";
     public String baseURL = "";
-    public String sessionID="a1b2c3d4";
+    public String sessionID="";
     public String pID="-1";
     public String lastValue;
-    public final String defaultURL="https://fachtnaroe.net/tuuber";
-//    public final String fileLocation="applicationSettings.txt";
-    public String status;
+    public final String default_baseURL="https://fachtnaroe.net/tuuber";
+    public final String default_sessionID="a1b2c3d4";
+    public String default_backgroundImageName="img_splashcanvas.png";
+//    public String status;
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin;
 
     TinyDB localDB;
 
     public tuuber_Settings(ComponentContainer screenName){
-        baseURL = defaultURL;
+        baseURL = default_baseURL;
+        sessionID = default_sessionID;
         localDB= new TinyDB(screenName);
     }
-//    public tuuber_Settings (String URL){
-//         baseURL = URL;
-//    }
 
     public String get (String name) throws MalformedURLException{
 
