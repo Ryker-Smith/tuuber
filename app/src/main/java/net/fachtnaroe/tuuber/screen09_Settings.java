@@ -26,13 +26,13 @@ import org.json.JSONObject;
 
 public class screen09_Settings extends Form implements HandlesEventDispatching {
 
-    settingsOnline settings = new settingsOnline();
+    tuuber_Settings applicationSettings;
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
     String version;
     TinyDB localDB;
-    TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, centralDebugBox;
+    TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, centralDebugBox,backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button debugButton, submitDetails, submitPassword, temp;
     Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
@@ -42,17 +42,19 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         dbg("Start $define");
+        applicationSettings = new tuuber_Settings(this);
         VerticalArrangement screen09_SettingsUnder = new VerticalArrangement(this);
-        screen09_SettingsUnder.Image("tuuberBackdrop-01.png");
+        screen09_SettingsUnder.Image(applicationSettings.backgroundImageName);
         screen09_SettingsUnder.WidthPercent(100);
         screen09_SettingsUnder.HeightPercent(100);
-        screen09_SettingsUnder.BackgroundColor(Component.COLOR_WHITE);
         VerticalArrangement screen09_Settings = new VerticalArrangement(screen09_SettingsUnder);
+
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
         localDB= new TinyDB(screen09_Settings);
-        settings.pID=localDB.GetValue("pID",-1).toString();
-
+        applicationSettings.pID=localDB.GetValue("pID",-1).toString();
+        backgroundImageTextBox=new TextBox(screen09_Settings);
+        backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
         detailsWeb = new Web(this);
         detailsWebSave=new Web(this);
         passwordWeb = new Web(this);
@@ -118,16 +120,17 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "onStop");
         EventDispatcher.registerEventForDelegation(this, "Settings", "onDestroy");
-        EventDispatcher.registerEventForDelegation(this, "Settings", "");
+//        EventDispatcher.registerEventForDelegation(this, "Settings", "");
         EventDispatcher.registerEventForDelegation(this, formName, "onActivityResult");
 
-        detailsWeb.Url(settings.baseURL
+        detailsWeb.Url(applicationSettings.baseURL
                 + "?action=GET"
                 + "&entity=person"
-                + "&pID=" + settings.pID
-                + "&sessionID=" + settings.sessionID
+                + "&pID=" + applicationSettings.pID
+                + "&sessionID=" + applicationSettings.sessionID
         );
         detailsWeb.Get();
+        screen09_Settings.Image(applicationSettings.backgroundImageName);
         dbg("End $define");
     }
 
@@ -147,11 +150,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             thisPersonsDetails.family=userFamilyBox.Text();
             thisPersonsDetails.phone=phoneBox.Text();
             // prepare to pass to back end
-            detailsWebSave.Url(settings.baseURL
+            detailsWebSave.Url(applicationSettings.baseURL
                     + "?action=PUT"
                     + "&entity=person"
-                    + "&pID=" + settings.pID
-                    + "&sessionID=" + settings.sessionID
+                    + "&pID=" + applicationSettings.pID
+                    + "&sessionID=" + applicationSettings.sessionID
                     + "&first=" +thisPersonsDetails.first
                     + "&family=" + thisPersonsDetails.family
                     + "&email=" + thisPersonsDetails.email
@@ -162,10 +165,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
         else if (component.equals(submitPassword) && eventName.equals("Click")) {
             // prepare to pass to back end
-            passwordWebSave.Url(settings.baseURL
+            passwordWebSave.Url(applicationSettings.baseURL
                     + "?cmd=CHPWD"
-                    + "&pID=" + settings.pID
-                    + "&sessionID=" + settings.sessionID
+                    + "&pID=" + applicationSettings.pID
+                    + "&sessionID=" + applicationSettings.sessionID
                     + "&op=" +oldPassBox.Text()
                     + "&np=" + newPassBox.Text()
                     + "&cp=" + confirmPassBox.Text()
@@ -219,7 +222,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     public void detailsGotText(String status, String textOfResponse) {
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
-            if (parser.getString("pID").equals(settings.pID)) {
+            if (parser.getString("pID").equals(applicationSettings.pID)) {
                 //using matching pID to check success
                 // do something
                 thisPersonsDetails.email=parser.getString("email");
@@ -291,7 +294,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     void w100listTB(TextBox... t) {
         // This function takes a list of TextBox'es and sets them to 100% width
-        // Other common settings may be applied this way.
+        // Other common applicationSettings may be applied this way.
         int i=0;
         int len = t.length;
         while ((i < len) && (t[i] != null)) {
@@ -304,7 +307,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     void w100listPTB (PasswordTextBox... t) {
         // This function takes a list of TextBox'es and sets them to 100% width
-        // Other common settings may be applied this way.
+        // Other common applicationSettings may be applied this way.
         int i=0;
         int len = t.length;
         while ((i < len) && (t[i] != null)) {

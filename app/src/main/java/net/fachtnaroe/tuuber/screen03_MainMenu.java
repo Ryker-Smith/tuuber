@@ -23,9 +23,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
-
         MessagesPopup = new Notifier(MainMenu);
-
         Routes = new Button(MainMenu);
         Routes.Text("Routes");
         Matches = new Button(MainMenu);
@@ -34,7 +32,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Chats.Text("Chats");
         Settings = new Button(MainMenu);
         Settings.Text("Settings");
-
         Header = new Image(MainMenu);
         Header.Picture("img_carlogo.png");
 
