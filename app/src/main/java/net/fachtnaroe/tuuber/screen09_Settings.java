@@ -41,28 +41,33 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        this.BackgroundImage("thumb-1920-426364.jpg");
-        VerticalArrangement Settings = new VerticalArrangement(this);
-        localDB= new TinyDB(Settings);
+        dbg("Start $define");
+        VerticalArrangement screen09_SettingsUnder = new VerticalArrangement(this);
+        screen09_SettingsUnder.Image("tuuberBackdrop-01.png");
+        screen09_SettingsUnder.WidthPercent(100);
+        screen09_SettingsUnder.HeightPercent(100);
+        screen09_SettingsUnder.BackgroundColor(Component.COLOR_WHITE);
+        VerticalArrangement screen09_Settings = new VerticalArrangement(screen09_SettingsUnder);
+        screen09_Settings.WidthPercent(100);
+        screen09_Settings.HeightPercent(100);
+        localDB= new TinyDB(screen09_Settings);
         settings.pID=localDB.GetValue("pID",-1).toString();
 
-        detailsWeb = new Web(Settings);
-        detailsWebSave=new Web(Settings);
-        passwordWeb = new Web(Settings);
-        passwordWebSave = new Web(Settings);
+        detailsWeb = new Web(this);
+        detailsWebSave=new Web(this);
+        passwordWeb = new Web(this);
+        passwordWebSave = new Web(this);
 
-        detailsVt = new VerticalArrangement(Settings);
+        detailsVt = new VerticalArrangement(screen09_Settings);
         userFirstHz = new HorizontalArrangement(detailsVt);
         userFirstLabel = new Label(userFirstHz);
         userFirstLabel.Text("First name:");
         userFirstBox = new TextBox(userFirstHz);
-        userFirstBox.Text("["+ this.startupValue+"]");
 
         userFamilyHz = new HorizontalArrangement(detailsVt);
         userFamilyLabel = new Label(userFamilyHz);
         userFamilyLabel.Text("Family name:");
         userFamilyBox = new TextBox(userFamilyHz);
-        userFamilyBox.Text("["+ this.startupValue+"]");
 
         phoneHz = new HorizontalArrangement(detailsVt);
         phoneLabel=new Label(phoneHz);
@@ -77,12 +82,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         submitDetails = new Button(detailsVt);
         submitDetails.Text("Save changes");
-//        temp = new Button(detailsVt);
-//        temp.Text("Test this");
-//        centralDebugBox = new TextBox(detailsVt);
-//        centralDebugBox.WidthPercent(100);
-//
-        passwordVt = new VerticalArrangement(Settings);
+        passwordVt = new VerticalArrangement(screen09_Settings);
         oldPassHz = new HorizontalArrangement(passwordVt);
         oldPassLabel = new Label(oldPassHz);
         oldPassLabel.Text("Old password:");
@@ -103,22 +103,23 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         w100listPTB(oldPassBox, newPassBox, confirmPassBox);
 
-        messages = new Notifier(Settings);
+        messages = new Notifier(screen09_Settings);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "detailsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "detailsWebSave", "GotText");
-//        EventDispatcher.registerEventForDelegation(this, "passwordWeb", "GotText");
+
         EventDispatcher.registerEventForDelegation(this, "passwordWebSave", "GotText");
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this, "temp", "Click");
 
-        EventDispatcher.registerEventForDelegation(this, "Settings", "BackPressed");
-        EventDispatcher.registerEventForDelegation(this, "Settings", "onStop");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "onStop");
         EventDispatcher.registerEventForDelegation(this, "Settings", "onDestroy");
         EventDispatcher.registerEventForDelegation(this, "Settings", "");
+        EventDispatcher.registerEventForDelegation(this, formName, "onActivityResult");
 
         detailsWeb.Url(settings.baseURL
                 + "?action=GET"
@@ -127,18 +128,16 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 + "&sessionID=" + settings.sessionID
         );
         detailsWeb.Get();
+        dbg("End $define");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + componentName + " " + eventName);
-        if (eventName.equals("BackPressed")) {
-            dbg("A");
-//            this.closeForm( this.getIntent() );
-            dbg("B");
-//            this.clear();
-            dbg("C");
-            this.finishActivity();
-            dbg("D");
+        if (eventName.equals("onCreate")) {
+            return true;
+        }
+        else if (eventName.equals("BackPressed")) {
+            switchForm("screen03_MainMenu");
             return true;
         }
         else if (component.equals(submitDetails) && eventName.equals("Click")) {
@@ -180,6 +179,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             if (!tempPerson.validEmail()) {
                 submitDetails.Enabled(false);
             }
+            return true;
         }
         else if (component.equals(phoneBox) && eventName.equals("LostFocus")) {
             fr_aPerson tempPerson=new fr_aPerson();
@@ -187,9 +187,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             if (!tempPerson.validPhone()) {
                 submitDetails.Enabled(false);
             }
+            return true;
         }
         else if (component.equals(detailsWeb) && eventName.equals("GotText")) {
             dbg((String) params[0]);
+            dbg(this.formName + " detailsWeb");
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             detailsGotText(status, textOfResponse);
@@ -197,6 +199,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
         else if (component.equals(detailsWebSave) && eventName.equals("GotText")) {
             dbg((String) params[0]);
+            dbg(this.formName + " detailsWebSave");
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             detailsSaveGotText(status, textOfResponse);
@@ -204,6 +207,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
         else if (component.equals(passwordWebSave) && eventName.equals("GotText")) {
             dbg((String) params[0]);
+            dbg(this.formName + " passwordWebSave");
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             passwordSaveGotText(status, textOfResponse);
@@ -278,7 +282,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n");
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 
     void w100 (TextBox t) {
@@ -313,3 +317,16 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
 
 }
+
+//            dbg("START Back");
+//            EventDispatcher.unregisterAllEventsForDelegation();
+//            dbg("a");
+//            Form.finishActivity();
+//            dbg("b");
+//            finishActivity();
+//            dbg("c");
+//            finish();
+//            dbg("d");
+//            closeForm(null);
+//            dbg("END Back");
+//            return true;

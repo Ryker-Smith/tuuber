@@ -18,14 +18,12 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     Notifier MessagesPopup;
     Image Header;
 
-
     protected void $define() {
-
 
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
-        MainMenu.Image("img_splashcanvas.png");
+
         MessagesPopup = new Notifier(MainMenu);
 
         Routes = new Button(MainMenu);
@@ -44,10 +42,14 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "Matches", "Click");
         EventDispatcher.registerEventForDelegation(this, "Chats", "Click");
         EventDispatcher.registerEventForDelegation(this, "Settings", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
-        if (component.equals(Matches) && eventName.equals("Click")) {
+        if (eventName.equals("BackPressed")) {
+            return true;
+        }
+        else if (component.equals(Matches) && eventName.equals("Click")) {
             switchForm("screen04_Matches");
             return true;
         }
@@ -65,5 +67,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             return true;
         }
         return false;
+    }
+
+    void dbg (String debugMsg) {
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }
