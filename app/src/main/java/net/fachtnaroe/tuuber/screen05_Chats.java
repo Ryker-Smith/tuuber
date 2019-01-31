@@ -28,7 +28,8 @@ public class screen05_Chats extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        this.BackgroundImage("img_splashcanvas.png");
+        applicationSettings = new tuuber_Settings(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
         Chats = new VerticalArrangement(this);
         ChatHZ = new HorizontalArrangement(Chats);
         Chat = new ListView(ChatHZ);

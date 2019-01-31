@@ -193,32 +193,36 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
             else {
                 temp = temp+ "tues=N";
-            }temp = temp + "&";
+            }
+            temp = temp + "&";
             if (weds.Checked()){
                 temp = temp + "weds=Y";
             }
             else {
                 temp= temp+ "weds=N";
-            }temp = temp + "&";
+            }
+            temp = temp + "&";
             if (thurs.Checked()){
                 temp = temp + "thurs=Y";
             }
             else {
                 temp = temp+ "thurs=N";
-            }temp = temp + "&";
+            }
+            temp = temp + "&";
             if (fri.Checked()){
                 temp = temp + "fri=Y";
             }
             else {
                 temp = temp+ "fri= N";
-            }temp = temp + "&";
+            }
+            temp = temp + "&";
             if (DriverYoN.Checked()){
                 temp = temp + "driver=Y";
             }
             else {
                 temp = temp+ "driver=N" ;
             }
-            temp = temp + "&";
+//            temp = temp;
 
 
 
