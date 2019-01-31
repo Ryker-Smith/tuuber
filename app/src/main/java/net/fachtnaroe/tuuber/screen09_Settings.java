@@ -18,7 +18,6 @@ import com.google.appinventor.components.runtime.Web;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-//import gnu.lists.FString;
 
 // Research:  http://loopj.com/android-async-http/
 // Research: https://hc.apache.org/httpcomponents-client-ga/
@@ -30,9 +29,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
-    String version;
     TinyDB localDB;
-    TextBox versionBox, debugBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, centralDebugBox,backgroundImageTextBox;
+    TextBox versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button debugButton, submitDetails, submitPassword, temp;
     Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
@@ -48,11 +46,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         screen09_SettingsUnder.WidthPercent(100);
         screen09_SettingsUnder.HeightPercent(100);
         VerticalArrangement screen09_Settings = new VerticalArrangement(screen09_SettingsUnder);
-
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
-        localDB= new TinyDB(screen09_Settings);
-        applicationSettings.pID=localDB.GetValue("pID",-1).toString();
         backgroundImageTextBox=new TextBox(screen09_Settings);
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
         detailsWeb = new Web(this);

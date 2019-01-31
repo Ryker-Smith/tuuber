@@ -12,7 +12,7 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Chats, Settings;
+    private Button Routes, Matches, Chats, Settings, Terms;
 
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
@@ -32,6 +32,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Chats.Text("Chats");
         Settings = new Button(MainMenu);
         Settings.Text("Settings");
+        Terms = new Button(MainMenu);
+        Terms.Text("Terms & Conditions");
         Header = new Image(MainMenu);
         Header.Picture("img_carlogo.png");
 
@@ -39,6 +41,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "Matches", "Click");
         EventDispatcher.registerEventForDelegation(this, "Chats", "Click");
         EventDispatcher.registerEventForDelegation(this, "Settings", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Terms", "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
     }
 
@@ -61,6 +64,10 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         }
         else if (component.equals(Settings) && eventName.equals("Click")) {
             switchForm("screen09_Settings");
+            return true;
+        }
+        else if (component.equals(Terms) && eventName.equals("Click")) {
+            switchForm("screen10_TermsAndConditions");
             return true;
         }
         return false;
