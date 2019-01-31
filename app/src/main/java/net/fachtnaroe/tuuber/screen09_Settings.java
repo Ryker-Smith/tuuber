@@ -46,8 +46,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         screen09_SettingsUnder.Image("tuuberBackdrop-01.png");
         screen09_SettingsUnder.WidthPercent(100);
         screen09_SettingsUnder.HeightPercent(100);
-        screen09_SettingsUnder.BackgroundColor(Component.COLOR_WHITE);
+//        screen09_SettingsUnder.BackgroundColor(Component.COLOR_WHITE);
         VerticalArrangement screen09_Settings = new VerticalArrangement(screen09_SettingsUnder);
+
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
         localDB= new TinyDB(screen09_Settings);
@@ -118,7 +119,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "onStop");
         EventDispatcher.registerEventForDelegation(this, "Settings", "onDestroy");
-        EventDispatcher.registerEventForDelegation(this, "Settings", "");
+//        EventDispatcher.registerEventForDelegation(this, "Settings", "");
         EventDispatcher.registerEventForDelegation(this, formName, "onActivityResult");
 
         detailsWeb.Url(settings.baseURL
@@ -128,6 +129,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 + "&sessionID=" + settings.sessionID
         );
         detailsWeb.Get();
+        screen09_Settings.Image("tuuberBackdrop-01.png");
         dbg("End $define");
     }
 
