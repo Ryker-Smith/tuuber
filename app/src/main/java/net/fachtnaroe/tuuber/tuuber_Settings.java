@@ -31,6 +31,7 @@ public class tuuber_Settings {
 //    public String status;
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin;
+    public String textColor;
 
     TinyDB localDB;
 
