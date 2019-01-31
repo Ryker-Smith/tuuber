@@ -28,16 +28,17 @@ public class tuuber_Settings {
     public final String default_baseURL="https://fachtnaroe.net/tuuber";
     public final String default_sessionID="a1b2c3d4";
     public String default_backgroundImageName="img_splashcanvas.png";
-//    public String status;
     public String backgroundImageName="img_splashcanvas.png";
-    public String lastLogin;
+    public String lastLogin="";
     public String textColor;
+    public
 
     TinyDB localDB;
 
     public tuuber_Settings(ComponentContainer screenName){
-        baseURL = default_baseURL;
-        sessionID = default_sessionID;
+        baseURL=default_baseURL;
+        sessionID=default_sessionID;
+        backgroundImageName=default_backgroundImageName;
         localDB= new TinyDB(screenName);
     }
 
