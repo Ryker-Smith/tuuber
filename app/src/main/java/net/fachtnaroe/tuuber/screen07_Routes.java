@@ -36,7 +36,7 @@ import java.util.List;
 public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
-    tuuber_Settings settings = new tuuber_Settings(this);
+    tuuber_Settings settings;
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
@@ -59,6 +59,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        settings = new tuuber_Settings(this);
         RoutesScreen = new VerticalArrangement(this);
         localDB = new TinyDB(RoutesScreen);
         String tempString= (String) localDB.GetValue("pID",-1);
