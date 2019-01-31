@@ -1,9 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import android.content.SharedPreferences;
-import android.media.Image;
-import android.renderscript.Sampler;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -40,7 +36,7 @@ import java.util.List;
 public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
-    settingsOnline settings = new settingsOnline();
+    tuuber_Settings settings = new tuuber_Settings(this);
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;

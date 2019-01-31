@@ -8,8 +8,8 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 
 import android.os.AsyncTask;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
+import com.google.appinventor.components.runtime.ComponentContainer;
+import com.google.appinventor.components.runtime.TinyDB;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,25 +18,28 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+public class tuuber_Settings {
 
-public class settingsOnline {
-
+    private String myTag="fr_";
     public String baseURL = "";
     public String sessionID="a1b2c3d4";
-    public String pID="2";
+    public String pID="-1";
     public String lastValue;
     public final String defaultURL="https://fachtnaroe.net/tuuber";
-    public final String fileLocation="settings.txt";
+//    public final String fileLocation="applicationSettings.txt";
     public String status;
+    public String backgroundImageName="img_splashcanvas.png";
+    public String lastLogin;
 
-    public settingsOnline (){
+    TinyDB localDB;
+
+    public tuuber_Settings(ComponentContainer screenName){
         baseURL = defaultURL;
+        localDB= new TinyDB(screenName);
     }
-    public settingsOnline (String URL){
-         baseURL = URL;
-    }
+//    public tuuber_Settings (String URL){
+//         baseURL = URL;
+//    }
 
     public String get (String name) throws MalformedURLException{
 
@@ -79,7 +82,10 @@ public class settingsOnline {
     }
 
     public String set (String name, String value) {
-        return "Not implemented";
+        localDB.StoreValue(myTag+"lastLogin", lastLogin);
+        localDB.StoreValue(myTag+"baseURL",baseURL);
+        localDB.StoreValue(myTag+"backgroundImageName", backgroundImageName);
+        return "OK";
     }
 
 }
