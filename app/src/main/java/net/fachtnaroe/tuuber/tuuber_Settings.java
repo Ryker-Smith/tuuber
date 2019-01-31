@@ -22,24 +22,27 @@ public class tuuber_Settings {
 
     private String myTag="fr_";
     public String baseURL = "";
-    public String sessionID="a1b2c3d4";
-    public String pID="-1";
+    public String sessionID="";
+    public String pID="";
     public String lastValue;
-    public final String defaultURL="https://fachtnaroe.net/tuuber";
-//    public final String fileLocation="applicationSettings.txt";
-    public String status;
+    public final String default_baseURL="https://fachtnaroe.net/tuuber-2019?";
+    public final String default_sessionID="a1b2c3d4";
+    public String default_pID="-1";
+    public String default_backgroundImageName="img_splashcanvas.png";
     public String backgroundImageName="img_splashcanvas.png";
-    public String lastLogin;
+    public String lastLogin="";
+    public String textColor;
+    public String TermsAndConditions = "You must use the app only in the way we intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
 
     TinyDB localDB;
 
     public tuuber_Settings(ComponentContainer screenName){
-        baseURL = defaultURL;
         localDB= new TinyDB(screenName);
+        baseURL=default_baseURL;
+        sessionID=default_sessionID;
+        backgroundImageName=localDB.GetValue("backgroundImageName",default_backgroundImageName).toString();
+        pID=localDB.GetValue("pID",default_pID).toString();
     }
-//    public tuuber_Settings (String URL){
-//         baseURL = URL;
-//    }
 
     public String get (String name) throws MalformedURLException{
 

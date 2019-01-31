@@ -1,7 +1,6 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
-import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -12,10 +11,8 @@ import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
-import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.TinyDB;
-import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 //import com.google.appinventor.components.runtime.util;
@@ -36,7 +33,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     private Web LoginWeb;
     private VerticalScrollArrangement Login;
-    private Notifier Notifier1;
+    private Notifier messages;
 
     private HorizontalArrangement HorizontalArrangement1, usernameHz, loginHz, passwordHz;
 
@@ -54,7 +51,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
-        Notifier1 = new Notifier(Login);
+        messages = new Notifier(Login);
 
         Header = new Image (Login);
 //        Header.Picture("img_carlogo.png");
@@ -146,14 +143,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 localDB.StoreValue("pID", parser.getString("pID"));
                 switchForm("screen03_MainMenu");
             } else {
-                Notifier1.ShowMessageDialog("Login failed, check details", "Information", "OK");
+                messages.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            Notifier1.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
+            messages.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
         }
         else {
-            Notifier1.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
 
