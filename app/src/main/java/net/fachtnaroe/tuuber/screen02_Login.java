@@ -28,6 +28,7 @@ import org.json.JSONObject;
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
 //    private TextBox;
+    tuuber_Settings applicationSettings;
     private Button LoginButton, RegisterButton;
     private Image Header, Image2, Image3, Image4;
 
@@ -39,14 +40,15 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     private Label UserNameLabel, PasswordLabel;
     private TextBox UserName;
-    private String baseURL = "https://fachtnaroe.net/tuuber-2019?";
-    private TinyDB localDB;
+//    private String baseURL = "https://fachtnaroe.net/tuuber-2019?";
+//    private TinyDB localDB;
     private String pIDsend, LoginResult, LoginList_JSON;
     private PasswordTextBox Password;
 
     protected void $define() {
 
-        this.BackgroundImage("img_splashcanvas.png");
+        applicationSettings = new tuuber_Settings(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
 
         Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
@@ -89,7 +91,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Image3 = new Image(passwordHz);
         HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1, usernameHz};
 
-        localDB = new TinyDB(Login);
+//        localDB = new TinyDB(Login);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
@@ -99,18 +101,20 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
             return true;
         }
         else if (component.equals(LoginButton) && eventName.equals("Click")) {
                 LoginWeb.Url(
-                        baseURL +
-                                "email=" +
-                                UserName.Text() +
-                                "&password=" +
-                                Password.Text() +
-                                "&cmd=LOGIN"
+                        applicationSettings.baseURL
+                            +    "?cmd=LOGIN"
+                            +   "&email="
+                            +    UserName.Text()
+                            +    "&password="
+                            +   Password.Text()
+
                 );
                 LoginWeb.Get();
                 return true;
@@ -140,7 +144,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
-                localDB.StoreValue("pID", parser.getString("pID"));
+                applicationSettings.pID= parser.getString("pID");
                 switchForm("screen03_MainMenu");
             } else {
                 messages.ShowMessageDialog("Login failed, check details", "Information", "OK");
@@ -155,6 +159,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     }
 
     void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n");
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }

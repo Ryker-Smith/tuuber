@@ -142,6 +142,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (component.equals(MainMenu) && eventName.equals("Click")) {
             switchForm("screen03_MainMenu");
             return true;
@@ -155,7 +156,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
 
 
-        else if (component.equals(TownsWeb) && eventName.equals("GotText")) {
+        else if (componentName.equals("TownsWeb") && eventName.equals("GotText")) {
             dbg((String) params[0]);
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
@@ -171,11 +172,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             return true;
         }
 
-        else if (component.equals(townsDisplay)&& eventName.equals("AfterPicking")){
+        else if (componentName.equals("townsDisplay")&& eventName.equals("AfterPicking")){
             townsDisplay.Text(townsDisplay.Selection());
 
         }
-        else if (component.equals(Save)&& eventName.equals("Click")){
+        else if (componentName.equals("Save")&& eventName.equals("Click")){
+            dbg("Saving");
             if( (!mon.Checked()) && (!tues.Checked()) &&(!weds.Checked()) &&(!thurs.Checked()) &&(!fri.Checked())  &&(!DriverYoN.Checked())){
                 return true;
 
@@ -243,6 +245,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "pID=" + settings.pID + "&"
                  );
                 saveRouteWeb.Get();
+                dbg(saveRouteWeb.Url());
                 return true;
         }
         else if (component.equals(To)&& eventName.equals("Click")){
@@ -327,7 +330,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n");
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }
 

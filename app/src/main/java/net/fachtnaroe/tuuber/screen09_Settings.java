@@ -29,7 +29,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
-    TinyDB localDB;
+//    TinyDB localDB;
     TextBox versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button debugButton, submitDetails, submitPassword, temp;
@@ -119,7 +119,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "onActivityResult");
 
         detailsWeb.Url(applicationSettings.baseURL
-                + "?action=GET"
+                + "action=GET"
                 + "&entity=person"
                 + "&pID=" + applicationSettings.pID
                 + "&sessionID=" + applicationSettings.sessionID
@@ -130,7 +130,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + componentName + " " + eventName);
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("onCreate")) {
             return true;
         }
@@ -146,7 +146,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             thisPersonsDetails.phone=phoneBox.Text();
             // prepare to pass to back end
             detailsWebSave.Url(applicationSettings.baseURL
-                    + "?action=PUT"
+                    + "action=PUT"
                     + "&entity=person"
                     + "&pID=" + applicationSettings.pID
                     + "&sessionID=" + applicationSettings.sessionID
@@ -161,7 +161,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         else if (component.equals(submitPassword) && eventName.equals("Click")) {
             // prepare to pass to back end
             passwordWebSave.Url(applicationSettings.baseURL
-                    + "?cmd=CHPWD"
+                    + "cmd=CHPWD"
                     + "&pID=" + applicationSettings.pID
                     + "&sessionID=" + applicationSettings.sessionID
                     + "&op=" +oldPassBox.Text()
@@ -215,8 +215,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     public void detailsGotText(String status, String textOfResponse) {
+        String temp2="";
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
+            temp2=parser.getString("pID");
             if (parser.getString("pID").equals(applicationSettings.pID)) {
                 //using matching pID to check success
                 // do something
@@ -235,7 +237,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog("JSON Exception", "Information", "OK");
+            messages.ShowMessageDialog(textOfResponse+"JSON Exception [pID="+applicationSettings.pID+"/"+temp2+"]", "Information", "OK");
         }
         else {
             messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
