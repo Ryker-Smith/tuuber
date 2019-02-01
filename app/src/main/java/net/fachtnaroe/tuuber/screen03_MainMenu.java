@@ -42,33 +42,40 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "Chats", "Click");
         EventDispatcher.registerEventForDelegation(this, "Settings", "Click");
         EventDispatcher.registerEventForDelegation(this, "Terms", "Click");
-        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, "", "BackPressed");
     }
 
-    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
+    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
             return true;
         }
-        else if (component.equals(Matches) && eventName.equals("Click")) {
-            switchForm("screen04_Matches");
-            return true;
-        }
-        else if (component.equals(Chats) && eventName.equals("Click")) {
-            switchForm("screen05_Chats");
-            return true;
-        }
-
-        else if (component.equals(Routes) && eventName.equals("Click")) {
-            switchForm("screen07_Routes");
-            return true;
-        }
-        else if (component.equals(Settings) && eventName.equals("Click")) {
-            switchForm("screen09_Settings");
-            return true;
-        }
-        else if (component.equals(Terms) && eventName.equals("Click")) {
-            switchForm("screen10_TermsAndConditions");
-            return true;
+         else if (eventName.equals("Click")) {
+             if (componentName.equals("Matches")) {
+                dbg("Matches");
+                switchForm("screen04_Matches");
+                return true;
+            }
+            else if (componentName.equals("Chats")) {
+                dbg("Chats");
+                switchForm("screen05_Chats");
+                return true;
+            }
+            else if (componentName.equals("Routes")) {
+                dbg("Routes");
+                switchForm("screen07_Routes");
+                return true;
+            }
+            else if (componentName.equals("Settings")) {
+                dbg("Settings");
+                switchForm("screen09_Settings");
+                return true;
+            }
+            else if (componentName.equals("Terms")) {
+                dbg("Terms");
+                switchForm("screen10_TermsAndConditions");
+                return true;
+            }
         }
         return false;
     }
