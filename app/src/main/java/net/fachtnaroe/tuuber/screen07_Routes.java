@@ -161,7 +161,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             getTownList(status, textOfResponse);
-            return true;
+             return true;
         }
 
         else if (component.equals(townsDisplay) && eventName.equals("Click")) {
