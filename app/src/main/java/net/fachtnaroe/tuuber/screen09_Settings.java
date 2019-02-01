@@ -29,10 +29,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
-//    TinyDB localDB;
     TextBox versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
-    Button debugButton, submitDetails, submitPassword, temp;
+    Button submitDetails, submitPassword;
     Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
     HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz,newPassHz, confirmHz;
     VerticalArrangement detailsVt, passwordVt;
@@ -103,10 +102,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         messages = new Notifier(screen09_Settings);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
-        EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "detailsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "detailsWebSave", "GotText");
-
         EventDispatcher.registerEventForDelegation(this, "passwordWebSave", "GotText");
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
@@ -138,7 +135,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             switchForm("screen03_MainMenu");
             return true;
         }
-        else if (componentName.equals("submitDetails") && eventName.equals("Click")) {
+        else if (component.equals(submitDetails) && eventName.equals("Click")) {
             // copy from screen elements to data
             thisPersonsDetails.email=eMailBox.Text();
             thisPersonsDetails.first=userFirstBox.Text();
@@ -158,7 +155,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             detailsWebSave.Get();
             return true;
         }
-        else if (componentName.equals("submitPassword") && eventName.equals("Click")) {
+        else if (component.equals(submitPassword) && eventName.equals("Click")) {
             // prepare to pass to back end
             passwordWebSave.Url(applicationSettings.baseURL
                     + "?cmd=CHPWD"
@@ -171,7 +168,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             passwordWebSave.Get();
             return true;
         }
-        else if (componentName.equals("eMailBox") && eventName.equals("LostFocus")) {
+        else if (component.equals(eMailBox) && eventName.equals("LostFocus")) {
             fr_aPerson tempPerson=new fr_aPerson();
             tempPerson.email=eMailBox.Text();
             if (!tempPerson.validEmail()) {
@@ -179,7 +176,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
             return true;
         }
-        else if (componentName.equals("phoneBox") && eventName.equals("LostFocus")) {
+        else if (component.equals(phoneBox) && eventName.equals("LostFocus")) {
             fr_aPerson tempPerson=new fr_aPerson();
             tempPerson.phone=phoneBox.Text();
             if (!tempPerson.validPhone()) {
@@ -187,7 +184,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
             return true;
         }
-        else if (componentName.equals("detailsWeb") && eventName.equals("GotText")) {
+        else if (component.equals(detailsWeb) && eventName.equals("GotText")) {
             dbg((String) params[0]);
             dbg(this.formName + " detailsWeb");
             String status = params[1].toString();
@@ -195,7 +192,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             detailsGotText(status, textOfResponse);
             return true;
         }
-        else if (componentName.equals("detailsWebSave") && eventName.equals("GotText")) {
+        else if (component.equals(detailsWebSave) && eventName.equals("GotText")) {
             dbg((String) params[0]);
             dbg(this.formName + " detailsWebSave");
             String status = params[1].toString();
@@ -203,7 +200,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             detailsSaveGotText(status, textOfResponse);
             return true;
         }
-        else if (componentName.equals("passwordWebSave") && eventName.equals("GotText")) {
+        else if (component.equals(passwordWebSave) && eventName.equals("GotText")) {
             dbg((String) params[0]);
             dbg(this.formName + " passwordWebSave");
             String status = params[1].toString();

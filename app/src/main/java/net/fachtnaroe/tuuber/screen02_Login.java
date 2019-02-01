@@ -12,7 +12,6 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TextBox;
-import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 //import com.google.appinventor.components.runtime.util;
@@ -30,19 +29,16 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 //    private TextBox;
     tuuber_Settings applicationSettings;
     private Button LoginButton, RegisterButton;
-    private Image Header, Image2, Image3, Image4;
+//    private Image Header;
 
     private Web LoginWeb;
     private VerticalScrollArrangement Login;
     private Notifier messages;
 
-    private HorizontalArrangement HorizontalArrangement1, usernameHz, loginHz, passwordHz;
+    private HorizontalArrangement usernameHz, loginHz, passwordHz;
 
     private Label UserNameLabel, PasswordLabel;
     private TextBox UserName;
-//    private String baseURL = "https://fachtnaroe.net/tuuber-2019?";
-//    private TinyDB localDB;
-    private String pIDsend, LoginResult, LoginList_JSON;
     private PasswordTextBox Password;
 
     protected void $define() {
@@ -55,16 +51,10 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login.HeightPercent(100);
         messages = new Notifier(Login);
 
-        Header = new Image (Login);
-//        Header.Picture("img_carlogo.png");
-
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
-
         LoginWeb = new Web(Login);
-
         usernameHz = new HorizontalArrangement(Login);
-
         UserNameLabel= new Label (usernameHz);
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
@@ -88,13 +78,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         LoginButton.TextColor(Component.COLOR_LTGRAY);
         LoginButton.FontTypeface(Component.TYPEFACE_SANSSERIF);
         LoginButton.Text("Login");
-        Image3 = new Image(passwordHz);
-        HorizontalArrangement[] x = new HorizontalArrangement[] {HorizontalArrangement1, usernameHz};
-
-//        localDB = new TinyDB(Login);
+//        Image3 = new Image(passwordHz);
 
         EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
-        EventDispatcher.registerEventForDelegation(this, "debugButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
