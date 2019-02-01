@@ -30,9 +30,9 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement ChatWith;
-    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ;
+    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ;
     private Button Send;
-    private Label ChatLabel;
+    private Label ChatLabel, pID;
     private ListView Chat;
 
     protected void $define() {
@@ -40,6 +40,9 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         applicationSettings = new tuuber_Settings(this);
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatWith = new VerticalArrangement(this);
+        pIDHZ = new HorizontalArrangement(ChatWith);
+        pID = new Label(pIDHZ);
+        pID.Text(applicationSettings.pID);
         ChatLabelHZ = new HorizontalArrangement(ChatWith);
         ChatLabel = new Label(ChatLabelHZ);
         ChatLabel.Text("ChatLog");

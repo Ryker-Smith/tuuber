@@ -16,16 +16,19 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, ContactsLabelHZ, ChatsScreenHZ;
+    private HorizontalArrangement ContactsHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
     private ListView Contacts;
     private Button ChatsScreen;
-    private Label ContactsLabel;
+    private Label ContactsLabel, pID;
 
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Conversations = new VerticalArrangement(this);
+        pIDHZ = new HorizontalArrangement(Conversations);
+        pID = new Label(pIDHZ);
+        pID.Text(applicationSettings.pID);
         ContactsLabelHZ = new HorizontalArrangement(Conversations);
         ContactsLabel = new Label(ContactsLabelHZ);
         ContactsLabel.Text("Contacts List");
