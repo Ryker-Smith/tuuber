@@ -40,7 +40,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
-    private String baseURL = "https://fachtnaroe.net/tuuber-2019?";
+    private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     private ArrayList RoutsList ;
     private HorizontalArrangement Direction, Days;
     private Label myRoutes;
@@ -129,7 +129,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "To", "Click");
 
         TownsWeb.Url(
-                baseURL + "&entity=town&action=LIST"
+                baseURL + "?entity=town&action=LIST"
         );
         TownsWeb.Get();
         getRouteWeb.Url(settings.baseURL
@@ -161,7 +161,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             getTownList(status, textOfResponse);
-            return true;
+             return true;
         }
 
         else if (component.equals(townsDisplay) && eventName.equals("Click")) {
@@ -187,7 +187,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 temp = temp + "mon=Y";
                 }
             else {
-                temp = temp+ "monn=N" ;
+                temp = temp+ "mon=N" ;
             }
             temp = temp + "&";
             if (tues.Checked()){
@@ -238,7 +238,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 saveRouteWeb.Url(
 
                         baseURL
-                                + "action=POST"
+                                + "?action=POST"
                                 + "&entity=ROUTE"
                                 + Directions + "&"
                                 + temp +"&"

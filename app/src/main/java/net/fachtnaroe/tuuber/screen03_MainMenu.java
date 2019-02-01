@@ -58,7 +58,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(Chats)) {
                 dbg("Chats");
-                switchForm("screen05_Chats");
+                switchForm("screen05_Conversations");
                 return true;
             }
             else if (component.equals(Routes)) {
