@@ -46,32 +46,32 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        dbg("dispatchEvent: " + formName + " "  + eventName);
         if (eventName.equals("BackPressed")) {
             return true;
         }
          else if (eventName.equals("Click")) {
-             if (componentName.equals("Matches")) {
+             if (component.equals(Matches)) {
                 dbg("Matches");
                 switchForm("screen04_Matches");
                 return true;
             }
-            else if (componentName.equals("Chats")) {
+            else if (component.equals(Chats)) {
                 dbg("Chats");
                 switchForm("screen05_Chats");
                 return true;
             }
-            else if (componentName.equals("Routes")) {
+            else if (component.equals(Routes)) {
                 dbg("Routes");
                 switchForm("screen07_Routes");
                 return true;
             }
-            else if (componentName.equals("Settings")) {
+            else if (component.equals(Settings)) {
                 dbg("Settings");
                 switchForm("screen09_Settings");
                 return true;
             }
-            else if (componentName.equals("Terms")) {
+            else if (component.equals(Terms)) {
                 dbg("Terms");
                 switchForm("screen10_TermsAndConditions");
                 return true;

@@ -101,7 +101,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        dbg("dispatchEvent: " + formName +  " " + eventName);
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
             return true;
