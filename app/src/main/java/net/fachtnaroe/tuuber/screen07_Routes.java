@@ -74,9 +74,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My RoutesScreen");
 
-        routesDisplay = new ListPicker(RoutesScreen);
-        routesDisplay.TextColor(Component.COLOR_WHITE);
 
+
+        routesDisplay = new ListPicker(RoutesScreen);
+        routesDisplay.HeightPercent(10  );
 
         saveRouteWeb = new Web(RoutesScreen);
         messagesPopUp = new Notifier(RoutesScreen);
@@ -122,6 +123,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "getRouteWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "TownsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "townsDisplay", "AfterPicking");
+        EventDispatcher.registerEventForDelegation(this, "routesDisplay", "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, "Save", "Click");
         EventDispatcher.registerEventForDelegation(this, "From", "Click");
         EventDispatcher.registerEventForDelegation(this, "To", "Click");
@@ -174,6 +176,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             townsDisplay.Text(townsDisplay.Selection());
 
         }
+        else if (componentName.equals("routesDisplay")&& eventName.equals("AfterPicking")) {
+            routesDisplay.Text(routesDisplay.Selection());
+        }
         else if (component.equals(Save)&& eventName.equals("Click")){
             dbg("Saving");
             if( (!mon.Checked()) && (!tues.Checked()) &&(!weds.Checked()) &&(!thurs.Checked()) &&(!fri.Checked())  &&(!DriverYoN.Checked())){
@@ -215,7 +220,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             else {
                 temp = temp+ "fri=N";
             }
-            temp = temp ;
+            temp = temp +"&";
             if (DriverYoN.Checked()){
                 temp = temp + "driver=Y";
             }
