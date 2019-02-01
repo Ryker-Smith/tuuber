@@ -27,43 +27,19 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement HorizontalArragment1, HorizontalArragment2, HorizontalArragment3;
     private ListPicker MyRouteList;
-    private ArrayList ListOfRouts;
-    private List listItem;
-    private Label Label_1;
-    private Web TuuberWeb;
-    private TextBox Chatbox1;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
 
     protected void $define() {
         Matches = new VerticalArrangement(this);
         Matches.Image("img_splashcanvas.png");
-//        VerticalArrangment1 = new VerticalArrangement(Matches);
-        VerticalArrangment2 = new VerticalArrangement(Matches);
-        TuuberWeb = new Web(Matches);
-        HorizontalArragment1 = new HorizontalArrangement(Matches);
-        HorizontalArragment2 = new HorizontalArrangement(Matches);
-        HorizontalArragment3 = new HorizontalArrangement(Matches);
-        MainMenu =  new Button(HorizontalArragment1);
-        SelectMyRout = new Button(HorizontalArragment2);
-        MyRouteList = new ListPicker(VerticalArrangment2);
-        Label_1 = new Label(HorizontalArragment2);
-        Chatbox1 = new TextBox(HorizontalArragment3);
-        Send = new Button(HorizontalArragment3);
-        Label_1.Text("Star Chat by Clicking on Send ");
-        MainMenu.Text("MainMenu");
-        SelectMyRout.Text("Select Rout");
-        Send.Text("SendMessege");
-        MyRouteList.Text("Routs List");
-        ListOfRouts = new ArrayList();
-        String data="adding";
-        ListOfRouts.add(data);
-        ListOfRouts.add("more");
-        ListOfRouts.add("Stuff");
-        data="like this";
-        ListOfRouts.add(data);
-        YailList tempData=YailList.makeList(ListOfRouts);
-        MyRouteList.Elements(tempData);
+
+
+
+
+
+
+
         EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
