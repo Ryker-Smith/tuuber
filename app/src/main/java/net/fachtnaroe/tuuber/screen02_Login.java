@@ -51,8 +51,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login.HeightPercent(100);
         messages = new Notifier(Login);
 
-        RegisterButton = new Button(Login);
-        RegisterButton.Text("Register");
         LoginWeb = new Web(Login);
         usernameHz = new HorizontalArrangement(Login);
         UserNameLabel= new Label (usernameHz);
@@ -72,18 +70,15 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         loginHz = new HorizontalArrangement(Login);
         LoginButton = new Button (loginHz);
-        LoginButton.Shape(Component.BUTTON_SHAPE_ROUNDED);
-        LoginButton.BackgroundColor(Component.COLOR_BLACK);
-        LoginButton.FontBold(true);
-        LoginButton.TextColor(Component.COLOR_LTGRAY);
-        LoginButton.FontTypeface(Component.TYPEFACE_SANSSERIF);
         LoginButton.Text("Login");
-//        Image3 = new Image(passwordHz);
+        RegisterButton = new Button(Login);
+        RegisterButton.Text("Register");
+        button_CommonFormatting(LoginButton, RegisterButton);
 
-        EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
-        EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
+//        EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -100,7 +95,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                             +    UserName.Text()
                             +    "&password="
                             +   Password.Text()
-
                 );
                 LoginWeb.Get();
                 return true;
@@ -121,7 +115,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 // do something
                 return false;
             }
-
     }
 
     public void webGotText(String status, String textOfResponse) {
@@ -146,5 +139,23 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
+    }
+
+    void button_CommonFormatting (Button... b) {
+        // This function takes a list of TextBox'es and sets them to 100% width
+        // Other common applicationSettings may be applied this way.
+        int i=0;
+        int len = b.length;
+        while ((i < len) && (b[i] != null)) {
+            b[i].WidthPercent(100);
+            b[i].BackgroundColor(Component.COLOR_BLACK);
+            b[i].FontBold(true);
+            b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
+            b[i].TextColor(Component.COLOR_LTGRAY);
+            b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
+            EventDispatcher.registerEventForDelegation(this, b[i].toString(), "Click");
+            i++;
+
+        }
     }
 }

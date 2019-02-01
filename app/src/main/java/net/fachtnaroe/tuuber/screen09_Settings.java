@@ -40,11 +40,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         dbg("Start $define");
         applicationSettings = new tuuber_Settings(this);
-        VerticalArrangement screen09_SettingsUnder = new VerticalArrangement(this);
-        screen09_SettingsUnder.Image(applicationSettings.backgroundImageName);
-        screen09_SettingsUnder.WidthPercent(100);
-        screen09_SettingsUnder.HeightPercent(100);
-        VerticalArrangement screen09_Settings = new VerticalArrangement(screen09_SettingsUnder);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
+        VerticalArrangement screen09_Settings = new VerticalArrangement(this);
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
         backgroundImageTextBox=new TextBox(screen09_Settings);
@@ -108,12 +105,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this,"eMailBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this,"phoneBox","LostFocus");
         EventDispatcher.registerEventForDelegation(this, "temp", "Click");
-
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
-     //   EventDispatcher.registerEventForDelegation(this, formName, "onStop");
         EventDispatcher.registerEventForDelegation(this, "Settings", "onDestroy");
-//        EventDispatcher.registerEventForDelegation(this, "Settings", "");
-       // EventDispatcher.registerEventForDelegation(this, formName, "onActivityResult");
 
         detailsWeb.Url(applicationSettings.baseURL
                 + "?action=GET"
@@ -128,6 +121,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+
         if (eventName.equals("onCreate")) {
             return true;
         }

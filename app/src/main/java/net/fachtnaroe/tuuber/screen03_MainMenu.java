@@ -1,26 +1,33 @@
 package net.fachtnaroe.tuuber;
 
-import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
+import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.util.AlignmentUtil;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Chats, Settings, Terms;
+    private Button Routes, Matches, Conversations, Settings, Terms;
 
+    tuuber_Settings applicationSettings;
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
-    Image Header;
+    ArrayList<HorizontalArrangement> hz;//= new Array ();
 
     protected void $define() {
 
+        applicationSettings = new tuuber_Settings(this);
         MainMenu = new VerticalArrangement(this);
+        MainMenu.Image(applicationSettings.backgroundImageName);;
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MessagesPopup = new Notifier(MainMenu);
@@ -28,24 +35,22 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Routes.Text("Routes");
         Matches = new Button(MainMenu);
         Matches.Text("Matches");
-        Chats = new Button(MainMenu);
-        Chats.Text("Chats");
+        Conversations = new Button(MainMenu);
+        Conversations.Text("Conversations");
         Settings = new Button(MainMenu);
         Settings.Text("Settings");
         Terms = new Button(MainMenu);
         Terms.Text("Terms & Conditions");
-        Header = new Image(MainMenu);
-        Header.Picture("img_carlogo.png");
+        MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        hz=new ArrayList();
 
-        EventDispatcher.registerEventForDelegation(this, "Routes", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Matches", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Chats", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Settings", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Terms", "Click");
+        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms);
+
         EventDispatcher.registerEventForDelegation(this, "", "BackPressed");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+
         dbg("dispatchEvent: " + formName + " "  + eventName);
         if (eventName.equals("BackPressed")) {
             return true;
@@ -56,8 +61,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 switchForm("screen04_Matches");
                 return true;
             }
-            else if (component.equals(Chats)) {
-                dbg("Chats");
+            else if (component.equals(Conversations)) {
+                dbg("Conversations");
                 switchForm("screen05_Conversations");
                 return true;
             }
@@ -82,5 +87,23 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
+    }
+
+    void button_CommonFormatting(Button... b) {
+        // This function takes a list of TextBox'es and sets them to 100% width
+        // Other common applicationSettings may be applied this way.
+        int i=0;
+        int len = b.length;
+
+        while ((i < len) && (b[i] != null)) {
+            hz.add(new HorizontalArrangement(MainMenu));
+            b[i].WidthPercent(50);
+            b[i].BackgroundColor(Component.COLOR_BLACK);
+            b[i].FontBold(true);
+            b[i].TextColor(Component.COLOR_WHITE);
+            b[i].Shape(BUTTON_SHAPE_ROUNDED);
+            EventDispatcher.registerEventForDelegation(this.getDispatchDelegate(), b[i].toString(), "Click");
+            i++;
+        }
     }
 }

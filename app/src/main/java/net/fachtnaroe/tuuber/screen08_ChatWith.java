@@ -29,7 +29,9 @@ import org.json.JSONObject;
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
+    private TextBox chatText;
     private VerticalArrangement ChatWith;
+    private Button MainMenu;
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ;
     private Button Send;
     private Label ChatLabel, pID;
@@ -38,6 +40,21 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        applicationSettings = new tuuber_Settings(this);
+        ChatWith=new VerticalArrangement(this);
+        ChatWith.WidthPercent(100);
+        ChatWith.HeightPercent(100);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
+
+        chatText = new TextBox(ChatWith);
+        chatText.Text("This will be the (prettified) result of:" +
+                "SELECT * FROM Chats WHERE " +
+                "(End result of:" +
+                "getting each line from Chat table where" +
+                "initiator_pID/respondent_pID combination matches for the Conversation" +
+                "selected on the Conversation screen.)");
+        MainMenu= new Button(ChatWith);
+        MainMenu.Text("Back to main");
         applicationSettings = new tuuber_Settings(this);
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatWith = new VerticalArrangement(this);
