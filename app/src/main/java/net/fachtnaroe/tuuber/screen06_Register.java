@@ -23,6 +23,7 @@ import org.json.JSONObject;
 public class screen06_Register extends Form implements HandlesEventDispatching {
 
     private Button Create, TermsConditions;
+    private tuuber_Settings applicationSettings;
     private Image Image1, Image2, Image3, Image4, Image5, Image6;
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
@@ -37,7 +38,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        this.BackgroundImage("img_splashcanvas.png");
+        applicationSettings = new tuuber_Settings(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
         Register = new VerticalArrangement (this);
         Image1 = new Image (Register);
         PhoneHZ = new HorizontalArrangement (Register);
