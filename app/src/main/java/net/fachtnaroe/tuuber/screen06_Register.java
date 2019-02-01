@@ -29,7 +29,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
-    private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
+    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
     private Web Creation;
     private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
     private PasswordTextBox Password, ConfirmPassword;
@@ -181,7 +181,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
             Creation.Url(
                     baseURL +
-                            "entity=person&action=POST&first=" +
+                            "?entity=person&action=POST&first=" +
                             FirstName.Text() +
                             "&family=" +
                             LastName.Text() +
@@ -215,7 +215,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
-                switchForm("screen02_Login");
             } else {
                 Web_Notifier.ShowMessageDialog("Creation failed, check details", "Information", "OK");
             }
