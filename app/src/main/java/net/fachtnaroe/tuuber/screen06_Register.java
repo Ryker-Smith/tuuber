@@ -23,13 +23,14 @@ import org.json.JSONObject;
 public class screen06_Register extends Form implements HandlesEventDispatching {
 
     private Button Create, TermsConditions;
+    private tuuber_Settings applicationSettings;
     private Image Image1, Image2, Image3, Image4, Image5, Image6;
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
-    private String baseURL ="https://fachtnaroe.net/tuuber-2019?";
+    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
     private Web Creation;
     private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
     private PasswordTextBox Password, ConfirmPassword;
@@ -37,7 +38,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        this.BackgroundImage("img_splashcanvas.png");
+        applicationSettings = new tuuber_Settings(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
         Register = new VerticalArrangement (this);
         Image1 = new Image (Register);
         PhoneHZ = new HorizontalArrangement (Register);
@@ -181,7 +183,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
             Creation.Url(
                     baseURL +
-                            "entity=person&action=POST&first=" +
+                            "?entity=person&action=POST&first=" +
                             FirstName.Text() +
                             "&family=" +
                             LastName.Text() +
@@ -215,7 +217,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
-                switchForm("screen02_Login");
             } else {
                 Web_Notifier.ShowMessageDialog("Creation failed, check details", "Information", "OK");
             }

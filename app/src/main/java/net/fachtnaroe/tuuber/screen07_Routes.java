@@ -49,9 +49,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Button MainMenu, To, From, Save, Delete;
     TinyDB localDB;
     private CheckBox M, T, W, Th,F;
-    private ListView routesDisplay;
+    private ListPicker routesDisplay;
     private TextBox TownSingle, TownsDecoded, DriverYN;
-    private ListPicker OriginList, DestinationList, OriginList2, DestinationList2;
+    private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
     Integer pID;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
@@ -74,10 +74,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My RoutesScreen");
 
-        routesDisplay = new ListView(RoutesScreen);
-        routesDisplay.WidthPercent(100);
-        routesDisplay.HeightPercent(40);
-        routesDisplay.TextColor(Component.COLOR_WHITE);
+
+
+        routesDisplay = new ListPicker(RoutesScreen);
+        routesDisplay.HeightPercent(10  );
 
         saveRouteWeb = new Web(RoutesScreen);
         messagesPopUp = new Notifier(RoutesScreen);
@@ -103,12 +103,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         thurs.Text("Th");
         fri.Text("F");
         DriverYoN.Text("Press Yes if Driver");
-
         townsDisplay = new ListPicker(RoutesScreen);
         Templemore = new ImagePicker(Direction);
         townsDisplay.Text("Press for list of towns");
 //        RoutsList = new ArrayList();
-
 //        YailList tempData=YailList.makeList(RoutsList);
 //        townsDisplay.Elements(tempData);
         Save = new Button(RoutesScreen);
@@ -120,10 +118,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
         EventDispatcher.registerEventForDelegation(this, "RoutsList", "Click");
+        EventDispatcher.registerEventForDelegation(this, "Delete", "Click");
         EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "getRouteWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "TownsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "townsDisplay", "AfterPicking");
+        EventDispatcher.registerEventForDelegation(this, "routesDisplay", "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, "Save", "Click");
         EventDispatcher.registerEventForDelegation(this, "From", "Click");
         EventDispatcher.registerEventForDelegation(this, "To", "Click");
@@ -156,7 +156,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
 
 
-        else if (componentName.equals("TownsWeb") && eventName.equals("GotText")) {
+       else if (component.equals(TownsWeb) && eventName.equals("GotText")) {
             dbg((String) params[0]);
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
@@ -176,7 +176,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             townsDisplay.Text(townsDisplay.Selection());
 
         }
-        else if (componentName.equals("Save")&& eventName.equals("Click")){
+        else if (componentName.equals("routesDisplay")&& eventName.equals("AfterPicking")) {
+            routesDisplay.Text(routesDisplay.Selection());
+        }
+        else if (component.equals(Save)&& eventName.equals("Click")){
             dbg("Saving");
             if( (!mon.Checked()) && (!tues.Checked()) &&(!weds.Checked()) &&(!thurs.Checked()) &&(!fri.Checked())  &&(!DriverYoN.Checked())){
                 return true;
@@ -215,9 +218,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 temp = temp + "fri=Y";
             }
             else {
-                temp = temp+ "fri= N";
+                temp = temp+ "fri=N";
             }
-            temp = temp + "&";
+            temp = temp +"&";
             if (DriverYoN.Checked()){
                 temp = temp + "driver=Y";
             }
@@ -256,6 +259,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else if (component.equals(From)&& eventName.equals("Click")) {
             Templemore.Image("Arrow_Left_Templemore.png");
             Specify="from";
+        }
+        else if (component.equals(Delete)&& eventName.equals("Click")) {
+
         }
         return true;
     }
