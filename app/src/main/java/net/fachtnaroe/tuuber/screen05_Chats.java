@@ -13,7 +13,7 @@ public class screen05_Chats extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private Button Send, OtherChats;
     private HorizontalArrangement ChatHZ, SendHZ, OtherChatsHZ, ChatBoxHZ;
-    private VerticalArrangement Chats;
+    private VerticalArrangement Conversation;
     private TextBox ChatBox;
     private ListView Contacts;
 
@@ -23,18 +23,18 @@ public class screen05_Chats extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         this.BackgroundImage(applicationSettings.backgroundImageName);
-        Chats = new VerticalArrangement(this);
-        ChatHZ = new HorizontalArrangement(Chats);
+        Conversation = new VerticalArrangement(this);
+        ChatHZ = new HorizontalArrangement(Conversation);
         Contacts = new ListView(ChatHZ);
 
-        ChatBoxHZ = new HorizontalArrangement(Chats);
+        ChatBoxHZ = new HorizontalArrangement(Conversation);
         ChatBox = new TextBox(ChatBoxHZ);
 
-        SendHZ = new HorizontalArrangement(Chats);
+        SendHZ = new HorizontalArrangement(Conversation);
         Send = new Button(SendHZ);
         Send.Text("Send");
 
-        OtherChatsHZ = new HorizontalArrangement(Chats);
+        OtherChatsHZ = new HorizontalArrangement(Conversation);
         OtherChats = new Button(OtherChatsHZ);
         OtherChats.Text("Other Chats");
 
