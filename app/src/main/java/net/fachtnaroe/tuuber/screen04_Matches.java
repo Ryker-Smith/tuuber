@@ -13,6 +13,7 @@ import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListPicker;
+import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
@@ -33,7 +34,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     protected void $define() {
         Matches = new VerticalArrangement(this);
         Matches.Image("img_splashcanvas.png");
-
+        Matches.HeightPercent(100);
+        Matches.WidthPercent(100);
+        MyRouteList = new ListPicker(Matches);
 
 
 
