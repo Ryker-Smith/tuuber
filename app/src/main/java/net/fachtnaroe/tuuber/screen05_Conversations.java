@@ -15,7 +15,7 @@ import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 
-public class screen05_Chats extends Form implements HandlesEventDispatching {
+public class screen05_Conversations extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
     private Button Send, OtherChats;

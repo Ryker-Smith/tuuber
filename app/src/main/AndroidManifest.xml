@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".screen05_Chats"
+            android:name=".screen05_Conversations"
             android:label="@string/title_activity_screen05__chats"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen02_Login">
