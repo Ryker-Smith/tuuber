@@ -34,6 +34,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private Button Send;
     private Label ChatLabel, pID;
     private ListView Chat;
+    private Web ChatWeb;
 
     protected void $define() {
 
@@ -51,6 +52,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
+
+        ChatWeb = new Web(this);
 
 
     }

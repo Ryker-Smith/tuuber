@@ -20,6 +20,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private ListView Contacts;
     private Button ChatsScreen;
     private Label ContactsLabel, pID;
+    private Web ContactWeb;
 
     protected void $define() {
 
@@ -37,6 +38,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         ChatsScreen = new Button(ChatsScreenHZ);
         ChatsScreen.Text("Chat");
+
+        ContactWeb = new Web(this);
 
         EventDispatcher.registerEventForDelegation(this, "ChatsScreen", "Click");
 
