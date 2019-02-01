@@ -245,6 +245,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "pID=" + settings.pID + "&"
                  );
                 saveRouteWeb.Get();
+                getRouteWeb.Get();
                 dbg(saveRouteWeb.Url());
                 return true;
         }
