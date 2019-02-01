@@ -11,6 +11,7 @@ import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
+import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TableArrangement;
@@ -26,6 +27,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
+
+    private tuuber_Settings applicationSettings;
+    private VerticalArrangement ChatWith;
+    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ;
+    private Button Send;
+    private Label ChatLabel;
+    private ListView Chat;
 
     protected void $define() {
 
