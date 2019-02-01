@@ -37,6 +37,18 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        applicationSettings = new tuuber_Settings(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
+        ChatWith = new VerticalArrangement(this);
+        ChatLabelHZ = new HorizontalArrangement(ChatWith);
+        ChatLabel = new Label(ChatLabelHZ);
+        ChatLabel.Text("ChatLog");
+        ChatHZ = new HorizontalArrangement(ChatWith);
+        Chat = new ListView(ChatHZ);
+        SendHZ = new HorizontalArrangement(ChatWith);
+        Send = new Button(SendHZ);
+        Send.Text("Send");
+
 
     }
 }
