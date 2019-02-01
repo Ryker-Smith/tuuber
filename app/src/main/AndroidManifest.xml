@@ -24,10 +24,10 @@
             android:name=".screen05_Conversations"
             android:label="@string/title_activity_screen05__chats"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".screen02_Login">
+        <activity android:name=".screen02_Login"
+            android:windowSoftInputMode="stateVisible|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,12 +38,17 @@
         <activity
             android:name=".screen09_Settings"
             android:label="@string/title_activity_screen09__settings"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".screen06_Register" />
-        <activity android:name=".screen07_Routes" />
-        <activity android:name=".screen10_TermsAndConditions" />
-        <activity android:name=".screen04_Matches" />
-        <activity android:name="com.google.appinventor.components.runtime.ListPickerActivity" />
+        <activity android:name=".screen06_Register"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".screen07_Routes"/>
+        <activity android:name=".screen10_TermsAndConditions"
+            android:windowSoftInputMode="stateVisible|adjustPan"/>
+        <activity android:name=".screen04_Matches"
+            android:windowSoftInputMode="stateVisible|adjustPan"/>
+        <activity android:name="com.google.appinventor.components.runtime.ListPickerActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"/>
     </application>
 
 </manifest>
