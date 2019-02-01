@@ -32,9 +32,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private TextBox chatText;
     private VerticalArrangement ChatWith;
     private Button MainMenu;
-
-    private tuuber_Settings applicationSettings;
-    private VerticalArrangement ChatWith;
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ;
     private Button Send;
     private Label ChatLabel, pID;
