@@ -1,5 +1,8 @@
 package net.fachtnaroe.tuuber;
 
+import android.content.Intent;
+import android.content.res.Resources;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -14,20 +17,29 @@ import com.google.appinventor.components.runtime.util.AlignmentUtil;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import static android.support.v4.content.res.TypedArrayUtils.getResourceId;
+
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     private Button Routes, Matches, Conversations, Settings, Terms;
 
     tuuber_Settings applicationSettings;
+    boolean form_made=false;
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
     ArrayList<HorizontalArrangement> hz;//= new Array ();
 
     protected void $define() {
 
+        if (form_made) {
+            return;
+        }
+        else {
+            form_made=true;
+        }
         applicationSettings = new tuuber_Settings(this);
         MainMenu = new VerticalArrangement(this);
-        MainMenu.Image(applicationSettings.backgroundImageName);;
+        MainMenu.Image(applicationSettings.backgroundImageName);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MessagesPopup = new Notifier(MainMenu);
@@ -46,39 +58,35 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms);
 
-        EventDispatcher.registerEventForDelegation(this, "", "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
 
-        dbg("dispatchEvent: " + formName + " "  + eventName);
+//        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("BackPressed")) {
             return true;
         }
-         else if (eventName.equals("Click")) {
-             if (component.equals(Matches)) {
-                dbg("Matches");
-                switchForm("screen04_Matches");
+        if (eventName.equals("Click")) {
+            if (component.equals(Matches)) {
+                startActivity(new Intent().setClass(this, screen04_Matches.class));
                 return true;
             }
             else if (component.equals(Conversations)) {
-                dbg("Conversations");
-                switchForm("screen05_Conversations");
+                startActivity(new Intent().setClass(this, screen05_Conversations.class));
                 return true;
             }
             else if (component.equals(Routes)) {
-                dbg("Routes");
-                switchForm("screen07_Routes");
+                startActivity(new Intent().setClass(this, screen07_Routes.class));
                 return true;
             }
             else if (component.equals(Settings)) {
-                dbg("Settings");
-                switchForm("screen09_Settings");
+                startActivity(new Intent().setClass(this, screen09_Settings.class));
                 return true;
             }
             else if (component.equals(Terms)) {
-                dbg("Terms");
-                switchForm("screen10_TermsAndConditions");
+                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
                 return true;
             }
         }
@@ -94,16 +102,30 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         // Other common applicationSettings may be applied this way.
         int i=0;
         int len = b.length;
-
+//        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         while ((i < len) && (b[i] != null)) {
-            hz.add(new HorizontalArrangement(MainMenu));
+//            hz.add(new HorizontalArrangement(MainMenu));
             b[i].WidthPercent(50);
             b[i].BackgroundColor(Component.COLOR_BLACK);
             b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
-            EventDispatcher.registerEventForDelegation(this.getDispatchDelegate(), b[i].toString(), "Click");
+//            b[i].Text(b[i].toString());
+//            R.id();
+//            String[] temp = b[i].toString().split("@");
+//            String x = temp[1];
+//            Integer a = Resources.getSystem().getIdentifier(b[i].toString(),"drawable","android");
+//            Integer r=$context().getResources().getIdentifier(x,"drawable",$context().getPackageName());
+//            dbg(a.toString());
+//            dbg(r.toString());
+//            android.app.Activity
+//            $c
+////            $context().findViewById()
+//            dbg(x);
+//            int x=getResourceId(b[i].toString(),"",getPackageName());
+//            EventDispatcher.registerEventForDelegation(this.getDispatchDelegate(), b[i].toString(), "Click");
             i++;
         }
     }
+
 }
