@@ -1,6 +1,8 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
+import android.content.Intent;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -26,7 +28,6 @@ import org.json.JSONObject;
 
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
-//    private TextBox;
     tuuber_Settings applicationSettings;
     private Button LoginButton, RegisterButton;
 //    private Image Header;
@@ -34,12 +35,11 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private Web LoginWeb;
     private VerticalScrollArrangement Login;
     private Notifier messages;
-
     private HorizontalArrangement usernameHz, loginHz, passwordHz;
-
     private Label UserNameLabel, PasswordLabel;
     private TextBox UserName;
     private PasswordTextBox Password;
+    private Image ourLogo;
 
     protected void $define() {
 
@@ -74,11 +74,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         RegisterButton = new Button(Login);
         RegisterButton.Text("Register");
         button_CommonFormatting(LoginButton, RegisterButton);
+        ourLogo=new Image(Login);
+        ourLogo.Picture(applicationSettings.ourLogo);
+        ourLogo.ScalePictureToFit(false);
+        ourLogo.Height(320);
+        Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
         EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
-//        EventDispatcher.registerEventForDelegation(this, "RegisterButton", "Click");
-//        EventDispatcher.registerEventForDelegation(this, "LoginButton", "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -87,23 +90,24 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             // prevents return to splash screen
             return true;
         }
-        else if (component.equals(LoginButton) && eventName.equals("Click")) {
+        if (eventName.equals("Click")) {
+            if (component.equals(LoginButton)) {
                 LoginWeb.Url(
                         applicationSettings.baseURL
-                            +    "?cmd=LOGIN"
-                            +   "&email="
-                            +    UserName.Text()
-                            +    "&password="
-                            +   Password.Text()
+                                + "?cmd=LOGIN"
+                                + "&email="
+                                + UserName.Text()
+                                + "&password="
+                                + Password.Text()
                 );
                 LoginWeb.Get();
                 return true;
-            }
-            else if (component.equals(RegisterButton) && eventName.equals("Click")) {
-                switchForm("screen06_Register");
+            } else if (component.equals(RegisterButton)) {
+                startActivity(new Intent().setClass(this, screen06_Register.class));
                 return true;
             }
-            else if (component.equals(LoginWeb) && eventName.equals("GotText")) {
+        }
+        if (component.equals(LoginWeb) && eventName.equals("GotText")) {
                 String stringSent =  (String) params[0];
                 Integer status = (Integer) params[1];
                 String encoding = (String) params[2];
@@ -124,7 +128,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 applicationSettings.pID= parser.getString("pID");
-                switchForm("screen03_MainMenu");
+                startActivity(new Intent().setClass(this, screen03_MainMenu.class));
             } else {
                 messages.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }

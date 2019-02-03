@@ -37,6 +37,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     tuuber_Settings settings;
+    boolean form_made=false;
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
@@ -59,6 +60,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        if (form_made) {
+            return;
+        }
+        else {
+            form_made=true;
+        }
         settings = new tuuber_Settings(this);
         RoutesScreen = new VerticalArrangement(this);
         localDB = new TinyDB(RoutesScreen);
@@ -66,7 +73,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         pID = Integer.valueOf(tempString);
         settings.pID=localDB.GetValue("pID",-1).toString();
 
-        RoutesScreen.Image("img_splashcanvas.png");
+        RoutesScreen.Image(settings.backgroundImageName);
         MainMenu =  new Button(RoutesScreen);
         MainMenu.Text("MainMenu");
 
@@ -117,16 +124,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Templemore.HeightPercent(10);
 
 
-        EventDispatcher.registerEventForDelegation(this, "RoutsList", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Delete", "Click");
-        EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
+        EventDispatcher.registerEventForDelegation(this, "ClickettyDoDah", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "Delete", "Click");
+//        EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "getRouteWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "TownsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "townsDisplay", "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, "routesDisplay", "AfterPicking");
-        EventDispatcher.registerEventForDelegation(this, "Save", "Click");
-        EventDispatcher.registerEventForDelegation(this, "From", "Click");
-        EventDispatcher.registerEventForDelegation(this, "To", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "Save", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "From", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "To", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
 
         TownsWeb.Url(
                 baseURL + "?entity=town&action=LIST"
@@ -143,7 +151,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
-        if (component.equals(MainMenu) && eventName.equals("Click")) {
+        if (eventName.equals("BackPressed")) {
+            this.finishActivity();
+            return true;
+        }
+        else if (component.equals(MainMenu) && eventName.equals("Click")) {
             switchForm("screen03_MainMenu");
             return true;
         }
