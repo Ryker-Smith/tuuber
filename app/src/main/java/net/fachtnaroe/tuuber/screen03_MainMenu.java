@@ -58,7 +58,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz=new ArrayList();
 
-        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms);
+        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms, experimental);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
