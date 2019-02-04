@@ -26,8 +26,47 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class screen10_TermsAndConditions extends Form implements HandlesEventDispatching {
+    private tuuber_Settings applicationSettings;
+    private VerticalArrangement tacvz;
+    private Button accept, decline;
+    private Label TandC;
+
 
     protected void $define() {
+        applicationSettings = new tuuber_Settings(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
+        tacvz = new VerticalArrangement(this);
+        tacvz.WidthPercent(100);
+        tacvz.HeightPercent(100);
+        TandC = new Label(tacvz);
+        TandC.Text(applicationSettings.TermsAndConditions);
+        TandC.BackgroundColor(COLOR_WHITE);
+        accept = new Button(tacvz);
+        accept.Text("Accept");
+        decline = new Button(tacvz);
+        decline.Text("Decline");
+
+        EventDispatcher.registerEventForDelegation(this, "accept", "Click");
+
+    }
+
+    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        if (eventName.equals("BackPressed")) {
+            return true;
+        }
+        else if(component.equals(accept) && eventName.equals("Click")){
+            switchForm("screen02_Login");
+            return true;
+
+
+        }
+        else if(component.equals(decline) && eventName.equals("Click")){
+            switchForm("screen06_Register");
+            return true;
+
+
+        }
+        return false;
 
 
     }
