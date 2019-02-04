@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".screen05_Conversations"
-            android:label="@string/title_activity_screen05__chats"
+            android:label="screen05_Conversations"
             android:theme="@style/AppTheme.NoActionBar" />
         <!-- To control the action of the soft keyboard
         and how the background is rendered use:
