@@ -37,10 +37,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     tuuber_Settings settings;
+    boolean form_made=false;
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
-    private String baseURL = "https://fachtnaroe.net/tuuber-2019?";
+    private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     private ArrayList RoutsList ;
     private HorizontalArrangement Direction, Days;
     private Label myRoutes;
@@ -51,7 +52,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private CheckBox M, T, W, Th,F;
     private ListView routesDisplay;
     private TextBox TownSingle, TownsDecoded, DriverYN;
-    private ListPicker OriginList, DestinationList, OriginList2, DestinationList2;
+    private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
     Integer pID;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
@@ -59,6 +60,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
+        if (form_made) {
+            return;
+        }
+        else {
+            form_made=true;
+        }
         settings = new tuuber_Settings(this);
         RoutesScreen = new VerticalArrangement(this);
         localDB = new TinyDB(RoutesScreen);
@@ -66,7 +73,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         pID = Integer.valueOf(tempString);
         settings.pID=localDB.GetValue("pID",-1).toString();
 
-        RoutesScreen.Image("img_splashcanvas.png");
+        RoutesScreen.Image(settings.backgroundImageName);
         MainMenu =  new Button(RoutesScreen);
         MainMenu.Text("MainMenu");
 
@@ -74,10 +81,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My RoutesScreen");
 
+
+
         routesDisplay = new ListView(RoutesScreen);
-        routesDisplay.WidthPercent(100);
-        routesDisplay.HeightPercent(40);
-        routesDisplay.TextColor(Component.COLOR_WHITE);
+        routesDisplay.HeightPercent(10  );
 
         saveRouteWeb = new Web(RoutesScreen);
         messagesPopUp = new Notifier(RoutesScreen);
@@ -103,12 +110,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         thurs.Text("Th");
         fri.Text("F");
         DriverYoN.Text("Press Yes if Driver");
-
         townsDisplay = new ListPicker(RoutesScreen);
         Templemore = new ImagePicker(Direction);
         townsDisplay.Text("Press for list of towns");
 //        RoutsList = new ArrayList();
-
 //        YailList tempData=YailList.makeList(RoutsList);
 //        townsDisplay.Elements(tempData);
         Save = new Button(RoutesScreen);
@@ -119,17 +124,20 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Templemore.HeightPercent(10);
 
 
-        EventDispatcher.registerEventForDelegation(this, "RoutsList", "Click");
-        EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
+        EventDispatcher.registerEventForDelegation(this, "ClickettyDoDah", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "Delete", "Click");
+//        EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "getRouteWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "TownsWeb", "GotText");
         EventDispatcher.registerEventForDelegation(this, "townsDisplay", "AfterPicking");
-        EventDispatcher.registerEventForDelegation(this, "Save", "Click");
-        EventDispatcher.registerEventForDelegation(this, "From", "Click");
-        EventDispatcher.registerEventForDelegation(this, "To", "Click");
+        EventDispatcher.registerEventForDelegation(this, "routesDisplay", "AfterPicking");
+//        EventDispatcher.registerEventForDelegation(this, "Save", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "From", "Click");
+//        EventDispatcher.registerEventForDelegation(this, "To", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
 
         TownsWeb.Url(
-                baseURL + "&entity=town&action=LIST"
+                baseURL + "?entity=town&action=LIST"
         );
         TownsWeb.Get();
         getRouteWeb.Url(settings.baseURL
@@ -142,7 +150,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (component.equals(MainMenu) && eventName.equals("Click")) {
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        if (eventName.equals("BackPressed")) {
+            this.finishActivity();
+            return true;
+        }
+        else if (component.equals(MainMenu) && eventName.equals("Click")) {
             switchForm("screen03_MainMenu");
             return true;
         }
@@ -155,12 +168,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
 
 
-        else if (component.equals(TownsWeb) && eventName.equals("GotText")) {
+       else if (component.equals(TownsWeb) && eventName.equals("GotText")) {
             dbg((String) params[0]);
             String status = params[1].toString();
             String textOfResponse = (String) params[3];
             getTownList(status, textOfResponse);
-            return true;
+             return true;
         }
 
         else if (component.equals(townsDisplay) && eventName.equals("Click")) {
@@ -171,11 +184,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             return true;
         }
 
-        else if (component.equals(townsDisplay)&& eventName.equals("AfterPicking")){
+        else if (componentName.equals("townsDisplay")&& eventName.equals("AfterPicking")){
             townsDisplay.Text(townsDisplay.Selection());
 
         }
         else if (component.equals(Save)&& eventName.equals("Click")){
+            dbg("Saving");
             if( (!mon.Checked()) && (!tues.Checked()) &&(!weds.Checked()) &&(!thurs.Checked()) &&(!fri.Checked())  &&(!DriverYoN.Checked())){
                 return true;
 
@@ -185,7 +199,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 temp = temp + "mon=Y";
                 }
             else {
-                temp = temp+ "monn=N" ;
+                temp = temp+ "mon=N" ;
             }
             temp = temp + "&";
             if (tues.Checked()){
@@ -213,9 +227,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 temp = temp + "fri=Y";
             }
             else {
-                temp = temp+ "fri= N";
+                temp = temp+ "fri=N";
             }
-            temp = temp + "&";
+            temp = temp +"&";
             if (DriverYoN.Checked()){
                 temp = temp + "driver=Y";
             }
@@ -236,13 +250,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 saveRouteWeb.Url(
 
                         baseURL
-                                + "action=POST"
+                                + "?action=POST"
                                 + "&entity=ROUTE"
                                 + Directions + "&"
                                 + temp +"&"
                                 + "pID=" + settings.pID + "&"
                  );
                 saveRouteWeb.Get();
+                getRouteWeb.Get();
+                dbg(saveRouteWeb.Url());
                 return true;
         }
         else if (component.equals(To)&& eventName.equals("Click")){
@@ -252,6 +268,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else if (component.equals(From)&& eventName.equals("Click")) {
             Templemore.Image("Arrow_Left_Templemore.png");
             Specify="from";
+        }
+        else if (component.equals(Delete)&& eventName.equals("Click")) {
+
         }
         return true;
     }
@@ -327,7 +346,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     void dbg (String debugMsg) {
-        System.err.print( debugMsg + "\n");
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }
 
