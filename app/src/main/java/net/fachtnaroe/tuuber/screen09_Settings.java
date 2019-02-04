@@ -33,7 +33,6 @@ import java.util.ArrayList;
 public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
-    boolean form_made = false;
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
@@ -43,20 +42,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
     HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz;
     VerticalArrangement detailsVt, passwordVt;
-    ListView myList;
     Notifier messagesPopUp;
-    Web testFancyList_Web;
-    WebViewer testFancyList_Web_Viewer;
 
     protected void $define() {
 
         dbg("Start $define " + formName);
-        if (form_made) {
-            dbg("made");
-            return;
-        } else {
-            form_made = true;
-        }
         applicationSettings = new tuuber_Settings(this);
 
         this.BackgroundImage(applicationSettings.backgroundImageName);
@@ -67,15 +57,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         MainMenu.Text("MainMenu");
 
         messagesPopUp = new Notifier(screen09_Settings);
-        testFancyList_Web = new Web(screen09_Settings);
-        testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
-//        testFancyList_Web.Get();
-
-        testFancyList_Web_Viewer= new WebViewer(screen09_Settings);
-        testFancyList_Web_Viewer.GoToUrl("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
-        testFancyList_Web_Viewer.HeightPercent(25);
-
-        fancyListView(screen09_Settings, myList, "one", "two", "three");
 
         backgroundImageTextBox = new TextBox(screen09_Settings);
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
@@ -133,13 +114,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click");
         EventDispatcher.registerEventForDelegation(this, "WebEvent", "GotText");
-//        EventDispatcher.registerEventForDelegation(this, "detailsWebSave", "GotText");
-//        EventDispatcher.registerEventForDelegation(this, "passwordWebSave", "GotText");
-//        EventDispatcher.registerEventForDelegation(this, "eMailBox", "LostFocus");
         EventDispatcher.registerEventForDelegation(this, "phoneBox", "LostFocus");
-//        EventDispatcher.registerEventForDelegation(this, "temp", "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
-//        EventDispatcher.registerEventForDelegation(this, "Settings", "onDestroy");
 
         detailsWeb.Url(applicationSettings.baseURL
                 + "?action=GET"
