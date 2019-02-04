@@ -3,5 +3,5 @@
     <string name="message">All Thumbs</string>
     <string name="title_activity_screen03__main_menu">screen03_MainMenu</string>
     <string name="title_activity_screen09__settings">screen09_Settings</string>
-    <string name="title_activity_screen05__chats">screen05_Chats</string>
+    <string name="title_activity_screen05__Chats">screen05_Chats</string>
 </resources>

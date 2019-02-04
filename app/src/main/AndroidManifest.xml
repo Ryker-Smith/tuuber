@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".screen05_Chats"
-            android:label="@string/title_activity_screen05__chats"
+            android:label="@string/title_activity_screen05__Chats"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen02_Login">
             <intent-filter>
