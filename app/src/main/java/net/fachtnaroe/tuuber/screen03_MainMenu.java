@@ -21,7 +21,7 @@ import static android.support.v4.content.res.TypedArrayUtils.getResourceId;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Conversations, Settings, Terms;
+    private Button Routes, Matches, Conversations, Settings, Terms, experimental;
 
     tuuber_Settings applicationSettings;
     boolean form_made=false;
@@ -53,6 +53,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Settings.Text("Settings");
         Terms = new Button(MainMenu);
         Terms.Text("Terms & Conditions");
+        experimental= new Button(MainMenu);
+        experimental.Text("Experimental Stuff");
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz=new ArrayList();
 
@@ -88,6 +90,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             else if (component.equals(Terms)) {
                 startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
                 return true;
+            }
+            else if (component.equals(experimental)) {
+                startActivity(new Intent().setClass(this, experimental_doNotUseThis.class));
             }
         }
         return false;

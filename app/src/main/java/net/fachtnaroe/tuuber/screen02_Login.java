@@ -80,12 +80,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         ourLogo.Height(320);
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
-        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
-        EventDispatcher.registerEventForDelegation(this, "LoginWeb", "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName +  " " + eventName);
+//        dbg("dispatchEvent: " + formName +  " " + eventName);
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
             return true;
