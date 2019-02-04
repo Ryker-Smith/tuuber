@@ -49,7 +49,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Button MainMenu, To, From, Save, Delete;
     TinyDB localDB;
     private CheckBox M, T, W, Th,F;
-    private ListPicker routesDisplay;
+    private ListView routesDisplay;
     private TextBox TownSingle, TownsDecoded, DriverYN;
     private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
@@ -76,7 +76,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
 
-        routesDisplay = new ListPicker(RoutesScreen);
+        routesDisplay = new ListView(RoutesScreen);
         routesDisplay.HeightPercent(10  );
 
         saveRouteWeb = new Web(RoutesScreen);
@@ -175,9 +175,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else if (componentName.equals("townsDisplay")&& eventName.equals("AfterPicking")){
             townsDisplay.Text(townsDisplay.Selection());
 
-        }
-        else if (componentName.equals("routesDisplay")&& eventName.equals("AfterPicking")) {
-            routesDisplay.Text(routesDisplay.Selection());
         }
         else if (component.equals(Save)&& eventName.equals("Click")){
             dbg("Saving");
