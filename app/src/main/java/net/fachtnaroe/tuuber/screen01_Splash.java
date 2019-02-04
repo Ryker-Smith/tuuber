@@ -14,15 +14,17 @@ import com.google.appinventor.components.runtime.util.Ev3Constants;
 public class screen01_Splash extends Form implements HandlesEventDispatching {
 
     Clock nextScreenTimer;
+    tuuber_Settings applicationSettings;
     VerticalArrangement SplashScreen;
     Button tempButton;
-    Image logo;
+    Image ourLogo;
     Label spacer;
     int thisIsA_Bad_Idea = 320;
-    int another_Bad_Idea = 1000;
+    int another_Bad_Idea = 1500;
 
     protected void $define(){
 
+        applicationSettings=new tuuber_Settings(this);
         this.BackgroundColor(Component.COLOR_BLACK);
         Integer screenHeight = this.Height();
         SplashScreen = new VerticalArrangement(this);
@@ -30,13 +32,13 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         SplashScreen.WidthPercent(100);
         SplashScreen.AlignHorizontal(Component.ALIGNMENT_CENTER);
         spacer = new Label(SplashScreen);
-        logo = new Image(SplashScreen);
+        ourLogo = new Image(SplashScreen);
         spacer.WidthPercent(100);
-        logo.Picture("tuuber_logo_002.png");
-        logo.ScalePictureToFit(false);
-        logo.Height(thisIsA_Bad_Idea);
-        Integer spacerHeight= ( screenHeight - logo.Height() );
-        spacerHeight = screenHeight / 4 - logo.Height() /2;
+        ourLogo.Picture(applicationSettings.ourLogo);
+        ourLogo.ScalePictureToFit(false);
+        ourLogo.Height(thisIsA_Bad_Idea);
+        Integer spacerHeight= ( screenHeight - ourLogo.Height() );
+        spacerHeight = screenHeight / 4 - ourLogo.Height() /2;
         spacer.Height( spacerHeight );
         spacer.TextColor(Component.COLOR_WHITE);
         spacer.FontBold(true);

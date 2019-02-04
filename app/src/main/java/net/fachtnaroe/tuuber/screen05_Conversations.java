@@ -18,8 +18,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private VerticalArrangement Conversations;
     private HorizontalArrangement ContactsHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
     private ListView Contacts;
+    private String baseURL = "https://fachtnaroe.net/tuuber-test";
     private Button ChatsScreen;
     private Label ContactsLabel, pID;
+    private Web ContactWeb;
 
     protected void $define() {
 
@@ -38,8 +40,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ChatsScreen = new Button(ChatsScreenHZ);
         ChatsScreen.Text("Chat");
 
-        EventDispatcher.registerEventForDelegation(this, "ChatsScreen", "Click");
+        ContactWeb = new Web(this);
 
+        EventDispatcher.registerEventForDelegation(this, "ChatsScreen", "Click");
+        EventDispatcher.registerEventForDelegation(this, "ContactWeb", "GotText");
 
     }
 
@@ -47,6 +51,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         if (component.equals(ChatsScreen) && eventName.equals("Click")) {
             switchForm("screen08_ChatWith");
             return true;
+        }
+        ContactWeb.Url(
+                baseURL +
+                        "action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22"
+        );
+        ContactWeb.Get();
+        if (component.equals(ContactWeb) && eventName.equals("GotText")){
+            
         }
         return true;
     }
