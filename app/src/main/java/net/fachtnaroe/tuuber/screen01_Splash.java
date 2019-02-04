@@ -44,7 +44,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         spacer.FontBold(true);
         spacer.FontTypeface(Ev3Constants.FontType.NORMAL_FONT);
         spacer.TextAlignment(Component.ALIGNMENT_CENTER);
-        spacer.Text("Loading...");
+        spacer.Text("Ag fáil data...");
         nextScreenTimer = new Clock(SplashScreen);
         nextScreenTimer.TimerEnabled(false);
         nextScreenTimer.TimerInterval(another_Bad_Idea);
