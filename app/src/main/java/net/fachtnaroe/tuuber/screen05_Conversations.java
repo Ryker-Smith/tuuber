@@ -54,7 +54,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         }
         ContactWeb.Url(
                 baseURL +
-                        "action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22"
+                        "action=LIST&entity=chat"
+                        + "&sessionID=" + applicationSettings.sessionID
+                        + "&initiator_pID=15&respondent_pID=22"
         );
         ContactWeb.Get();
         if (component.equals(ContactWeb) && eventName.equals("GotText")){
