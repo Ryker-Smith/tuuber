@@ -59,6 +59,7 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
             return true;
 
 
+
         }
         else if(component.equals(decline) && eventName.equals("Click")){
             switchForm("screen02_Login");
