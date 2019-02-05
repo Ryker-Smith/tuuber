@@ -2,6 +2,11 @@ package net.fachtnaroe.tuuber;
 
 //import android.support.v7.app.AppCompatActivity;
 
+import android.content.Context;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+import android.widget.Toast;
+
 import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
@@ -33,6 +38,8 @@ import java.util.ArrayList;
 
 public class experimental_doNotUseThis extends Form implements HandlesEventDispatching {
 
+    //https://codevog.com/blog/2015-03-09-webview-interactions-with-javascript
+    //https://developer.android.com/guide/webapps/webview#java
     tuuber_Settings applicationSettings;
     ListView myList;
     Web testFancyList_Web;
@@ -55,23 +62,32 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         debug_FancyList=new Label(screenArrangement);
         debug_FancyList.Text("Debug");
         testFancyList_Web = new Web(screenArrangement);
-        testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
-//        testFancyList_Web.Get();
+        testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22&displaymode=fancy1");
 
         testFancyList_Web_Viewer= new WebViewer(screenArrangement);
-        testFancyList_Web_Viewer.GoToUrl("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
+        testFancyList_Web_Viewer.GoToUrl("https://fachtnaroe.net/test_list1.html");
         testFancyList_Web_Viewer.HeightPercent(25);
+// MUST READ:
+        //  https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface(java.lang.Object,%20java.lang.String)
+
+//        WebView webView = testFancyList_Web_Viewer;
+//        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
         fancyListView(screenArrangement, myList, "one", "two", "three");
 
         EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click");
         EventDispatcher.registerEventForDelegation(this, "WebEvent", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "WebEvent", "WebViewStringChange");
 
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
+        if (eventName.equals("WebViewStringChange")) {
+            debug_FancyList.Text(testFancyList_Web_Viewer.WebViewString());
+            return true;
+        }
         if (eventName.equals("BackPressed")) {
             finish();
             return true;
@@ -111,5 +127,20 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 
     void dbg(String debugMsg) {
         System.err.print("~~~> " + debugMsg + " <~~~\n");
+    }
+}
+
+ class WebAppInterface {
+    Context mContext;
+
+    /** Instantiate the interface and set the context */
+    WebAppInterface(Context c) {
+        mContext = c;
+    }
+
+    /** Show a toast from the web page */
+    @JavascriptInterface
+    public void showToast(String toast) {
+        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
     }
 }
