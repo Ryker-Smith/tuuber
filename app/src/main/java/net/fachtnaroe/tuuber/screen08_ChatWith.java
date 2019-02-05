@@ -51,6 +51,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatWeb.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
+        ChatsViewer.HeightPercent(10);
         ChatsViewer.GoToUrl("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
         chatText = new TextBox(ChatWith);
         chatText.Text("This will be the (prettified) result of:" +
@@ -61,9 +62,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "selected on the Conversation screen.)");
         MainMenu= new Button(ChatWith);
         MainMenu.Text("Back to main");
-        applicationSettings = new tuuber_Settings(this);
-        this.BackgroundImage(applicationSettings.backgroundImageName);
-        ChatWith = new VerticalArrangement(this);
         pIDHZ = new HorizontalArrangement(ChatWith);
         pID = new Label(pIDHZ);
         pID.Text(applicationSettings.pID);

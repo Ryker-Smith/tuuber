@@ -46,7 +46,7 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         decline = new Button(tacvz);
         decline.Text("Decline");
 
-        EventDispatcher.registerEventForDelegation(this, "accept", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
 
     }
 
@@ -54,19 +54,22 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         if (eventName.equals("BackPressed")) {
             return true;
         }
-        else if(component.equals(accept) && eventName.equals("Click")){
-            switchForm("screen06_Register");
-            return true;
+        else if(eventName.equals("Click")){
+            if (component.equals(accept)){
+                finishActivityWithResult("Good");
 
+                return true;
+            }
+            else if(eventName.equals("decline")){
 
+                finishActivityWithResult("Bad");
+                return true;
+            }
 
         }
-        else if(component.equals(decline) && eventName.equals("Click")){
-            switchForm("screen02_Login");
-            return true;
 
 
-        }
+
         return false;
 
 

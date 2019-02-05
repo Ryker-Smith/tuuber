@@ -1,5 +1,6 @@
 package net.fachtnaroe.tuuber;
 
+import android.content.Intent;
 import android.graphics.Color;
 
 import com.google.appinventor.components.runtime.Button;
@@ -28,7 +29,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
     private CheckBox TCAgree;
-    private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel;
+    private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
     private String baseURL ="https://fachtnaroe.net/tuuber-2019";
     private Web Creation;
@@ -80,6 +81,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TermsConditions.Text ("Terms&Conditions");
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
+        TCLabel = new Label(TermsConditionsHZ);
 
         Image4 = new Image (Register);
 
@@ -98,12 +100,16 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
         EventDispatcher.registerEventForDelegation(this, "TermsConditions", "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
-
+        EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         if (component.equals(TermsConditions) && eventName.equals("Click")) {
-            switchForm("screen10_TermsAndConditions");
+            startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
+            return true;
+        }
+        else if(  eventName.equals("OtherScreenClosed") ) {
+            thisOtherScreenClosed((String) params[0], (Object) params[1]);
             return true;
         }
         else if (component.equals(Create) && eventName.equals("Click")) {
@@ -227,5 +233,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         else {
             Web_Notifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
+    }
+    public void thisOtherScreenClosed(String otherScreenName, Object result) {
+        TCLabel.Text(result.toString());
+        TCLabel.Text("EEEEE");
     }
 }
