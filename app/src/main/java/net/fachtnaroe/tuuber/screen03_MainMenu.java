@@ -93,6 +93,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(experimental)) {
                 startActivity(new Intent().setClass(this, experimental_doNotUseThis.class));
+                return true;
             }
         }
         return false;
