@@ -55,7 +55,7 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
             return true;
         }
         else if(component.equals(accept) && eventName.equals("Click")){
-            switchForm("screen06_Register");
+            finishActivityWithResult("Good");
             return true;
 
 
