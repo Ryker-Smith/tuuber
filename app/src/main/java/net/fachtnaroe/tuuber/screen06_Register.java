@@ -98,111 +98,116 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         User = new dd_aPerson();
 
         EventDispatcher.registerEventForDelegation(this, "Create", "Click");
-        EventDispatcher.registerEventForDelegation(this, "TermsConditions", "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
         EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (component.equals(TermsConditions) && eventName.equals("Click")) {
-            startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
-            return true;
-        }
-        else if(  eventName.equals("OtherScreenClosed") ) {
+        dbg("failure");
+        if(eventName.equals("OtherScreenClosed") ) {
             thisOtherScreenClosed((String) params[0], (Object) params[1]);
             return true;
         }
-        else if (component.equals(Create) && eventName.equals("Click")) {
-            User.phone = Telephone.Text();
-            User.eMail = eMail.Text();
-            if (!User.valid_phone()) {
-                TelephoneLabel.TextColor(Color.RED);
-                eMailLabel.TextColor(Color.BLACK);
-                FirstNameLabel.TextColor(Color.BLACK);
-                LastNameLabel.TextColor(Color.BLACK);
-                PasswordLabel.TextColor(Color.BLACK);
-                ConfirmPasswordLabel.TextColor(Color.BLACK);
-                TCAgree.TextColor(Color.BLACK);
-                Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
+        else if (eventName.equals("Click")) {
+            dbg("fail");
+            if (component.equals(Create)){
+                User.phone = Telephone.Text();
+                User.eMail = eMail.Text();
+                if (!User.valid_phone()) {
+                    TelephoneLabel.TextColor(Color.RED);
+                    eMailLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    PasswordLabel.TextColor(Color.BLACK);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
+                    return true;
+                }
+
+                if (!User.valid_eMail()) {
+                    eMailLabel.TextColor(Color.RED);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    PasswordLabel.TextColor(Color.BLACK);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
+                    return true;
+                }
+
+                if (FirstName.Text().length() <1) {
+                    FirstNameLabel.TextColor(Color.RED);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    eMailLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    PasswordLabel.TextColor(Color.BLACK);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "Confirm");
+                    return true;
+                }
+
+                if (LastName.Text().length() <1){
+                    LastNameLabel.TextColor(Color.RED);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    eMailLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    PasswordLabel.TextColor(Color.BLACK);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "Confirm");
+                    return true;
+                }
+
+                if (!Password.Text().equals(ConfirmPassword.Text())) {
+                    PasswordLabel.TextColor(Color.RED);
+                    ConfirmPasswordLabel.TextColor(Color.RED);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    eMailLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
+                    return true;
+                }
+
+                if (!TCAgree.Checked()) {
+                    TCAgree.TextColor(Color.RED);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    eMailLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    PasswordLabel.TextColor(Color.BLACK);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Agree to Terms and Conditions", "Error", "Confirm");
+                    return true;
+                }
+
+                Creation.Url(
+                        baseURL +
+                                "?entity=person&action=POST&first=" +
+                                FirstName.Text() +
+                                "&family=" +
+                                LastName.Text() +
+                                "&phone=" +
+                                Telephone.Text() +
+                                "&email=" +
+                                eMail.Text() +
+                                "&pw=" +
+                                ConfirmPassword.Text()
+                );
+                Creation.Get();
+
+                return true;
+            }
+            if (component.equals(TermsConditions)) {
+                dbg("error");
+                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
                 return true;
             }
 
-            if (!User.valid_eMail()) {
-                eMailLabel.TextColor(Color.RED);
-                TelephoneLabel.TextColor(Color.BLACK);
-                FirstNameLabel.TextColor(Color.BLACK);
-                LastNameLabel.TextColor(Color.BLACK);
-                PasswordLabel.TextColor(Color.BLACK);
-                ConfirmPasswordLabel.TextColor(Color.BLACK);
-                TCAgree.TextColor(Color.BLACK);
-                Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
-                return true;
-            }
-
-            if (FirstName.Text().length() <1) {
-                FirstNameLabel.TextColor(Color.RED);
-                TelephoneLabel.TextColor(Color.BLACK);
-                eMailLabel.TextColor(Color.BLACK);
-                LastNameLabel.TextColor(Color.BLACK);
-                PasswordLabel.TextColor(Color.BLACK);
-                ConfirmPasswordLabel.TextColor(Color.BLACK);
-                TCAgree.TextColor(Color.BLACK);
-                Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "Confirm");
-                return true;
-            }
-
-            if (LastName.Text().length() <1){
-                LastNameLabel.TextColor(Color.RED);
-                TelephoneLabel.TextColor(Color.BLACK);
-                eMailLabel.TextColor(Color.BLACK);
-                FirstNameLabel.TextColor(Color.BLACK);
-                PasswordLabel.TextColor(Color.BLACK);
-                ConfirmPasswordLabel.TextColor(Color.BLACK);
-                TCAgree.TextColor(Color.BLACK);
-                Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "Confirm");
-                return true;
-            }
-
-            if (!Password.Text().equals(ConfirmPassword.Text())) {
-                PasswordLabel.TextColor(Color.RED);
-                ConfirmPasswordLabel.TextColor(Color.RED);
-                TelephoneLabel.TextColor(Color.BLACK);
-                eMailLabel.TextColor(Color.BLACK);
-                FirstNameLabel.TextColor(Color.BLACK);
-                LastNameLabel.TextColor(Color.BLACK);
-                TCAgree.TextColor(Color.BLACK);
-                Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
-                return true;
-            }
-
-            if (!TCAgree.Checked()) {
-                TCAgree.TextColor(Color.RED);
-                TelephoneLabel.TextColor(Color.BLACK);
-                eMailLabel.TextColor(Color.BLACK);
-                FirstNameLabel.TextColor(Color.BLACK);
-                LastNameLabel.TextColor(Color.BLACK);
-                PasswordLabel.TextColor(Color.BLACK);
-                ConfirmPasswordLabel.TextColor(Color.BLACK);
-                Universal_Notifier.ShowMessageDialog("Agree to Terms and Conditions", "Error", "Confirm");
-                return true;
-            }
-
-            Creation.Url(
-                    baseURL +
-                            "?entity=person&action=POST&first=" +
-                            FirstName.Text() +
-                            "&family=" +
-                            LastName.Text() +
-                            "&phone=" +
-                            Telephone.Text() +
-                            "&email=" +
-                            eMail.Text() +
-                            "&pw=" +
-                            ConfirmPassword.Text()
-            );
-            Creation.Get();
-
-            return true;
         }
         else if (component.equals(Creation) && eventName.equals("GotText")){
             String stringSent =  (String) params[0];
@@ -215,6 +220,10 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         }
         return true;
     }
+    void dbg (String debugMsg) {
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
+    }
+
     public void webGotText(String status, String textOfResponse) {
 
         String temp=new String();
@@ -235,7 +244,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         }
     }
     public void thisOtherScreenClosed(String otherScreenName, Object result) {
-        TCLabel.Text(result.toString());
+//        TCLabel.Text(result.toString());
         TCLabel.Text("EEEEE");
     }
 }
