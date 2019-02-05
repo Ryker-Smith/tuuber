@@ -21,6 +21,7 @@ import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
+import com.google.appinventor.components.runtime.WebViewer;
 //import com.google.appinventor.components.runtime.util;
 
 import org.json.JSONException;
@@ -32,11 +33,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private TextBox chatText;
     private VerticalArrangement ChatWith;
     private Button MainMenu;
-    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ;
+    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ;
     private Button Send;
     private Label ChatLabel, pID;
     private ListView Chat;
     private Web ChatWeb;
+    private WebViewer ChatsViewer;
 
     protected void $define() {
 
@@ -45,7 +47,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
         this.BackgroundImage(applicationSettings.backgroundImageName);
-
+        ChatWeb = new Web(this);
+        ChatWeb.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
+        ChatsViewerHZ = new HorizontalArrangement(ChatWith);
+        ChatsViewer = new WebViewer(ChatsViewerHZ);
+        ChatsViewer.GoToUrl("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
         chatText = new TextBox(ChatWith);
         chatText.Text("This will be the (prettified) result of:" +
                 "SELECT * FROM Chats WHERE " +
@@ -61,16 +67,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         pIDHZ = new HorizontalArrangement(ChatWith);
         pID = new Label(pIDHZ);
         pID.Text(applicationSettings.pID);
-        ChatLabelHZ = new HorizontalArrangement(ChatWith);
-        ChatLabel = new Label(ChatLabelHZ);
-        ChatLabel.Text("ChatLog");
-        ChatHZ = new HorizontalArrangement(ChatWith);
-        Chat = new ListView(ChatHZ);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
 
-        ChatWeb = new Web(this);
+
 
 
     }
