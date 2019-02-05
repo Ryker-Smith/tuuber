@@ -60,7 +60,7 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
 
                 return true;
             }
-            else if(eventName.equals(decline)){
+            else if(component.equals(decline)){
 
                 finishActivityWithResult("Bad");
                 return true;
