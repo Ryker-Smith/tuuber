@@ -82,6 +82,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
         TCLabel = new Label(TermsConditionsHZ);
+        TCLabel.BackgroundColor(Component.COLOR_BLUE);
 
         Image4 = new Image (Register);
 
