@@ -76,6 +76,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 //
 //                finishActivityWithResult("elbow");
 //                finishActivityWithTextResult();
+
 //                onActivityResult();
 //                EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
                 startActivity(new Intent().setClass(this, screen04_Matches.class));
@@ -87,7 +88,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(Routes)) {
                 startActivity(new Intent().setClass(this, screen07_Routes.class));
-
                 return true;
             }
             else if (component.equals(Settings)) {

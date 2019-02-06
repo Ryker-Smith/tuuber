@@ -17,6 +17,7 @@ import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
+//import com.google.appinventor.components.runtime.ActivityStarter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,14 +99,42 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Web_Notifier = new Notifier(Register);
         User = new dd_aPerson();
 
-        EventDispatcher.registerEventForDelegation(this, "Create", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
         EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosed" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "AfterActivity" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "ActivityCanceled" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Initialize" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Closure" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "EventClosure" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Finish" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Close" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "ActivityResult" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "ActivityClosed" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherActivityClosed" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "onStop" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "onPause" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "onDestroy" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "ScreenOrientationChanged" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "ErrorOccurred" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosed" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "KeyDown" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "onActivityResult" );
+//        EventDispatcher.registerEventForDelegation(this, "notImportant", "" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "resultReturned" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Click");
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "APP_INVENTOR_RESULT");
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Result" );
+        EventDispatcher.registerEventForDelegation(this, "notImportant", "Blah" );
+
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("failure");
-        if(eventName.equals("OtherScreenClosed") ) {
+        dbg("events");
+
+        dbg("GOT: "+formName+" "+eventName);
+        if ((component.equals(this)) && (eventName.equals("OtherScreenClosed"))) {
             thisOtherScreenClosed((String) params[0], (Object) params[1]);
             return true;
         }
@@ -205,7 +234,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             }
             if (component.equals(TermsConditions)) {
                 dbg("error");
-                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
+//                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
+//                startActivityForResult(new Intent().setClass(this, screen10_TermsAndConditions.class),23);
+                startNewForm("screen10_TermsAndConditions","none");
                 return true;
             }
 
@@ -246,6 +277,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     }
     public void thisOtherScreenClosed(String otherScreenName, Object result) {
 //        TCLabel.Text(result.toString());
-        TCLabel.Text("EEEEE");
+        TCLabel.Text(otherScreenName+" EEEEE " + result);
+
     }
 }

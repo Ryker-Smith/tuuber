@@ -74,6 +74,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 //        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
         fancyListView(screenArrangement, myList, "one", "two", "three");
+//        $context().getResources().getIdentifier("*","drawable",$context().getPackageName());
 
         EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click");
         EventDispatcher.registerEventForDelegation(this, "WebEvent", "GotText");
