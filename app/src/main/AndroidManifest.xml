@@ -45,6 +45,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen06_Register"
             android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".experimental_doNotUseThis"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".screen08_ChatWith"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".screen07_Routes"/>

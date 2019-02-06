@@ -51,18 +51,20 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("GOT: "+formName+" "+eventName);
         if (eventName.equals("BackPressed")) {
+            finishActivityWithTextResult("Bad");
             return true;
         }
         else if(eventName.equals("Click")){
             if (component.equals(accept)){
-                finishActivityWithResult("Good");
-
+                finishActivityWithTextResult("Good");
+                dbg("Good");
                 return true;
             }
             else if(component.equals(decline)){
-
-                finishActivityWithResult("Bad");
+                dbg("Bad");
+                finishActivityWithTextResult("Bad");
                 return true;
             }
 
@@ -73,5 +75,8 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         return false;
 
 
+    }
+    void dbg(String debugMsg) {
+        System.err.print("~~~> " + debugMsg + " <~~~\n");
     }
 }

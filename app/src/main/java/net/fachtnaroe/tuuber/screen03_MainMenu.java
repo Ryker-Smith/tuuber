@@ -72,6 +72,13 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         }
         if (eventName.equals("Click")) {
             if (component.equals(Matches)) {
+                // eg startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
+                //
+//                finishActivityWithResult("elbow");
+//                finishActivityWithTextResult();
+
+//                onActivityResult();
+//                EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
                 startActivity(new Intent().setClass(this, screen04_Matches.class));
                 return true;
             }
