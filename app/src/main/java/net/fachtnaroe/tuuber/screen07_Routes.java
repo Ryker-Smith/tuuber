@@ -47,6 +47,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Label myRoutes;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
+    private HorizontalArrangement ButtonHolder;
     private Button MainMenu, To, From, Save, Delete;
     TinyDB localDB;
     private CheckBox M, T, W, Th,F;
@@ -116,8 +117,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //        RoutsList = new ArrayList();
 //        YailList tempData=YailList.makeList(RoutsList);
 //        townsDisplay.Elements(tempData);
-        Save = new Button(RoutesScreen);
-        Delete = new Button(RoutesScreen);
+        ButtonHolder = new HorizontalArrangement(RoutesScreen);
+        Save = new Button(ButtonHolder);
+        Delete = new Button(ButtonHolder);
         Save.Text("Save");
         Delete.Text("Delete");
         Templemore.WidthPercent(10);
