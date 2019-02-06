@@ -27,7 +27,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private Image Image1, Image2, Image3, Image4, Image5, Image6;
     private VerticalArrangement Register;
-    private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
+    private HorizontalArrangement TermsConditionsHZ, TCLabelHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
@@ -81,7 +81,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TermsConditions.Text ("Terms&Conditions");
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
-        TCLabel = new Label(TermsConditionsHZ);
+        TCLabelHZ = new HorizontalArrangement(Register);
+        TCLabel = new Label(TCLabelHZ);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
 
         Image4 = new Image (Register);
@@ -98,14 +99,14 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Web_Notifier = new Notifier(Register);
         User = new dd_aPerson();
 
-        EventDispatcher.registerEventForDelegation(this, "Create", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, "Creation", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
+        EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "AfterActivity" );
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("failure");
-        if(eventName.equals("OtherScreenClosed") ) {
+        if(eventName.equals("AfterActivity") ) {
             thisOtherScreenClosed((String) params[0], (Object) params[1]);
             return true;
         }
