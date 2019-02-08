@@ -45,21 +45,21 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         pID.Text(applicationSettings.pID);
         ContactsLabelHZ = new HorizontalArrangement(Conversations);
         ContactsLabel = new Label(ContactsLabelHZ);
-        ContactsLabel.Text("Open Conversation");
+        ContactsLabel.Text("Open Conversations");
         ContactsHZ = new HorizontalArrangement(Conversations);
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(20);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
-        InboundInitiationLabel.Text("PendingInbound");
+        InboundInitiationLabel.Text("Pending (Inbound)");
         InboundInitiationHZ = new HorizontalArrangement(Conversations);
         InboundInitiation = new ListView(InboundInitiationHZ);
         InboundInitiation.HeightPercent(20);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         OutboundInitiationLabel = new Label(OutboundInitiationLabelHZ);
-        OutboundInitiationLabel.Text("PendingOutbound");
+        OutboundInitiationLabel.Text("Pending (Outbound)");
         OutboundInitiationHZ = new HorizontalArrangement(Conversations);
         OutboundInitiation = new ListView(OutboundInitiationHZ);
         OutboundInitiation.HeightPercent(20);
@@ -72,17 +72,50 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contact2Web = new Web(this);
         InboundWeb = new Web(this);
         OutboundWeb = new Web(this);
+        messagesPopUp = new Notifier(Conversations);
 
-        EventDispatcher.registerEventForDelegation(this, "ChatsScreen", "Click");
-        EventDispatcher.registerEventForDelegation(this, "Contact1Web", "GotText");
-
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        callBackEnd();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (component.equals(ChatsScreen) && eventName.equals("Click")) {
             switchForm("screen08_ChatWith");
             return true;
         }
+        if (eventName.equals("GotText")) {
+            if (component.equals(Contact1Web)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getContact1List(status, textOfResponse);
+                return true;
+            } else if (component.equals(Contact2Web)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getContact2List(status, textOfResponse);
+                return true;
+            } else if (component.equals(InboundWeb)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getInboundList(status, textOfResponse);
+                return true;
+            } else if (component.equals(OutboundWeb)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getOutboundList(status, textOfResponse);
+                return true;
+            }
+        }
+        return true;
+    }
+
+    void callBackEnd() {
         Contact1Web.Url(
                 baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
@@ -119,50 +152,23 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                         "&status=init"
         );
         OutboundWeb.Get();
-
-        if (component.equals(Contact1Web) && eventName.equals("GotText")) {
-            dbg((String) params[0]);
-            String status = params[1].toString();
-            String textOfResponse = (String) params[3];
-            getContact1List(status, textOfResponse);
-            return true;
-        }
-        else if (component.equals(Contact2Web) && eventName.equals("GotText")) {
-            dbg((String) params[0]);
-            String status = params[1].toString();
-            String textOfResponse = (String) params[3];
-            getContact2List(status, textOfResponse);
-            return true;
-        }
-        else if (component.equals(InboundWeb) && eventName.equals("GotText")) {
-            dbg((String) params[0]);
-            String status = params[1].toString();
-            String textOfResponse = (String) params[3];
-            getInboundList(status, textOfResponse);
-            return true;
-        }
-        else if (component.equals(OutboundWeb) && eventName.equals("GotText")) {
-            dbg((String) params[0]);
-            String status = params[1].toString();
-            String textOfResponse = (String) params[3];
-            getOutboundList(status, textOfResponse);
-            return true;
-        }
-        return true;
     }
+
     public void getContact1List (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
+        dbg(textOfResponse);
         if (status.equals("200" )) try {
 
             ListofContactWeb1 = new ArrayList<String>();
 
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("towns" ).equals("" )) {
+            if (!parser.getString("chat" ).equals("" )) {
 
-                JSONArray contacts1Array = parser.getJSONArray("Contacts1" );
+                JSONArray contacts1Array = parser.getJSONArray("chat" );
                 for (int i = 0; i < contacts1Array.length(); i++) {
                     ListofContactWeb1.add(
-                            contacts1Array.getJSONObject(i).getString("name" )
+                            contacts1Array.getJSONObject(i).getString("initiator_pID" )
                     );
                 }
                 YailList tempData = YailList.makeList(ListofContactWeb1);
@@ -186,12 +192,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             ListofContactWeb2 = new ArrayList<String>();
 
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("Contacts2").equals("")) {
+            if (!parser.getString("chat").equals("")) {
 
-                JSONArray contacts2 = parser.getJSONArray("Contacts2");
+                JSONArray contacts2 = parser.getJSONArray("chat");
                 for(int i = 0 ; i < contacts2.length() ; i++){
                     ListofContactWeb2.add(
-                            contacts2.getJSONObject(i).getString("names")
+                            contacts2.getJSONObject(i).getString("respondent_pID")
                     );
                 }
                 YailList tempData2=YailList.makeList( ListofContactWeb2 );
@@ -216,12 +222,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             ListofInboundWeb = new ArrayList<String>();
 
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("Inbound").equals("")) {
+            if (!parser.getString("chat").equals("")) {
 
-                JSONArray Inbound = parser.getJSONArray("Inbound");
+                JSONArray Inbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     ListofInboundWeb.add(
-                            Inbound.getJSONObject(i).getString("names")
+                            Inbound.getJSONObject(i).getString("initiator_pID")
                     );
                 }
                 YailList tempData3=YailList.makeList( ListofInboundWeb );
@@ -246,12 +252,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             ListofOutboundWeb = new ArrayList<String>();
 
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("Outbound").equals("")) {
+            if (!parser.getString("chat").equals("")) {
 
-                JSONArray Outbound = parser.getJSONArray("Outbound");
+                JSONArray Outbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     ListofOutboundWeb.add(
-                            Outbound.getJSONObject(i).getString("names")
+                            Outbound.getJSONObject(i).getString("respondent_pID")
                     );
                 }
                 YailList tempData4=YailList.makeList( ListofOutboundWeb );
