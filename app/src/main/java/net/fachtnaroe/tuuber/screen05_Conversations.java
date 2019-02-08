@@ -27,13 +27,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private VerticalArrangement Conversations;
     private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
-    private String baseURL = "https://fachtnaroe.net/tuuber-2019";
+    private String baseURL = "https://fachtnaroe.net/tuuber-test";
     private Button ChatsScreen;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
+    int intListViewsize=40;
 
     protected void $define() {
 
@@ -49,6 +50,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ContactsHZ = new HorizontalArrangement(Conversations);
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(20);
+        Contacts.TextSize(intListViewsize);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
@@ -56,6 +58,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiationHZ = new HorizontalArrangement(Conversations);
         InboundInitiation = new ListView(InboundInitiationHZ);
         InboundInitiation.HeightPercent(20);
+        InboundInitiation.TextSize(intListViewsize);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         OutboundInitiationLabel = new Label(OutboundInitiationLabelHZ);
@@ -63,6 +66,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiationHZ = new HorizontalArrangement(Conversations);
         OutboundInitiation = new ListView(OutboundInitiationHZ);
         OutboundInitiation.HeightPercent(20);
+        OutboundInitiation.TextSize(intListViewsize);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         ChatsScreen = new Button(ChatsScreenHZ);
@@ -168,7 +172,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 JSONArray contacts1Array = parser.getJSONArray("chat" );
                 for (int i = 0; i < contacts1Array.length(); i++) {
                     ListofContactWeb1.add(
-                            contacts1Array.getJSONObject(i).getString("initiator_pID" )
+//                            contacts1Array.getJSONObject(i).getString("initiator_pID" )
+                            contacts1Array.getJSONObject(i).getString("family")
+                                    + ", " +
+                                    contacts1Array.getJSONObject(i).getString("first")
                     );
                 }
                 YailList tempData = YailList.makeList(ListofContactWeb1);
@@ -179,7 +186,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK" );
+            messagesPopUp.ShowMessageDialog("JSON Exception (1)", "Information", "OK" );
         }
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
@@ -190,14 +197,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         if (status.equals("200") ) try {
 
             ListofContactWeb2 = new ArrayList<String>();
-
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat").equals("")) {
 
                 JSONArray contacts2 = parser.getJSONArray("chat");
                 for(int i = 0 ; i < contacts2.length() ; i++){
                     ListofContactWeb2.add(
-                            contacts2.getJSONObject(i).getString("respondent_pID")
+//                            contacts2.getJSONObject(i).getString("respondent_pID")
+                            contacts2.getJSONObject(i).getString("family")
+                                    + ", " +
+                            contacts2.getJSONObject(i).getString("first")
                     );
                 }
                 YailList tempData2=YailList.makeList( ListofContactWeb2 );
@@ -208,7 +217,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
         }
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
@@ -217,6 +226,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(textOfResponse);
         if (status.equals("200") ) try {
 
             ListofInboundWeb = new ArrayList<String>();
@@ -227,7 +237,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 JSONArray Inbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     ListofInboundWeb.add(
-                            Inbound.getJSONObject(i).getString("initiator_pID")
+//                            Inbound.getJSONObject(i).getString("family")
+//                                    + ", "
+                             Inbound.getJSONObject(i).getString("inititiator_pID")
                     );
                 }
                 YailList tempData3=YailList.makeList( ListofInboundWeb );
@@ -238,7 +250,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            messagesPopUp.ShowMessageDialog("JSON Exception (3)", "Information", "OK");
         }
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
@@ -268,7 +280,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            messagesPopUp.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
         }
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
