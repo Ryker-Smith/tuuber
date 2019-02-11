@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class screen05_Conversations extends Form implements HandlesEventDispatching {
@@ -28,7 +29,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-test";
-    private Button ChatsScreen;
+    private Button ChatsScreen, buttonRefresh;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
@@ -43,7 +44,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Conversations = new VerticalArrangement(this);
         pIDHZ = new HorizontalArrangement(Conversations);
         pID = new Label(pIDHZ);
-        pID.Text(applicationSettings.pID);
+        pID.Text("I am user: #" + applicationSettings.pID);
+        buttonRefresh = new Button(pIDHZ);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+//        buttonRefresh.Text("r");
+        buttonRefresh.Image("RefreshButt.png");
         ContactsLabelHZ = new HorizontalArrangement(Conversations);
         ContactsLabel = new Label(ContactsLabelHZ);
         ContactsLabel.Text("Open Conversations");
@@ -85,11 +92,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
-        if (component.equals(ChatsScreen) && eventName.equals("Click")) {
-            switchForm("screen08_ChatWith");
-            return true;
+        if (eventName.equals("Click")) {
+            if (component.equals(ChatsScreen)) {
+                startNewForm("screen08_ChatWith",null);
+                return true;
+            }
+            else if (component.equals(buttonRefresh)) {
+                callBackEnd();
+            }
         }
-        if (eventName.equals("GotText")) {
+        else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
@@ -168,20 +180,32 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat" ).equals("" )) {
-dbg("AAA");
                 JSONArray contacts1Array = parser.getJSONArray("chat" );
                 for (int i = 0; i < contacts1Array.length(); i++) {
-                    dbg("BBB");
-                    dbg(contacts1Array.getJSONObject(i).toString());
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
                             contacts1Array.getJSONObject(i).getString("first" )
                             + " " +
-                                    contacts1Array.getJSONObject(i).getString("family" )
+                            contacts1Array.getJSONObject(i).getString("family" )
                     );
                 }
-                YailList tempData = YailList.makeList(ListofContactWeb1);
+
+                String[] temp= new String[Contacts.Elements().toStringArray().length];
+                temp=Contacts.Elements().toStringArray();
+                for (int i=0; i< temp.length; i++) {
+                    ListofContactWeb1.add(temp[i]);
+                }
+//                ListofContactWeb1.add(Contacts.Elements().toString());
+//                for (int i=0; i < Contacts.Elements().toStringArray().length; i++) {
+//
+//                }
+//                ListofContactWeb1.addAll( Contacts.Elements().toStringArray());
+                YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
+//                YailList t2 = YailList.makeList(Contacts.Elements().toStringArray());
+//t2=(YailList)(t2,tempData);
+                ListofContactWeb1.add(Contacts.Elements().toString());
                 Contacts.Elements(tempData);
+
 
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting Contact1 details", "Information", "OK" );
@@ -194,6 +218,8 @@ dbg("AAA");
             messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
     }
+
+
     public void getContact2List (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
