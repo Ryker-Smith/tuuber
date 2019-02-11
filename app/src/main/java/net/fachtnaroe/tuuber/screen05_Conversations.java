@@ -24,11 +24,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
+    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-test";
     private Button buttonGoToChatSCreen, buttonRefresh;
-    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID;
+    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
@@ -56,6 +56,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(20);
         Contacts.TextSize(intListViewsize);
+        OtherpIDHZ = new HorizontalArrangement(Conversations);
+        OtherpID = new Label(OtherpIDHZ);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
@@ -101,7 +103,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         }
         else if (eventName.equals("AfterPicking")) {
-            buttonGoToChatSCreen.Text( Integer.toString(Contacts.SelectionIndex()) );
+            OtherpID.Text( Integer.toString(Contacts.SelectionIndex()) );
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {
