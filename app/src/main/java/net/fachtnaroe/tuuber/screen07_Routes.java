@@ -53,7 +53,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private TextBox TownSingle, TownsDecoded, DriverYN;
     private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
-    Integer pID;
+   // Integer pID;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify=new String("to");
 
