@@ -141,15 +141,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                         "&status=open"
         );
         Contact1Web.Get();
-        Contact2Web.Url(
-                baseURL +
-                        "?action=LIST&entity=chat&sessionID=" +
-                        applicationSettings.sessionID +
-                        "&initiator_pID=" +
-                        applicationSettings.pID +
-                        "&status=open"
-        );
-        Contact2Web.Get();
         InboundWeb.Url(
                 baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
@@ -190,20 +181,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     );
                 }
 
-                String[] temp= new String[Contacts.Elements().toStringArray().length];
-                temp=Contacts.Elements().toStringArray();
-                for (int i=0; i< temp.length; i++) {
-                    ListofContactWeb1.add(temp[i]);
-                }
-//                ListofContactWeb1.add(Contacts.Elements().toString());
-//                for (int i=0; i < Contacts.Elements().toStringArray().length; i++) {
-//
+//                String[] temp= new String[Contacts.Elements().toStringArray().length];
+//                temp=Contacts.Elements().toStringArray();
+//                for (int i=0; i< temp.length; i++) {
+//                    ListofContactWeb1.add(temp[i]);
 //                }
-//                ListofContactWeb1.addAll( Contacts.Elements().toStringArray());
                 YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
-//                YailList t2 = YailList.makeList(Contacts.Elements().toStringArray());
-//t2=(YailList)(t2,tempData);
-                ListofContactWeb1.add(Contacts.Elements().toString());
+//                ListofContactWeb1.add(Contacts.Elements().toString());
                 Contacts.Elements(tempData);
 
 
@@ -217,6 +201,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
+        Contact2Web.Url(
+                baseURL +
+                        "?action=LIST&entity=chat&sessionID=" +
+                        applicationSettings.sessionID +
+                        "&initiator_pID=" +
+                        applicationSettings.pID +
+                        "&status=open"
+        );
+        Contact2Web.Get();
+
     }
 
 
@@ -240,7 +234,15 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                             contacts2.getJSONObject(i).getString("family")
                     );
                 }
-                YailList tempData2=YailList.makeList( ListofContactWeb2 );
+
+                String[] temp= new String[Contacts.Elements().toStringArray().length];
+                temp=Contacts.Elements().toStringArray();
+                for (int i=0; i< temp.length; i++) {
+                    ListofContactWeb2.add(temp[i]);
+                }
+                YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
+//                ListofContactWeb1.add(Contacts.Elements().toString());
+                tempData2=YailList.makeList( ListofContactWeb2 );
                 Contacts.Elements(tempData2);
 
             } else {
