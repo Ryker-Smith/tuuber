@@ -9,7 +9,6 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
@@ -19,7 +18,6 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class screen05_Conversations extends Form implements HandlesEventDispatching {
@@ -29,7 +27,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-test";
-    private Button ChatsScreen, buttonRefresh;
+    private Button buttonGoToChatSCreen, buttonRefresh;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
@@ -76,8 +74,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiation.TextSize(intListViewsize);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
-        ChatsScreen = new Button(ChatsScreenHZ);
-        ChatsScreen.Text("Chat");
+        buttonGoToChatSCreen = new Button(ChatsScreenHZ);
+        buttonGoToChatSCreen.Text("Chat");
 
         Contact1Web = new Web(this);
         Contact2Web = new Web(this);
@@ -87,19 +85,23 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         callBackEnd();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("Click")) {
-            if (component.equals(ChatsScreen)) {
+            if (component.equals(buttonGoToChatSCreen)) {
                 startNewForm("screen08_ChatWith",null);
                 return true;
             }
             else if (component.equals(buttonRefresh)) {
                 callBackEnd();
             }
+        }
+        else if (eventName.equals("AfterPicking")) {
+            buttonGoToChatSCreen.Text( Integer.toString(Contacts.SelectionIndex()) );
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {
@@ -180,7 +182,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                             contacts1Array.getJSONObject(i).getString("family" )
                     );
                 }
-
 //                String[] temp= new String[Contacts.Elements().toStringArray().length];
 //                temp=Contacts.Elements().toStringArray();
 //                for (int i=0; i< temp.length; i++) {
