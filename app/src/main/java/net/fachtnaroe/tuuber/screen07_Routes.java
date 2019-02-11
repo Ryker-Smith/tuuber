@@ -42,18 +42,18 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     private ArrayList RoutsList ;
-    private HorizontalArrangement Direction, Days;
-    private Label myRoutes;
+    private HorizontalArrangement Direction, Days, pIDHZ;
+    private Label myRoutes, pID;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
-    private Button MainMenu, To, From, Save, Delete;
+    private Button MainMenu, To, From, Save, Delete, buttonRefresh;
     TinyDB localDB;
     private CheckBox M, T, W, Th,F;
     private ListView routesDisplay;
     private TextBox TownSingle, TownsDecoded, DriverYN;
     private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
-    Integer pID;
+//    Integer pID;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify=new String("to");
 
@@ -66,7 +66,18 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
   //      pID = Integer.valueOf(tempString);
 //        settings.pID=localDB.GetValue("pID",-1).toString();
 
+
         RoutesScreen.Image(applicationSettings.backgroundImageName);
+        pIDHZ = new HorizontalArrangement(RoutesScreen);
+        pID = new Label(pIDHZ);
+        pID.Text("I am user: #" + applicationSettings.pID);
+        buttonRefresh = new Button(pIDHZ);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+//        buttonRefresh.Text("r");
+        buttonRefresh.Image("RefreshButt.png");
+
         MainMenu =  new Button(RoutesScreen);
         MainMenu.Text("MainMenu");
 
