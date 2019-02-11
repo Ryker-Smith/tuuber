@@ -239,7 +239,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     ListofInboundWeb.add(
 //                            Inbound.getJSONObject(i).getString("family")
 //                                    + ", "
-                             Inbound.getJSONObject(i).getString("inititiator_pID")
+                             Inbound.getJSONObject(i).getString("initiator_pID")
                     );
                 }
                 YailList tempData3=YailList.makeList( ListofInboundWeb );
