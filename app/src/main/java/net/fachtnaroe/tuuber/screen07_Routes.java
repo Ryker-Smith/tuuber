@@ -36,8 +36,7 @@ import java.util.List;
 public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
-    tuuber_Settings settings;
-    boolean form_made=false;
+    tuuber_Settings applicationSettings;
     private Web saveRouteWeb, getRouteWeb, TownsWeb;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
@@ -60,20 +59,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        if (form_made) {
-            return;
-        }
-        else {
-            form_made=true;
-        }
-        settings = new tuuber_Settings(this);
+        applicationSettings = new tuuber_Settings(this);
         RoutesScreen = new VerticalArrangement(this);
-        localDB = new TinyDB(RoutesScreen);
-        String tempString= (String) localDB.GetValue("pID",-1);
-        pID = Integer.valueOf(tempString);
-        settings.pID=localDB.GetValue("pID",-1).toString();
+//        localDB = new TinyDB(RoutesScreen);
+//        String tempString= (String) localDB.GetValue("pID",-1);
+  //      pID = Integer.valueOf(tempString);
+//        settings.pID=localDB.GetValue("pID",-1).toString();
 
-        RoutesScreen.Image(settings.backgroundImageName);
+        RoutesScreen.Image(applicationSettings.backgroundImageName);
         MainMenu =  new Button(RoutesScreen);
         MainMenu.Text("MainMenu");
 
@@ -140,11 +133,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 baseURL + "?entity=town&action=LIST"
         );
         TownsWeb.Get();
-        getRouteWeb.Url(settings.baseURL
+        getRouteWeb.Url(applicationSettings.baseURL
                 + "?action=LIST"
                 + "&entity=ROUTE"
-                + "&pID=" + settings.pID
-                + "&sessionID=" + settings.sessionID
+                + "&pID=" + applicationSettings.pID
+                + "&sessionID=" + applicationSettings.sessionID
         );
         getRouteWeb.Get();
     }
@@ -251,7 +244,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "&entity=ROUTE"
                                 + Directions + "&"
                                 + temp +"&"
-                                + "pID=" + settings.pID + "&"
+                                + "pID=" + applicationSettings.pID + "&"
                  );
                 saveRouteWeb.Get();
                 getRouteWeb.Get();
