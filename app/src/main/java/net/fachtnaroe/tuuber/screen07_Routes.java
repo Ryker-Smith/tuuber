@@ -238,9 +238,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             else {
                 temp = temp+ "driver=N" ;
             }
-//            temp = temp;
-
-
 
             String Directions=new String();
             if (Specify.equals("to")) {
@@ -288,11 +285,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for(int i = 0 ; i < routesArray.length() ; i++){
+
+
+
                     ListOfRoutesFromWeb.add(
                             "from "
                             + routesArray.getJSONObject(i).getString("origin")
                             + " to "
-                            + routesArray.getJSONObject(i).getString("destination")
+                            + routesArray.getJSONObject(i).getString("destination" )
                     );
                 }
                 YailList tempData=YailList.makeList( ListOfRoutesFromWeb);

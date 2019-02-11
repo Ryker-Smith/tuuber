@@ -33,7 +33,7 @@ public class tuuber_Settings {
     public final String default_sessionID="a1b2c3d4";
     public String default_pID="-1";
     public String default_backgroundImageName="tuuberBackdrop-06.png";
-    public String ourLogo="MultiLayerLogo-001.png";
+    public String ourLogo="MultiLayerLogo-002.png";
 
     TinyDB localDB;
 

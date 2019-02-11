@@ -31,12 +31,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     protected void $define() {
 
-        if (form_made) {
-            return;
-        }
-        else {
-            form_made=true;
-        }
         applicationSettings = new tuuber_Settings(this);
         MainMenu = new VerticalArrangement(this);
         MainMenu.Image(applicationSettings.backgroundImageName);
@@ -72,6 +66,13 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         }
         if (eventName.equals("Click")) {
             if (component.equals(Matches)) {
+                // eg startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
+                //
+//                finishActivityWithResult("elbow");
+//                finishActivityWithTextResult();
+
+//                onActivityResult();
+//                EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
                 startActivity(new Intent().setClass(this, screen04_Matches.class));
                 return true;
             }
