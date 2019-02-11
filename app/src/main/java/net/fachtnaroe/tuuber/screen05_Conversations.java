@@ -168,14 +168,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat" ).equals("" )) {
-
+dbg("AAA");
                 JSONArray contacts1Array = parser.getJSONArray("chat" );
                 for (int i = 0; i < contacts1Array.length(); i++) {
+                    dbg("BBB");
+                    dbg(contacts1Array.getJSONObject(i).toString());
+                    if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
-//                            contacts1Array.getJSONObject(i).getString("initiator_pID" )
-                            contacts1Array.getJSONObject(i).getString("family")
-                                    + ", " +
-                                    contacts1Array.getJSONObject(i).getString("first")
+                            contacts1Array.getJSONObject(i).getString("first" )
+                            + " " +
+                                    contacts1Array.getJSONObject(i).getString("family" )
                     );
                 }
                 YailList tempData = YailList.makeList(ListofContactWeb1);
@@ -194,6 +196,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
     public void getContact2List (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
+        dbg(textOfResponse);
         if (status.equals("200") ) try {
 
             ListofContactWeb2 = new ArrayList<String>();
@@ -201,12 +205,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             if (!parser.getString("chat").equals("")) {
 
                 JSONArray contacts2 = parser.getJSONArray("chat");
+
                 for(int i = 0 ; i < contacts2.length() ; i++){
+                    if (contacts2.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb2.add(
-//                            contacts2.getJSONObject(i).getString("respondent_pID")
-                            contacts2.getJSONObject(i).getString("family")
-                                    + ", " +
                             contacts2.getJSONObject(i).getString("first")
+                                    + " " +
+                            contacts2.getJSONObject(i).getString("family")
                     );
                 }
                 YailList tempData2=YailList.makeList( ListofContactWeb2 );
@@ -226,6 +231,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
         dbg(textOfResponse);
         if (status.equals("200") ) try {
 
@@ -237,9 +243,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 JSONArray Inbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     ListofInboundWeb.add(
-//                            Inbound.getJSONObject(i).getString("family")
-//                                    + ", "
-                             Inbound.getJSONObject(i).getString("initiator_pID")
+                            Inbound.getJSONObject(i).getString("first")
+                                    + " " +
+                             Inbound.getJSONObject(i).getString("family")
                     );
                 }
                 YailList tempData3=YailList.makeList( ListofInboundWeb );
@@ -259,6 +265,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
     public void getOutboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
+        dbg(textOfResponse);
         if (status.equals("200") ) try {
 
             ListofOutboundWeb = new ArrayList<String>();
@@ -269,7 +277,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 JSONArray Outbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     ListofOutboundWeb.add(
-                            Outbound.getJSONObject(i).getString("respondent_pID")
+                            Outbound.getJSONObject(i).getString("first")
+                            + " " +
+                            Outbound.getJSONObject(i).getString("family")
                     );
                 }
                 YailList tempData4=YailList.makeList( ListofOutboundWeb );
