@@ -67,12 +67,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         if (eventName.equals("Click")) {
             if (component.equals(Matches)) {
                 // eg startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
-                //
-//                finishActivityWithResult("elbow");
-//                finishActivityWithTextResult();
-
-//                onActivityResult();
-//                EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
+                // finishActivityWithResult("elbow");
+                // finishActivityWithTextResult();
                 startNewForm("screen04_Matches",null   );
                 return true;
             }
@@ -111,26 +107,11 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         int len = b.length;
 //        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         while ((i < len) && (b[i] != null)) {
-//            hz.add(new HorizontalArrangement(MainMenu));
             b[i].WidthPercent(50);
             b[i].BackgroundColor(Component.COLOR_BLACK);
             b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
-//            b[i].Text(b[i].toString());
-//            R.id();
-//            String[] temp = b[i].toString().split("@");
-//            String x = temp[1];
-//            Integer a = Resources.getSystem().getIdentifier(b[i].toString(),"drawable","android");
-//            Integer r=$context().getResources().getIdentifier(x,"drawable",$context().getPackageName());
-//            dbg(a.toString());
-//            dbg(r.toString());
-//            android.app.Activity
-//            $c
-////            $context().findViewById()
-//            dbg(x);
-//            int x=getResourceId(b[i].toString(),"",getPackageName());
-//            EventDispatcher.registerEventForDelegation(this.getDispatchDelegate(), b[i].toString(), "Click");
             i++;
         }
     }
