@@ -149,12 +149,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
-//        if (eventName.equals("onCreate")) {
-////            return true;
-//        }
         if (eventName.equals("BackPressed")) {
-//            this.finishActivity();
-//            Form.finishActivity();
             finish();
             return true;
         }
@@ -165,6 +160,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             else if (component.equals(submitCustomisation) ) {
                 applicationSettings.backgroundImageName=backgroundImageTextBox.Text();
                 applicationSettings.set();
+                finish();
             }
             else if (component.equals(submitDetails) ) {
                 // copy from screen elements to data
@@ -282,7 +278,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-                Form.finishActivity();
+                finish();
             } else {
                 messages.ShowMessageDialog("Error saving details", "Information", "OK");
             }
@@ -301,7 +297,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-                Form.finishActivity();
+                finish();
             } else {
                 messages.ShowMessageDialog("Error changing password", "Information", "OK");
             }
@@ -314,13 +310,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
     }
 
-    void dbg(String debugMsg) {
-        System.err.print("~~~> " + debugMsg + " <~~~\n");
-    }
-
-    void w100(TextBox t) {
-        t.WidthPercent(100);
-    }
+    void dbg(String debugMsg) { System.err.print("~~~> " + debugMsg + " <~~~\n");  }
 
     void w100listTB(TextBox... t) {
         // This function takes a list of TextBox'es and sets them to 100% width

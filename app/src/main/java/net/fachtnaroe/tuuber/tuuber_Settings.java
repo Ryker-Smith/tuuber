@@ -42,6 +42,7 @@ public class tuuber_Settings {
         sessionID=default_sessionID;
         backgroundImageName=default_backgroundImageName;
         pID=default_pID;
+        lastLogin=defaultLastLogin;
     }
 
     public String get () {

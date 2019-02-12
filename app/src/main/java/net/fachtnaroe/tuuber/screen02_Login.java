@@ -37,8 +37,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private Notifier messages;
     private HorizontalArrangement usernameHz, loginHz, passwordHz;
     private Label UserNameLabel, PasswordLabel;
-    private TextBox UserName;
-    private PasswordTextBox Password;
+    private TextBox inputUsername;
+    private PasswordTextBox inputPassword;
     private Image ourLogo;
 
     protected void $define() {
@@ -58,16 +58,20 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
 
-        UserName= new TextBox (usernameHz);
-        UserName.BackgroundColor(Component.COLOR_WHITE);
-        UserName.Text("testing.this@tcfe.ie");
-
+        inputUsername = new TextBox (usernameHz);
+        inputUsername.BackgroundColor(Component.COLOR_WHITE);
+        if (applicationSettings.lastLogin == applicationSettings.defaultLastLogin) {
+            inputUsername.Text("testing.this@tcfe.ie");
+        }
+        else {
+            inputUsername.Text(applicationSettings.lastLogin);
+        }
         passwordHz = new HorizontalArrangement(Login);
         PasswordLabel = new Label(passwordHz);
-        PasswordLabel.Text("Password");
+        PasswordLabel.Text("inputPassword");
         PasswordLabel.FontBold(true);
-        Password = new PasswordTextBox(passwordHz);
-        Password.Text("tcfetcfe");
+        inputPassword = new PasswordTextBox(passwordHz);
+        inputPassword.Text("tcfetcfe");
 
         loginHz = new HorizontalArrangement(Login);
         LoginButton = new Button (loginHz);
@@ -83,6 +87,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -97,9 +102,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                         applicationSettings.baseURL
                                 + "?cmd=LOGIN"
                                 + "&email="
-                                + UserName.Text()
+                                + inputUsername.Text()
                                 + "&password="
-                                + Password.Text()
+                                + inputPassword.Text()
                 );
                 LoginWeb.Get();
                 return true;
@@ -128,7 +133,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 applicationSettings.pID= parser.getString("pID");
-                applicationSettings.lastLogin=UserName.Text();
+                applicationSettings.lastLogin= inputUsername.Text();
                 applicationSettings.sessionID=parser.getString("sessionID");
                 applicationSettings.set();
                 startNewForm("screen03_MainMenu",null);
