@@ -68,7 +68,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
         passwordHz = new HorizontalArrangement(Login);
         PasswordLabel = new Label(passwordHz);
-        PasswordLabel.Text("inputPassword");
+        PasswordLabel.Text("Password");
         PasswordLabel.FontBold(true);
         inputPassword = new PasswordTextBox(passwordHz);
         inputPassword.Text("tcfetcfe");
