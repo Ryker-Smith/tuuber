@@ -48,7 +48,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         dbg("Start $define " + formName);
         applicationSettings = new tuuber_Settings(this);
-
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         VerticalArrangement screen09_Settings = new VerticalArrangement(this);
         screen09_Settings.WidthPercent(100);

@@ -59,6 +59,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         RoutesScreen = new VerticalArrangement(this);
 
         RoutesScreen.Image(applicationSettings.backgroundImageName);
