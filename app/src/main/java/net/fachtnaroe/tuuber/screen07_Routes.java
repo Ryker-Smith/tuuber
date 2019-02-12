@@ -42,18 +42,18 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     private ArrayList RoutsList ;
-    private HorizontalArrangement Direction, Days;
-    private Label myRoutes;
+    private HorizontalArrangement Direction, Days, pIDHZ;
+    private Label myRoutes, pID;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
-    private Button MainMenu, To, From, Save, Delete;
+    private Button MainMenu, To, From, Save, Delete, buttonRefresh;
     TinyDB localDB;
     private CheckBox M, T, W, Th,F;
     private ListView routesDisplay;
     private TextBox TownSingle, TownsDecoded, DriverYN;
     private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
-   // Integer pID;
+//    Integer pID;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify=new String("to");
 
@@ -61,24 +61,22 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         RoutesScreen = new VerticalArrangement(this);
-//        localDB = new TinyDB(RoutesScreen);
-//        String tempString= (String) localDB.GetValue("pID",-1);
-  //      pID = Integer.valueOf(tempString);
-//        settings.pID=localDB.GetValue("pID",-1).toString();
 
         RoutesScreen.Image(applicationSettings.backgroundImageName);
+        pIDHZ = new HorizontalArrangement(RoutesScreen);
+        pID = new Label(pIDHZ);
+        pID.Text("I am user: #" + applicationSettings.pID);
+        buttonRefresh = new Button(pIDHZ);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+        buttonRefresh.Image("RefreshButt.png");
         MainMenu =  new Button(RoutesScreen);
         MainMenu.Text("MainMenu");
-
-
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My RoutesScreen");
-
-
-
         routesDisplay = new ListView(RoutesScreen);
         routesDisplay.HeightPercent(35  );
-
         saveRouteWeb = new Web(RoutesScreen);
         messagesPopUp = new Notifier(RoutesScreen);
         getRouteWeb = new Web(RoutesScreen);
@@ -106,9 +104,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         townsDisplay = new ListPicker(RoutesScreen);
         Templemore = new ImagePicker(Direction);
         townsDisplay.Text("Press for list of towns");
-//        RoutsList = new ArrayList();
-//        YailList tempData=YailList.makeList(RoutsList);
-//        townsDisplay.Elements(tempData);
         Save = new Button(RoutesScreen);
         Delete = new Button(RoutesScreen);
         Save.Text("Save");
@@ -116,17 +111,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Templemore.WidthPercent(10);
         Templemore.HeightPercent(10);
 
-
-        EventDispatcher.registerEventForDelegation(this, "ClickettyDoDah", "Click");
-//        EventDispatcher.registerEventForDelegation(this, "Delete", "Click");
-//        EventDispatcher.registerEventForDelegation( this, "MainMenu", "Click");
-        EventDispatcher.registerEventForDelegation(this, "getRouteWeb", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "TownsWeb", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "townsDisplay", "AfterPicking");
-        EventDispatcher.registerEventForDelegation(this, "routesDisplay", "AfterPicking");
-//        EventDispatcher.registerEventForDelegation(this, "Save", "Click");
-//        EventDispatcher.registerEventForDelegation(this, "From", "Click");
-//        EventDispatcher.registerEventForDelegation(this, "To", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
 
         TownsWeb.Url(
@@ -170,10 +157,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
 
         else if (component.equals(townsDisplay) && eventName.equals("Click")) {
-
-//            TownsWeb.Url(
-//                    baseURL + "&entity=town&action=LIST"
-//            );
             return true;
         }
 
@@ -276,8 +259,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for(int i = 0 ; i < routesArray.length() ; i++){
-
-
 
                     ListOfRoutesFromWeb.add(
                             "from "
