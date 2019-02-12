@@ -38,12 +38,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         Matches.WidthPercent(100);
         MyRouteList = new ListView(Matches);
 
-
-
-
-
-
-        EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
+        EventDispatcher.registerEventForDelegation(this, "buttonMainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
 

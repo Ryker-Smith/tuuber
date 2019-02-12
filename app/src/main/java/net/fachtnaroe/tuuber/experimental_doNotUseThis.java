@@ -57,7 +57,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         screenArrangement.WidthPercent(100);
         screenArrangement.HeightPercent(100);
         MainMenu = new Button(screenArrangement);
-        MainMenu.Text("MainMenu");
+        MainMenu.Text("buttonMainMenu");
 
         debug_FancyList=new Label(screenArrangement);
         debug_FancyList.Text("Debug");

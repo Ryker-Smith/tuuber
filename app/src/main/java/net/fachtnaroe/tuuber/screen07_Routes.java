@@ -72,7 +72,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         buttonRefresh.FontSize(8);
         buttonRefresh.Image("RefreshButt.png");
         MainMenu =  new Button(RoutesScreen);
-        MainMenu.Text("MainMenu");
+        MainMenu.Text("buttonMainMenu");
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My RoutesScreen");
         routesDisplay = new ListView(RoutesScreen);

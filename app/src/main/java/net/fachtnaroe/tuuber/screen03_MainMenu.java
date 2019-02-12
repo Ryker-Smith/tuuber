@@ -32,6 +32,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         MainMenu = new VerticalArrangement(this);
         MainMenu.Image(applicationSettings.backgroundImageName);
         MainMenu.WidthPercent(100);

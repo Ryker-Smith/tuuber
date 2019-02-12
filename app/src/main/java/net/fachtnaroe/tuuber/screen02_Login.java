@@ -44,6 +44,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
 
         Login = new VerticalScrollArrangement(this);
@@ -116,7 +117,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 return true;
             }
             else {
-                // do something
                 return false;
             }
     }
@@ -128,6 +128,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 applicationSettings.pID= parser.getString("pID");
+                applicationSettings.lastLogin=UserName.Text();
+                applicationSettings.sessionID=parser.getString("sessionID");
                 applicationSettings.set();
                 startNewForm("screen03_MainMenu",null);
             } else {

@@ -13,14 +13,12 @@ import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TextBox;
-import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 import com.google.appinventor.components.runtime.util.YailList;
 //import com.google.appinventor.components.runtime.util;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,10 +36,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Notifier messages;
     TextBox versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
-    Button submitDetails, submitPassword, MainMenu;
-    Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
-    HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz;
-    VerticalArrangement detailsVt, passwordVt;
+    Button submitDetails, submitPassword, buttonMainMenu, buttonRefresh, submitCustomisation;
+    Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel, label_pID;
+    HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz, toolbarHz;
+    VerticalArrangement detailsVt, passwordVt, customisationVt;
     Notifier messagesPopUp;
 
     protected void $define() {
@@ -53,13 +51,33 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         VerticalArrangement screen09_Settings = new VerticalArrangement(this);
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
-        MainMenu = new Button(screen09_Settings);
-        MainMenu.Text("MainMenu");
+
+        // The 'toolbar'
+        toolbarHz = new HorizontalArrangement(screen09_Settings);
+        buttonMainMenu = new Button(toolbarHz);
+        buttonMainMenu.Width(40);
+        buttonMainMenu.Height(40);
+        buttonMainMenu.Image("buttonHome.png");
+        label_pID = new Label(toolbarHz);
+        label_pID.Text("I am user: #" + applicationSettings.pID);
+        label_pID.Height(40);
+        label_pID.FontSize(20);
+        label_pID.WidthPercent(70);
+        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        buttonRefresh = new Button(toolbarHz);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+        buttonRefresh.Image("buttonRefresh.png");
 
         messagesPopUp = new Notifier(screen09_Settings);
 
+        customisationVt = new VerticalArrangement(screen09_Settings);
         backgroundImageTextBox = new TextBox(screen09_Settings);
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
+        submitCustomisation = new Button(customisationVt);
+        submitCustomisation.Text("Save");
+
         detailsWeb = new Web(this);
         detailsWebSave = new Web(this);
         passwordWeb = new Web(this);
@@ -141,10 +159,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             return true;
         }
         if (eventName.equals("Click")) {
-            if (component.equals(MainMenu)) {
+            if (component.equals(buttonMainMenu)) {
                 finish();
             }
-            if (component.equals(submitDetails) ) {
+            else if (component.equals(submitCustomisation) ) {
+                applicationSettings.backgroundImageName=backgroundImageTextBox.Text();
+                applicationSettings.set();
+            }
+            else if (component.equals(submitDetails) ) {
                 // copy from screen elements to data
                 thisPersonsDetails.email = eMailBox.Text();
                 thisPersonsDetails.first = userFirstBox.Text();
@@ -164,7 +186,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsWebSave.Get();
                 return true;
             }
-            if (component.equals(submitPassword) ) {
+            else if (component.equals(submitPassword) ) {
                 // prepare to pass to back end
                 passwordWebSave.Url(applicationSettings.baseURL
                         + "?cmd=CHPWD"
