@@ -128,7 +128,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 applicationSettings.pID= parser.getString("pID");
-                startActivity(new Intent().setClass(this, screen03_MainMenu.class));
+                startNewForm("screen03_MainMenu",null);
             } else {
                 messages.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }

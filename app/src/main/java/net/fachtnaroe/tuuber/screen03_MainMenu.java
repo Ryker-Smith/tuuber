@@ -73,27 +73,27 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
 //                onActivityResult();
 //                EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
-                startActivity(new Intent().setClass(this, screen04_Matches.class));
+                startNewForm("screen04_Matches",null   );
                 return true;
             }
             else if (component.equals(Conversations)) {
-                startActivity(new Intent().setClass(this, screen05_Conversations.class));
+                startNewForm("screen05_Conversations",null );
                 return true;
             }
             else if (component.equals(Routes)) {
-                startActivity(new Intent().setClass(this, screen07_Routes.class));
+                startNewForm("screen07_Routes",null);
                 return true;
             }
             else if (component.equals(Settings)) {
-                startActivity(new Intent().setClass(this, screen09_Settings.class));
+                startNewForm("screen09_Settings",null);
                 return true;
             }
             else if (component.equals(Terms)) {
-                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
+                startNewForm("screen10_TermsAndConditions",null);
                 return true;
             }
             else if (component.equals(experimental)) {
-                startActivity(new Intent().setClass(this, experimental_doNotUseThis.class));
+                startNewForm("experimental_doNotUseThis",null);
                 return true;
             }
         }
