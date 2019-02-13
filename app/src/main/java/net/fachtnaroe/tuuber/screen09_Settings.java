@@ -8,6 +8,8 @@ import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
+import com.google.appinventor.components.runtime.Image;
+import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
@@ -17,7 +19,6 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 import com.google.appinventor.components.runtime.util.YailList;
-//import com.google.appinventor.components.runtime.util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,10 +42,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz, toolbarHz;
     VerticalArrangement detailsVt, passwordVt, customisationVt;
     Notifier messagesPopUp;
+    ImagePicker myImagePicker;
 
     protected void $define() {
 
-        dbg("Start $define " + formName);
+//        dbg("Start $define " + formName);
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
@@ -75,6 +77,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         customisationVt = new VerticalArrangement(screen09_Settings);
         backgroundImageTextBox = new TextBox(screen09_Settings);
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
+        myImagePicker = new ImagePicker(customisationVt);
+        myImagePicker.Text("Crash Program");
+
         submitCustomisation = new Button(customisationVt);
         submitCustomisation.Text("Save");
 
@@ -130,9 +135,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         messages = new Notifier(screen09_Settings);
 
-        EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click");
-        EventDispatcher.registerEventForDelegation(this, "WebEvent", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "phoneBox", "LostFocus");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "LostFocus");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
+        EventDispatcher.registerEventForDelegation(this, formName, "BeforePicking");
+        EventDispatcher.registerEventForDelegation(this, formName, "ActivityResult");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
 
         detailsWeb.Url(applicationSettings.baseURL
@@ -149,18 +157,42 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
+
         if (eventName.equals("BackPressed")) {
             finish();
             return true;
         }
-        if (eventName.equals("Click")) {
+        else if (eventName.equals("ActivityResult")) {
+//            finish();
+            return true;
+        }
+        else if (eventName.equals("BeforePicking")) {
+            if (component.equals(myImagePicker)) {
+this.BackgroundImage(myImagePicker.Selection());
+
+
+                return true;
+            }
+            return false;
+        }
+        else if (eventName.equals("AfterPicking")) {
+            if (component.equals(myImagePicker)) {
+                this.BackgroundImage(myImagePicker.Selection());
+//                backgroundImageTextBox.Text( myImagePicker.Selection() );
+                return true;
+            }
+            return false;
+        }
+        else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
                 finish();
+                return true;
             }
             else if (component.equals(submitCustomisation) ) {
                 applicationSettings.backgroundImageName=backgroundImageTextBox.Text();
                 applicationSettings.set();
                 finish();
+                return true;
             }
             else if (component.equals(submitDetails) ) {
                 // copy from screen elements to data
@@ -196,7 +228,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 return true;
             }
         }
-        if (eventName.equals("LostFocus")) {
+        else if (eventName.equals("LostFocus")) {
             if (component.equals(eMailBox)) {
                 fr_aPerson tempPerson = new fr_aPerson();
                 tempPerson.email = eMailBox.Text();
@@ -214,7 +246,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 return true;
             }
         }
-        if (eventName.equals("GotText") ) {
+        else if (eventName.equals("GotText") ) {
             if (component.equals(detailsWeb)) {
                 dbg((String) params[0]);
                 dbg(this.formName + " detailsWeb");
@@ -223,7 +255,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsGotText(status, textOfResponse);
                 return true;
             }
-            if (component.equals(detailsWebSave)) {
+            else if (component.equals(detailsWebSave)) {
                 dbg((String) params[0]);
                 dbg(this.formName + " detailsWebSave");
                 String status = params[1].toString();
@@ -231,7 +263,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsSaveGotText(status, textOfResponse);
                 return true;
             }
-            if (component.equals(passwordWebSave)) {
+            else if (component.equals(passwordWebSave)) {
                 dbg((String) params[0]);
                 dbg(this.formName + " passwordWebSave");
                 String status = params[1].toString();
@@ -239,6 +271,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 passwordSaveGotText(status, textOfResponse);
                 return true;
             }
+            return false;
         }
         return false;
     }

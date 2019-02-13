@@ -10,6 +10,7 @@ import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
+import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
@@ -91,12 +92,11 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-//        dbg("dispatchEvent: " + formName +  " " + eventName);
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
             return true;
         }
-        if (eventName.equals("Click")) {
+        else if (eventName.equals("Click")) {
             if (component.equals(LoginButton)) {
                 LoginWeb.Url(
                         applicationSettings.baseURL
@@ -108,22 +108,23 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 );
                 LoginWeb.Get();
                 return true;
-            } else if (component.equals(RegisterButton)) {
-                startActivity(new Intent().setClass(this, screen06_Register.class));
+            }
+            else if (component.equals(RegisterButton)) {
+                startNewForm("screen06_Register",null);
                 return true;
             }
         }
-        if (component.equals(LoginWeb) && eventName.equals("GotText")) {
-                String stringSent =  (String) params[0];
+        else if (eventName.equals("GotText")) {
+            if (component.equals(LoginWeb)) {
                 Integer status = (Integer) params[1];
-                String encoding = (String) params[2];
                 String textOfResponse = (String) params[3];
                 webGotText(status.toString(), textOfResponse);
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
+        }
+        return false;
     }
 
     public void webGotText(String status, String textOfResponse) {
@@ -167,7 +168,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
             EventDispatcher.registerEventForDelegation(this, b[i].toString(), "Click");
             i++;
-
         }
     }
 }

@@ -13,14 +13,14 @@ import com.google.appinventor.components.runtime.util.Ev3Constants;
 
 public class screen01_Splash extends Form implements HandlesEventDispatching {
 
-    Clock nextScreenTimer;
+    Clock timerNextScreen;
     tuuber_Settings applicationSettings;
     VerticalArrangement SplashScreen;
     Button tempButton;
     Image ourLogo;
     Label spacer;
     int thisIsA_Bad_Idea = 320;
-    int another_Bad_Idea = 50;
+    int another_Bad_Idea = 250;
 
     protected void $define(){
 
@@ -45,19 +45,18 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         spacer.FontTypeface(Ev3Constants.FontType.NORMAL_FONT);
         spacer.TextAlignment(Component.ALIGNMENT_CENTER);
         spacer.Text("Ag fáil data...");
-        nextScreenTimer = new Clock(SplashScreen);
-        nextScreenTimer.TimerEnabled(false);
-        nextScreenTimer.TimerInterval(another_Bad_Idea);
-        nextScreenTimer.TimerEnabled(true);
-//        tempButton = new Button(SplashScreen);
+        timerNextScreen = new Clock(SplashScreen);
+        timerNextScreen.TimerEnabled(false);
+        timerNextScreen.TimerInterval(another_Bad_Idea);
+        timerNextScreen.TimerEnabled(true);
 
-        EventDispatcher.registerEventForDelegation(this,"nextScreenTimer","Timer");
+        EventDispatcher.registerEventForDelegation(this,"timerNextScreen","Timer");
         EventDispatcher.registerEventForDelegation(this,"tempButton","Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
            if (eventName.equals("Timer")) {
-                nextScreenTimer.TimerEnabled(false);
+                timerNextScreen.TimerEnabled(false);
                 switchForm("screen02_Login");
                 return true;
             }
