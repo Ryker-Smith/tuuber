@@ -1,5 +1,7 @@
 package net.fachtnaroe.tuuber;
 
+import android.webkit.JavascriptInterface;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.Component;
@@ -50,18 +52,18 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         timerNextScreen.TimerInterval(another_Bad_Idea);
         timerNextScreen.TimerEnabled(true);
 
-        EventDispatcher.registerEventForDelegation(this,"timerNextScreen","Timer");
-        EventDispatcher.registerEventForDelegation(this,"tempButton","Click");
+        EventDispatcher.registerEventForDelegation(this,formName,"Timer");
+        EventDispatcher.registerEventForDelegation(this,formName,"Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
            if (eventName.equals("Timer")) {
                 timerNextScreen.TimerEnabled(false);
-                switchForm("screen02_Login");
+                startNewForm("screen02_Login",null);
                 return true;
             }
             else if (eventName.equals("Click")) {
-               switchForm("screen02_Login");
+               startNewForm("screen02_Login",null);
            }
             return false; // event not handled
     }

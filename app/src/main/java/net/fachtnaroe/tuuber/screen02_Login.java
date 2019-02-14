@@ -1,8 +1,6 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
-import android.content.Intent;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -10,7 +8,6 @@ import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
-import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
@@ -35,7 +32,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     private Web LoginWeb;
     private VerticalScrollArrangement Login;
-    private Notifier messages;
+    private Notifier ErrorNotifier;
     private HorizontalArrangement usernameHz, loginHz, passwordHz;
     private Label UserNameLabel, PasswordLabel;
     private TextBox inputUsername;
@@ -51,7 +48,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
-        messages = new Notifier(Login);
+        ErrorNotifier = new Notifier(Login);
 
         LoginWeb = new Web(Login);
         usernameHz = new HorizontalArrangement(Login);
@@ -139,14 +136,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.set();
                 startNewForm("screen03_MainMenu",null);
             } else {
-                messages.ShowMessageDialog("Login failed, check details", "Information", "OK");
+                ErrorNotifier.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
+            ErrorNotifier.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
         }
         else {
-            messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            ErrorNotifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
 
@@ -170,4 +167,5 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             i++;
         }
     }
+
 }
