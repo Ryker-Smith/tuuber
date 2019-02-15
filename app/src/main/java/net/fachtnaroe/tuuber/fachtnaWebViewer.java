@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.PropertyCategory;
+import com.google.appinventor.components.annotations.SimpleEvent;
 import com.google.appinventor.components.annotations.SimpleFunction;
 import com.google.appinventor.components.annotations.SimpleObject;
 import com.google.appinventor.components.annotations.SimpleProperty;
@@ -17,6 +18,7 @@ import com.google.appinventor.components.annotations.UsesPermissions;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.runtime.AndroidViewComponent;
 import com.google.appinventor.components.runtime.ComponentContainer;
+import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.util.EclairUtil;
 import com.google.appinventor.components.runtime.util.FroyoUtil;
 import com.google.appinventor.components.runtime.util.SdkLevel;
@@ -24,27 +26,27 @@ import com.google.appinventor.components.runtime.util.SdkLevel;
 @DesignerComponent(
         version = 6,
         category = ComponentCategory.USERINTERFACE,
-        description = "Component for viewing Web pages.  The Home URL can be specified in the Designer or in the Blocks Editor.  The view can be set to follow links when they are tapped, and users can fill in Web forms. Warning: This is not a full browser.  For example, pressing the phone's hardware Back key will exit the app, rather than move back in the browser history.<p />You can use the frWebViewer.WebViewString property to communicate between your app and Javascript code running in the Webviewer page. In the app, you get and set WebViewString.  In the frWebViewer, you include Javascript that references the window.AppInventor object, using the methoods </em getWebViewString()</em> and <em>setWebViewString(text)</em>.  <p />For example, if the frWebViewer opens to a page that contains the Javascript command <br /> <em>document.write(\"The answer is\" + window.AppInventor.getWebViewString());</em> <br />and if you set WebView.WebVewString to \"hello\", then the web page will show </br ><em>The answer is hello</em>.  <br />And if the Web page contains Javascript that executes the command <br /><em>window.AppInventor.setWebViewString(\"hello from Javascript\")</em>, <br />then the value of the WebViewString property will be <br /><em>hello from Javascript</em>. "
+        description = "Component for viewing Web pages.  The Home URL can be specified in the Designer or in the Blocks Editor.  The view can be set to follow links when they are tapped, and users can fill in Web forms. Warning: This is not a full browser.  For example, pressing the phone's hardware Back key will exit the app, rather than move back in the browser history.<p />You can use the fachtnaWebViewer.WebViewString property to communicate between your app and Javascript code running in the Webviewer page. In the app, you get and set WebViewString.  In the fachtnaWebViewer, you include Javascript that references the window.AppInventor object, using the methoods </em getWebViewString()</em> and <em>frSetWebViewString(text)</em>.  <p />For example, if the fachtnaWebViewer opens to a page that contains the Javascript command <br /> <em>document.write(\"The answer is\" + window.AppInventor.getWebViewString());</em> <br />and if you set WebView.WebVewString to \"hello\", then the web page will show </br ><em>The answer is hello</em>.  <br />And if the Web page contains Javascript that executes the command <br /><em>window.AppInventor.frSetWebViewString(\"hello from Javascript\")</em>, <br />then the value of the WebViewString property will be <br /><em>hello from Javascript</em>. "
 )
 @SimpleObject
 @UsesPermissions(
         permissionNames = "android.permission.INTERNET"
 )
-public final class frWebViewer extends AndroidViewComponent {
+public final class fachtnaWebViewer extends AndroidViewComponent  {
     private final WebView webview;
     private String homeUrl;
     private boolean followLinks = true;
     private boolean prompt = true;
     private boolean ignoreSslErrors = false;
-    frWebViewer.WebViewInterface wvInterface;
+    fachtnaWebViewer.WebViewInterface wvInterface;
 
-    public frWebViewer(ComponentContainer container) {
+    public fachtnaWebViewer(ComponentContainer container) {
         super(container);
         this.webview = new WebView(container.$context());
         this.resetWebViewClient();
         this.webview.getSettings().setJavaScriptEnabled(true);
         this.webview.setFocusable(true);
-        this.wvInterface = new frWebViewer.WebViewInterface(this.webview.getContext());
+        this.wvInterface = new fachtnaWebViewer.WebViewInterface(this.webview.getContext());
         this.webview.addJavascriptInterface(this.wvInterface, "AppInventor");
         this.webview.getSettings().setBuiltInZoomControls(true);
         if (SdkLevel.getLevel() >= 5) {
@@ -82,7 +84,7 @@ public final class frWebViewer extends AndroidViewComponent {
             category = PropertyCategory.BEHAVIOR
     )
     public void WebViewString(String newString) {
-        this.wvInterface.setWebViewString(newString);
+        this.wvInterface.fachtnaSetWebViewString(newString);
     }
 
     public View getView() {
@@ -108,7 +110,7 @@ public final class frWebViewer extends AndroidViewComponent {
     }
 
     @SimpleProperty(
-            description = "URL of the page the frWebViewer should initially open to.  Setting this will load the page.",
+            description = "URL of the page the fachtnaWebViewer should initially open to.  Setting this will load the page.",
             category = PropertyCategory.BEHAVIOR
     )
     public String HomeUrl() {
@@ -143,7 +145,7 @@ public final class frWebViewer extends AndroidViewComponent {
     }
 
     @SimpleProperty(
-            description = "Determines whether to follow links when they are tapped in the frWebViewer.  If you follow links, you can use GoBack and GoForward to navigate the browser history. ",
+            description = "Determines whether to follow links when they are tapped in the fachtnaWebViewer.  If you follow links, you can use GoBack and GoForward to navigate the browser history. ",
             category = PropertyCategory.BEHAVIOR
     )
     public boolean FollowLinks() {
@@ -206,14 +208,14 @@ public final class frWebViewer extends AndroidViewComponent {
     }
 
     @SimpleFunction(
-            description = "Returns true if the frWebViewer can go forward in the history list."
+            description = "Returns true if the fachtnaWebViewer can go forward in the history list."
     )
     public boolean CanGoForward() {
         return this.webview.canGoForward();
     }
 
     @SimpleFunction(
-            description = "Returns true if the frWebViewer can go back in the history list."
+            description = "Returns true if the fachtnaWebViewer can go back in the history list."
     )
     public boolean CanGoBack() {
         return this.webview.canGoBack();
@@ -269,7 +271,7 @@ public final class frWebViewer extends AndroidViewComponent {
         if (SdkLevel.getLevel() >= 8) {
             this.webview.setWebViewClient(FroyoUtil.getWebViewClient(this.ignoreSslErrors, this.followLinks, this.container.$form(), this));
         } else {
-            this.webview.setWebViewClient(new frWebViewer.WebViewerClient());
+            this.webview.setWebViewClient(new fachtnaWebViewer.WebViewerClient());
         }
 
     }
@@ -295,18 +297,39 @@ public final class frWebViewer extends AndroidViewComponent {
             return this.webViewString;
         }
 
+        /* This next line added 20190215 by Fachtna; the omission of this
+            was preventing the JavaScript in the web-page
+            from communicating with the Java of the host App.
+            PROBLEM:    JavascriptInterface not working (@JavascriptInterface omitted)
+            SOLUTION:   Add @JavascriptInterface before each function to be accessible
+        */
         @JavascriptInterface
-        public void setWebViewString(String newString) {
+        public void fachtnaSetWebViewString(String newString) {
             this.webViewString = newString;
+            /* This next line added 20190216 by Fachtna; no event was being raised as documentation
+                indicated would be raised; this function-call is part of bringing code inline with
+                embedded documentation.
+            */
+            fachtnaRaiseEvent("fachtnaWebViewStringChange");
         }
     }
+    /*
+        This fachtnaRaiseEvent routine added 20190215 by Fachtna;
+        PROBLEM: no event was being raised as documentation indicated would be raised;
+        SOLUTION: raise an event using the provided EventDispatcher
+     */
+    @SimpleEvent
+    public void fachtnaRaiseEvent(String customMessage) {
+        EventDispatcher.dispatchEvent(this, customMessage, new Object[]{});
+    }
+    // End Fachtna-added bits
 
     private class WebViewerClient extends WebViewClient {
         private WebViewerClient() {
         }
 
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return !frWebViewer.this.followLinks;
+            return !fachtnaWebViewer.this.followLinks;
         }
     }
 }
