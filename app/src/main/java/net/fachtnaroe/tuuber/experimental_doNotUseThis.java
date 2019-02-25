@@ -14,6 +14,7 @@ import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
+import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
@@ -21,6 +22,8 @@ import com.google.appinventor.components.runtime.util.YailList;
 //import com.google.appinventor.components.runtime.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class experimental_doNotUseThis extends Form implements HandlesEventDispatching {
 
@@ -31,6 +34,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 
     tuuber_Settings applicationSettings;
     HorizontalArrangement toolbarHz;
+    Map<String, String> hm = new HashMap<String, String>();
     Clock ticker;
     ListView myList;
     Web testFancyList_Web;
@@ -40,6 +44,8 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
     Integer count=0;
     Button buttonMainMenu, buttonRefresh;
     VerticalArrangement screenArrangement;
+
+    Notifier messagesPopUp;
 
     @JavascriptInterface
     protected void $define() {
@@ -82,13 +88,14 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         ticker = new Clock(screenArrangement);
         ticker.TimerEnabled(false);
         ticker.TimerInterval(1000);
-        head1 = new Label(screenArrangement);
-        head1.Text("Above");
+//        head1 = new Label(screenArrangement);
+//        head1.Text("Above");
 //        dbg("In");
 //        dbg("Out");
-        head2 = new Label(screenArrangement);
-        head2.Text("Below");
+//        head2 = new Label(screenArrangement);
+//        head2.Text("Below");
 
+        messagesPopUp = new Notifier(screenArrangement);
         fancyListView(screenArrangement, myList, "one", "two", "three");
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -97,12 +104,21 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
         EventDispatcher.registerEventForDelegation(this, formName, "fachtnaWebViewStringChange");
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
+
+        hm.put("es","Spain");
+        hm.put("it","Italy");
+        hm.put("po","Poland");
+        hm.put("fr","France");
+
     }
 
     @JavascriptInterface
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+
             if (eventName.contains("WebViewStringChange")) {
+                //aiWebViewer.WebViewString()
+                messagesPopUp.ShowAlert("You selected: " + hm.get(aiWebViewer.WebViewString()));
             debug_FancyList.Text(
                     aiWebViewer.WebViewString()
             );
