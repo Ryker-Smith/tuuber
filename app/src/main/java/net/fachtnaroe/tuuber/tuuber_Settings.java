@@ -23,12 +23,11 @@ public class tuuber_Settings {
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
-    public String lastValue;
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin="";
-    public String textColor;
     public String TermsAndConditions = "You must use the app only in the way we intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
     public String ourLogo="MultiLayerLogo-002.png";
+
     public final String default_baseURL="https://fachtnaroe.net/tuuber-2019";
     public final String default_sessionID="a1b2c3d4";
     public String default_pID="-1";
@@ -43,11 +42,10 @@ public class tuuber_Settings {
         sessionID=default_sessionID;
         backgroundImageName=default_backgroundImageName;
         pID=default_pID;
+        lastLogin=defaultLastLogin;
     }
 
-
     public String get () {
-
         baseURL=(String) localDB.GetValue("baseURL",default_baseURL);
         sessionID=(String) localDB.GetValue("sessionId",default_sessionID);
         backgroundImageName=(String) localDB.GetValue("backgroundImageName", default_backgroundImageName);
@@ -59,6 +57,7 @@ public class tuuber_Settings {
     public String set () {
         localDB.StoreValue("lastLogin", lastLogin);
         localDB.StoreValue("baseURL",baseURL);
+        localDB.StoreValue("sessionID",baseURL);
         localDB.StoreValue("backgroundImageName", backgroundImageName);
         localDB.StoreValue("pID", pID);
         return "OK";

@@ -21,7 +21,7 @@ import static android.support.v4.content.res.TypedArrayUtils.getResourceId;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Conversations, Settings, Terms, experimental;
+    private Button Routes, Matches, Conversations, Settings, Terms, experimental, buttonLogOut;
 
     tuuber_Settings applicationSettings;
     boolean form_made=false;
@@ -32,6 +32,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         MainMenu = new VerticalArrangement(this);
         MainMenu.Image(applicationSettings.backgroundImageName);
         MainMenu.WidthPercent(100);
@@ -49,13 +50,16 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Terms.Text("Terms & Conditions");
         experimental= new Button(MainMenu);
         experimental.Text("Experimental Stuff");
+        buttonLogOut = new Button(MainMenu);
+        buttonLogOut.Text("Log Out");
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz=new ArrayList();
 
-        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms, experimental);
+        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms, experimental,buttonLogOut);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -64,7 +68,14 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         if (eventName.equals("BackPressed")) {
             return true;
         }
-        if (eventName.equals("Click")) {
+        else if (eventName.equals("OtherScreenClosed")) {
+            if (params[0].equals("screen09_Settings")) {
+                applicationSettings.get();
+//                this.recreate();
+                return true;
+            }
+        }
+        else if (eventName.equals("Click")) {
             if (component.equals(Matches)) {
                 // eg startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
                 // finishActivityWithResult("elbow");
@@ -90,6 +101,11 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(experimental)) {
                 startNewForm("experimental_doNotUseThis",null);
+                return true;
+            }
+            else if (component.equals(buttonLogOut)) {
+                System.exit(0);
+
                 return true;
             }
         }

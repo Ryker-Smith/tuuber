@@ -41,17 +41,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
-    private ArrayList RoutsList ;
-    private HorizontalArrangement Direction, Days, pIDHZ;
-    private Label myRoutes, pID;
+//    private ArrayList RoutsList ;
+    private HorizontalArrangement Direction, Days, toolbarHz;
+    private Label myRoutes, label_pID;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
-    private Button MainMenu, To, From, Save, Delete, buttonRefresh;
+    private Button buttonMainMenu, To, From, Save, Delete, buttonRefresh;
     TinyDB localDB;
-    private CheckBox M, T, W, Th,F;
+//    private CheckBox M, T, W, Th,F;
     private ListView routesDisplay;
-    private TextBox TownSingle, TownsDecoded, DriverYN;
-    private ListPicker O, DestinationList, OriginList2, DestinationList2;
+//    private TextBox TownSingle, TownsDecoded, DriverYN;
+//    private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify=new String("to");
@@ -63,18 +63,26 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         RoutesScreen = new VerticalArrangement(this);
 
         RoutesScreen.Image(applicationSettings.backgroundImageName);
-        pIDHZ = new HorizontalArrangement(RoutesScreen);
-        pID = new Label(pIDHZ);
-        pID.Text("I am user: #" + applicationSettings.pID);
-        buttonRefresh = new Button(pIDHZ);
+        // The 'toolbar'
+        toolbarHz = new HorizontalArrangement(RoutesScreen);
+        buttonMainMenu = new Button(toolbarHz);
+        buttonMainMenu.Width(40);
+        buttonMainMenu.Height(40);
+        buttonMainMenu.Image("buttonHome.png");
+        label_pID = new Label(toolbarHz);
+        label_pID.Text("I am user: #" + applicationSettings.pID);
+        label_pID.Height(40);
+        label_pID.FontSize(20);
+        label_pID.WidthPercent(70);
+        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        buttonRefresh = new Button(toolbarHz);
         buttonRefresh.Width(40);
         buttonRefresh.Height(40);
         buttonRefresh.FontSize(8);
-        buttonRefresh.Image("RefreshButt.png");
-        MainMenu =  new Button(RoutesScreen);
-        MainMenu.Text("MainMenu");
+        buttonRefresh.Image("buttonRefresh.png");
+
         myRoutes = new Label(RoutesScreen);
-        myRoutes.Text("My RoutesScreen");
+        myRoutes.Text("My Routes:");
         routesDisplay = new ListView(RoutesScreen);
         routesDisplay.HeightPercent(35  );
         saveRouteWeb = new Web(RoutesScreen);
@@ -91,6 +99,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         fri = new CheckBox(Days);
         DriverYoN = new CheckBox(Days);
         To = new Button(Direction);
+        Templemore = new ImagePicker(Direction);
         From = new Button(Direction);
         saveRouteWeb = new Web(RoutesScreen);
         To.Text("To");
@@ -102,14 +111,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         fri.Text("F");
         DriverYoN.Text("Press Yes if Driver");
         townsDisplay = new ListPicker(RoutesScreen);
-        Templemore = new ImagePicker(Direction);
         townsDisplay.Text("Press for list of towns");
+        routesDisplay.TextSize(40);
         Save = new Button(RoutesScreen);
         Delete = new Button(RoutesScreen);
         Save.Text("Save");
         Delete.Text("Delete");
-        Templemore.WidthPercent(10);
-        Templemore.HeightPercent(10);
+        Templemore.Image("Arrow_Right_Templemore.png");
+        Templemore.Width(50);
+        Templemore.Height(50);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -120,130 +130,127 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 baseURL + "?entity=town&action=LIST"
         );
         TownsWeb.Get();
-        getRouteWeb.Url(applicationSettings.baseURL
-                + "?action=LIST"
-                + "&entity=ROUTE"
-                + "&pID=" + applicationSettings.pID
-                + "&sessionID=" + applicationSettings.sessionID
-        );
-        getRouteWeb.Get();
+        getRoutesFromBackEnd();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
-            this.finishActivity();
+            this.finish();
             return true;
         }
-        else if (component.equals(MainMenu) && eventName.equals("Click")) {
-            switchForm("screen03_MainMenu");
-            return true;
-        }
-        else if (component.equals(getRouteWeb) && eventName.equals("GotText")) {
-            dbg((String) params[0]);
-            String status = params[1].toString();
-            String textOfResponse = (String) params[3];
-            getRouteWebGotText(status, textOfResponse);
-            return true;
-        }
-
-
-       else if (component.equals(TownsWeb) && eventName.equals("GotText")) {
-            dbg((String) params[0]);
-            String status = params[1].toString();
-            String textOfResponse = (String) params[3];
-            getTownList(status, textOfResponse);
-             return true;
-        }
-
-        else if (component.equals(townsDisplay) && eventName.equals("Click")) {
-            return true;
-        }
-
-        else if (componentName.equals("townsDisplay")&& eventName.equals("AfterPicking")){
-            townsDisplay.Text(townsDisplay.Selection());
-
-        }
-        else if (component.equals(Save)&& eventName.equals("Click")){
-            dbg("Saving");
-            if( (!mon.Checked()) && (!tues.Checked()) &&(!weds.Checked()) &&(!thurs.Checked()) &&(!fri.Checked())  &&(!DriverYoN.Checked())){
+        else if (eventName.equals("Click")) {
+            if (component.equals(buttonMainMenu)) {
+                finish();
                 return true;
-
             }
-            String temp = new String("");
-            if (mon.Checked()){
-                temp = temp + "mon=Y";
+            else if (component.equals(townsDisplay)) {
+                return true;
+            }
+            else if (component.equals(buttonRefresh)) {
+                getRoutesFromBackEnd();
+                return true;
+            }
+            else if (component.equals(Save))    {
+                dbg("Saving");
+                if( (!mon.Checked()) && (!tues.Checked()) &&(!weds.Checked()) &&(!thurs.Checked()) &&(!fri.Checked())  &&(!DriverYoN.Checked())){
+                    return true;
                 }
-            else {
-                temp = temp+ "mon=N" ;
-            }
-            temp = temp + "&";
-            if (tues.Checked()){
-                temp = temp + "tues=Y";
-            }
-            else {
-                temp = temp+ "tues=N";
-            }
-            temp = temp + "&";
-            if (weds.Checked()){
-                temp = temp + "weds=Y";
-            }
-            else {
-                temp= temp+ "weds=N";
-            }
-            temp = temp + "&";
-            if (thurs.Checked()){
-                temp = temp + "thurs=Y";
-            }
-            else {
-                temp = temp+ "thurs=N";
-            }
-            temp = temp + "&";
-            if (fri.Checked()){
-                temp = temp + "fri=Y";
-            }
-            else {
-                temp = temp+ "fri=N";
-            }
-            temp = temp +"&";
-            if (DriverYoN.Checked()){
-                temp = temp + "driver=Y";
-            }
-            else {
-                temp = temp+ "driver=N" ;
-            }
-
-            String Directions=new String();
-            if (Specify.equals("to")) {
-                Directions="&destination=Templemore&origin=" + townsDisplay.Text() ;
-            }
-            else {
-                Directions="&origin=Templemore&destination=" + townsDisplay.Text();
-            }
+                String temp = new String("");
+                if (mon.Checked()){
+                    temp = temp + "mon=Y";
+                }
+                else {
+                    temp = temp+ "mon=N" ;
+                }
+                temp = temp + "&";
+                if (tues.Checked()){
+                    temp = temp + "tues=Y";
+                }
+                else {
+                    temp = temp+ "tues=N";
+                }
+                temp = temp + "&";
+                if (weds.Checked()){
+                    temp = temp + "weds=Y";
+                }
+                else {
+                    temp= temp+ "weds=N";
+                }
+                temp = temp + "&";
+                if (thurs.Checked()){
+                    temp = temp + "thurs=Y";
+                }
+                else {
+                    temp = temp+ "thurs=N";
+                }
+                temp = temp + "&";
+                if (fri.Checked()){
+                    temp = temp + "fri=Y";
+                }
+                else {
+                    temp = temp+ "fri=N";
+                }
+                temp = temp +"&";
+                if (DriverYoN.Checked()){
+                    temp = temp + "driver=Y";
+                }
+                else {
+                    temp = temp+ "driver=N" ;
+                }
+                String Directions=new String();
+                if (Specify.equals("to")) {
+                    Directions="&destination=Templemore&origin=" + townsDisplay.Text() ;
+                }
+                else {
+                    Directions="&origin=Templemore&destination=" + townsDisplay.Text();
+                }
                 saveRouteWeb.Url(
-
                         baseURL
                                 + "?action=POST"
                                 + "&entity=ROUTE"
                                 + Directions + "&"
                                 + temp +"&"
                                 + "pID=" + applicationSettings.pID + "&"
-                 );
+                );
                 saveRouteWeb.Get();
-                getRouteWeb.Get();
                 dbg(saveRouteWeb.Url());
                 return true;
-        }
-        else if (component.equals(To)&& eventName.equals("Click")){
+            }
+            else if (component.equals(To)){
                 Templemore.Image("Arrow_Right_Templemore.png");
                 Specify="to";
+            }
+            else if (component.equals(From)) {
+                Templemore.Image("Arrow_Left_Templemore.png");
+                Specify="from";
+            }
+            else if (component.equals(Delete)) {
+            }
         }
-        else if (component.equals(From)&& eventName.equals("Click")) {
-            Templemore.Image("Arrow_Left_Templemore.png");
-            Specify="from";
+        else if (eventName.equals("GotText")) {
+                if (component.equals(getRouteWeb)) {
+                    dbg((String) params[0]);
+                    String status = params[1].toString();
+                    String textOfResponse = (String) params[3];
+                    getRouteWebGotText(status, textOfResponse);
+                    return true;
+                }
+                else if (component.equals(TownsWeb)) {
+                    dbg((String) params[0]);
+                    String status = params[1].toString();
+                    String textOfResponse = (String) params[3];
+                    getTownList(status, textOfResponse);
+                    return true;
+                }
+                else if (component.equals(saveRouteWeb)) {
+                    getRouteWeb.Get();
+                }
         }
-        else if (component.equals(Delete)&& eventName.equals("Click")) {
-
+        else if (eventName.equals("AfterPicking")) {
+            if (component.equals(townsDisplay)) {
+                townsDisplay.Text(townsDisplay.Selection());
+            }
         }
         return true;
     }
@@ -251,17 +258,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     public void getRouteWebGotText(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         if (status.equals("200") ) try {
-
             ListOfRoutesFromWeb = new ArrayList<String>();
-
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("routes").equals("")) {
-
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for(int i = 0 ; i < routesArray.length() ; i++){
-
                     ListOfRoutesFromWeb.add(
-                            "from "
+                            "From "
                             + routesArray.getJSONObject(i).getString("origin")
                             + " to "
                             + routesArray.getJSONObject(i).getString("destination" )
@@ -269,7 +272,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
                 routesDisplay.Elements(tempData);
-
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
             }
@@ -280,17 +282,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-
-
-
     }
 
     public void getTownList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         if (status.equals("200") ) try {
-
             ListOfTownsFromWeb = new ArrayList<String>();
-
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("towns").equals("")) {
 
@@ -313,11 +310,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-
-
-
     }
 
+    void getRoutesFromBackEnd() {
+        getRouteWeb.Url(applicationSettings.baseURL
+                + "?action=LIST"
+                + "&entity=ROUTE"
+                + "&pID=" + applicationSettings.pID
+                + "&sessionID=" + applicationSettings.sessionID
+        );
+        getRouteWeb.Get();
+    }
 
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");

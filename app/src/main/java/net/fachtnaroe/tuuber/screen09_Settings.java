@@ -1,26 +1,25 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
-import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.ComponentContainer;
+import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
+import com.google.appinventor.components.runtime.Image;
+import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TextBox;
-import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 import com.google.appinventor.components.runtime.util.YailList;
-//import com.google.appinventor.components.runtime.util;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,28 +37,52 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Notifier messages;
     TextBox versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
-    Button submitDetails, submitPassword, MainMenu;
-    Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel;
-    HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz;
-    VerticalArrangement detailsVt, passwordVt;
+    Button submitDetails, submitPassword, buttonMainMenu, buttonRefresh, submitCustomisation;
+    Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel, label_pID;
+    HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz, toolbarHz;
+    VerticalArrangement detailsVt, passwordVt, customisationVt;
     Notifier messagesPopUp;
+    ImagePicker myImagePicker;
 
     protected void $define() {
 
-        dbg("Start $define " + formName);
+//        dbg("Start $define " + formName);
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         VerticalArrangement screen09_Settings = new VerticalArrangement(this);
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
-        MainMenu = new Button(screen09_Settings);
-        MainMenu.Text("MainMenu");
+
+        // The 'toolbar'
+        toolbarHz = new HorizontalArrangement(screen09_Settings);
+        buttonMainMenu = new Button(toolbarHz);
+        buttonMainMenu.Width(40);
+        buttonMainMenu.Height(40);
+        buttonMainMenu.Image("buttonHome.png");
+        label_pID = new Label(toolbarHz);
+        label_pID.Text("I am user: #" + applicationSettings.pID);
+        label_pID.Height(40);
+        label_pID.FontSize(20);
+        label_pID.WidthPercent(70);
+        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        buttonRefresh = new Button(toolbarHz);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+        buttonRefresh.Image("buttonRefresh.png");
 
         messagesPopUp = new Notifier(screen09_Settings);
 
+        customisationVt = new VerticalArrangement(screen09_Settings);
         backgroundImageTextBox = new TextBox(screen09_Settings);
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
+        myImagePicker = new ImagePicker(customisationVt);
+        myImagePicker.Text("Crash Program");
+
+        submitCustomisation = new Button(customisationVt);
+        submitCustomisation.Text("Save");
+
         detailsWeb = new Web(this);
         detailsWebSave = new Web(this);
         passwordWeb = new Web(this);
@@ -112,9 +135,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         messages = new Notifier(screen09_Settings);
 
-        EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click");
-        EventDispatcher.registerEventForDelegation(this, "WebEvent", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "phoneBox", "LostFocus");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "LostFocus");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
+        EventDispatcher.registerEventForDelegation(this, formName, "BeforePicking");
+        EventDispatcher.registerEventForDelegation(this, formName, "ActivityResult");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
 
         detailsWeb.Url(applicationSettings.baseURL
@@ -131,20 +157,44 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
-//        if (eventName.equals("onCreate")) {
-////            return true;
-//        }
+
         if (eventName.equals("BackPressed")) {
-//            this.finishActivity();
-//            Form.finishActivity();
             finish();
             return true;
         }
-        if (eventName.equals("Click")) {
-            if (component.equals(MainMenu)) {
-                finish();
+        else if (eventName.equals("ActivityResult")) {
+//            finish();
+            return true;
+        }
+        else if (eventName.equals("BeforePicking")) {
+            if (component.equals(myImagePicker)) {
+this.BackgroundImage(myImagePicker.Selection());
+
+
+                return true;
             }
-            if (component.equals(submitDetails) ) {
+            return false;
+        }
+        else if (eventName.equals("AfterPicking")) {
+            if (component.equals(myImagePicker)) {
+                this.BackgroundImage(myImagePicker.Selection());
+//                backgroundImageTextBox.Text( myImagePicker.Selection() );
+                return true;
+            }
+            return false;
+        }
+        else if (eventName.equals("Click")) {
+            if (component.equals(buttonMainMenu)) {
+                finish();
+                return true;
+            }
+            else if (component.equals(submitCustomisation) ) {
+                applicationSettings.backgroundImageName=backgroundImageTextBox.Text();
+                applicationSettings.set();
+                finish();
+                return true;
+            }
+            else if (component.equals(submitDetails) ) {
                 // copy from screen elements to data
                 thisPersonsDetails.email = eMailBox.Text();
                 thisPersonsDetails.first = userFirstBox.Text();
@@ -164,7 +214,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsWebSave.Get();
                 return true;
             }
-            if (component.equals(submitPassword) ) {
+            else if (component.equals(submitPassword) ) {
                 // prepare to pass to back end
                 passwordWebSave.Url(applicationSettings.baseURL
                         + "?cmd=CHPWD"
@@ -178,7 +228,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 return true;
             }
         }
-        if (eventName.equals("LostFocus")) {
+        else if (eventName.equals("LostFocus")) {
             if (component.equals(eMailBox)) {
                 fr_aPerson tempPerson = new fr_aPerson();
                 tempPerson.email = eMailBox.Text();
@@ -196,7 +246,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 return true;
             }
         }
-        if (eventName.equals("GotText") ) {
+        else if (eventName.equals("GotText") ) {
             if (component.equals(detailsWeb)) {
                 dbg((String) params[0]);
                 dbg(this.formName + " detailsWeb");
@@ -205,7 +255,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsGotText(status, textOfResponse);
                 return true;
             }
-            if (component.equals(detailsWebSave)) {
+            else if (component.equals(detailsWebSave)) {
                 dbg((String) params[0]);
                 dbg(this.formName + " detailsWebSave");
                 String status = params[1].toString();
@@ -213,7 +263,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsSaveGotText(status, textOfResponse);
                 return true;
             }
-            if (component.equals(passwordWebSave)) {
+            else if (component.equals(passwordWebSave)) {
                 dbg((String) params[0]);
                 dbg(this.formName + " passwordWebSave");
                 String status = params[1].toString();
@@ -221,6 +271,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 passwordSaveGotText(status, textOfResponse);
                 return true;
             }
+            return false;
         }
         return false;
     }
@@ -260,7 +311,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-                Form.finishActivity();
+                finish();
             } else {
                 messages.ShowMessageDialog("Error saving details", "Information", "OK");
             }
@@ -279,7 +330,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
                 // do something
-                Form.finishActivity();
+                finish();
             } else {
                 messages.ShowMessageDialog("Error changing password", "Information", "OK");
             }
@@ -292,13 +343,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
     }
 
-    void dbg(String debugMsg) {
-        System.err.print("~~~> " + debugMsg + " <~~~\n");
-    }
-
-    void w100(TextBox t) {
-        t.WidthPercent(100);
-    }
+    void dbg(String debugMsg) { System.err.print("~~~> " + debugMsg + " <~~~\n");  }
 
     void w100listTB(TextBox... t) {
         // This function takes a list of TextBox'es and sets them to 100% width
