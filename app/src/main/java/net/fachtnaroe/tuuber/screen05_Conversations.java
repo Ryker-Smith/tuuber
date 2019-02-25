@@ -38,6 +38,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Conversations = new VerticalArrangement(this);
         pIDHZ = new HorizontalArrangement(Conversations);
