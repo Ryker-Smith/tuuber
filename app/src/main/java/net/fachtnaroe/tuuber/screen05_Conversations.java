@@ -26,11 +26,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private VerticalArrangement Conversations;
     private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
-    private String baseURL = "https://fachtnaroe.net/tuuber-2019";
+    private String baseURL = "https://fachtnaroe.net/tuuber-test";
     private Button buttonGoToChatSCreen, buttonRefresh;
-    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID;
+    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, FirstName, LastName;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
-    private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
+    private List<String> ListofContactWeb1, ListofContactWeb2, ListofpIDs, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
     int intListViewsize=40;
@@ -38,6 +38,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Conversations = new VerticalArrangement(this);
         pIDHZ = new HorizontalArrangement(Conversations);
@@ -57,6 +58,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts.HeightPercent(20);
         Contacts.TextSize(intListViewsize);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
+        FirstName = new Label(OtherpIDHZ);
+        LastName = new Label (OtherpIDHZ);
         OtherpID = new Label(OtherpIDHZ);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
@@ -103,7 +106,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         }
         else if (eventName.equals("AfterPicking")) {
-            OtherpID.Text( Integer.toString(Contacts.SelectionIndex()) );
+            OtherpID.Text(Integer.toString(Contacts.SelectionIndex()));
+
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {
