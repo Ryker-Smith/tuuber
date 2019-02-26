@@ -106,8 +106,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         }
         else if (eventName.equals("AfterPicking")) {
-            OtherpID.Text(Contacts.Selection());
-
+            String OtherpIDText= new String();
+            OtherpIDText=Contacts.Selection();
+            String currentString = OtherpIDText;
+            String[] seperated = currentString.split(":");
+            OtherpID.Text(seperated[0]);
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {
@@ -183,9 +186,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 for (int i = 0; i < contacts1Array.length(); i++) {
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
-                            "[" +
-                                    contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
-                                    "] " +
+                            contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
+                                    ": " +
                                     contacts1Array.getJSONObject(i).getString("first" ) +
                                     " " +
                                     contacts1Array.getJSONObject(i).getString("family")
@@ -240,9 +242,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 for(int i = 0 ; i < contacts2.length() ; i++){
                     if (contacts2.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb2.add(
-                            "[" +
-                                    contacts2.getJSONObject(i).getString("respondent_pID") +
-                                    "] " +
+                            contacts2.getJSONObject(i).getString("respondent_pID") +
+                                    ": " +
                                     contacts2.getJSONObject(i).getString("first") +
                                     " " +
                                     contacts2.getJSONObject(i).getString("family")
