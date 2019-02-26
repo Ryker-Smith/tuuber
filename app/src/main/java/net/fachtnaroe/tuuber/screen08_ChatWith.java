@@ -48,15 +48,15 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
         this.BackgroundImage(applicationSettings.backgroundImageName);
-        ChatWeb = new Web(this);
-        ChatWeb.Url("https://fachtnaroe.net/tuuber-2019?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=" +
-                applicationSettings.pID +
-                "&respondent_pID=" +
-                applicationSettings.OtherpIDforChat
-        );
+//        ChatWeb = new Web(this);
+//        ChatWeb.Url("https://fachtnaroe.net/tuuber-2019?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=" +
+//                applicationSettings.pID +
+//                "&respondent_pID=" +
+//                applicationSettings.OtherpIDforChat
+//        );
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
-        ChatsViewer.HeightPercent(10);
+        ChatsViewer.HeightPercent(80);
         ChatsViewer.GoToUrl("https://fachtnaroe.net/tuuber-2019?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=" +
                 applicationSettings.pID +
                 "&respondent_pID=" +
