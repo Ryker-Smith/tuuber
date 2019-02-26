@@ -79,8 +79,17 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Send = new Button(SendHZ);
         Send.Text("Send");
 
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+    }
 
-
-
+    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        if (eventName.equals("Click")) {
+            if (component.equals(MainMenu)) {
+                startNewForm("screen03_MainMenu", null);
+                return true;
+            }
+            return true;
+        }
+        return true;
     }
 }
