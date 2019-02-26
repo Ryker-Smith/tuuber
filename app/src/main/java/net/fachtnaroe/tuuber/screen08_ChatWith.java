@@ -62,12 +62,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "&iam=" + applicationSettings.pID
         );
         chatText = new TextBox(ChatWith);
-        chatText.Text("This will be the (prettified) result of:" +
-                "SELECT * FROM Chats WHERE " +
-                "(End result of:" +
-                "getting each line from Chat table where" +
-                "initiator_pID/respondent_pID combination matches for the Conversation" +
-                "selected on the Conversation screen.)");
+        chatText.Text("");
         MainMenu= new Button(ChatWith);
         MainMenu.Text("Back to main");
         pIDHZ = new HorizontalArrangement(ChatWith);
