@@ -112,10 +112,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 String OtherpIDText = new String();
                 OtherpIDText = Contacts.Selection();
                 String currentString = OtherpIDText;
-                String[] seperated = currentString.split(":");
-                applicationSettings.OtherpIDforChat=seperated[0];
+                String[] separated = currentString.split(":");
+                applicationSettings.OtherpIDforChat=separated[0];
                 applicationSettings.set();
-                OtherpID.Text(seperated[0]);
+                OtherpID.Text(separated[0]);
                 buttonGoToChatSCreen.Enabled(true);
             }
         }
@@ -194,7 +194,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
                             contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
-                                    ": " +
+                                    ":: " +
                                     contacts1Array.getJSONObject(i).getString("first" ) +
                                     " " +
                                     contacts1Array.getJSONObject(i).getString("family")
@@ -250,7 +250,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     if (contacts2.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb2.add(
                             contacts2.getJSONObject(i).getString("respondent_pID") +
-                                    ": " +
+                                    ":: " +
                                     contacts2.getJSONObject(i).getString("first") +
                                     " " +
                                     contacts2.getJSONObject(i).getString("family")
