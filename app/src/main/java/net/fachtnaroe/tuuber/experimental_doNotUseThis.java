@@ -120,7 +120,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         hm.put("it","Italy");
         hm.put("po","Poland");
         hm.put("fr","France");
-        debug_FancyList.Text(aiWebViewer.HomeUrl());
+//        debug_FancyList.Text(aiWebViewer.HomeUrl());
 
     }
 

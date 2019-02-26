@@ -85,6 +85,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 startNewForm("screen03_MainMenu", null);
                 return true;
             }
+            // https://fachtnaroe.net//tuuber-test?action=POST&entity=CHAT&sessionID=a1b2c3d4&initiator_pID=18&respondent_pID=138&status=open&text=Not%20now
             return true;
         }
         return true;
