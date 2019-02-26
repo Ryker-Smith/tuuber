@@ -122,12 +122,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //        townsDisplay.Elements(tempData);
         ButtonHolder = new HorizontalArrangement(RoutesScreen);
         Save = new Button(ButtonHolder);
-        Delete = new Button(ButtonHolder);
-        routesDisplay.TextSize(40);
-        Save = new Button(RoutesScreen);
-        Delete = new Button(RoutesScreen);
         Save.Text("Save");
+        Delete = new Button(ButtonHolder);
         Delete.Text("Delete");
+        routesDisplay.TextSize(40);
+        //Save = new Button(RoutesScreen);
+        //Delete = new Button(RoutesScreen);
+        //Save.Text("Save");
+        //Delete.Text("Delete");
         Templemore.Image("Arrow_Right_Templemore.png");
         Templemore.Width(50);
         Templemore.Height(50);
