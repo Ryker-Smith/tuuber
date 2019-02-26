@@ -50,22 +50,19 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
-        ChatsViewer.HeightPercent(80);
-        ChatsViewer.GoToUrl(applicationSettings.baseURL +
+        ChatsViewer.HeightPercent(60);
+        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
                 "&initiator_pID=" +
                 applicationSettings.pID +
                 "&respondent_pID=" +
-                applicationSettings.OtherpIDforChat
+                applicationSettings.OtherpIDforChat +
+                "&showHtml=1" +
+                "&iam=" + applicationSettings.pID
         );
         chatText = new TextBox(ChatWith);
-        chatText.Text("This will be the (prettified) result of:" +
-                "SELECT * FROM Chats WHERE " +
-                "(End result of:" +
-                "getting each line from Chat table where" +
-                "initiator_pID/respondent_pID combination matches for the Conversation" +
-                "selected on the Conversation screen.)");
+        chatText.Text("");
         MainMenu= new Button(ChatWith);
         MainMenu.Text("Back to main");
         pIDHZ = new HorizontalArrangement(ChatWith);
