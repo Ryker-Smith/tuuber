@@ -43,7 +43,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
 //    private ArrayList RoutsList ;
     private HorizontalArrangement Direction, Days, toolbarHz;
-    private Label myRoutes, label_pID;
+    private Label myRoutes, label_pID, test;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
@@ -57,6 +57,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private CheckBox mon, tues, weds, thurs ,fri, DriverYoN;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify=new String("to");
+    String rID;
+
 
     protected void $define() {
 
@@ -77,6 +79,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         label_pID.FontSize(20);
         label_pID.WidthPercent(70);
         label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        test = new Label(RoutesScreen);
         buttonRefresh = new Button(toolbarHz);
         buttonRefresh.Width(40);
         buttonRefresh.Height(40);
@@ -140,6 +143,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         );
         TownsWeb.Get();
         getRoutesFromBackEnd();
+
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -147,6 +151,20 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         if (eventName.equals("BackPressed")) {
             this.finish();
             return true;
+        }
+        else if (eventName.equals("AfterPicking")){
+            if (component.equals(routesDisplay)){
+
+                String CheckrID = new String();
+                CheckrID = routesDisplay.Selection();
+                String currentstring = CheckrID;
+                String[] separated = currentstring.split(":");
+                test.Text(separated[0]);
+                return true;
+
+
+            }
+
         }
         else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
@@ -167,10 +185,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "?action=DELETE"
                                 + "&entity=ROUTE"
                                 + "&"
-                                + "rID=" + RouteID + "&"
+                                + "rID=" + test.Text() + "&"
                                 + "sessionID=" + applicationSettings.sessionID
                 );
                 DeleteRoute.Get();
+                getRoutesFromBackEnd();
 
             }
             else if (component.equals(Save))    {
@@ -348,8 +367,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         getRouteWeb.Get();
     }
 
+
+
+
+
+
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }
+
+
 
