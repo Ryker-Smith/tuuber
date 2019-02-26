@@ -81,7 +81,18 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         //testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22&displaymode=fancy1");
 
         aiWebViewer = new fachtnaWebViewer(screenArrangement);
-        aiWebViewer.GoToUrl(stringTestURL_1);
+        aiWebViewer.HomeUrl(
+                applicationSettings.default_baseURL +
+                "?action=LIST&entity=chat&sessionID=" +
+                applicationSettings.sessionID +
+                "&initiator_pID=" +
+                applicationSettings.pID +
+                "&respondent_pID=" +
+                applicationSettings.OtherpIDforChat +
+                "&showHtml=1" +
+                "&iam=" + applicationSettings.pID
+        );
+        aiWebViewer.GoHome();
         aiWebViewer.HeightPercent(40);
         aiWebViewer.WebViewString("This is another sample.");
 
@@ -109,6 +120,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         hm.put("it","Italy");
         hm.put("po","Poland");
         hm.put("fr","France");
+        debug_FancyList.Text(aiWebViewer.HomeUrl());
 
     }
 
@@ -134,7 +146,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
                 return true;
             }
             else if (component.equals(buttonRefresh)) {
-                aiWebViewer.GoToUrl(stringTestURL_1);
+                aiWebViewer.GoHome();
                 return true;
             }
         }
