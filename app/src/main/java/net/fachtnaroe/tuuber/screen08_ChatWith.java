@@ -36,6 +36,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ;
     private Button Send;
     private Label ChatLabel, pID, OtherpIDLabel;
+    private Notifier MessageSent_Notifier, MessageError_Notifier;
     private ListView Chat;
     private Web ChatWeb;
     private WebViewer ChatsViewer;
@@ -77,6 +78,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Send.Text("Send");
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -85,9 +87,52 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 startNewForm("screen03_MainMenu", null);
                 return true;
             }
-            // https://fachtnaroe.net//tuuber-test?action=POST&entity=CHAT&sessionID=a1b2c3d4&initiator_pID=18&respondent_pID=138&status=open&text=Not%20now
+            if (component.equals(Send)) {
+                ChatWeb.Url(
+                        applicationSettings.baseURL +
+                                "?action=POST&entity=CHAT&sessionID=" +
+                                applicationSettings.sessionID +
+                                "&initiator_pID=" +
+                                pID.Text() +
+                                "&respondent_pID=" +
+                                OtherpIDLabel.Text() +
+                                "&status=open&text=" +
+                                chatText.Text()
+                );
+                ChatWeb.Get();
+                return true;
+            }
+                // https://fachtnaroe.net//tuuber-test?action=POST&entity=CHAT&sessionID=a1b2c3d4&initiator_pID=18&respondent_pID=138&status=open&text=Not%20now
             return true;
         }
-        return true;
+        else if (component.equals(ChatWeb))
+            if (eventName.equals("GotText")) {
+                String stringSent = (String) params[0];
+                Integer status = (Integer) params[1];
+                String encoding = (String) params[2];
+                String textOfResponse = (String) params[3];
+                webGotText(status.toString(), textOfResponse);
+                return true;
+            }
+            return true;
+    }
+    public void webGotText(String status, String textOfResponse) {
+
+        String temp=new String();
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            temp = parser.getString("result");
+            if (parser.getString("result").equals("OK")) {
+                MessageSent_Notifier.ShowMessageDialog("MessageSent", "Success!", "Confirm");
+            } else {
+                MessageError_Notifier.ShowMessageDialog("MessageFailed", "Information", "OK");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            MessageError_Notifier.ShowMessageDialog("MessageFailed" + temp, "Information", "OK");
+        }
+        else {
+            MessageError_Notifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        }
     }
 }
