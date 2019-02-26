@@ -37,7 +37,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     tuuber_Settings applicationSettings;
-    private Web saveRouteWeb, getRouteWeb, TownsWeb;
+    private Web saveRouteWeb, getRouteWeb, TownsWeb, DeleteRoute;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
@@ -46,7 +46,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Label myRoutes, label_pID;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
-    private Button buttonMainMenu, To, From, Save, Delete, buttonRefresh;
+    private HorizontalArrangement ButtonHolder;
+    private Button MainMenu, To, From, Save, Delete;
+    private Button buttonMainMenu, buttonRefresh;
     TinyDB localDB;
 //    private CheckBox M, T, W, Th,F;
     private ListView routesDisplay;
@@ -112,6 +114,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         DriverYoN.Text("Press Yes if Driver");
         townsDisplay = new ListPicker(RoutesScreen);
         townsDisplay.Text("Press for list of towns");
+//        RoutsList = new ArrayList();
+//        YailList tempData=YailList.makeList(RoutsList);
+//        townsDisplay.Elements(tempData);
+        ButtonHolder = new HorizontalArrangement(RoutesScreen);
+        Save = new Button(ButtonHolder);
+        Delete = new Button(ButtonHolder);
         routesDisplay.TextSize(40);
         Save = new Button(RoutesScreen);
         Delete = new Button(RoutesScreen);
@@ -120,6 +128,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Templemore.Image("Arrow_Right_Templemore.png");
         Templemore.Width(50);
         Templemore.Height(50);
+        DeleteRoute = new Web(RoutesScreen);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -150,6 +159,19 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             else if (component.equals(buttonRefresh)) {
                 getRoutesFromBackEnd();
                 return true;
+            }
+            else if (component.equals(Delete)){
+                String RouteID = townsDisplay.Selection();
+                DeleteRoute.Url(
+                        baseURL
+                                + "?action=DELETE"
+                                + "&entity=ROUTE"
+                                + "&"
+                                + "rID=" + RouteID + "&"
+                                + "sessionID=" + applicationSettings.sessionID
+                );
+                DeleteRoute.Get();
+
             }
             else if (component.equals(Save))    {
                 dbg("Saving");
@@ -264,7 +286,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for(int i = 0 ; i < routesArray.length() ; i++){
                     ListOfRoutesFromWeb.add(
-
+                            routesArray.getJSONObject(i).getString("rID")
+                            +
+                            ":: "
+                            +
                             "From "
                             + routesArray.getJSONObject(i).getString("origin")
                             + " to "
