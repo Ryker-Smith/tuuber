@@ -37,7 +37,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     tuuber_Settings applicationSettings;
-    private Web saveRouteWeb, getRouteWeb, TownsWeb, DeleteRoute;
+    private Web saveRouteWeb, getRouteWeb, TownsWeb, DeleteRoute, GetTowns;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
@@ -134,6 +134,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Templemore.Width(50);
         Templemore.Height(50);
         DeleteRoute = new Web(RoutesScreen);
+        GetTowns = new Web(RoutesScreen);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -142,6 +143,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         TownsWeb.Url(
                 baseURL + "?entity=town&action=LIST"
+                        + "&"
+                + "sessionID="
+                + applicationSettings.sessionID
         );
         TownsWeb.Get();
         getRoutesFromBackEnd();
@@ -174,7 +178,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(townsDisplay)) {
-                return true;
+                GetTowns.Url(
+                        baseURL
+                                + "?action=LIST"
+                                + "&entity=TOWN"
+                                + "&"
+                                + "sessionID=" + applicationSettings.sessionID
+                );
+                dbg(GetTowns.Url());
+                GetTowns.Get();
+
+
             }
             else if (component.equals(buttonRefresh)) {
                 getRoutesFromBackEnd();
@@ -249,7 +263,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     Directions="&origin=Templemore&destination=" + townsDisplay.Text();
                 }
                 saveRouteWeb.Url(
-                        baseURL
+                                baseURL
                                 + "?action=POST"
                                 + "&entity=ROUTE"
                                 + Directions + "&"
