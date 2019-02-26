@@ -61,7 +61,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts.TextSize(intListViewsize);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
         OtherpID = new Label(OtherpIDHZ);
-        OtherpID.Visible(false);
+        OtherpID.Visible(true);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
@@ -100,9 +100,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("Click")) {
             if (component.equals(buttonGoToChatSCreen)) {
-                applicationSettings.OtherpIDforChat=OtherpID.Text();
-                applicationSettings.set();
-                startNewForm("screen08_ChatWith",OtherpID.Text());
+                startNewForm("screen08_ChatWith",null);
                 return true;
             }
             else if (component.equals(buttonRefresh)) {
@@ -115,6 +113,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 OtherpIDText = Contacts.Selection();
                 String currentString = OtherpIDText;
                 String[] seperated = currentString.split(":");
+                applicationSettings.OtherpIDforChat=seperated[0];
+                applicationSettings.set();
                 OtherpID.Text(seperated[0]);
                 buttonGoToChatSCreen.Enabled(true);
             }

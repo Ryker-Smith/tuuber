@@ -49,11 +49,19 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatWith.HeightPercent(100);
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatWeb = new Web(this);
-        ChatWeb.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
+        ChatWeb.Url("https://fachtnaroe.net/tuuber-2019?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=" +
+                applicationSettings.pID +
+                "&respondent_pID=" +
+                applicationSettings.OtherpIDforChat
+        );
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
         ChatsViewer.HeightPercent(10);
-        ChatsViewer.GoToUrl("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
+        ChatsViewer.GoToUrl("https://fachtnaroe.net/tuuber-2019?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=" +
+                applicationSettings.pID +
+                "&respondent_pID=" +
+                applicationSettings.OtherpIDforChat
+        );
         chatText = new TextBox(ChatWith);
         chatText.Text("This will be the (prettified) result of:" +
                 "SELECT * FROM Chats WHERE " +
@@ -66,10 +74,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         pIDHZ = new HorizontalArrangement(ChatWith);
         pID = new Label(pIDHZ);
         pID.Text(applicationSettings.pID);
-        pID.Visible(false);
+        pID.Visible(true);
         OtherpIDLabel = new Label(pIDHZ);
         OtherpIDLabel.Text(applicationSettings.OtherpIDforChat);
-        OtherpIDLabel.Visible(false);
+        OtherpIDLabel.Visible(true);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
