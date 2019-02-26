@@ -23,6 +23,7 @@ public class tuuber_Settings {
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
+    public String OtherpIDforChat="";
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin="";
     public String TermsAndConditions = "You must use the app only in the way we intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
@@ -31,6 +32,7 @@ public class tuuber_Settings {
     public final String default_baseURL="https://fachtnaroe.net/tuuber-2019";
     public final String default_sessionID="a1b2c3d4";
     public String default_pID="-1";
+    public String default_OtherpIDforChat="-1";
     public String default_backgroundImageName="tuuberBackdrop-06.png";
     public String defaultLastLogin="";
 
@@ -42,6 +44,7 @@ public class tuuber_Settings {
         sessionID=default_sessionID;
         backgroundImageName=default_backgroundImageName;
         pID=default_pID;
+        OtherpIDforChat=default_OtherpIDforChat;
         lastLogin=defaultLastLogin;
     }
 
@@ -51,6 +54,7 @@ public class tuuber_Settings {
         backgroundImageName=(String) localDB.GetValue("backgroundImageName", default_backgroundImageName);
         lastLogin=(String) localDB.GetValue("lastLogin", defaultLastLogin);
         pID=(String) localDB.GetValue("pID",default_pID);
+        OtherpIDforChat=(String) localDB.GetValue("OtherpIDforChat",OtherpIDforChat);
         return "OK";
     }
 
@@ -60,6 +64,7 @@ public class tuuber_Settings {
         localDB.StoreValue("sessionID",baseURL);
         localDB.StoreValue("backgroundImageName", backgroundImageName);
         localDB.StoreValue("pID", pID);
+        localDB.StoreValue("OtherpIDforChat",OtherpIDforChat);
         return "OK";
     }
 

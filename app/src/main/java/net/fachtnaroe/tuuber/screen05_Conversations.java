@@ -9,6 +9,7 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
+import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
@@ -34,6 +35,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private Notifier messagesPopUp;
     String Specify=new String("to");
     int intListViewsize=40;
+    TinyDB LocalDB;
 
     protected void $define() {
 
@@ -58,9 +60,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts.HeightPercent(20);
         Contacts.TextSize(intListViewsize);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
-        FirstName = new Label(OtherpIDHZ);
-        LastName = new Label (OtherpIDHZ);
         OtherpID = new Label(OtherpIDHZ);
+        OtherpID.Visible(false);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
@@ -81,6 +82,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         buttonGoToChatSCreen = new Button(ChatsScreenHZ);
         buttonGoToChatSCreen.Text("Chat");
+        buttonGoToChatSCreen.Enabled(false);
 
         Contact1Web = new Web(this);
         Contact2Web = new Web(this);
@@ -98,7 +100,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("Click")) {
             if (component.equals(buttonGoToChatSCreen)) {
-                startNewForm("screen08_ChatWith",null);
+                applicationSettings.OtherpIDforChat=OtherpID.Text();
+                applicationSettings.set();
+                startNewForm("screen08_ChatWith",OtherpID.Text());
                 return true;
             }
             else if (component.equals(buttonRefresh)) {
@@ -106,11 +110,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         }
         else if (eventName.equals("AfterPicking")) {
-            String OtherpIDText= new String();
-            OtherpIDText=Contacts.Selection();
-            String currentString = OtherpIDText;
-            String[] seperated = currentString.split(":");
-            OtherpID.Text(seperated[0]);
+            if (component.equals(Contacts)) {
+                String OtherpIDText = new String();
+                OtherpIDText = Contacts.Selection();
+                String currentString = OtherpIDText;
+                String[] seperated = currentString.split(":");
+                OtherpID.Text(seperated[0]);
+                buttonGoToChatSCreen.Enabled(true);
+            }
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {

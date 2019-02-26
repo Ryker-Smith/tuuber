@@ -35,7 +35,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private Button MainMenu;
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ;
     private Button Send;
-    private Label ChatLabel, pID;
+    private Label ChatLabel, pID, OtherpIDLabel;
     private ListView Chat;
     private Web ChatWeb;
     private WebViewer ChatsViewer;
@@ -43,6 +43,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         ChatWith=new VerticalArrangement(this);
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
@@ -65,6 +66,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         pIDHZ = new HorizontalArrangement(ChatWith);
         pID = new Label(pIDHZ);
         pID.Text(applicationSettings.pID);
+        pID.Visible(false);
+        OtherpIDLabel = new Label(pIDHZ);
+        OtherpIDLabel.Text(applicationSettings.OtherpIDforChat);
+        OtherpIDLabel.Visible(false);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
