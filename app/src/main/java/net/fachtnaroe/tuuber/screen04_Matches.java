@@ -27,7 +27,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private Button SelectMyRout, MainMenu, Send;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement HorizontalArragment1, HorizontalArragment2, HorizontalArragment3;
-    private ListPicker MyRouteList;
+    private ListView MyRouteList;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
 
@@ -36,14 +36,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         Matches.Image("img_splashcanvas.png");
         Matches.HeightPercent(100);
         Matches.WidthPercent(100);
-        MyRouteList = new ListPicker(Matches);
+        MyRouteList = new ListView(Matches);
 
-
-
-
-
-
-        EventDispatcher.registerEventForDelegation(this, "MainMenu", "Click");
+        EventDispatcher.registerEventForDelegation(this, "buttonMainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
     }
 

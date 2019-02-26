@@ -21,7 +21,7 @@ import static android.support.v4.content.res.TypedArrayUtils.getResourceId;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Conversations, Settings, Terms, experimental;
+    private Button Routes, Matches, Conversations, Settings, Terms, experimental, buttonLogOut;
 
     tuuber_Settings applicationSettings;
     boolean form_made=false;
@@ -32,6 +32,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         MainMenu = new VerticalArrangement(this);
         MainMenu.Image(applicationSettings.backgroundImageName);
         MainMenu.WidthPercent(100);
@@ -49,13 +50,16 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Terms.Text("Terms & Conditions");
         experimental= new Button(MainMenu);
         experimental.Text("Experimental Stuff");
+        buttonLogOut = new Button(MainMenu);
+        buttonLogOut.Text("Log Out");
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz=new ArrayList();
 
-        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms, experimental);
+        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms, experimental,buttonLogOut);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -64,36 +68,44 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         if (eventName.equals("BackPressed")) {
             return true;
         }
-        if (eventName.equals("Click")) {
+        else if (eventName.equals("OtherScreenClosed")) {
+            if (params[0].equals("screen09_Settings")) {
+                applicationSettings.get();
+//                this.recreate();
+                return true;
+            }
+        }
+        else if (eventName.equals("Click")) {
             if (component.equals(Matches)) {
                 // eg startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
-                //
-//                finishActivityWithResult("elbow");
-//                finishActivityWithTextResult();
-
-//                onActivityResult();
-//                EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
-                startActivity(new Intent().setClass(this, screen04_Matches.class));
+                // finishActivityWithResult("elbow");
+                // finishActivityWithTextResult();
+                startNewForm("screen04_Matches",null   );
                 return true;
             }
             else if (component.equals(Conversations)) {
-                startActivity(new Intent().setClass(this, screen05_Conversations.class));
+                startNewForm("screen05_Conversations",null );
                 return true;
             }
             else if (component.equals(Routes)) {
-                startActivity(new Intent().setClass(this, screen07_Routes.class));
+                startNewForm("screen07_Routes",null);
                 return true;
             }
             else if (component.equals(Settings)) {
-                startActivity(new Intent().setClass(this, screen09_Settings.class));
+                startNewForm("screen09_Settings",null);
                 return true;
             }
             else if (component.equals(Terms)) {
-                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
+                startNewForm("screen10_TermsAndConditions",null);
                 return true;
             }
             else if (component.equals(experimental)) {
-                startActivity(new Intent().setClass(this, experimental_doNotUseThis.class));
+                startNewForm("experimental_doNotUseThis",null);
+                return true;
+            }
+            else if (component.equals(buttonLogOut)) {
+                System.exit(0);
+
                 return true;
             }
         }
@@ -111,26 +123,11 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         int len = b.length;
 //        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         while ((i < len) && (b[i] != null)) {
-//            hz.add(new HorizontalArrangement(MainMenu));
             b[i].WidthPercent(50);
             b[i].BackgroundColor(Component.COLOR_BLACK);
             b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
-//            b[i].Text(b[i].toString());
-//            R.id();
-//            String[] temp = b[i].toString().split("@");
-//            String x = temp[1];
-//            Integer a = Resources.getSystem().getIdentifier(b[i].toString(),"drawable","android");
-//            Integer r=$context().getResources().getIdentifier(x,"drawable",$context().getPackageName());
-//            dbg(a.toString());
-//            dbg(r.toString());
-//            android.app.Activity
-//            $c
-////            $context().findViewById()
-//            dbg(x);
-//            int x=getResourceId(b[i].toString(),"",getPackageName());
-//            EventDispatcher.registerEventForDelegation(this.getDispatchDelegate(), b[i].toString(), "Click");
             i++;
         }
     }

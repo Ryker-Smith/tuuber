@@ -82,8 +82,10 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TermsConditions.Text ("Terms&Conditions");
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
+        TCAgree.Enabled(false);
         TCLabel = new Label(TermsConditionsHZ);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
+        TCLabel.Visible(false);
 
         Image4 = new Image (Register);
 
@@ -111,6 +113,10 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         dbg("GOT: "+formName+" "+eventName);
         if ((component.equals(this)) && (eventName.equals("OtherScreenClosed"))) {
             thisOtherScreenClosed((String) params[0], (Object) params[1]);
+            if (TCLabel.Text().equals("screen10_TermsAndConditions EEEEE Good")) {
+                TCAgree.Checked(true);
+                return true;
+            }
             return true;
         }
         else if (eventName.equals("Click")) {
@@ -177,7 +183,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
                     return true;
                 }
-
                 if (!TCAgree.Checked()) {
                     TCAgree.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);

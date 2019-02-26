@@ -20,20 +20,21 @@ import java.net.URL;
 
 public class tuuber_Settings {
 
-    private String myTag="fr_";
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
-    public String lastValue;
+    public String OtherpIDforChat="";
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin="";
-    public String textColor;
     public String TermsAndConditions = "You must use the app only in the way we intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
+    public String ourLogo="MultiLayerLogo-002.png";
+
     public final String default_baseURL="https://fachtnaroe.net/tuuber-2019";
     public final String default_sessionID="a1b2c3d4";
     public String default_pID="-1";
+    public String default_OtherpIDforChat="-1";
     public String default_backgroundImageName="tuuberBackdrop-06.png";
-    public String ourLogo="MultiLayerLogo-002.png";
+    public String defaultLastLogin="";
 
     TinyDB localDB;
 
@@ -41,54 +42,29 @@ public class tuuber_Settings {
         localDB= new TinyDB(screenName);
         baseURL=default_baseURL;
         sessionID=default_sessionID;
-        backgroundImageName=localDB.GetValue("backgroundImageName",default_backgroundImageName).toString();
-        pID=localDB.GetValue("pID",default_pID).toString();
+        backgroundImageName=default_backgroundImageName;
+        pID=default_pID;
+        OtherpIDforChat=default_OtherpIDforChat;
+        lastLogin=defaultLastLogin;
     }
 
-    public String get (String name) throws MalformedURLException{
-
-        class getDataFromWebInBackground extends AsyncTask<URL, Integer, String> {
-
-            public String dataline=new String("");
-            @Override
-            protected String doInBackground(URL... urls) {
-                String value= new String("");
-                lastValue=urls[0].toString();
-                try {
-                    URL url = urls[0];
-                    InputStream inputStream = url.openStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    value = bufferedReader.readLine();
-                    lastValue.concat(value);
-                    while (value != null) {
-                            value= bufferedReader.readLine();
-                    }
-                    return value;
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return value;
-            }
-
-            protected void onProgressUpdate(Integer n) {
-            }
-
-            protected void onPostExecute(String data) {
-                lastValue=data;
-            }
-        }
-
-        URL target = new URL(baseURL.concat("?method=GET&name="+name));
-        new getDataFromWebInBackground().execute(target);
-        return lastValue;
+    public String get () {
+        baseURL=(String) localDB.GetValue("baseURL",default_baseURL);
+        sessionID=(String) localDB.GetValue("sessionId",default_sessionID);
+        backgroundImageName=(String) localDB.GetValue("backgroundImageName", default_backgroundImageName);
+        lastLogin=(String) localDB.GetValue("lastLogin", defaultLastLogin);
+        pID=(String) localDB.GetValue("pID",default_pID);
+        OtherpIDforChat=(String) localDB.GetValue("OtherpIDforChat",OtherpIDforChat);
+        return "OK";
     }
 
-    public String set (String name, String value) {
-        localDB.StoreValue(myTag+"lastLogin", lastLogin);
-        localDB.StoreValue(myTag+"baseURL",baseURL);
-        localDB.StoreValue(myTag+"backgroundImageName", backgroundImageName);
+    public String set () {
+        localDB.StoreValue("lastLogin", lastLogin);
+        localDB.StoreValue("baseURL",baseURL);
+        localDB.StoreValue("sessionID",baseURL);
+        localDB.StoreValue("backgroundImageName", backgroundImageName);
+        localDB.StoreValue("pID", pID);
+        localDB.StoreValue("OtherpIDforChat",OtherpIDforChat);
         return "OK";
     }
 

@@ -2,111 +2,149 @@ package net.fachtnaroe.tuuber;
 
 //import android.support.v7.app.AppCompatActivity;
 
-import android.content.Context;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
-import android.widget.Toast;
 
-import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
+import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
-import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.PasswordTextBox;
-import com.google.appinventor.components.runtime.TableArrangement;
-import com.google.appinventor.components.runtime.TableLayout;
-import com.google.appinventor.components.runtime.TextBox;
-import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
-import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 import com.google.appinventor.components.runtime.util.YailList;
 //import com.google.appinventor.components.runtime.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class experimental_doNotUseThis extends Form implements HandlesEventDispatching {
 
+    // MUST READ:
+    //  https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface(java.lang.Object,%20java.lang.String)
     //https://codevog.com/blog/2015-03-09-webview-interactions-with-javascript
     //https://developer.android.com/guide/webapps/webview#java
+
     tuuber_Settings applicationSettings;
+    HorizontalArrangement toolbarHz;
+    Map<String, String> hm = new HashMap<String, String>();
+    Clock ticker;
     ListView myList;
     Web testFancyList_Web;
-    Label debug_FancyList;
-    WebViewer testFancyList_Web_Viewer;
-    Button MainMenu;
+    Label debug_FancyList, head1, head2, label_pID;
+    fachtnaWebViewer aiWebViewer;
+    String stringTestURL_1="https://fachtnaroe.net/test_list1.html";
+    Integer count=0;
+    Button buttonMainMenu, buttonRefresh;
     VerticalArrangement screenArrangement;
 
+    Notifier messagesPopUp;
+
+    @JavascriptInterface
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
-
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
-        VerticalArrangement screenArrangement = new VerticalArrangement(this);
+
+        screenArrangement = new VerticalArrangement(this);
         screenArrangement.WidthPercent(100);
         screenArrangement.HeightPercent(100);
-        MainMenu = new Button(screenArrangement);
-        MainMenu.Text("MainMenu");
+        // The 'toolbar'
+        toolbarHz = new HorizontalArrangement(screenArrangement);
+        buttonMainMenu = new Button(toolbarHz);
+        buttonMainMenu.Width(40);
+        buttonMainMenu.Height(40);
+        buttonMainMenu.Image("buttonHome.png");
+        label_pID = new Label(toolbarHz);
+        label_pID.Text("I am user: #" + applicationSettings.pID);
+        label_pID.Height(40);
+        label_pID.FontSize(20);
+        label_pID.WidthPercent(70);
+        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        buttonRefresh = new Button(toolbarHz);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+        buttonRefresh.Image("buttonRefresh.png");
 
         debug_FancyList=new Label(screenArrangement);
         debug_FancyList.Text("Debug");
         testFancyList_Web = new Web(screenArrangement);
-        testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22&displaymode=fancy1");
+        //testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22&displaymode=fancy1");
 
-        testFancyList_Web_Viewer= new WebViewer(screenArrangement);
-        testFancyList_Web_Viewer.GoToUrl("https://fachtnaroe.net/test_list1.html");
-        testFancyList_Web_Viewer.HeightPercent(25);
-// MUST READ:
-        //  https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface(java.lang.Object,%20java.lang.String)
+        aiWebViewer = new fachtnaWebViewer(screenArrangement);
+        aiWebViewer.GoToUrl(stringTestURL_1);
+        aiWebViewer.HeightPercent(40);
+        aiWebViewer.WebViewString("This is another sample.");
 
-//        WebView webView = testFancyList_Web_Viewer;
-//        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
+        ticker = new Clock(screenArrangement);
+        ticker.TimerEnabled(false);
+        ticker.TimerInterval(1000);
+//        head1 = new Label(screenArrangement);
+//        head1.Text("Above");
+//        dbg("In");
+//        dbg("Out");
+//        head2 = new Label(screenArrangement);
+//        head2.Text("Below");
 
+        messagesPopUp = new Notifier(screenArrangement);
         fancyListView(screenArrangement, myList, "one", "two", "three");
-//        $context().getResources().getIdentifier("*","drawable",$context().getPackageName());
 
-        EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click");
-        EventDispatcher.registerEventForDelegation(this, "WebEvent", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "WebEvent", "WebViewStringChange");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
+        EventDispatcher.registerEventForDelegation(this, formName, "fachtnaWebViewStringChange");
+        EventDispatcher.registerEventForDelegation(this, formName, "Timer");
+
+        hm.put("es","Spain");
+        hm.put("it","Italy");
+        hm.put("po","Poland");
+        hm.put("fr","France");
 
     }
 
+    @JavascriptInterface
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
-        if (eventName.equals("WebViewStringChange")) {
-            debug_FancyList.Text(testFancyList_Web_Viewer.WebViewString());
+            if (eventName.contains("WebViewStringChange")) {
+                //aiWebViewer.WebViewString()
+                messagesPopUp.ShowAlert("You selected: " + hm.get(aiWebViewer.WebViewString()));
+            debug_FancyList.Text(
+                    aiWebViewer.WebViewString()
+            );
             return true;
         }
-        if (eventName.equals("BackPressed")) {
+        else if (eventName.equals("BackPressed")) {
             finish();
             return true;
         }
-        if (eventName.equals("Click")) {
-            if (component.equals(MainMenu)) {
+        else if (eventName.equals("Click")) {
+            if (component.equals(buttonMainMenu)) {
                 finish();
                 return true;
             }
+            else if (component.equals(buttonRefresh)) {
+                aiWebViewer.GoToUrl(stringTestURL_1);
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     void fancyListView(ComponentContainer container, ListView list, String... listData) {
         list = new ListView(container);
         list.HeightPercent(10);
         list.TextSize(40);
-
         list = getRouteWebGotText(list, listData);
     }
 
@@ -125,9 +163,6 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         listDisplay.Elements(tempData);
         return listDisplay;
     }
-
-    void dbg(String debugMsg) {
-        System.err.print("~~~> " + debugMsg + " <~~~\n");
-    }
+    void dbg(String debugMsg) { System.err.print("~~~> " + debugMsg + " <~~~\n"); }
 }
 

@@ -9,7 +9,7 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.TextBox;
+import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
@@ -25,25 +25,33 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ;
+    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-test";
-    private Button ChatsScreen;
-    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID;
+    private Button buttonGoToChatSCreen, buttonRefresh;
+    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, FirstName, LastName;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
-    private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
+    private List<String> ListofContactWeb1, ListofContactWeb2, ListofpIDs, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
     int intListViewsize=40;
+    TinyDB LocalDB;
 
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Conversations = new VerticalArrangement(this);
         pIDHZ = new HorizontalArrangement(Conversations);
         pID = new Label(pIDHZ);
-        pID.Text(applicationSettings.pID);
+        pID.Text("I am user: #" + applicationSettings.pID);
+        buttonRefresh = new Button(pIDHZ);
+        buttonRefresh.Width(40);
+        buttonRefresh.Height(40);
+        buttonRefresh.FontSize(8);
+//        buttonRefresh.Text("r");
+        buttonRefresh.Image("RefreshButt.png");
         ContactsLabelHZ = new HorizontalArrangement(Conversations);
         ContactsLabel = new Label(ContactsLabelHZ);
         ContactsLabel.Text("Open Conversations");
@@ -51,6 +59,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(20);
         Contacts.TextSize(intListViewsize);
+        OtherpIDHZ = new HorizontalArrangement(Conversations);
+        OtherpID = new Label(OtherpIDHZ);
+        OtherpID.Visible(true);
 
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
@@ -69,8 +80,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiation.TextSize(intListViewsize);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
-        ChatsScreen = new Button(ChatsScreenHZ);
-        ChatsScreen.Text("Chat");
+        buttonGoToChatSCreen = new Button(ChatsScreenHZ);
+        buttonGoToChatSCreen.Text("Chat");
+        buttonGoToChatSCreen.Enabled(false);
 
         Contact1Web = new Web(this);
         Contact2Web = new Web(this);
@@ -80,16 +92,34 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         callBackEnd();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
-        if (component.equals(ChatsScreen) && eventName.equals("Click")) {
-            switchForm("screen08_ChatWith");
-            return true;
+        if (eventName.equals("Click")) {
+            if (component.equals(buttonGoToChatSCreen)) {
+                startNewForm("screen08_ChatWith",null);
+                return true;
+            }
+            else if (component.equals(buttonRefresh)) {
+                callBackEnd();
+            }
         }
-        if (eventName.equals("GotText")) {
+        else if (eventName.equals("AfterPicking")) {
+            if (component.equals(Contacts)) {
+                String OtherpIDText = new String();
+                OtherpIDText = Contacts.Selection();
+                String currentString = OtherpIDText;
+                String[] seperated = currentString.split(":");
+                applicationSettings.OtherpIDforChat=seperated[0];
+                applicationSettings.set();
+                OtherpID.Text(seperated[0]);
+                buttonGoToChatSCreen.Enabled(true);
+            }
+        }
+        else if (eventName.equals("GotText")) {
             if (component.equals(Contact1Web)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
@@ -129,15 +159,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                         "&status=open"
         );
         Contact1Web.Get();
-        Contact2Web.Url(
-                baseURL +
-                        "?action=LIST&entity=chat&sessionID=" +
-                        applicationSettings.sessionID +
-                        "&initiator_pID=" +
-                        applicationSettings.pID +
-                        "&status=open"
-        );
-        Contact2Web.Get();
         InboundWeb.Url(
                 baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
@@ -168,20 +189,27 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat" ).equals("" )) {
-dbg("AAA");
                 JSONArray contacts1Array = parser.getJSONArray("chat" );
                 for (int i = 0; i < contacts1Array.length(); i++) {
-                    dbg("BBB");
-                    dbg(contacts1Array.getJSONObject(i).toString());
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
-                            contacts1Array.getJSONObject(i).getString("first" )
-                            + " " +
-                                    contacts1Array.getJSONObject(i).getString("family" )
+                            contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
+                                    ": " +
+                                    contacts1Array.getJSONObject(i).getString("first" ) +
+                                    " " +
+                                    contacts1Array.getJSONObject(i).getString("family")
+
                     );
                 }
-                YailList tempData = YailList.makeList(ListofContactWeb1);
+//                String[] temp= new String[Contacts.Elements().toStringArray().length];
+//                temp=Contacts.Elements().toStringArray();
+//                for (int i=0; i< temp.length; i++) {
+//                    ListofContactWeb1.add(temp[i]);
+//                }
+                YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
+//                ListofContactWeb1.add(Contacts.Elements().toString());
                 Contacts.Elements(tempData);
+
 
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting Contact1 details", "Information", "OK" );
@@ -193,7 +221,19 @@ dbg("AAA");
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
+        Contact2Web.Url(
+                baseURL +
+                        "?action=LIST&entity=chat&sessionID=" +
+                        applicationSettings.sessionID +
+                        "&initiator_pID=" +
+                        applicationSettings.pID +
+                        "&status=open"
+        );
+        Contact2Web.Get();
+
     }
+
+
     public void getContact2List (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
@@ -209,12 +249,22 @@ dbg("AAA");
                 for(int i = 0 ; i < contacts2.length() ; i++){
                     if (contacts2.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb2.add(
-                            contacts2.getJSONObject(i).getString("first")
-                                    + " " +
-                            contacts2.getJSONObject(i).getString("family")
+                            contacts2.getJSONObject(i).getString("respondent_pID") +
+                                    ": " +
+                                    contacts2.getJSONObject(i).getString("first") +
+                                    " " +
+                                    contacts2.getJSONObject(i).getString("family")
                     );
                 }
-                YailList tempData2=YailList.makeList( ListofContactWeb2 );
+
+                String[] temp= new String[Contacts.Elements().toStringArray().length];
+                temp=Contacts.Elements().toStringArray();
+                for (int i=0; i< temp.length; i++) {
+                    ListofContactWeb2.add(temp[i]);
+                }
+                YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
+//                ListofContactWeb1.add(Contacts.Elements().toString());
+                tempData2=YailList.makeList( ListofContactWeb2 );
                 Contacts.Elements(tempData2);
 
             } else {
@@ -245,7 +295,7 @@ dbg("AAA");
                     ListofInboundWeb.add(
                             Inbound.getJSONObject(i).getString("first")
                                     + " " +
-                             Inbound.getJSONObject(i).getString("family")
+                                    Inbound.getJSONObject(i).getString("family")
                     );
                 }
                 YailList tempData3=YailList.makeList( ListofInboundWeb );

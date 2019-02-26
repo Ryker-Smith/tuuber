@@ -1,8 +1,6 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
-import android.content.Intent;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -34,22 +32,23 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     private Web LoginWeb;
     private VerticalScrollArrangement Login;
-    private Notifier messages;
+    private Notifier ErrorNotifier;
     private HorizontalArrangement usernameHz, loginHz, passwordHz;
     private Label UserNameLabel, PasswordLabel;
-    private TextBox UserName;
-    private PasswordTextBox Password;
+    private TextBox inputUsername;
+    private PasswordTextBox inputPassword;
     private Image ourLogo;
 
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
 
         Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
-        messages = new Notifier(Login);
+        ErrorNotifier = new Notifier(Login);
 
         LoginWeb = new Web(Login);
         usernameHz = new HorizontalArrangement(Login);
@@ -57,16 +56,20 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
 
-        UserName= new TextBox (usernameHz);
-        UserName.BackgroundColor(Component.COLOR_WHITE);
-        UserName.Text("testing.this@tcfe.ie");
-
+        inputUsername = new TextBox (usernameHz);
+        inputUsername.BackgroundColor(Component.COLOR_WHITE);
+        if (applicationSettings.lastLogin == applicationSettings.defaultLastLogin) {
+            inputUsername.Text("testing.this@tcfe.ie");
+        }
+        else {
+            inputUsername.Text(applicationSettings.lastLogin);
+        }
         passwordHz = new HorizontalArrangement(Login);
         PasswordLabel = new Label(passwordHz);
         PasswordLabel.Text("Password");
         PasswordLabel.FontBold(true);
-        Password = new PasswordTextBox(passwordHz);
-        Password.Text("tcfetcfe");
+        inputPassword = new PasswordTextBox(passwordHz);
+        inputPassword.Text("tcfetcfe");
 
         loginHz = new HorizontalArrangement(Login);
         LoginButton = new Button (loginHz);
@@ -82,43 +85,43 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-//        dbg("dispatchEvent: " + formName +  " " + eventName);
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
             return true;
         }
-        if (eventName.equals("Click")) {
+        else if (eventName.equals("Click")) {
             if (component.equals(LoginButton)) {
                 LoginWeb.Url(
                         applicationSettings.baseURL
                                 + "?cmd=LOGIN"
                                 + "&email="
-                                + UserName.Text()
+                                + inputUsername.Text()
                                 + "&password="
-                                + Password.Text()
+                                + inputPassword.Text()
                 );
                 LoginWeb.Get();
                 return true;
-            } else if (component.equals(RegisterButton)) {
-                startActivity(new Intent().setClass(this, screen06_Register.class));
+            }
+            else if (component.equals(RegisterButton)) {
+                startNewForm("screen06_Register",null);
                 return true;
             }
         }
-        if (component.equals(LoginWeb) && eventName.equals("GotText")) {
-                String stringSent =  (String) params[0];
+        else if (eventName.equals("GotText")) {
+            if (component.equals(LoginWeb)) {
                 Integer status = (Integer) params[1];
-                String encoding = (String) params[2];
                 String textOfResponse = (String) params[3];
                 webGotText(status.toString(), textOfResponse);
                 return true;
-            }
-            else {
-                // do something
+            } else {
                 return false;
             }
+        }
+        return false;
     }
 
     public void webGotText(String status, String textOfResponse) {
@@ -128,16 +131,19 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
                 applicationSettings.pID= parser.getString("pID");
-                startActivity(new Intent().setClass(this, screen03_MainMenu.class));
+                applicationSettings.lastLogin= inputUsername.Text();
+                applicationSettings.sessionID=parser.getString("sessionID");
+                applicationSettings.set();
+                startNewForm("screen03_MainMenu",null);
             } else {
-                messages.ShowMessageDialog("Login failed, check details", "Information", "OK");
+                ErrorNotifier.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
+            ErrorNotifier.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
         }
         else {
-            messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            ErrorNotifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
 
@@ -159,7 +165,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
             EventDispatcher.registerEventForDelegation(this, b[i].toString(), "Click");
             i++;
-
         }
     }
+
 }

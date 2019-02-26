@@ -333,3 +333,32 @@ public final class fachtnaWebViewer extends AndroidViewComponent  {
         }
     }
 }
+
+//
+//2019-02-15 14:52:06.983 12902-12994/net.fachtnaroe.tuuber W/System.err: ~~~> dispatchEvent: experimental_doNotUseThis experimental_doNotUseThis fachtnaWebViewStringChange <~~~
+//        2019-02-15 14:52:06.986 12902-12994/net.fachtnaroe.tuuber W/System.err: android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
+//        2019-02-15 14:52:06.988 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.ViewRootImpl.checkThread(ViewRootImpl.java:7809)
+//        2019-02-15 14:52:06.989 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.ViewRootImpl.invalidateChildInParent(ViewRootImpl.java:1338)
+//        2019-02-15 14:52:06.989 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.ViewGroup.invalidateChild(ViewGroup.java:5446)
+//        2019-02-15 14:52:06.989 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.View.invalidateInternal(View.java:14749)
+//        2019-02-15 14:52:06.989 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.View.invalidate(View.java:14664)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at com.google.appinventor.components.runtime.ScaledFrameLayout.invalidateChildInParent(ScaledFrameLayout.java:75)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.ViewGroup.invalidateChild(ViewGroup.java:5446)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.View.invalidateInternal(View.java:14749)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.View.invalidate(View.java:14713)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.view.View.invalidate(View.java:14697)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.widget.TextView.checkForRelayout(TextView.java:8557)
+//        2019-02-15 14:52:06.990 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.widget.TextView.setText(TextView.java:5082)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.widget.TextView.setText(TextView.java:4907)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.widget.TextView.setText(TextView.java:4882)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at com.google.appinventor.components.runtime.util.TextViewUtil.setText(TextViewUtil.java:189)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at com.google.appinventor.components.runtime.Label.Text(Label.java:366)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at net.fachtnaroe.tuuber.experimental_doNotUseThis.dispatchEvent(experimental_doNotUseThis.java:122)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at com.google.appinventor.components.runtime.EventDispatcher.delegateDispatchEvent(EventDispatcher.java:220)
+//        2019-02-15 14:52:06.991 12902-12994/net.fachtnaroe.tuuber W/System.err:     at com.google.appinventor.components.runtime.EventDispatcher.dispatchEvent(EventDispatcher.java:198)
+//        2019-02-15 14:52:06.992 12902-12994/net.fachtnaroe.tuuber W/System.err:     at net.fachtnaroe.tuuber.fachtnaWebViewer.fachtnaRaiseEvent(fachtnaWebViewer.java:323)
+//        2019-02-15 14:52:06.992 12902-12994/net.fachtnaroe.tuuber W/System.err:     at net.fachtnaroe.tuuber.fachtnaWebViewer$WebViewInterface.fachtnaSetWebViewString(fachtnaWebViewer.java:313)
+//        2019-02-15 14:52:06.992 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.os.MessageQueue.nativePollOnce(Native Method)
+//        2019-02-15 14:52:06.992 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.os.MessageQueue.next(MessageQueue.java:323)
+//        2019-02-15 14:52:06.992 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.os.Looper.loop(Looper.java:136)
+//        2019-02-15 14:52:06.992 12902-12994/net.fachtnaroe.tuuber W/System.err:     at android.os.HandlerThread.run(HandlerThread.java:61)

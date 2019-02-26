@@ -35,7 +35,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private Button MainMenu;
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ;
     private Button Send;
-    private Label ChatLabel, pID;
+    private Label ChatLabel, pID, OtherpIDLabel;
     private ListView Chat;
     private Web ChatWeb;
     private WebViewer ChatsViewer;
@@ -43,16 +43,22 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         ChatWith=new VerticalArrangement(this);
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
         this.BackgroundImage(applicationSettings.backgroundImageName);
-        ChatWeb = new Web(this);
-        ChatWeb.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
-        ChatsViewer.HeightPercent(10);
-        ChatsViewer.GoToUrl("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22");
+        ChatsViewer.HeightPercent(80);
+        ChatsViewer.GoToUrl(applicationSettings.baseURL +
+                "?action=LIST&entity=chat&sessionID=" +
+                applicationSettings.sessionID +
+                "&initiator_pID=" +
+                applicationSettings.pID +
+                "&respondent_pID=" +
+                applicationSettings.OtherpIDforChat
+        );
         chatText = new TextBox(ChatWith);
         chatText.Text("This will be the (prettified) result of:" +
                 "SELECT * FROM Chats WHERE " +
@@ -65,12 +71,25 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         pIDHZ = new HorizontalArrangement(ChatWith);
         pID = new Label(pIDHZ);
         pID.Text(applicationSettings.pID);
+        pID.Visible(true);
+        OtherpIDLabel = new Label(pIDHZ);
+        OtherpIDLabel.Text(applicationSettings.OtherpIDforChat);
+        OtherpIDLabel.Visible(true);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
 
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+    }
 
-
-
+    public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        if (eventName.equals("Click")) {
+            if (component.equals(MainMenu)) {
+                startNewForm("screen03_MainMenu", null);
+                return true;
+            }
+            return true;
+        }
+        return true;
     }
 }
