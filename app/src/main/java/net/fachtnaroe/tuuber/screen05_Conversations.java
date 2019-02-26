@@ -194,7 +194,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
                             contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
-                                    ": " +
+                                    ":: " +
                                     contacts1Array.getJSONObject(i).getString("first" ) +
                                     " " +
                                     contacts1Array.getJSONObject(i).getString("family")
