@@ -117,6 +117,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         DriverYoN.Text("Press Yes if Driver");
         townsDisplay = new ListPicker(RoutesScreen);
         townsDisplay.Text("Press for list of towns");
+        townsDisplay.Selection();
 //        RoutsList = new ArrayList();
 //        YailList tempData=YailList.makeList(RoutsList);
 //        townsDisplay.Elements(tempData);
@@ -257,10 +258,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 String Directions=new String();
                 if (Specify.equals("to")) {
-                    Directions="&destination=Templemore&origin=" + townsDisplay.Text() ;
+                    Directions="&destination=Templemore&origin=" + townsDisplay.Selection();
                 }
                 else {
-                    Directions="&origin=Templemore&destination=" + townsDisplay.Text();
+                    Directions="&origin=Templemore&destination=" + townsDisplay.Selection();
                 }
                 saveRouteWeb.Url(
                                 baseURL
@@ -269,6 +270,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + Directions + "&"
                                 + temp +"&"
                                 + "pID=" + applicationSettings.pID + "&"
+                                + "sessionID=" + applicationSettings.sessionID
                 );
                 saveRouteWeb.Get();
                 dbg(saveRouteWeb.Url());
