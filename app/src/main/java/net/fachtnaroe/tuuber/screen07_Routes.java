@@ -36,7 +36,6 @@ import java.util.Random;
 
 public class screen07_Routes extends Form implements HandlesEventDispatching {
 
-
     tuuber_Settings applicationSettings;
     private Web saveRouteWeb, getRouteWeb, TownsWeb, DeleteRoute, GetTowns, getRoute;
     private Notifier messagesPopUp;
@@ -62,15 +61,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     Integer day=-1; // used to store the day selection of the user
 
     protected void $define() {
-
-        for (Integer i = 1; i<5; i++) {
-            Integer something;
-            something= 63297469;
-            Integer intPlaceValue = 2^i;
-            if (binary_same_as(something, intPlaceValue) ) {
-                // do something
-            }
-        }
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
@@ -370,16 +360,16 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2) ) {
                         temp="Monday";
                     }
-                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4) ) {
+                    else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4) ) {
                         temp="Tuesday";
                     }
-                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8) ) {
+                    else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8) ) {
                         temp="Wednesday";
                     }
-                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16) ) {
+                    else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16) ) {
                         temp="Thursday";
                     }
-                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32) ) {
+                    else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32) ) {
                         temp="Friday";
                     }
                     ListOfRoutesFromWeb.add(
@@ -450,19 +440,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     }
 
-
     boolean binary_same_as(Integer first, Integer second) {
-
         if ((first & second) == second) {
             return true;
         }
         else {
             return false;
         }
-
     }
-
-
 
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
