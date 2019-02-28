@@ -167,9 +167,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 String currentstring = CheckrID;
                 String[] separated = currentstring.split(":");
                 test.Text(separated[0]);
+
                 return true;
 
 
+            }
+            else if (component.equals(townsDisplay)){
+
+                townsDisplay.Text(townsDisplay.Selection());
             }
 
         }
