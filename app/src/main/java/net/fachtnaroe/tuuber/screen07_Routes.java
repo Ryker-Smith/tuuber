@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 //import gnu.lists.FString;
 
 // Research:  http://loopj.com/android-async-http/
@@ -61,6 +62,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     protected void $define() {
+
+        for (Integer i = 1; i<5; i++) {
+            Integer something;
+            something= 63297469;
+            Integer intPlaceValue = 2^i;
+            if (binary_same_as(something, intPlaceValue) ) {
+                // do something
+            }
+        }
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
@@ -459,6 +469,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
+
     }
 
     void getRoutesFromBackEnd() {
@@ -469,10 +480,20 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 + "&sessionID=" + applicationSettings.sessionID
         );
         getRouteWeb.Get();
+
     }
 
 
+    boolean binary_same_as(Integer first, Integer second) {
 
+        if ((first & second) == second) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
 
 
 
