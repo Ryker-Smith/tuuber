@@ -179,6 +179,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else if (eventName.equals("Changed")) {
              if (component.equals(mon)){
                 if (mon.Checked()== true){
+                    day=2;
                     tues.Checked(false);
                     weds.Checked(false);
                     thurs.Checked(false);
@@ -190,7 +191,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(tues)){
                 if (tues.Checked()==true){
-
+                    day=4;
                     mon.Checked(false);
                     weds.Checked(false);
                     thurs.Checked(false);
@@ -202,6 +203,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(weds)){
                 if (weds.Checked()==true){
+                    day=8;
                     tues.Checked(false);
                     mon.Checked(false);
                     thurs.Checked(false);
@@ -222,6 +224,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(fri)){
                 if (fri.Checked()==true){
+                    day=32;
                     tues.Checked(false);
                     weds.Checked(false);
                     thurs.Checked(false);
@@ -306,41 +309,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     return true;
                 }
                 String temp = new String("");
-                temp="day=" + day;
-                if (mon.Checked()){
-                    temp = temp + "mon=Y";
-                }
-                else {
-                    temp = temp+ "mon=N" ;
-                }
-                temp = temp + "&";
-                if (tues.Checked()){
-                    temp = temp + "tues=Y";
-                }
-                else {
-                    temp = temp+ "tues=N";
-                }
-                temp = temp + "&";
-                if (weds.Checked()){
-                    temp = temp + "weds=Y";
-                }
-                else {
-                    temp= temp+ "weds=N";
-                }
-                temp = temp + "&";
-                if (thurs.Checked()){
-                    temp = temp + "thurs=Y";
-                }
-                else {
-                    temp = temp+ "thurs=N";
-                }
-                temp = temp + "&";
-                if (fri.Checked()){
-                    temp = temp + "fri=Y";
-                }
-                else {
-                    temp = temp+ "fri=N";
-                }
+                temp = temp + "day=" + day;
                 temp = temp +"&";
                 if (DriverYoN.Checked()){
                     temp = temp + "driver=Y";
