@@ -37,7 +37,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
 
     tuuber_Settings applicationSettings;
-    private Web saveRouteWeb, getRouteWeb, TownsWeb, DeleteRoute, GetTowns;
+    private Web saveRouteWeb, getRouteWeb, TownsWeb, DeleteRoute, GetTowns, getRoute;
     private Notifier messagesPopUp;
     private ImagePicker Templemore;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
@@ -142,12 +142,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         DeleteRoute = new Web(RoutesScreen);
         GetTowns = new Web(RoutesScreen);
+        getRoute = new Web(RoutesScreen);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
-
+        EventDispatcher.registerEventForDelegation(this, formName, "Changed");
         TownsWeb.Url(
                 baseURL + "?entity=town&action=LIST"
                         + "&"
@@ -165,6 +166,60 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             this.finish();
             return true;
         }
+        else if (eventName.equals("Changed")) {
+             if (component.equals(mon)){
+                if (mon.Checked()== true){
+                    tues.Checked(false);
+                    weds.Checked(false);
+                    thurs.Checked(false);
+                    fri.Checked(false);
+                }
+                return true;
+
+
+            }
+            else if (component.equals(tues)){
+                if (tues.Checked()==true){
+
+                    mon.Checked(false);
+                    weds.Checked(false);
+                    thurs.Checked(false);
+                    fri.Checked(false);
+
+                }
+                return true;
+
+            }
+            else if (component.equals(weds)){
+                if (weds.Checked()==true){
+                    tues.Checked(false);
+                    mon.Checked(false);
+                    thurs.Checked(false);
+                    fri.Checked(false);
+
+                }
+                return true;
+            }
+            else if (component.equals(thurs)){
+                if (thurs.Checked()==true){
+
+                    tues.Checked(false);
+                    weds.Checked(false);
+                    mon.Checked(false);
+                    fri.Checked(false);
+                }
+                return true;
+            }
+            else if (component.equals(fri)){
+                if (fri.Checked()==true){
+                    tues.Checked(false);
+                    weds.Checked(false);
+                    thurs.Checked(false);
+                    mon.Checked(false);
+                }
+
+            return true;
+        }
         else if (eventName.equals("AfterPicking")){
             if (component.equals(routesDisplay)){
 
@@ -173,6 +228,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 String currentstring = CheckrID;
                 String[] separated = currentstring.split(":");
                 test.Text(separated[0]);
+                getRoute.Url(
+                        baseURL
+                                + "?action=GET"
+                                + "&entity=ROUTE"
+                                + "&" +"rID=" + test.Text()
+                                + "&"
+
+                                + "sessionID=" + applicationSettings.sessionID
+                );
+                dbg(getRoute.Url());
+                getRoute.Get();
 
                 return true;
 
@@ -218,6 +284,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 );
                 DeleteRoute.Get();
                 getRoutesFromBackEnd();
+
+            }
+
+
 
             }
             else if (component.equals(Save))    {
@@ -315,6 +385,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 else if (component.equals(saveRouteWeb)) {
                     getRouteWeb.Get();
+                }
+                else if (component.equals(getRoute)){
+
+                    dbg((String) params[3]);
+
                 }
         }
         else if (eventName.equals("AfterPicking")) {
