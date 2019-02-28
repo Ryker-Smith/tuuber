@@ -43,7 +43,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
 //    private ArrayList RoutsList ;
     private HorizontalArrangement Direction, Days, toolbarHz;
-    private Label myRoutes, label_pID, test;
+    private Label myRoutes, label_pID, test, routesDescription, routesAction;
     private ListPicker TownsList,townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
@@ -90,11 +90,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         myRoutes.Text("My Routes:");
         routesDisplay = new ListView(RoutesScreen);
         routesDisplay.HeightPercent(35  );
+        routesDescription=new Label(RoutesScreen);
+        routesDescription.Text("Route description area:");
         saveRouteWeb = new Web(RoutesScreen);
         messagesPopUp = new Notifier(RoutesScreen);
         getRouteWeb = new Web(RoutesScreen);
         TownsWeb = new Web(RoutesScreen);
         ListofDDT = new VerticalArrangement(RoutesScreen);
+        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
         Direction = new HorizontalArrangement(ListofDDT);
         Days = new HorizontalArrangement(RoutesScreen);
         mon = new CheckBox(Days);
@@ -121,6 +124,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //        RoutsList = new ArrayList();
 //        YailList tempData=YailList.makeList(RoutsList);
 //        townsDisplay.Elements(tempData);
+        routesAction = new Label(RoutesScreen);
+        routesAction.Text("Route actions:");
         ButtonHolder = new HorizontalArrangement(RoutesScreen);
         Save = new Button(ButtonHolder);
         Save.Text("Save");
@@ -134,6 +139,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Templemore.Image("Arrow_Right_Templemore.png");
         Templemore.Width(50);
         Templemore.Height(50);
+
         DeleteRoute = new Web(RoutesScreen);
         GetTowns = new Web(RoutesScreen);
 
