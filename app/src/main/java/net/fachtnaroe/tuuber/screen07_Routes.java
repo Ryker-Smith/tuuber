@@ -306,6 +306,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     return true;
                 }
                 String temp = new String("");
+                temp="day=" + day;
                 if (mon.Checked()){
                     temp = temp + "mon=Y";
                 }
