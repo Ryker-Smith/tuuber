@@ -397,7 +397,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
 
-
+    boolean binary_same_as(Integer first, Integer second) {
+        if ((first & second) == second) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 
 
