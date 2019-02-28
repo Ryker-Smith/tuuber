@@ -366,6 +366,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             if (!parser.getString("routes").equals("")) {
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for(int i = 0 ; i < routesArray.length() ; i++){
+                    String temp="";
+                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2) ) {
+                        temp="Monday";
+                    }
+                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2) ) {
+                        temp="Tuesday";
+                    }
                     ListOfRoutesFromWeb.add(
                             routesArray.getJSONObject(i).getString("rID")
                             +
@@ -376,6 +383,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                             + " to "
                             + routesArray.getJSONObject(i).getString("destination" )
                             + " on "
+                            + temp
 
                     );
                 }
