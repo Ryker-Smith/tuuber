@@ -59,7 +59,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify=new String("to");
     String rID;
-
+    Integer day=-1; // used to store the day selection of the user
 
     protected void $define() {
 
@@ -212,7 +212,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(thurs)){
                 if (thurs.Checked()==true){
-
+                    day=16;
                     tues.Checked(false);
                     weds.Checked(false);
                     mon.Checked(false);
