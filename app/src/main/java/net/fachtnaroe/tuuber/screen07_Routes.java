@@ -370,8 +370,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2) ) {
                         temp="Monday";
                     }
-                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2) ) {
+                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4) ) {
                         temp="Tuesday";
+                    }
+                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8) ) {
+                        temp="Wednesday";
+                    }
+                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16) ) {
+                        temp="Thursday";
+                    }
+                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32) ) {
+                        temp="Friday";
                     }
                     ListOfRoutesFromWeb.add(
                             routesArray.getJSONObject(i).getString("rID")
