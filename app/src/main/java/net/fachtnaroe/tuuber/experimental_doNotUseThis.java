@@ -88,7 +88,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
                 "&initiator_pID=" +
                 applicationSettings.pID +
                 "&respondent_pID=" +
-                applicationSettings.OtherpIDforChat +
+                applicationSettings.otherpIDforChat +
                 "&showHtml=1" +
                 "&iam=" + applicationSettings.pID
         );
