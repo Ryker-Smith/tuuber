@@ -25,11 +25,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ;
+    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ, toolbarHz;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
-    private Button buttonGoToChatSCreen, buttonRefresh;
-    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, FirstName, LastName;
+    private Button buttonGoToChatSCreen, Refresh, MainMenu;
+    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, test;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofpIDs, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
@@ -43,21 +43,32 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Conversations = new VerticalArrangement(this);
-        pIDHZ = new HorizontalArrangement(Conversations);
-        pID = new Label(pIDHZ);
+
+        toolbarHz = new HorizontalArrangement(Conversations);
+        MainMenu = new Button(toolbarHz);
+        MainMenu.Width(40);
+        MainMenu.Height(40);
+        MainMenu.Image("buttonHome.png");
+        pID = new Label(toolbarHz);
         pID.Text("I am user: #" + applicationSettings.pID);
-        buttonRefresh = new Button(pIDHZ);
-        buttonRefresh.Width(40);
-        buttonRefresh.Height(40);
-        buttonRefresh.FontSize(8);
-//        buttonRefresh.Text("r");
-        buttonRefresh.Image("RefreshButt.png");
+        pID.Height(40);
+        pID.FontSize(20);
+        pID.WidthPercent(70);
+        pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        test = new Label(Conversations);
+        Refresh = new Button(toolbarHz);
+        Refresh.Width(40);
+        Refresh.Height(40);
+        Refresh.FontSize(8);
+        Refresh.Image("buttonRefresh.png");
+
+
         ContactsLabelHZ = new HorizontalArrangement(Conversations);
         ContactsLabel = new Label(ContactsLabelHZ);
         ContactsLabel.Text("Open Conversations");
         ContactsHZ = new HorizontalArrangement(Conversations);
         Contacts = new ListView(ContactsHZ);
-        Contacts.HeightPercent(20);
+        Contacts.HeightPercent(15);
         Contacts.TextSize(intListViewsize);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
         OtherpID = new Label(OtherpIDHZ);
@@ -68,7 +79,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiationLabel.Text("Pending (Inbound)");
         InboundInitiationHZ = new HorizontalArrangement(Conversations);
         InboundInitiation = new ListView(InboundInitiationHZ);
-        InboundInitiation.HeightPercent(20);
+        InboundInitiation.HeightPercent(15);
         InboundInitiation.TextSize(intListViewsize);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
@@ -76,7 +87,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiationLabel.Text("Pending (Outbound)");
         OutboundInitiationHZ = new HorizontalArrangement(Conversations);
         OutboundInitiation = new ListView(OutboundInitiationHZ);
-        OutboundInitiation.HeightPercent(20);
+        OutboundInitiation.HeightPercent(15);
         OutboundInitiation.TextSize(intListViewsize);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
@@ -103,7 +114,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 startNewForm("screen08_ChatWith",null);
                 return true;
             }
-            else if (component.equals(buttonRefresh)) {
+            else if (component.equals(Refresh)) {
                 callBackEnd();
             }
         }
@@ -126,13 +137,15 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 String textOfResponse = (String) params[3];
                 getContact1List(status, textOfResponse);
                 return true;
-            } else if (component.equals(Contact2Web)) {
-                dbg((String) params[0]);
-                String status = params[1].toString();
-                String textOfResponse = (String) params[3];
-                getContact2List(status, textOfResponse);
-                return true;
-            } else if (component.equals(InboundWeb)) {
+            }
+//            else if (component.equals(Contact2Web)) {
+//                dbg((String) params[0]);
+//                String status = params[1].toString();
+//                String textOfResponse = (String) params[3];
+//                getContact2List(status, textOfResponse);
+//                return true;
+//            }
+            else if (component.equals(InboundWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
@@ -234,51 +247,51 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
 
 
-    public void getContact2List (String status, String textOfResponse) {
-        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        dbg(status);
-        dbg(textOfResponse);
-        if (status.equals("200") ) try {
-
-            ListofContactWeb2 = new ArrayList<String>();
-            JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("chat").equals("")) {
-
-                JSONArray contacts2 = parser.getJSONArray("chat");
-
-                for(int i = 0 ; i < contacts2.length() ; i++){
-                    if (contacts2.getJSONObject(i).toString().equals("{}")) break;
-                    ListofContactWeb2.add(
-                            contacts2.getJSONObject(i).getString("respondent_pID") +
-                                    ":: " +
-                                    contacts2.getJSONObject(i).getString("first") +
-                                    " " +
-                                    contacts2.getJSONObject(i).getString("family")
-                    );
-                }
-
-                String[] temp= new String[Contacts.Elements().toStringArray().length];
-                temp=Contacts.Elements().toStringArray();
-                for (int i=0; i< temp.length; i++) {
-                    ListofContactWeb2.add(temp[i]);
-                }
-                YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
-//                ListofContactWeb1.add(Contacts.Elements().toString());
-                tempData2=YailList.makeList( ListofContactWeb2 );
-                Contacts.Elements(tempData2);
-
-            } else {
-                messagesPopUp.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
-            }
-        } catch (JSONException e) {
-            // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
-        }
-        else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
-        }
-
-    }
+//    public void getContact2List (String status, String textOfResponse) {
+//        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+//        dbg(status);
+//        dbg(textOfResponse);
+//        if (status.equals("200") ) try {
+//
+//            ListofContactWeb2 = new ArrayList<String>();
+//            JSONObject parser = new JSONObject(textOfResponse);
+//            if (!parser.getString("chat").equals("")) {
+//
+//                JSONArray contacts2 = parser.getJSONArray("chat");
+//
+//                for(int i = 0 ; i < contacts2.length() ; i++){
+//                    if (contacts2.getJSONObject(i).toString().equals("{}")) break;
+//                    ListofContactWeb2.add(
+//                            contacts2.getJSONObject(i).getString("respondent_pID") +
+//                                    ":: " +
+//                                    contacts2.getJSONObject(i).getString("first") +
+//                                    " " +
+//                                    contacts2.getJSONObject(i).getString("family")
+//                    );
+//                }
+//
+//                String[] temp= new String[Contacts.Elements().toStringArray().length];
+//                temp=Contacts.Elements().toStringArray();
+//                for (int i=0; i< temp.length; i++) {
+//                    ListofContactWeb2.add(temp[i]);
+//                }
+//                YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
+////                ListofContactWeb1.add(Contacts.Elements().toString());
+//                tempData2=YailList.makeList( ListofContactWeb2 );
+//                Contacts.Elements(tempData2);
+//
+//            } else {
+//                messagesPopUp.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
+//            }
+//        } catch (JSONException e) {
+//            // if an exception occurs, code for it in here
+//            messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
+//        }
+//        else {
+//            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+//        }
+//
+//    }
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);

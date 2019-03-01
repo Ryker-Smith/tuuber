@@ -32,13 +32,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private TextBox chatText;
     private VerticalArrangement ChatWith;
-    private Button MainMenu;
-    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ;
-    private Button Send, Refresh;
+    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
+    private Button Send, Refresh, Pool, MainMenu;
     private Label ChatLabel, pID, OtherpIDLabel;
     private Notifier MessageSent_Notifier, MessageError_Notifier;
     private ListView Chat;
-    private Web ChatWeb;
+    private Web ChatWeb, PoolWeb;
     private WebViewer ChatsViewer;
 
     protected void $define() {
@@ -48,6 +47,24 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatWith=new VerticalArrangement(this);
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
+
+        toolbarHz = new HorizontalArrangement(ChatWith);
+        MainMenu = new Button(toolbarHz);
+        MainMenu.Width(40);
+        MainMenu.Height(40);
+        MainMenu.Image("buttonHome.png");
+        pID = new Label(toolbarHz);
+        pID.Text("I am user: #" + applicationSettings.pID);
+        pID.Height(40);
+        pID.FontSize(20);
+        pID.WidthPercent(70);
+        pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        Refresh = new Button(toolbarHz);
+        Refresh.Width(40);
+        Refresh.Height(40);
+        Refresh.FontSize(8);
+        Refresh.Image("buttonRefresh.png");
+
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
@@ -64,22 +81,18 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         );
         chatText = new TextBox(ChatWith);
         chatText.Text("");
-        MainMenu= new Button(ChatWith);
-        MainMenu.Text("Back to main");
         pIDHZ = new HorizontalArrangement(ChatWith);
-        pID = new Label(pIDHZ);
-        pID.Text(applicationSettings.pID);
-        pID.Visible(true);
         OtherpIDLabel = new Label(pIDHZ);
         OtherpIDLabel.Text(applicationSettings.OtherpIDforChat);
         OtherpIDLabel.Visible(true);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
-        Refresh = new Button(SendHZ);
-        Refresh.Text("Refresh");
+        Pool = new Button(SendHZ);
+        Pool.Text("Pool Request");
 
         ChatWeb = new Web(ChatWith);
+        PoolWeb = new Web(ChatWith);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -97,9 +110,9 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                 "?action=POST&entity=CHAT&sessionID=" +
                                 applicationSettings.sessionID +
                                 "&initiator_pID=" +
-                                pID.Text() +
+                                applicationSettings.pID +
                                 "&respondent_pID=" +
-                                OtherpIDLabel.Text() +
+                                applicationSettings.OtherpIDforChat +
                                 "&status=open&text=" +
                                 chatText.Text()
                 );
@@ -109,6 +122,20 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             }
             else if(component.equals(Refresh)) {
                 callBackend();
+            }
+            else if(component.equals(Pool)) {
+                PoolWeb.Url(
+                        applicationSettings.baseURL +
+                                "?action=&entity=pools"
+                );
+                PoolWeb.Get();
+            }
+            return true;
+        }
+        else if (eventName.equals("GotText")) {
+            if(component.equals(ChatWeb)) {
+                chatText.Text("");
+                return true;
             }
             return true;
         }
