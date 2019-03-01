@@ -2,30 +2,21 @@ package net.fachtnaroe.tuuber;
 
 //import android.support.v7.app.AppCompatActivity;
 
-import com.google.appinventor.components.runtime.ActivityStarter;
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
-import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.PasswordTextBox;
-import com.google.appinventor.components.runtime.TableArrangement;
-import com.google.appinventor.components.runtime.TableLayout;
 import com.google.appinventor.components.runtime.TextBox;
-import com.google.appinventor.components.runtime.TinyDB;
 import com.google.appinventor.components.runtime.VerticalArrangement;
-import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 //import com.google.appinventor.components.runtime.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
@@ -58,7 +49,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "&initiator_pID=" +
                 applicationSettings.pID +
                 "&respondent_pID=" +
-                applicationSettings.OtherpIDforChat +
+                applicationSettings.otherpIDforChat +
                 "&showHtml=1" +
                 "&iam=" + applicationSettings.pID
         );
@@ -71,7 +62,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         pID.Text(applicationSettings.pID);
         pID.Visible(true);
         OtherpIDLabel = new Label(pIDHZ);
-        OtherpIDLabel.Text(applicationSettings.OtherpIDforChat);
+        OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
         OtherpIDLabel.Visible(true);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
@@ -123,7 +114,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "&initiator_pID=" +
                 applicationSettings.pID +
                 "&respondent_pID=" +
-                applicationSettings.OtherpIDforChat +
+                applicationSettings.otherpIDforChat +
                 "&showHtml=1" +
                 "&iam=" + applicationSettings.pID
         );

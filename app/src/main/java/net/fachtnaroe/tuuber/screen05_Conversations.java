@@ -113,7 +113,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 OtherpIDText = Contacts.Selection();
                 String currentString = OtherpIDText;
                 String[] separated = currentString.split(":");
-                applicationSettings.OtherpIDforChat=separated[0];
+                applicationSettings.otherpIDforChat =separated[0];
                 applicationSettings.set();
                 OtherpID.Text(separated[0]);
                 buttonGoToChatSCreen.Enabled(true);
@@ -282,7 +282,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
-        dbg(textOfResponse);
+        dbg("INBOUND: " + textOfResponse);
         if (status.equals("200") ) try {
 
             ListofInboundWeb = new ArrayList<String>();
@@ -292,6 +292,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
                 JSONArray Inbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Inbound.length() ; i++){
+                    if (Inbound.getJSONObject(i).toString().equals("{}")) break;
                     ListofInboundWeb.add(
                             Inbound.getJSONObject(i).getString("first")
                                     + " " +
@@ -326,6 +327,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
                 JSONArray Outbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Outbound.length() ; i++){
+                    if (Outbound.getJSONObject(i).toString().equals("{}")) break;
                     ListofOutboundWeb.add(
                             Outbound.getJSONObject(i).getString("first")
                             + " " +
