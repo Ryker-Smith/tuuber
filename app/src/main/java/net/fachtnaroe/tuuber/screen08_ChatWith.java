@@ -87,7 +87,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 startNewForm("screen03_MainMenu", null);
                 return true;
             }
-            if (component.equals(Send)) {
+            else if (component.equals(Send)) {
                 ChatWeb.Url(
                         applicationSettings.baseURL +
                                 "?action=POST&entity=CHAT&sessionID=" +
