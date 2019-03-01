@@ -77,6 +77,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Send = new Button(SendHZ);
         Send.Text("Send");
 
+        ChatWeb = new Web(ChatWith);
+
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
@@ -100,39 +102,31 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                 chatText.Text()
                 );
                 ChatWeb.Get();
-                return true;
-            }
-                // https://fachtnaroe.net//tuuber-test?action=POST&entity=CHAT&sessionID=a1b2c3d4&initiator_pID=18&respondent_pID=138&status=open&text=Not%20now
-            return true;
-        }
-        else if (component.equals(ChatWeb))
-            if (eventName.equals("GotText")) {
-                String stringSent = (String) params[0];
-                Integer status = (Integer) params[1];
-                String encoding = (String) params[2];
-                String textOfResponse = (String) params[3];
-                webGotText(status.toString(), textOfResponse);
-                return true;
-            }
-            return true;
-    }
-    public void webGotText(String status, String textOfResponse) {
 
-        String temp=new String();
-        if (status.equals("200") ) try {
-            JSONObject parser = new JSONObject(textOfResponse);
-            temp = parser.getString("result");
-            if (parser.getString("result").equals("OK")) {
-                MessageSent_Notifier.ShowMessageDialog("MessageSent", "Success!", "Confirm");
-            } else {
-                MessageError_Notifier.ShowMessageDialog("MessageFailed", "Information", "OK");
+                return true;
             }
-        } catch (JSONException e) {
-            // if an exception occurs, code for it in here
-            MessageError_Notifier.ShowMessageDialog("MessageFailed" + temp, "Information", "OK");
+            return true;
         }
-        else {
-            MessageError_Notifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        else if (eventName.equals("GotText")) {
+            if (component.equals(ChatWeb)) {
+                callBackend();
+            }
         }
+        return true;
+
     }
+
+    void callBackend() {
+        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
+                "?action=LIST&entity=chat&sessionID=" +
+                applicationSettings.sessionID +
+                "&initiator_pID=" +
+                applicationSettings.pID +
+                "&respondent_pID=" +
+                applicationSettings.OtherpIDforChat +
+                "&showHtml=1" +
+                "&iam=" + applicationSettings.pID
+        );
+    }
+
 }
