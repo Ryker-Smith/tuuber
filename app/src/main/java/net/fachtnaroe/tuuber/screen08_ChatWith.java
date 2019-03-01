@@ -15,6 +15,9 @@ import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 //import com.google.appinventor.components.runtime.util;
 
 
@@ -60,7 +63,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
         ChatsViewer.HeightPercent(60);
-        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
+        ChatsViewer.HomeUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
                 "&initiator_pID=" +
@@ -80,7 +83,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Send = new Button(SendHZ);
         Send.Text("Send");
         Pool = new Button(SendHZ);
-        Pool.Text("Pool Request");
+        Pool.Text("Make Pool");
+        Pool.WidthPercent(100);
 
         ChatWeb = new Web(ChatWith);
         PoolWeb = new Web(ChatWith);
@@ -125,7 +129,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("GotText")) {
             if(component.equals(ChatWeb)) {
-                chatText.Text("");
+                if (web_ResultGotText(params[1].toString(),params[3].toString())) {
+                    chatText.Text("");
+                    callBackend();
+                }
+                else {
+                    chatText.BackgroundColor(Component.COLOR_RED);
+                }
                 return true;
             }
             return true;
@@ -135,16 +145,35 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     void callBackend() {
-        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
-                "?action=LIST&entity=chat&sessionID=" +
-                applicationSettings.sessionID +
-                "&initiator_pID=" +
-                applicationSettings.pID +
-                "&respondent_pID=" +
-                applicationSettings.otherpIDforChat +
-                "&showHtml=1" +
-                "&iam=" + applicationSettings.pID
-        );
+        ChatsViewer.GoHome();
+//        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
+//                "?action=LIST&entity=chat&sessionID=" +
+//                applicationSettings.sessionID +
+//                "&initiator_pID=" +
+//                applicationSettings.pID +
+//                "&respondent_pID=" +
+//                applicationSettings.otherpIDforChat +
+//                "&showHtml=1" +
+//                "&iam=" + applicationSettings.pID
+//        );
     }
 
+    public boolean web_ResultGotText(String status, String textOfResponse) {
+        String temp=new String();
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            temp = parser.getString("line_ID");
+            if (!parser.getString("line_ID").equals("-1")) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            return false;
+        }
+        else {
+            return false;
+        }
+    }
 }
