@@ -34,7 +34,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private VerticalArrangement ChatWith;
     private Button MainMenu;
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ;
-    private Button Send;
+    private Button Send, Refresh;
     private Label ChatLabel, pID, OtherpIDLabel;
     private Notifier MessageSent_Notifier, MessageError_Notifier;
     private ListView Chat;
@@ -76,6 +76,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
+        Refresh = new Button(SendHZ);
+        Refresh.Text("Refresh");
 
         ChatWeb = new Web(ChatWith);
 
@@ -105,12 +107,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
                 return true;
             }
-            return true;
-        }
-        else if (eventName.equals("GotText")) {
-            if (component.equals(ChatWeb)) {
+            else if(component.equals(Refresh)) {
                 callBackend();
             }
+            return true;
         }
         return true;
 
