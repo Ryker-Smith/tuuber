@@ -137,15 +137,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 String textOfResponse = (String) params[3];
                 getContact1List(status, textOfResponse);
                 return true;
-            }
-//            else if (component.equals(Contact2Web)) {
-//                dbg((String) params[0]);
-//                String status = params[1].toString();
-//                String textOfResponse = (String) params[3];
-//                getContact2List(status, textOfResponse);
-//                return true;
-//            }
-            else if (component.equals(InboundWeb)) {
+            } else if (component.equals(Contact2Web)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getContact2List(status, textOfResponse);
+                return true;
+            } else if (component.equals(InboundWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
@@ -247,51 +245,51 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
 
 
-//    public void getContact2List (String status, String textOfResponse) {
-//        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-//        dbg(status);
-//        dbg(textOfResponse);
-//        if (status.equals("200") ) try {
-//
-//            ListofContactWeb2 = new ArrayList<String>();
-//            JSONObject parser = new JSONObject(textOfResponse);
-//            if (!parser.getString("chat").equals("")) {
-//
-//                JSONArray contacts2 = parser.getJSONArray("chat");
-//
-//                for(int i = 0 ; i < contacts2.length() ; i++){
-//                    if (contacts2.getJSONObject(i).toString().equals("{}")) break;
-//                    ListofContactWeb2.add(
-//                            contacts2.getJSONObject(i).getString("respondent_pID") +
-//                                    ":: " +
-//                                    contacts2.getJSONObject(i).getString("first") +
-//                                    " " +
-//                                    contacts2.getJSONObject(i).getString("family")
-//                    );
-//                }
-//
-//                String[] temp= new String[Contacts.Elements().toStringArray().length];
-//                temp=Contacts.Elements().toStringArray();
-//                for (int i=0; i< temp.length; i++) {
-//                    ListofContactWeb2.add(temp[i]);
-//                }
-//                YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
-////                ListofContactWeb1.add(Contacts.Elements().toString());
-//                tempData2=YailList.makeList( ListofContactWeb2 );
-//                Contacts.Elements(tempData2);
-//
-//            } else {
-//                messagesPopUp.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
-//            }
-//        } catch (JSONException e) {
-//            // if an exception occurs, code for it in here
-//            messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
-//        }
-//        else {
-//            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
-//        }
-//
-//    }
+    public void getContact2List (String status, String textOfResponse) {
+        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
+        dbg(textOfResponse);
+        if (status.equals("200") ) try {
+
+            ListofContactWeb2 = new ArrayList<String>();
+            JSONObject parser = new JSONObject(textOfResponse);
+            if (!parser.getString("chat").equals("")) {
+
+                JSONArray contacts2 = parser.getJSONArray("chat");
+
+                for(int i = 0 ; i < contacts2.length() ; i++){
+                    if (contacts2.getJSONObject(i).toString().equals("{}")) break;
+                    ListofContactWeb2.add(
+                            contacts2.getJSONObject(i).getString("respondent_pID") +
+                                    ":: " +
+                                    contacts2.getJSONObject(i).getString("first") +
+                                    " " +
+                                    contacts2.getJSONObject(i).getString("family")
+                    );
+                }
+
+                String[] temp= new String[Contacts.Elements().toStringArray().length];
+                temp=Contacts.Elements().toStringArray();
+                for (int i=0; i< temp.length; i++) {
+                    ListofContactWeb2.add(temp[i]);
+                }
+                YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
+//                ListofContactWeb1.add(Contacts.Elements().toString());
+                tempData2=YailList.makeList( ListofContactWeb2 );
+                Contacts.Elements(tempData2);
+
+            } else {
+                messagesPopUp.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
+        }
+        else {
+            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        }
+
+    }
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
