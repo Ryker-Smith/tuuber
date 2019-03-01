@@ -103,7 +103,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                 "&initiator_pID=" +
                                 applicationSettings.pID +
                                 "&respondent_pID=" +
-                                applicationSettings.OtherpIDforChat +
+                                applicationSettings.otherpIDforChat +
                                 "&status=open&text=" +
                                 chatText.Text()
                 );

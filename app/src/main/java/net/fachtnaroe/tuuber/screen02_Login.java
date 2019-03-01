@@ -58,7 +58,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         inputUsername = new TextBox (usernameHz);
         inputUsername.BackgroundColor(Component.COLOR_WHITE);
-        if (applicationSettings.lastLogin == applicationSettings.defaultLastLogin) {
+        if (applicationSettings.lastLogin == applicationSettings.default_lastLogin) {
             inputUsername.Text("testing.this@tcfe.ie");
         }
         else {
