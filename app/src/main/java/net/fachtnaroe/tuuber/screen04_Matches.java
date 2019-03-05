@@ -14,10 +14,15 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListPicker;
 import com.google.appinventor.components.runtime.ListView;
+import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +30,14 @@ import java.util.List;
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private Button SelectMyRout, MainMenu, DisplayDetails, Refresh;
+    private Web getRouteWeb, Routes, MatchesAvelable;
+    private Notifier messagesPopUp;
+    private Button SelectMyRout, MainMenu, DisplayDetails, Refresh , AddToMateches;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
-    private ListView MyRouteList, MatchesMade;
+    private ListView MyRouteList,MatchesMade;
     private Label User_ID;
+    private List<String> ListOfRoutesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
 
@@ -49,6 +57,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         User_ID = new Label(MenuButtons);
         User_ID.Text("I am user: #" + applicationSettings.pID);
         User_ID.FontSize(20);
+        Routes=new Web(Matches);
         User_ID.Height(40);
         User_ID.WidthPercent(70);
         User_ID.TextAlignment(Component.ALIGNMENT_CENTER);
@@ -59,18 +68,32 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MatchesButtons = new HorizontalArrangement(Matches);
         SelectMyRout =new Button(MatchesButtons);
         SelectMyRout.Text("Send Messege");
-
+        AddToMateches=new Button(MatchesButtons);
+        AddToMateches.Text("Add Route To Matches");
+        getRouteWeb = new Web(Matches);
         MatchesMade = new ListView(Matches);
         MatchesMade.HeightPercent(35);
         DisplayDetails= new Button(Matches);
         DisplayDetails.Text("Display Details");
-
+        MatchesAvelable= new Web(Matches);
+        EventDispatcher.registerEventForDelegation(this, "AddToMatches", "Click");
         EventDispatcher.registerEventForDelegation(this, "buttonMainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
-        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
+        EventDispatcher.registerEventForDelegation(this, "MyRouteList", "GotText");
+        EventDispatcher.registerEventForDelegation(this, "Matches made", "GotText");
+
+        Routes.Url(
+                baseURL + "?entity=town&action=LIST"
+                        + "&"
+                        + "sessionID="
+                        + applicationSettings.sessionID
+        );
+        Routes.Get();
+        getRoutesFromBackEnd();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
 //            if (this.BackPressed()) {
                 // one of the above should be redundant
@@ -78,11 +101,105 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 //            }
         }
         else if (component.equals(MainMenu) && eventName.equals("Click")) {
-                switchForm("screen03_MainMenu");
+                switchForm("screen03_MainMenu");}
 
-                return true;
+       else if (component.equals(Refresh) && eventName.equals("Click")){
+
+            getRoutesFromBackEnd();
+            return true;
         }
+        else if (component.equals(AddToMateches)&& eventName.equals("Click")) {
+             {
+               // MyRouteList.Selection(MatchesMade);
+            }
+        }
+        else if (eventName.equals("GotText")) {
+            if (component.equals(getRouteWeb)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+
+                getRouteWebGotText(status, textOfResponse);
+                return true;
+            }
+
+        }
+
         return true;
     }
+        public void getRouteWebGotText(String status, String textOfResponse) {
+            // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+            if (status.equals("200") ) try {
+                ListOfRoutesFromWeb = new ArrayList<String>();
+                JSONObject parser = new JSONObject(textOfResponse);
+                if (!parser.getString("routes").equals("")) {
+                    JSONArray routesArray = parser.getJSONArray("routes");
+                    for(int i = 0 ; i < routesArray.length() ; i++){
+                        String temp="";
+                        if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2) ) {
+                            temp="Monday";
+                        }
+                        else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4) ) {
+                            temp="Tuesday";
+                        }
+                        else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8) ) {
+                            temp="Wednesday";
+                        }
+                        else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16) ) {
+                            temp="Thursday";
+                        }
+                        else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32) ) {
+                            temp="Friday";
+                        }
+                        ListOfRoutesFromWeb.add(
+                                routesArray.getJSONObject(i).getString("rID")
+                                        +
+                                        ":: "
+                                        +
+                                        "From "
+                                        + routesArray.getJSONObject(i).getString("origin")
+                                        + " to "
+                                        + routesArray.getJSONObject(i).getString("destination" )
+                                        + " on "
+                                        + temp
 
+                        );
+                    }
+                    YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
+                    MyRouteList.Elements(tempData);
+                } else {
+                    messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
+                }
+            } catch (JSONException e) {
+                // if an exception occurs, code for it in here
+                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            }
+            else {
+                messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            }
+        }
+
+
+    boolean binary_same_as(Integer first, Integer second) {
+        if ((first & second) == second) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    void getRoutesFromBackEnd() {
+        getRouteWeb.Url(applicationSettings.baseURL
+                + "?action=LIST"
+                + "&entity=ROUTE"
+                + "&pID=" + applicationSettings.pID
+                + "&sessionID=" + applicationSettings.sessionID
+        );
+        getRouteWeb.Get();
+    }
+
+    void dbg (String debugMsg) {
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
+    }
 }
+
