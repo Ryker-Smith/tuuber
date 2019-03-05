@@ -110,6 +110,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("Click")) {
+            if (component.equals(MainMenu))  {
+                finish();
+            }
             if (component.equals(buttonGoToChatSCreen)) {
                 startNewForm("screen08_ChatWith",null);
                 return true;

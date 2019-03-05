@@ -1,11 +1,24 @@
 package net.fachtnaroe.tuuber;
 
-public class dd_aPerson {
-    String First;
-    String Family;
-    String eMail;
-    String phone;
+import com.google.appinventor.components.runtime.ComponentContainer;
+import com.google.appinventor.components.runtime.TinyDB;
 
+public class dd_aPerson {
+
+    public String First = "";
+    public String Family = "";
+    public String eMail = "";
+    public String phone = "";
+    public String password = "";
+    public String registerdetails;
+
+    public String default_First = "";
+    public String default_Family = "";
+    public String default_eMail = "";
+    public String default_phone = "";
+    public String default_password = "";
+
+    TinyDB localDB;
 
     public boolean valid_eMail() {
         int atSymbolCount = 0;
@@ -76,6 +89,10 @@ public class dd_aPerson {
         //phone is valid here
         return true;
     }
+
+//    public dd_aPerson(ComponentContainer screenName) {
+//
+//    }
 
     void dbg (String debugMsg) { System.err.print( debugMsg + "\n"); }
 }

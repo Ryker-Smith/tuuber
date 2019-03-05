@@ -33,6 +33,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private ListView Chat;
     private Web ChatWeb, PoolWeb;
     private WebViewer ChatsViewer;
+    Integer status=-1;
 
     protected void $define() {
 
@@ -96,7 +97,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         if (eventName.equals("Click")) {
             if (component.equals(MainMenu)) {
-                startNewForm("screen03_MainMenu", null);
+                finish();
                 return true;
             }
             else if (component.equals(Send)) {
@@ -146,16 +147,16 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     void callBackend() {
         ChatsViewer.GoHome();
-//        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
-//                "?action=LIST&entity=chat&sessionID=" +
-//                applicationSettings.sessionID +
-//                "&initiator_pID=" +
-//                applicationSettings.pID +
-//                "&respondent_pID=" +
-//                applicationSettings.otherpIDforChat +
-//                "&showHtml=1" +
-//                "&iam=" + applicationSettings.pID
-//        );
+        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
+                "?action=LIST&entity=chat&sessionID=" +
+                applicationSettings.sessionID +
+                "&initiator_pID=" +
+                applicationSettings.pID +
+                "&respondent_pID=" +
+                applicationSettings.otherpIDforChat +
+                "&showHtml=1" +
+                "&iam=" + applicationSettings.pID
+        );
     }
 
     public boolean web_ResultGotText(String status, String textOfResponse) {
