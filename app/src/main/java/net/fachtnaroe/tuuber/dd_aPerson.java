@@ -10,7 +10,6 @@ public class dd_aPerson {
     public String eMail = "";
     public String phone = "";
     public String password = "";
-    public String registerdetails;
 
     public String default_First = "";
     public String default_Family = "";
@@ -91,7 +90,12 @@ public class dd_aPerson {
     }
 
 //    public dd_aPerson(ComponentContainer screenName) {
-//
+//        localDB= new TinyDB(screenName);
+//        First=default_First;
+//        Family=default_Family;
+//        eMail=default_eMail;
+//        phone=default_phone;
+//        password=default_password;
 //    }
 
     void dbg (String debugMsg) { System.err.print( debugMsg + "\n"); }

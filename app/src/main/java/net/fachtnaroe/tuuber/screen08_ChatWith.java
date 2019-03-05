@@ -3,6 +3,7 @@ package net.fachtnaroe.tuuber;
 //import android.support.v7.app.AppCompatActivity;
 
 import com.google.appinventor.components.runtime.Button;
+import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
@@ -26,11 +27,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private TextBox chatText;
     private VerticalArrangement ChatWith;
-    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
+    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, PoolHZ, CheckBoxHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
     private Label ChatLabel, pID, OtherpIDLabel;
     private Notifier MessageSent_Notifier, MessageError_Notifier;
     private ListView Chat;
+    private CheckBox DriverCB, NavigatorCB;
     private Web ChatWeb, PoolWeb;
     private WebViewer ChatsViewer;
     Integer status=-1;
@@ -63,7 +65,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
-        ChatsViewer.HeightPercent(60);
+        ChatsViewer.HeightPercent(40);
         ChatsViewer.HomeUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
@@ -83,19 +85,38 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
-        Pool = new Button(SendHZ);
+        CheckBoxHZ = new HorizontalArrangement(ChatWith);
+        DriverCB = new CheckBox(CheckBoxHZ);
+        DriverCB.Text("Driver");
+        NavigatorCB = new CheckBox(CheckBoxHZ);
+        NavigatorCB.Text("Passenger");
+        PoolHZ = new HorizontalArrangement(ChatWith);
+        Pool = new Button(PoolHZ);
         Pool.Text("Make Pool");
-        Pool.WidthPercent(100);
+
 
         ChatWeb = new Web(ChatWith);
         PoolWeb = new Web(ChatWith);
 
+        EventDispatcher.registerEventForDelegation(this, formName, "Changed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (eventName.equals("Click")) {
+        if (eventName.equals("Checked")) {
+            if (component.equals(DriverCB)) {
+                if (DriverCB.Checked() == true) {
+                    NavigatorCB.Checked(false);
+                }
+            }
+            else if (component.equals(NavigatorCB)) {
+                if (NavigatorCB.Checked() == true) {
+                    DriverCB.Checked(false);
+                }
+            }
+        }
+        else if (eventName.equals("Click")) {
             if (component.equals(MainMenu)) {
                 finish();
                 return true;
@@ -120,11 +141,34 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 callBackend();
             }
             else if(component.equals(Pool)) {
-                PoolWeb.Url(
-                        applicationSettings.baseURL +
-                                "?action=&entity=pools"
-                );
-                PoolWeb.Get();
+                if(DriverCB.Checked()) {
+                    PoolWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&driver_pID=" +
+                                    applicationSettings.pID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=2&pool_Status=0"
+                    );
+                    PoolWeb.Get();
+                    return true;
+                }
+                if(NavigatorCB.Checked()) {
+                    PoolWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&driver_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&navigator_pID=" +
+                                    applicationSettings.pID +
+                                    "&rID=2&pool_Status=0"
+                    );
+                    PoolWeb.Get();
+                    return true;
+                }
             }
             return true;
         }

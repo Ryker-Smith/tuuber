@@ -183,6 +183,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
                     return true;
                 }
+
                 if (!TCAgree.Checked()) {
                     TCAgree.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
