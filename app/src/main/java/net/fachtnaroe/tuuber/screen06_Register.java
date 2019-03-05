@@ -99,7 +99,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Creation_Notifier = new Notifier(Register);
         Universal_Notifier = new Notifier(Register);
         Web_Notifier = new Notifier(Register);
-        User = new dd_aPerson();
+        User = new dd_aPerson(this);
 
         EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
 //        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );
@@ -124,6 +124,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             if (component.equals(Create)){
                 User.phone = Telephone.Text();
                 User.eMail = eMail.Text();
+                User.First = FirstName.Text();
+                User.Family = LastName.Text();
+                User.password = Password.Text();
                 if (!User.valid_phone()) {
                     TelephoneLabel.TextColor(Color.RED);
                     eMailLabel.TextColor(Color.BLACK);

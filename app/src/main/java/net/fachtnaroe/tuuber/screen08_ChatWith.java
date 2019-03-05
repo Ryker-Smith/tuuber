@@ -109,11 +109,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 if (DriverCB.Checked() == true) {
                     NavigatorCB.Checked(false);
                 }
+                return true;
             }
             else if (component.equals(NavigatorCB)) {
                 if (NavigatorCB.Checked() == true) {
                     DriverCB.Checked(false);
                 }
+                return true;
             }
         }
         else if (eventName.equals("Click")) {

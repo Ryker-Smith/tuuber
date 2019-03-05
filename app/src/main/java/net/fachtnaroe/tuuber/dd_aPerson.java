@@ -89,14 +89,32 @@ public class dd_aPerson {
         return true;
     }
 
-//    public dd_aPerson(ComponentContainer screenName) {
-//        localDB= new TinyDB(screenName);
-//        First=default_First;
-//        Family=default_Family;
-//        eMail=default_eMail;
-//        phone=default_phone;
-//        password=default_password;
-//    }
+    public dd_aPerson(ComponentContainer screenName) {
+        localDB= new TinyDB(screenName);
+        First=default_First;
+        Family=default_Family;
+        eMail=default_eMail;
+        phone=default_phone;
+        password=default_password;
+    }
+
+    public String get () {
+        First=(String) localDB.GetValue("First",default_First);
+        Family=(String) localDB.GetValue("Family",default_Family);
+        eMail=(String) localDB.GetValue("eMail", default_eMail);
+        phone=(String) localDB.GetValue("phone", default_phone);
+        password=(String) localDB.GetValue("pID",default_password);
+        return "OK";
+    }
+
+    public String set () {
+        localDB.StoreValue("First", First);
+        localDB.StoreValue("Family",Family);
+        localDB.StoreValue("eMail",eMail);
+        localDB.StoreValue("phone", phone);
+        localDB.StoreValue("password", password);
+        return "OK";
+    }
 
     void dbg (String debugMsg) { System.err.print( debugMsg + "\n"); }
 }
