@@ -31,7 +31,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private Button buttonGoToChatSCreen, Refresh, MainMenu;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, test;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
-    private List<String> ListofContactWeb1, ListofContactWeb2, ListofpIDs, ListofInboundWeb, ListofOutboundWeb;
+    private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
     int intListViewsize=40;
