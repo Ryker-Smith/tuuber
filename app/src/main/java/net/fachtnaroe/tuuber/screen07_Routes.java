@@ -542,11 +542,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
     public void setdestination(String destination) {
         if (destination.equals("Templemore")) {
-            Templemore.Image("Arrow_Right_Templemore.png");
+            Templemore.Image("Arrow_Left_Templemore.png");
             townsDisplay.Text(origin);
         }
         else {
-            Templemore.Image("Arrow_Left_Templemore.png");
+            Templemore.Image("Arrow_Right_Templemore.png");
 
         }
 
