@@ -153,7 +153,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&rID=2&pool_Status=2"
+                                    "&rID=2"
                     );
                     PoolWeb.Get();
                     return true;
@@ -167,7 +167,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&navigator_pID=" +
                                     applicationSettings.pID +
-                                    "&rID=2&pool_Status=2"
+                                    "&rID=2"
                     );
                     PoolWeb.Get();
                     return true;
