@@ -128,10 +128,18 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             if (component.equals(buttonInitiateNewChat)) {
                 InboundWebCreate.Url(
                         applicationSettings.baseURL +
-                                "action=POST&entity="
+                                "?action=POST&entity=CHAT&sessionID=" +
+                                applicationSettings.sessionID +
+                                "&respondent_pID=" +
+                                InboundpID.Text() +
+                                "&initiator_pID=" +
+                                applicationSettings.pID +
+                                "&status=open&text=" +
+                                ""
                 );
-                startNewForm("screen08_ChatWith",null);
+                InboundWebCreate.Get();
                 return true;
+                //startNewForm("screen08_ChatWith",null);
             }
             else if (component.equals(Refresh)) {
                 callBackEnd();
@@ -164,24 +172,43 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 String textOfResponse = (String) params[3];
                 getContact1List(status, textOfResponse);
                 return true;
-            } else if (component.equals(Contact2Web)) {
+            }
+            else if (component.equals(Contact2Web)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getContact2List(status, textOfResponse);
                 return true;
-            } else if (component.equals(InboundWeb)) {
+            }
+            else if (component.equals(InboundWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getInboundList(status, textOfResponse);
                 return true;
-            } else if (component.equals(OutboundWeb)) {
+            }
+            else if (component.equals(OutboundWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getOutboundList(status, textOfResponse);
                 return true;
+            }
+            else if (component.equals(InboundWebCreate)) {
+                InboundWebRemove.Url(
+                        applicationSettings.baseURL +
+                                "?action=DELETE&entity=CHAT&sessionID=a1b2c3d4" +
+                                "&respondent_pID=" +
+                                applicationSettings.pID +
+                                "&initiator_pID=" +
+                                InboundpID.Text() +
+                                "status=init"
+                );
+                InboundWebRemove.Get();
+                return true;
+            }
+            else if (component.equals(InboundWebRemove)) {
+                callBackEnd();
             }
         }
         return true;
