@@ -79,7 +79,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         TermsConditionsHZ = new HorizontalArrangement(Register);
         TermsConditions = new Button(TermsConditionsHZ);
-        TermsConditions.Text ("Terms&Conditions");
+        TermsConditions.Text ("Terms & Conditions");
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
         TCAgree.Enabled(false);
