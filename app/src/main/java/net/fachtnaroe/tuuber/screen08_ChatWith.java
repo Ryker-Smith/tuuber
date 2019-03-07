@@ -89,7 +89,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         DriverCB = new CheckBox(CheckBoxHZ);
         DriverCB.Text("Driver");
         NavigatorCB = new CheckBox(CheckBoxHZ);
-        NavigatorCB.Text("Passenger");
+        NavigatorCB.Text("Navigator");
         PoolHZ = new HorizontalArrangement(ChatWith);
         Pool = new Button(PoolHZ);
         Pool.Text("Make Pool");
@@ -104,7 +104,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (eventName.equals("Checked")) {
+        if (eventName.equals("Changed")) {
             if (component.equals(DriverCB)) {
                 if (DriverCB.Checked() == true) {
                     NavigatorCB.Checked(false);
@@ -117,6 +117,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 return true;
             }
+            return true;
         }
         else if (eventName.equals("Click")) {
             if (component.equals(MainMenu)) {
@@ -152,7 +153,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&rID=2&pool_Status=0"
+                                    "&rID=2"
                     );
                     PoolWeb.Get();
                     return true;
@@ -166,7 +167,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&navigator_pID=" +
                                     applicationSettings.pID +
-                                    "&rID=2&pool_Status=0"
+                                    "&rID=2"
                     );
                     PoolWeb.Get();
                     return true;
@@ -182,6 +183,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 else {
                     chatText.BackgroundColor(Component.COLOR_RED);
+                    MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
                 }
                 return true;
             }

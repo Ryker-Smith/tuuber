@@ -88,6 +88,18 @@ public class dd_aPerson {
         //phone is valid here
         return true;
     }
+    public boolean valid_first() {
+        if (First.length() <= 1) {
+            return false;
+        }
+        return true;
+    }
+    public boolean valid_family() {
+        if (Family.length() <= 1) {
+            return false;
+        }
+        return true;
+    }
 
     public dd_aPerson(ComponentContainer screenName) {
         localDB= new TinyDB(screenName);
