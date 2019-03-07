@@ -25,11 +25,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ, toolbarHz;
+    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, InboundpIDHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ, toolbarHz;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
-    private Button buttonGoToChatSCreen, Refresh, MainMenu;
-    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, test;
+    private Button buttonGoToChatScreen, buttonInitiateNewChat, Refresh, MainMenu;
+    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, InboundpID, test;
     private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
@@ -81,6 +81,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiation = new ListView(InboundInitiationHZ);
         InboundInitiation.HeightPercent(15);
         InboundInitiation.TextSize(intListViewsize);
+        InboundpIDHZ = new HorizontalArrangement(Conversations);
+        InboundpID = new Label(InboundpIDHZ);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         OutboundInitiationLabel = new Label(OutboundInitiationLabelHZ);
@@ -91,9 +93,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiation.TextSize(intListViewsize);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
-        buttonGoToChatSCreen = new Button(ChatsScreenHZ);
-        buttonGoToChatSCreen.Text("Chat");
-        buttonGoToChatSCreen.Enabled(false);
+        buttonGoToChatScreen = new Button(ChatsScreenHZ);
+        buttonGoToChatScreen.Text("Chat");
+        buttonGoToChatScreen.Enabled(false);
+        buttonInitiateNewChat = new Button(ChatsScreenHZ);
+        buttonInitiateNewChat.Text("Create Contact");
+        buttonInitiateNewChat.Enabled(false);
 
         Contact1Web = new Web(this);
         Contact2Web = new Web(this);
@@ -113,7 +118,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             if (component.equals(MainMenu))  {
                 finish();
             }
-            if (component.equals(buttonGoToChatSCreen)) {
+            if (component.equals(buttonGoToChatScreen)) {
+                startNewForm("screen08_ChatWith",null);
+                return true;
+            }
+            if (component.equals(buttonInitiateNewChat)) {
                 startNewForm("screen08_ChatWith",null);
                 return true;
             }
@@ -130,7 +139,15 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 applicationSettings.otherpIDforChat =separated[0];
                 applicationSettings.set();
                 OtherpID.Text(separated[0]);
-                buttonGoToChatSCreen.Enabled(true);
+                buttonGoToChatScreen.Enabled(true);
+            }
+            if (component.equals(InboundInitiation)) {
+                String InboundpIDText = new String();
+                InboundpIDText = InboundInitiation.Selection();
+                String currentString = InboundpIDText;
+                String[] seperated = currentString.split(":");
+                InboundpID.Text(seperated[0]);
+                buttonInitiateNewChat.Enabled(true);
             }
         }
         else if (eventName.equals("GotText")) {
@@ -308,8 +325,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     if (Inbound.getJSONObject(i).toString().equals("{}")) break;
                     ListofInboundWeb.add(
-                            Inbound.getJSONObject(i).getString("first")
-                                    + " " +
+                            Inbound.getJSONObject(i).getString("initiator_pID") +
+                                    "::" +
+                                    Inbound.getJSONObject(i).getString("first") +
+                                    " " +
                                     Inbound.getJSONObject(i).getString("family")
                     );
                 }
