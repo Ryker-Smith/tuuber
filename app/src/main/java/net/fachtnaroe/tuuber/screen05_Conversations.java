@@ -74,6 +74,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OtherpID = new Label(OtherpIDHZ);
         OtherpID.Visible(true);
 
+        ChatsScreenHZ = new HorizontalArrangement(Conversations);
+        buttonGoToChatScreen = new Button(ChatsScreenHZ);
+        buttonGoToChatScreen.Text("Chat");
+        buttonGoToChatScreen.Enabled(false);
         InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
         InboundInitiationLabel.Text("Pending (Inbound)");
@@ -83,6 +87,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiation.TextSize(intListViewsize);
         InboundpIDHZ = new HorizontalArrangement(Conversations);
         InboundpID = new Label(InboundpIDHZ);
+        buttonInitiateNewChat = new Button(Conversations);
+        buttonInitiateNewChat.Text("Accept inbound");
+        buttonInitiateNewChat.Enabled(false);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         OutboundInitiationLabel = new Label(OutboundInitiationLabelHZ);
@@ -92,13 +99,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiation.HeightPercent(15);
         OutboundInitiation.TextSize(intListViewsize);
 
-        ChatsScreenHZ = new HorizontalArrangement(Conversations);
-        buttonGoToChatScreen = new Button(ChatsScreenHZ);
-        buttonGoToChatScreen.Text("Chat");
-        buttonGoToChatScreen.Enabled(false);
-        buttonInitiateNewChat = new Button(ChatsScreenHZ);
-        buttonInitiateNewChat.Text("Create Contact");
-        buttonInitiateNewChat.Enabled(false);
+
 
         Contact1Web = new Web(this);
         Contact2Web = new Web(this);
