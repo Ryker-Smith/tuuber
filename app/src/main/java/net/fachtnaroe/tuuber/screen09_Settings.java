@@ -35,11 +35,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
-    TextBox versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
+    TextBox listViewSizeBox, versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button submitDetails, submitPassword, buttonMainMenu, buttonRefresh, submitCustomisation;
-    Label phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel, label_pID;
-    HorizontalArrangement userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz, toolbarHz;
+    Label listViewSizeLabel, phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel, label_pID;
+    HorizontalArrangement listViewSizeHz, userFirstHz, userFamilyHz, phoneHz, eMailHz, oldPassHz, newPassHz, confirmHz, toolbarHz;
     VerticalArrangement detailsVt, passwordVt, customisationVt;
     Notifier messagesPopUp;
     ImagePicker myImagePicker;
@@ -88,6 +88,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         passwordWeb = new Web(this);
         passwordWebSave = new Web(this);
 
+        listViewSizeHz=new HorizontalArrangement(screen09_Settings);
+        listViewSizeLabel=new Label(listViewSizeHz);
+        listViewSizeLabel.Text("List font size:");
+        listViewSizeBox = new TextBox(listViewSizeHz);
+        listViewSizeBox.NumbersOnly(true);
+        listViewSizeBox.Text(applicationSettings.intListViewsize.toString());
         detailsVt = new VerticalArrangement(screen09_Settings);
         userFirstHz = new HorizontalArrangement(detailsVt);
         userFirstLabel = new Label(userFirstHz);
@@ -150,7 +156,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 + "&sessionID=" + applicationSettings.sessionID
         );
         detailsWeb.Get();
-//        screen09_Settings.Image(applicationSettings.backgroundImageName);
         dbg("End $define " + formName);
     }
 
@@ -168,9 +173,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("BeforePicking")) {
             if (component.equals(myImagePicker)) {
-this.BackgroundImage(myImagePicker.Selection());
-
-
+                this.BackgroundImage(myImagePicker.Selection());
                 return true;
             }
             return false;
@@ -190,6 +193,9 @@ this.BackgroundImage(myImagePicker.Selection());
             }
             else if (component.equals(submitCustomisation) ) {
                 applicationSettings.backgroundImageName=backgroundImageTextBox.Text();
+                if (Integer.valueOf(listViewSizeBox.Text()) >= applicationSettings.minimimum_intListViewsize) {
+                    applicationSettings.intListViewsize = Integer.valueOf(listViewSizeBox.Text());
+                }
                 applicationSettings.set();
                 finish();
                 return true;

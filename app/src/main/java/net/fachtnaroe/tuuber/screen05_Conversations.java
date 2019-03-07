@@ -34,7 +34,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
-    int intListViewsize=40;
+//    int intListViewsize=40;
     TinyDB LocalDB;
 
     protected void $define() {
@@ -69,7 +69,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ContactsHZ = new HorizontalArrangement(Conversations);
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(15);
-        Contacts.TextSize(intListViewsize);
+        Contacts.TextSize(applicationSettings.intListViewsize);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
         OtherpID = new Label(OtherpIDHZ);
         OtherpID.Visible(true);
@@ -85,7 +85,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiationHZ = new HorizontalArrangement(Conversations);
         InboundInitiation = new ListView(InboundInitiationHZ);
         InboundInitiation.HeightPercent(15);
-        InboundInitiation.TextSize(intListViewsize);
+        InboundInitiation.TextSize(applicationSettings.intListViewsize);
         InboundpIDHZ = new HorizontalArrangement(Conversations);
         InboundpID = new Label(InboundpIDHZ);
         InboundLineID = new Label(InboundpIDHZ);
@@ -104,7 +104,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiationHZ = new HorizontalArrangement(Conversations);
         OutboundInitiation = new ListView(OutboundInitiationHZ);
         OutboundInitiation.HeightPercent(15);
-        OutboundInitiation.TextSize(intListViewsize);
+        OutboundInitiation.TextSize(applicationSettings.intListViewsize);
 
 
 

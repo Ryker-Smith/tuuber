@@ -63,8 +63,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb, getDayFromWeb;
     String Specify = new String("to");
     String rID;
-    Integer day = -1; // used to store the day selection of the user
-
+    Integer day = -1;// used to store the day selection of the user
+    Integer saveedit = 0;
+    String driver, destination, origin, action;
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
@@ -136,7 +137,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Save.Text("Save");
         Delete = new Button(ButtonHolder);
         Delete.Text("Delete");
-        routesDisplay.TextSize(40);
+        routesDisplay.TextSize(applicationSettings.intListViewsize);
         //Save = new Button(RoutesScreen);
         //Delete = new Button(RoutesScreen);
         //Save.Text("Save");
@@ -253,7 +254,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "&" + "rID=" + separated[0]
                                 + "&sessionID=" + applicationSettings.sessionID
                 );
-
+                saveedit = 1;
                 getRoute.Get();
                 return true;
             } else if (component.equals(townsDisplay)) {
@@ -293,6 +294,16 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
             } else if (component.equals(Save)) {
                 dbg("Saving");
+                if(saveedit.equals(0)){
+
+                    action="POST";
+
+                }
+                else{
+
+                    action="PUT";
+
+                }
                 if ((!mon.Checked()) && (!tues.Checked()) && (!weds.Checked()) && (!thurs.Checked()) && (!fri.Checked()) && (!DriverYoN.Checked())) {
                     return true;
                 }
@@ -306,13 +317,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 String Directions = new String();
                 if (Specify.equals("to")) {
-                    Directions = "&destination=Templemore&origin=" + townsDisplay.Selection();
+                    Directions = "&destination=Templemore&origin=" + townsDisplay.Text();
                 } else {
-                    Directions = "&origin=Templemore&destination=" + townsDisplay.Selection();
+                    Directions = "&origin=Templemore&destination=" + townsDisplay.Text();
                 }
                 saveRouteWeb.Url(
                         baseURL
-                                + "?action=POST"
+                                + "?action="
+                                + action
                                 + "&entity=ROUTE"
                                 + Directions + "&"
                                 + temp + "&"
@@ -350,6 +362,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getDay(status, textOfResponse);
+                getDirection(status, textOfResponse);
+                getDriver(status, textOfResponse);
+                getTown(status, textOfResponse);
                 return true;
             }
         }
@@ -468,6 +483,47 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
     }
+    public void getDriver(String status, String textOfResponse) {
+        if (status.equals("200") ) {
+            try {
+                JSONObject parser = new JSONObject(textOfResponse);
+                driver=(parser.getString("driver"));
+                setdriver(driver);
+            } catch (JSONException e) {
+                // if an exception occurs, code for it in here
+                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            }
+        }
+    }
+    public void getDirection(String status, String textOfResponse) {
+        if (status.equals("200") ) {
+            try {
+                JSONObject parser = new JSONObject(textOfResponse);
+                destination=(parser.getString("destination"));
+                setdestination(destination);
+                settown(destination);
+
+            } catch (JSONException e) {
+                // if an exception occurs, code for it in here
+                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            }
+        }
+    }
+    public void getTown(String status, String textOfResponse) {
+        if (status.equals("200") ) {
+            try {
+                JSONObject parser = new JSONObject(textOfResponse);
+                origin=(parser.getString("origin"));
+                setdestination(origin);
+                settown(origin);
+            } catch (JSONException e) {
+                // if an exception occurs, code for it in here
+                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            }
+        }
+    }
+
+
 
     public void setday(Integer days){
         if (binary_same_as(days, 2)) {
@@ -487,7 +543,35 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             fri.Checked(true);
         }
     }
+    public void setdriver(String driver) {
+        if (driver.equals("Y")) {
+            DriverYoN.Checked(true);
+        }
+        else {
+            DriverYoN.Checked(false);
+        }
+
+    }
+    public void setdestination(String destination) {
+        if (destination.equals("Templemore")) {
+            Templemore.Image("Arrow_Left_Templemore.png");
+            townsDisplay.Text(origin);
+        }
+        else {
+            Templemore.Image("Arrow_Right_Templemore.png");
+
+        }
+
+    }
+    public void settown(String origin) {
+        if (origin.equals("Templemore")) {
+            townsDisplay.Text(destination);
+        }
+        else{
+            townsDisplay.Text(origin);
+        }
 
 
+    }
 
 }

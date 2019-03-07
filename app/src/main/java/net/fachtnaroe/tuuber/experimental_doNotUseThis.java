@@ -38,7 +38,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
     Clock ticker;
     ListView myList;
     Web testFancyList_Web;
-    Label debug_FancyList, head1, head2, label_pID;
+    Label debug_FancyList, head1, debug, label_pID;
     fachtnaWebViewer aiWebViewer;
     String stringTestURL_1="https://fachtnaroe.net/test_list1.html";
     Integer count=0;
@@ -107,8 +107,9 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 //        head2.Text("Below");
 
         messagesPopUp = new Notifier(screenArrangement);
-        fancyListView(screenArrangement, myList, "one", "two", "three");
-
+        fancyListView(screenArrangement, myList, "pick one to see 2-question dialog", "one", "two", "three");
+        debug=new Label(screenArrangement);
+        debug.Text("Debug");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
@@ -126,21 +127,33 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 
     @JavascriptInterface
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        String w;
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
             if (eventName.contains("WebViewStringChange")) {
                 //aiWebViewer.WebViewString()
                 messagesPopUp.ShowAlert("You selected: " + hm.get(aiWebViewer.WebViewString()));
-            debug_FancyList.Text(
-                    aiWebViewer.WebViewString()
-            );
-            return true;
+                debug_FancyList.Text(
+                        aiWebViewer.WebViewString()
+                );
+                return true;
         }
         else if (eventName.equals("BackPressed")) {
             finish();
             return true;
         }
-        else if (eventName.equals("Click")) {
+        else if (eventName.equals("AfterChoosing")) {
+            if (component.equals(messagesPopUp)) {
+                messagesPopUp.ShowMessageDialog("You chose: ", "Information", "Grand");
+                debug.Text();
+                return true;
+            }
+        }
+        else if (eventName.equals("AfterPicking")) {
+            messagesPopUp.ShowChooseDialog("Choose YES to fire Death-Star weapon, or NO self-destruct Death-Star","Selection made","YES","NO",false);
+                return true;
+        }
+            else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
                 finish();
                 return true;
