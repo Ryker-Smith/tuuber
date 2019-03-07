@@ -64,7 +64,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     String Specify = new String("to");
     String rID;
     Integer day = -1; // used to store the day selection of the user
-    String driver, destination;
+    String driver, destination, origin, town;
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
@@ -352,6 +352,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 getDay(status, textOfResponse);
                 getDirection(status, textOfResponse);
                 getDriver(status, textOfResponse);
+                getTown(status, textOfResponse);
                 return true;
             }
         }
@@ -488,6 +489,21 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 JSONObject parser = new JSONObject(textOfResponse);
                 destination=(parser.getString("destination"));
                 setdestination(destination);
+                settown(destination);
+
+            } catch (JSONException e) {
+                // if an exception occurs, code for it in here
+                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            }
+        }
+    }
+    public void getTown(String status, String textOfResponse) {
+        if (status.equals("200") ) {
+            try {
+                JSONObject parser = new JSONObject(textOfResponse);
+                origin=(parser.getString("origin"));
+                setdestination(origin);
+                settown(origin);
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
                 messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
@@ -527,10 +543,23 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     public void setdestination(String destination) {
         if (destination.equals("Templemore")) {
             Templemore.Image("Arrow_Right_Templemore.png");
+            townsDisplay.Text(origin);
         }
         else {
             Templemore.Image("Arrow_Left_Templemore.png");
+
         }
 
     }
+    public void settown(String origin) {
+        if (origin.equals("Templemore")) {
+            townsDisplay.Text(destination);
+        }
+        else{
+            townsDisplay.Text(origin);
+        }
+
+
+    }
+
 }
