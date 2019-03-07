@@ -57,7 +57,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         eMailLabel = new Label(eMailHZ);
         eMailLabel.Text ("Email");
         eMail = new TextBox(eMailHZ);
-        eMail.Text ("");
+        eMail.Text ("place123@here.ie");
         FirstNameLabel = new Label (FirstNameHZ);
         FirstNameLabel.Text ("FirstName");
         FirstName = new TextBox (FirstNameHZ);
@@ -99,7 +99,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Creation_Notifier = new Notifier(Register);
         Universal_Notifier = new Notifier(Register);
         Web_Notifier = new Notifier(Register);
-        User = new dd_aPerson(this);
+        User = new dd_aPerson(Register);
 
         EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
 //        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );
@@ -139,7 +139,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
                     return true;
                 }
-
                 if (!User.valid_eMail()) {
                     eMailLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
@@ -152,7 +151,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     return true;
                 }
 
-                if (FirstName.Text().length() <1) {
+                if (!User.valid_first()) {
                     FirstNameLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
                     eMailLabel.TextColor(Color.BLACK);
@@ -164,7 +163,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     return true;
                 }
 
-                if (LastName.Text().length() <1){
+                if (!User.valid_family()) {
                     LastNameLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
                     eMailLabel.TextColor(Color.BLACK);
@@ -227,6 +226,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         }
         else if (component.equals(Creation) && eventName.equals("GotText")){
+
             String stringSent =  (String) params[0];
             Integer status = (Integer) params[1];
             String encoding = (String) params[2];
