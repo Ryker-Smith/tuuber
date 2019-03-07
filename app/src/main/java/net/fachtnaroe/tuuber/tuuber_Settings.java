@@ -20,6 +20,7 @@ public class tuuber_Settings {
     public String TermsAndConditions = "You must use the app only in the way we intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
     public String ourLogo="MultiLayerLogo-002.png";
     public String notificationSoundFileName="";
+    public Integer intListViewsize=0;
 
     public final String default_baseURL="https://fachtnaroe.net/tuuber-test";
     public final String default_sessionID="a1b2c3d4";
@@ -28,6 +29,9 @@ public class tuuber_Settings {
     public String default_backgroundImageName="tuuberBackdrop-06.png";
     public String default_lastLogin="";
     public String default_notificationSoundFileName="";
+    public Integer default_intListViewsize=40;
+
+    public Integer minimimum_intListViewsize=5;
 
     TinyDB localDB;
 
@@ -40,6 +44,7 @@ public class tuuber_Settings {
         otherpIDforChat = default_otherpIDforChat;
         lastLogin=default_lastLogin;
         notificationSoundFileName=default_notificationSoundFileName;
+        intListViewsize=default_intListViewsize;
     }
 
     public String get () {
@@ -50,6 +55,7 @@ public class tuuber_Settings {
         pID=(String) localDB.GetValue("pID",default_pID);
         otherpIDforChat =(String) localDB.GetValue("otherpIDforChat", otherpIDforChat);
         notificationSoundFileName=(String) localDB.GetValue("notificationSoundFileName",default_notificationSoundFileName);
+        intListViewsize=(Integer) localDB.GetValue("intListViewsize",default_intListViewsize);
         return "OK";
     }
 
@@ -61,6 +67,7 @@ public class tuuber_Settings {
         localDB.StoreValue("pID", pID);
         localDB.StoreValue("otherpIDforChat", otherpIDforChat);
         localDB.StoreValue("notificationSoundFileName", notificationSoundFileName);
+        localDB.StoreValue("intListViewsize", intListViewsize);
         return "OK";
     }
 
