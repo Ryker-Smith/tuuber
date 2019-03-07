@@ -246,32 +246,21 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 CheckrID = routesDisplay.Selection();
                 String currentstring = CheckrID;
                 String[] separated = currentstring.split(":");
-                test.Text(separated[0]);
                 getRoute.Url(
                         baseURL
                                 + "?action=GET"
                                 + "&entity=ROUTE"
-                                + "&" + "rID=" + test.Text()
-                                + "&"
-
-                                + "sessionID=" + applicationSettings.sessionID
+                                + "&" + "rID=" + separated[0]
+                                + "&sessionID=" + applicationSettings.sessionID
                 );
 
-
-                dbg(getRoute.Url());
                 getRoute.Get();
-                dbg("days="+days);
                 return true;
             } else if (component.equals(townsDisplay)) {
                 townsDisplay.Text(townsDisplay.Selection());
-            }
-            else if (component.equals(routesDisplay)){
-
-
-                dbg(days);
                 return true;
-
             }
+
         } else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
                 finish();
@@ -357,16 +346,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             } else if (component.equals(saveRouteWeb)) {
                 getRouteWeb.Get();
             } else if (component.equals(getRoute)) {
-                dbg((String) params[3]);
+//                dbg((String) params[3]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getDay(status, textOfResponse);
-                //test.Text(textOfResponse);
                 return true;
-            }
-        } else if (eventName.equals("AfterPicking")) {
-            if (component.equals(townsDisplay)) {
-                townsDisplay.Text(townsDisplay.Selection());
             }
         }
         return true;
@@ -473,45 +457,35 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
     public void getDay(String status, String textOfResponse) {
-        String temp=new String();
         if (status.equals("200") ) {
             try {
                 JSONObject parser = new JSONObject(textOfResponse);
-                temp = parser.getString("day");
-                if (parser.getString("day").equals("OK")) {
-                   day= Integer.valueOf(parser.getString("day"));
-                }
-                dbg(temp);
-                days=temp;
-
-
+                day=Integer.valueOf(parser.getString("day"));
+                setday(day);
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
                 messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
             }
         }
-
-
-
     }
-    public void setday(){
-        if (days == "2"){
+
+    public void setday(Integer days){
+        if (binary_same_as(days, 2)) {
             mon.Checked(true);
         }
-        else if (days == "4"){
+        else if (binary_same_as(days, 4)){
             tues.Checked(true);
         }
-        else if (days == "8"){
+        else if (binary_same_as(days, 8)){
             weds.Checked(true);
         }
-        else if (days == "16"){
+        else if (binary_same_as(days, 16)){
             thurs.Checked(true);
 
         }
-        else if (days == "32"){
+        else if (binary_same_as(days, 32)){
             fri.Checked(true);
         }
-
     }
 
 
