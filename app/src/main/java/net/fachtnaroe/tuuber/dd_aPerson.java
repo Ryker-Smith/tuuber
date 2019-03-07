@@ -89,13 +89,40 @@ public class dd_aPerson {
         return true;
     }
     public boolean valid_first() {
+        // checks length
         if (First.length() <= 1) {
             return false;
+        }
+        int i;
+        // loop created
+        for(i=0;i<=First.length()-1;i++){
+            //character checked individually
+            char c=First.charAt(i);
+            //character checked if numeric
+            if ((((int) c) >48) || (((int)c) <57)) {
+                return false;
+            }
         }
         return true;
     }
     public boolean valid_family() {
         if (Family.length() <= 1) {
+            return false;
+        }
+        int i;
+        // loop created
+        for(i=0;i<=Family.length()-1;i++) {
+            //character checked individually
+            char c = Family.charAt(i);
+            //character checked if numeric
+            if ((((int) c) > 48) || (((int) c) < 57)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean valid_password() {
+        if (password.length() <= 1) {
             return false;
         }
         return true;
@@ -109,7 +136,7 @@ public class dd_aPerson {
         phone=default_phone;
         password=default_password;
     }
-
+    
     public String get () {
         First=(String) localDB.GetValue("First",default_First);
         Family=(String) localDB.GetValue("Family",default_Family);
@@ -118,7 +145,7 @@ public class dd_aPerson {
         password=(String) localDB.GetValue("pID",default_password);
         return "OK";
     }
-
+    //stores the values
     public String set () {
         localDB.StoreValue("First", First);
         localDB.StoreValue("Family",Family);
