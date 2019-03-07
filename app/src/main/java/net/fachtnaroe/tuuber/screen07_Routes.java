@@ -63,8 +63,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb, getDayFromWeb;
     String Specify = new String("to");
     String rID;
-    Integer day = -1; // used to store the day selection of the user
-    String driver, destination, origin, town;
+    Integer day = -1;// used to store the day selection of the user
+    Integer saveedit = 0;
+    String driver, destination, origin, action;
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
@@ -253,7 +254,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "&" + "rID=" + separated[0]
                                 + "&sessionID=" + applicationSettings.sessionID
                 );
-
+                saveedit = 1;
                 getRoute.Get();
                 return true;
             } else if (component.equals(townsDisplay)) {
@@ -293,6 +294,16 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
             } else if (component.equals(Save)) {
                 dbg("Saving");
+                if(saveedit.equals(0)){
+
+                    action="POST";
+
+                }
+                else{
+
+                    action="PUT";
+
+                }
                 if ((!mon.Checked()) && (!tues.Checked()) && (!weds.Checked()) && (!thurs.Checked()) && (!fri.Checked()) && (!DriverYoN.Checked())) {
                     return true;
                 }
@@ -306,13 +317,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 String Directions = new String();
                 if (Specify.equals("to")) {
-                    Directions = "&destination=Templemore&origin=" + townsDisplay.Selection();
+                    Directions = "&destination=Templemore&origin=" + townsDisplay.Text();
                 } else {
-                    Directions = "&origin=Templemore&destination=" + townsDisplay.Selection();
+                    Directions = "&origin=Templemore&destination=" + townsDisplay.Text();
                 }
                 saveRouteWeb.Url(
                         baseURL
-                                + "?action=POST"
+                                + "?action="
+                                + action
                                 + "&entity=ROUTE"
                                 + Directions + "&"
                                 + temp + "&"
