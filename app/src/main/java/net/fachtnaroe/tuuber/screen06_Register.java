@@ -32,7 +32,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
-    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
+//    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
     private Web Creation;
     private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
     private PasswordTextBox Password, ConfirmPassword;
@@ -41,6 +41,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Register = new VerticalArrangement (this);
         Image1 = new Image (Register);
@@ -200,7 +201,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 }
 
                 Creation.Url(
-                        baseURL +
+                        applicationSettings.baseURL +
                                 "?entity=person&action=POST&first=" +
                                 FirstName.Text() +
                                 "&family=" +
