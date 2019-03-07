@@ -30,7 +30,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     private Button buttonGoToChatScreen, buttonInitiateNewChat, Refresh, MainMenu;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID, OtherpID, InboundpID, test;
-    private Web Contact1Web, Contact2Web, InboundWeb, OutboundWeb;
+    private Web Contact1Web, Contact2Web, InboundWeb,InboundWebCreate, InboundWebRemove, OutboundWeb;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
@@ -103,6 +103,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contact1Web = new Web(this);
         Contact2Web = new Web(this);
         InboundWeb = new Web(this);
+        InboundWebCreate = new Web(this);
+        InboundWebRemove = new Web(this);
         OutboundWeb = new Web(this);
         messagesPopUp = new Notifier(Conversations);
 
@@ -123,6 +125,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 return true;
             }
             if (component.equals(buttonInitiateNewChat)) {
+                InboundWebCreate.Url(
+                        applicationSettings.baseURL +
+                                "action=POST&entity="
+                );
                 startNewForm("screen08_ChatWith",null);
                 return true;
             }
