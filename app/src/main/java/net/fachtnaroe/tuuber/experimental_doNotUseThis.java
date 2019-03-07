@@ -99,12 +99,6 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         ticker = new Clock(screenArrangement);
         ticker.TimerEnabled(false);
         ticker.TimerInterval(1000);
-//        head1 = new Label(screenArrangement);
-//        head1.Text("Above");
-//        dbg("In");
-//        dbg("Out");
-//        head2 = new Label(screenArrangement);
-//        head2.Text("Below");
 
         messagesPopUp = new Notifier(screenArrangement);
         fancyListView(screenArrangement, myList, "pick one to see 2-question dialog", "one", "two", "three");
@@ -144,7 +138,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         }
         else if (eventName.equals("AfterChoosing")) {
             if (component.equals(messagesPopUp)) {
-                messagesPopUp.ShowMessageDialog("You chose: ", "Information", "Grand");
+                messagesPopUp.ShowMessageDialog("You chose: " + params[0], "Information", "Grand");
                 debug.Text();
                 return true;
             }
@@ -169,7 +163,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
     void fancyListView(ComponentContainer container, ListView list, String... listData) {
         list = new ListView(container);
         list.HeightPercent(10);
-        list.TextSize(40);
+        list.TextSize(applicationSettings.intListViewsize);
         list = getRouteWebGotText(list, listData);
     }
 
