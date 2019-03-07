@@ -30,7 +30,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     private Button buttonGoToChatScreen, buttonInitiateNewChat, buttonRemoveChatRequest, Refresh, MainMenu;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, InboundLineID, OutboundLineID, pID, OtherpID, InboundpID, OutboundpID, test;
-    private Web Contact1Web, Contact2Web, InboundWeb,InboundWebCreate, InboundWebRemove, OutboundWeb;
+    private Web Contact1Web, Contact2Web, InboundWeb,InboundWebCreate, InboundWebRemove, OutboundWeb, OutboundWebRemove;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier messagesPopUp;
     String Specify=new String("to");
