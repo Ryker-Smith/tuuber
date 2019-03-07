@@ -183,6 +183,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 else {
                     chatText.BackgroundColor(Component.COLOR_RED);
+                    MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
                 }
                 return true;
             }
