@@ -137,7 +137,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Save.Text("Save");
         Delete = new Button(ButtonHolder);
         Delete.Text("Delete");
-        routesDisplay.TextSize(40);
+        routesDisplay.TextSize(applicationSettings.intListViewsize);
         //Save = new Button(RoutesScreen);
         //Delete = new Button(RoutesScreen);
         //Save.Text("Save");
