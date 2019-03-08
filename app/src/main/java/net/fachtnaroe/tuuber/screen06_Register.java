@@ -182,7 +182,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     FirstNameLabel.TextColor(Color.BLACK);
                     LastNameLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "OK");
+                    Universal_Notifier.ShowMessageDialog("Invalid Password", "Error", "OK");
                     return true;
                 }
                 if (!Password.Text().equals(ConfirmPassword.Text())) {
