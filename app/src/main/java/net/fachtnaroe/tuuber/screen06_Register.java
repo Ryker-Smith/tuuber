@@ -163,7 +163,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "OK");
                     return true;
                 }
-
                 if (!User.valid_family()) {
                     LastNameLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
@@ -175,7 +174,17 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "OK");
                     return true;
                 }
-
+                if (!User.valid_password()) {
+                    PasswordLabel.TextColor(Color.RED);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    eMailLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Invalid Password", "Error", "OK");
+                    return true;
+                }
                 if (!Password.Text().equals(ConfirmPassword.Text())) {
                     PasswordLabel.TextColor(Color.RED);
                     ConfirmPasswordLabel.TextColor(Color.RED);

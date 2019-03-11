@@ -27,15 +27,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private TextBox chatText;
     private VerticalArrangement ChatWith;
-    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, PoolHZ, CheckBoxHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
+    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
-    private Label ChatLabel, pID, OtherpIDLabel;
-    private Notifier MessageSent_Notifier, MessageError_Notifier;
-    private ListView Chat;
-    private CheckBox DriverCB, NavigatorCB;
+    private Label ChatLabel, pID, OtherpIDLabel, DriverOrNavigatorLabel;
+    private Notifier MessageSent_Notifier, Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
     private Web ChatWeb, PoolWeb;
     private WebViewer ChatsViewer;
-    Integer status=-1;
+    
 
     protected void $define() {
 
@@ -82,42 +80,59 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         OtherpIDLabel = new Label(pIDHZ);
         OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
         OtherpIDLabel.Visible(true);
+        DriverOrNavigatorLabel = new Label(pIDHZ);
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
-        CheckBoxHZ = new HorizontalArrangement(ChatWith);
-        DriverCB = new CheckBox(CheckBoxHZ);
-        DriverCB.Text("Driver");
-        NavigatorCB = new CheckBox(CheckBoxHZ);
-        NavigatorCB.Text("Navigator");
         PoolHZ = new HorizontalArrangement(ChatWith);
         Pool = new Button(PoolHZ);
         Pool.Text("Make Pool");
 
-
+        Driver_Or_Navigator_ChoiceDialogNotifier = new Notifier(ChatWith);
         ChatWeb = new Web(ChatWith);
         PoolWeb = new Web(ChatWith);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        if (eventName.equals("Changed")) {
-            if (component.equals(DriverCB)) {
-                if (DriverCB.Checked() == true) {
-                    NavigatorCB.Checked(false);
+
+        if (eventName.equals("AfterChoosing")) {
+            if (component.equals(Driver_Or_Navigator_ChoiceDialogNotifier)) {
+                Driver_Or_Navigator_ChoiceDialogNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
+                DriverOrNavigatorLabel.Text((String) params[0]);
+                if (params[0].equals("Driver")) {
+                    PoolWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&driver_pID=" +
+                                    applicationSettings.pID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=2"
+                    );
+                    PoolWeb.Get();
+                    return true;
                 }
-                return true;
-            }
-            else if (component.equals(NavigatorCB)) {
-                if (NavigatorCB.Checked() == true) {
-                    DriverCB.Checked(false);
+                if (params[0].equals("Navigator")) {
+                    PoolWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.pID +
+                                    "&driver_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=2"
+                    );
+                    PoolWeb.Get();
+                    return true;
                 }
-                return true;
             }
-            return true;
         }
         else if (eventName.equals("Click")) {
             if (component.equals(MainMenu)) {
@@ -137,53 +152,24 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                 chatText.Text()
                 );
                 ChatWeb.Get();
-
                 return true;
             }
-            else if(component.equals(Refresh)) {
+            else if (component.equals(Refresh)) {
                 callBackend();
             }
-            else if(component.equals(Pool)) {
-                if(DriverCB.Checked()) {
-                    PoolWeb.Url(
-                            applicationSettings.baseURL +
-                                    "?action=POST&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&driver_pID=" +
-                                    applicationSettings.pID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.otherpIDforChat +
-                                    "&rID=2"
-                    );
-                    PoolWeb.Get();
-                    return true;
-                }
-                if(NavigatorCB.Checked()) {
-                    PoolWeb.Url(
-                            applicationSettings.baseURL +
-                                    "?action=POST&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&driver_pID=" +
-                                    applicationSettings.otherpIDforChat +
-                                    "&navigator_pID=" +
-                                    applicationSettings.pID +
-                                    "&rID=2"
-                    );
-                    PoolWeb.Get();
-                    return true;
-                }
+            else if (component.equals(Pool)) {
+                Driver_Or_Navigator_ChoiceDialogNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
             }
-            return true;
-        }
-        else if (eventName.equals("GotText")) {
-            if(component.equals(ChatWeb)) {
-                if (web_ResultGotText(params[1].toString(),params[3].toString())) {
-                    chatText.Text("");
-                    callBackend();
-                }
-                else {
-                    chatText.BackgroundColor(Component.COLOR_RED);
-                    MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
+            else if (eventName.equals("GotText")) {
+                if (component.equals(ChatWeb)) {
+                    if (web_ResultGotText(params[1].toString(), params[3].toString())) {
+                        chatText.Text("");
+                        callBackend();
+                    } else {
+                        chatText.BackgroundColor(Component.COLOR_RED);
+                        MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
+                    }
+                    return true;
                 }
                 return true;
             }

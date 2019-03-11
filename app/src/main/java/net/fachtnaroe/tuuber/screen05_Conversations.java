@@ -70,7 +70,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(15);
         Contacts.TextSize(applicationSettings.intListViewsize);
-        Contacts.Visible(false);
+        Contacts.Visible(true);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
         OtherpID = new Label(OtherpIDHZ);
         OtherpID.Visible(true);
@@ -87,7 +87,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiation = new ListView(InboundInitiationHZ);
         InboundInitiation.HeightPercent(15);
         InboundInitiation.TextSize(applicationSettings.intListViewsize);
-        InboundInitiation.Visible(false);
+        InboundInitiation.Visible(true);
         InboundpIDHZ = new HorizontalArrangement(Conversations);
         InboundpID = new Label(InboundpIDHZ);
         InboundLineID = new Label(InboundpIDHZ);
