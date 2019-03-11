@@ -3,7 +3,6 @@ package net.fachtnaroe.tuuber;
 //import android.support.v7.app.AppCompatActivity;
 //import android.os.Bundle;
 
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 
 import com.google.appinventor.components.runtime.Button;
@@ -13,10 +12,8 @@ import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
-import com.google.appinventor.components.runtime.ListPicker;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
-import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
@@ -31,12 +28,12 @@ import java.util.List;
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private Web getRouteWeb, Routes, MatchesAvelable;
+    private Web getRouteWeb, Routes, MatchesAvailable;
     private Notifier messagesPopUp;
-    private Button SelectMyRout, MainMenu, DisplayDetails, Refresh , AddToMateches;
+    private Button SelectMyRoute, MainMenu, DisplayDetails, Refresh , AddToMatches;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
-    private ListView MyRouteList,MatchesMade;
+    private ListView MyRouteList, MatchesMade;
     private Label User_ID;
     private List<String> ListOfRoutesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
@@ -67,25 +64,21 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MyRouteList = new ListView(Matches);
         MyRouteList.HeightPercent(35);
         MatchesButtons = new HorizontalArrangement(Matches);
-        AddToMateches=new Button(MatchesButtons);
-        AddToMateches.Text("Click to see Matches");
+        AddToMatches =new Button(MatchesButtons);
+        AddToMatches.Text("Click to see Matches");
         getRouteWeb = new Web(Matches);
-        MatchesAvelable = new Web(Matches);
+        MatchesAvailable = new Web(Matches);
         MatchesMade = new ListView(Matches);
         MatchesMade.HeightPercent(35);
         HorizontalArragment3 = new HorizontalArrangement(Matches);
         DisplayDetails= new Button(HorizontalArragment3);
         DisplayDetails.Text("Display Details");
-        MatchesAvelable= new Web(Matches);
-        SelectMyRout =new Button(HorizontalArragment3);
-        SelectMyRout.Text("Send Chat");
-        EventDispatcher.registerEventForDelegation(this, "AddToMatches", "Click");
-        EventDispatcher.registerEventForDelegation(this, "buttonMainMenu", "Click");
-        EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
-        EventDispatcher.registerEventForDelegation(this, "AddToMatches", "Click");
-        EventDispatcher.registerEventForDelegation(this, "MyRouteList", "GotText");
-        EventDispatcher.registerEventForDelegation(this, "Matches made", "GotText");
-
+        MatchesAvailable = new Web(Matches);
+        SelectMyRoute =new Button(HorizontalArragment3);
+        SelectMyRoute.Text("Send Chat");
+        EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         Routes.Url(
                 baseURL + "?entity=town&action=LIST"
                         + "&"
@@ -112,24 +105,24 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             getRoutesFromBackEnd();
             return true;
         }
-        else if (component.equals(AddToMateches)&& eventName.equals("Click")) {
+        else if (component.equals(AddToMatches)&& eventName.equals("Click")) {
 
-           if (component.equals(MatchesMade)) {
-               MatchesAvelable.Url(
+           if (component.equals(AddToMatches)) {
+               MatchesAvailable.Url(
                       applicationSettings.baseURL
                               + "?action=GET"
                               + "&entity=Match"
                               +  "&sessionID="
                               + applicationSettings.sessionID
                );
-                dbg("A "+MatchesAvelable.Url());
+                dbg("A "+ MatchesAvailable.Url());
                 dbg(applicationSettings.sessionID);
                 dbg(applicationSettings.baseURL
                         + "?action=GET"
                         + "&entity=Match"
                         +  "&sessionID="
                         + applicationSettings.sessionID);
-                MatchesAvelable.Get();
+                MatchesAvailable.Get();
                 return true;
             }
 
