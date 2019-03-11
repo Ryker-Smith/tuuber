@@ -33,7 +33,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private Notifier MessageSent_Notifier, Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
     private Web ChatWeb, PoolWeb;
     private WebViewer ChatsViewer;
-    
+
 
     protected void $define() {
 
@@ -160,16 +160,16 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             else if (component.equals(Pool)) {
                 Driver_Or_Navigator_ChoiceDialogNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
             }
-            else if (eventName.equals("GotText")) {
-                if (component.equals(ChatWeb)) {
-                    if (web_ResultGotText(params[1].toString(), params[3].toString())) {
-                        chatText.Text("");
-                        callBackend();
-                    } else {
-                        chatText.BackgroundColor(Component.COLOR_RED);
-                        MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
-                    }
-                    return true;
+            return true;
+        }
+        else if (eventName.equals("GotText")) {
+            if (component.equals(ChatWeb)) {
+                if (web_ResultGotText(params[1].toString(), params[3].toString())) {
+                    chatText.Text("");
+                    callBackend();
+                } else {
+                    chatText.BackgroundColor(Component.COLOR_RED);
+                    MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
                 }
                 return true;
             }
