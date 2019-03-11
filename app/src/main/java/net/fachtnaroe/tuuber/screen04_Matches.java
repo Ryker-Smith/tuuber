@@ -3,6 +3,7 @@ package net.fachtnaroe.tuuber;
 //import android.support.v7.app.AppCompatActivity;
 //import android.os.Bundle;
 
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 
 import com.google.appinventor.components.runtime.Button;
@@ -66,19 +67,22 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MyRouteList = new ListView(Matches);
         MyRouteList.HeightPercent(35);
         MatchesButtons = new HorizontalArrangement(Matches);
-        SelectMyRout =new Button(MatchesButtons);
-        SelectMyRout.Text("Send Messege");
         AddToMateches=new Button(MatchesButtons);
-        AddToMateches.Text("Add Route To Matches");
+        AddToMateches.Text("Click to see Matches");
         getRouteWeb = new Web(Matches);
+        MatchesAvelable = new Web(Matches);
         MatchesMade = new ListView(Matches);
         MatchesMade.HeightPercent(35);
-        DisplayDetails= new Button(Matches);
+        HorizontalArragment3 = new HorizontalArrangement(Matches);
+        DisplayDetails= new Button(HorizontalArragment3);
         DisplayDetails.Text("Display Details");
         MatchesAvelable= new Web(Matches);
+        SelectMyRout =new Button(HorizontalArragment3);
+        SelectMyRout.Text("Send Chat");
         EventDispatcher.registerEventForDelegation(this, "AddToMatches", "Click");
         EventDispatcher.registerEventForDelegation(this, "buttonMainMenu", "Click");
         EventDispatcher.registerEventForDelegation(this, "none", "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, "AddToMatches", "Click");
         EventDispatcher.registerEventForDelegation(this, "MyRouteList", "GotText");
         EventDispatcher.registerEventForDelegation(this, "Matches made", "GotText");
 
@@ -110,8 +114,25 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         }
         else if (component.equals(AddToMateches)&& eventName.equals("Click")) {
              {
-               // MyRouteList.Selection(MatchesMade);
+           if (component.equals(MatchesMade))
+               MatchesAvelable.Url(
+                      applicationSettings.baseURL
+                              + "?action=GET"
+                              + "&entity=Match"
+                              +  "&sessionID="
+                              + applicationSettings.sessionID
+               );
+                dbg("A "+MatchesAvelable.Url());
+                dbg(applicationSettings.sessionID);
+                dbg(applicationSettings.baseURL
+                        + "?action=GET"
+                        + "&entity=Match"
+                        +  "&sessionID="
+                        + applicationSettings.sessionID);
+                MatchesAvelable.Get();
+                return true;
             }
+
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(getRouteWeb)) {
