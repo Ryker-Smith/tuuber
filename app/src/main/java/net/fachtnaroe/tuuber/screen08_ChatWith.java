@@ -233,14 +233,22 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
         dbg("PoolID: " + textOfResponse);
+        /*
+          Request pool info, here prcess reply:
+          if no pool, send POST to make pool
+          else get pool_ID, send PUT to amend status
+
+           */
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
-            temp = parser.getString("result");
-            if (parser.getString("result").equals("OK")) {
-                PoolID = parser.getString("pool_ID");
+            if (!parser.getString("pool_ID").equals("")) {
+                PoolID.Text(parser.getString("pool_ID"));
             }
         }
+        catch (JSONException e) {
+        }
     }
+
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
