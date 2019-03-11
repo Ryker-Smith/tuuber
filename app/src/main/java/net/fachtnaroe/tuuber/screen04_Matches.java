@@ -101,7 +101,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 switchForm("screen03_MainMenu");}
 
        else if (component.equals(Refresh) && eventName.equals("Click")){
-
             getRoutesFromBackEnd();
             return true;
         }
@@ -115,13 +114,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                               +  "&sessionID="
                               + applicationSettings.sessionID
                );
-                dbg("A "+ MatchesAvailable.Url());
-                dbg(applicationSettings.sessionID);
-                dbg(applicationSettings.baseURL
-                        + "?action=GET"
-                        + "&entity=Match"
-                        +  "&sessionID="
-                        + applicationSettings.sessionID);
+                dbg(MatchesAvailable.Url());
                 MatchesAvailable.Get();
                 return true;
             }
