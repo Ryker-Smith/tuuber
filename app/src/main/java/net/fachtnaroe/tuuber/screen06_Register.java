@@ -32,7 +32,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
-    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
+//    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
     private Web Creation;
     private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
     private PasswordTextBox Password, ConfirmPassword;
@@ -41,6 +41,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
+        applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Register = new VerticalArrangement (this);
         Image1 = new Image (Register);
@@ -53,7 +54,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TelephoneLabel = new Label(PhoneHZ);
         TelephoneLabel.Text ("Phone Number");
         Telephone = new TextBox(PhoneHZ);
-        Telephone.Text ("0123456789");
+        Telephone.Text ("");
         eMailLabel = new Label(eMailHZ);
         eMailLabel.Text ("Email");
         eMail = new TextBox(eMailHZ);
@@ -61,25 +62,25 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         FirstNameLabel = new Label (FirstNameHZ);
         FirstNameLabel.Text ("FirstName");
         FirstName = new TextBox (FirstNameHZ);
-        FirstName.Text ("John");
+        FirstName.Text ("");
         LastNameLabel = new Label(LastNameHZ);
         LastNameLabel.Text ("LastName");
         LastName = new TextBox (LastNameHZ);
-        LastName.Text ("John");
+        LastName.Text ("");
         Image2 = new Image (Register);
         PasswordLabel = new Label (PasswordHZ);
         PasswordLabel.Text ("CreatePassword");
         Password = new PasswordTextBox (PasswordHZ);
-        Password.Text ("abc");
+        Password.Text ("");
         ConfirmPasswordLabel = new Label (ConfirmPasswordHZ);
         ConfirmPasswordLabel.Text ("ConfirmPassword");
         ConfirmPassword = new PasswordTextBox (ConfirmPasswordHZ);
-        ConfirmPassword.Text ("abc");
+        ConfirmPassword.Text ("");
         Image3 = new Image (Register);
 
         TermsConditionsHZ = new HorizontalArrangement(Register);
         TermsConditions = new Button(TermsConditionsHZ);
-        TermsConditions.Text ("Terms&Conditions");
+        TermsConditions.Text ("Terms & Conditions");
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
         TCAgree.Enabled(false);
@@ -99,7 +100,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Creation_Notifier = new Notifier(Register);
         Universal_Notifier = new Notifier(Register);
         Web_Notifier = new Notifier(Register);
-        User = new dd_aPerson(this);
+        User = new dd_aPerson(Register);
 
         EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
 //        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );
@@ -127,6 +128,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 User.First = FirstName.Text();
                 User.Family = LastName.Text();
                 User.password = Password.Text();
+                User.set();
                 if (!User.valid_phone()) {
                     TelephoneLabel.TextColor(Color.RED);
                     eMailLabel.TextColor(Color.BLACK);
@@ -135,10 +137,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "Confirm");
+                    Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "OK");
                     return true;
                 }
-
                 if (!User.valid_eMail()) {
                     eMailLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
@@ -147,11 +148,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "Confirm");
+                    Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "OK");
                     return true;
                 }
 
-                if (FirstName.Text().length() <1) {
+                if (!User.valid_first()) {
                     FirstNameLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
                     eMailLabel.TextColor(Color.BLACK);
@@ -159,11 +160,10 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "Confirm");
+                    Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "OK");
                     return true;
                 }
-
-                if (LastName.Text().length() <1){
+                if (!User.valid_family()) {
                     LastNameLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
                     eMailLabel.TextColor(Color.BLACK);
@@ -171,10 +171,20 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "Confirm");
+                    Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "OK");
                     return true;
                 }
-
+                if (!User.valid_password()) {
+                    PasswordLabel.TextColor(Color.RED);
+                    ConfirmPasswordLabel.TextColor(Color.BLACK);
+                    TelephoneLabel.TextColor(Color.BLACK);
+                    eMailLabel.TextColor(Color.BLACK);
+                    FirstNameLabel.TextColor(Color.BLACK);
+                    LastNameLabel.TextColor(Color.BLACK);
+                    TCAgree.TextColor(Color.BLACK);
+                    Universal_Notifier.ShowMessageDialog("Invalid Password", "Error", "OK");
+                    return true;
+                }
                 if (!Password.Text().equals(ConfirmPassword.Text())) {
                     PasswordLabel.TextColor(Color.RED);
                     ConfirmPasswordLabel.TextColor(Color.RED);
@@ -183,7 +193,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     FirstNameLabel.TextColor(Color.BLACK);
                     LastNameLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "Confirm");
+                    Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "OK");
                     return true;
                 }
 
@@ -195,12 +205,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     LastNameLabel.TextColor(Color.BLACK);
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Agree to Terms and Conditions", "Error", "Confirm");
+                    Universal_Notifier.ShowMessageDialog("Agree to Terms and Conditions", "Error", "OK");
                     return true;
                 }
 
                 Creation.Url(
-                        baseURL +
+                        applicationSettings.baseURL +
                                 "?entity=person&action=POST&first=" +
                                 FirstName.Text() +
                                 "&family=" +
@@ -226,6 +236,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         }
         else if (component.equals(Creation) && eventName.equals("GotText")){
+
             String stringSent =  (String) params[0];
             Integer status = (Integer) params[1];
             String encoding = (String) params[2];
