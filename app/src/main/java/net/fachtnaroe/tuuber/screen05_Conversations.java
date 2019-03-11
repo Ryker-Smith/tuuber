@@ -25,10 +25,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, InboundInitiationHZ, InboundInitiationLabelHZ, InboundpIDHZ, InboundButtonsHZ, OutboundpIDHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ, toolbarHz;
+    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, OutboundInitiationButtonHZ, InboundInitiationHZ, InboundInitiationLabelHZ, InboundpIDHZ, InboundButtonsHZ, OutboundpIDHZ, OutboundLineHZ, ContactsLabelHZ, ChatsScreenHZ, pIDHZ, OtherpIDHZ, toolbarHz;
     private ListView Contacts, OutboundInitiation, InboundInitiation;
     private String baseURL = "https://fachtnaroe.net/tuuber-2019";
-    private Button buttonGoToChatScreen, buttonInitiateNewChat, buttonRemoveChatRequest, Refresh, MainMenu;
+    private Button buttonGoToChatScreen, buttonInitiateNewChat, buttonRemoveChatRequestInbound, buttonRemoveChatRequestOutbound, Refresh, MainMenu;
     private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, InboundLineID, OutboundLineID, pID, OtherpID, InboundpID, OutboundpID, test;
     private Web Contact1Web, Contact2Web, InboundWeb,InboundWebCreate, InboundWebRemove, OutboundWeb, OutboundWebRemove;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
@@ -70,6 +70,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Contacts = new ListView(ContactsHZ);
         Contacts.HeightPercent(15);
         Contacts.TextSize(applicationSettings.intListViewsize);
+        Contacts.Visible(false);
         OtherpIDHZ = new HorizontalArrangement(Conversations);
         OtherpID = new Label(OtherpIDHZ);
         OtherpID.Visible(true);
@@ -86,6 +87,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundInitiation = new ListView(InboundInitiationHZ);
         InboundInitiation.HeightPercent(15);
         InboundInitiation.TextSize(applicationSettings.intListViewsize);
+        InboundInitiation.Visible(false);
         InboundpIDHZ = new HorizontalArrangement(Conversations);
         InboundpID = new Label(InboundpIDHZ);
         InboundLineID = new Label(InboundpIDHZ);
@@ -94,9 +96,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         buttonInitiateNewChat = new Button(InboundButtonsHZ);
         buttonInitiateNewChat.Text("Accept inbound");
         buttonInitiateNewChat.Enabled(false);
-        buttonRemoveChatRequest = new Button(InboundButtonsHZ);
-        buttonRemoveChatRequest.Text("Decline inbound");
-        buttonRemoveChatRequest.Enabled(false);
+        buttonRemoveChatRequestInbound = new Button(InboundButtonsHZ);
+        buttonRemoveChatRequestInbound.Text("Decline inbound");
+        buttonRemoveChatRequestInbound.Enabled(false);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
         OutboundInitiationLabel = new Label(OutboundInitiationLabelHZ);
@@ -105,6 +107,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiation = new ListView(OutboundInitiationHZ);
         OutboundInitiation.HeightPercent(15);
         OutboundInitiation.TextSize(applicationSettings.intListViewsize);
+        OutboundpIDHZ = new HorizontalArrangement(Conversations);
+        OutboundpID = new Label(OutboundpIDHZ);
+        OutboundLineHZ = new HorizontalArrangement(Conversations);
+        OutboundLineID = new Label (OutboundLineHZ);
+        OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
+        buttonRemoveChatRequestOutbound = new Button(OutboundInitiationButtonHZ);
+        buttonRemoveChatRequestOutbound.Text("Decline Outbound");
+        buttonRemoveChatRequestOutbound.Enabled(false);
 
 
 
@@ -114,6 +124,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundWebCreate = new Web(this);
         InboundWebRemove = new Web(this);
         OutboundWeb = new Web(this);
+        OutboundWebRemove = new Web(this);
         messagesPopUp = new Notifier(Conversations);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -161,7 +172,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 return true;
                 //startNewForm("screen08_ChatWith",null);
             }
-            else if (component.equals(buttonRemoveChatRequest)) {
+            else if (component.equals(buttonRemoveChatRequestInbound)) {
                 InboundWebRemove.Url(
                         applicationSettings.baseURL +
                                 "?action=DELETE&entity=CHAT&sessionID=" +
@@ -175,6 +186,21 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 InboundLineID.Text()
                 );
                 InboundWebRemove.Get();
+                return true;
+            }
+            else if (component.equals(buttonRemoveChatRequestOutbound)) {
+                OutboundWebRemove.Url(
+                        applicationSettings.baseURL +
+                                "?action=DELETE&entity=CHAT&sessionID=" +
+                                applicationSettings.sessionID +
+                                "&initiator_pID=" +
+                                applicationSettings.pID +
+                                "&respondent_pID=" +
+                                OutboundpID.Text() +
+                                "&status=init&line_ID=" +
+                                OutboundLineID.Text()
+                );
+                OutboundWebRemove.Get();
                 return true;
             }
             else if (component.equals(Refresh)) {
@@ -202,7 +228,18 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 InboundpID.Text(seperated[0]);
                 InboundLineID.Text(seperated2[1]);
                 buttonInitiateNewChat.Enabled(true);
-                buttonRemoveChatRequest.Enabled(true);
+                buttonRemoveChatRequestInbound.Enabled(true);
+            }
+            if (component.equals(OutboundInitiation)) {
+                String OutboundpIDText = new String();
+                OutboundpIDText = OutboundInitiation.Selection();
+                String nextString = OutboundpIDText;
+                String[] seperated3 = nextString.split(":");
+                String anotherString = OutboundpIDText;
+                String[] seperated4 = anotherString.split("=");
+                OutboundpID.Text(seperated3[0]);
+                OutboundLineID.Text(seperated4[1]);
+                buttonRemoveChatRequestOutbound.Enabled(true);
             }
         }
         else if (eventName.equals("GotText")) {
@@ -235,6 +272,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 return true;
             }
             else if (component.equals(InboundWebRemove)) {
+                callBackEnd();
+            }
+            else if (component.equals(OutboundWebRemove)) {
                 callBackEnd();
             }
         }
@@ -427,9 +467,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     if (Outbound.getJSONObject(i).toString().equals("{}")) break;
                     ListofOutboundWeb.add(
-                            Outbound.getJSONObject(i).getString("first")
-                            + " " +
-                            Outbound.getJSONObject(i).getString("family")
+                            Outbound.getJSONObject(i).getString("respondent_pID") +
+                                    "::" +
+                                    Outbound.getJSONObject(i).getString("first") +
+                                    " " +
+                                    Outbound.getJSONObject(i).getString("family") +
+                                    "=" +
+                                    Outbound.getJSONObject(i).getString("line_ID")
+
+
+
                     );
                 }
                 YailList tempData4=YailList.makeList( ListofOutboundWeb );
