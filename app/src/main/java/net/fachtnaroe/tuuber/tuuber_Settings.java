@@ -21,6 +21,7 @@ public class tuuber_Settings {
     public String ourLogo="MultiLayerLogo-002.png";
     public String notificationSoundFileName="";
     public Integer intListViewsize=0;
+    public boolean IsDebugSession=false;
 
     public final String default_baseURL="https://fachtnaroe.net/tuuber-test";
     public final String default_sessionID="a1b2c3d4";
@@ -45,6 +46,7 @@ public class tuuber_Settings {
         lastLogin=default_lastLogin;
         notificationSoundFileName=default_notificationSoundFileName;
         intListViewsize=default_intListViewsize;
+        IsDebugSession=true;
     }
 
     public String get () {
@@ -68,6 +70,7 @@ public class tuuber_Settings {
         localDB.StoreValue("otherpIDforChat", otherpIDforChat);
         localDB.StoreValue("notificationSoundFileName", notificationSoundFileName);
         localDB.StoreValue("intListViewsize", intListViewsize);
+        localDB.StoreValue("IsDebugSession", IsDebugSession);
         return "OK";
     }
 

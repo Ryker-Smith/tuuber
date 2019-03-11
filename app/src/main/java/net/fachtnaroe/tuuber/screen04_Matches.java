@@ -113,8 +113,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (component.equals(AddToMateches)&& eventName.equals("Click")) {
-             {
-           if (component.equals(MatchesMade))
+
+           if (component.equals(MatchesMade)) {
                MatchesAvelable.Url(
                       applicationSettings.baseURL
                               + "?action=GET"

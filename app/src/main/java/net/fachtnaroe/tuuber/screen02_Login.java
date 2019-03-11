@@ -2,6 +2,7 @@ package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
 import com.google.appinventor.components.runtime.Button;
+import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
@@ -38,6 +39,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private TextBox inputUsername;
     private PasswordTextBox inputPassword;
     private Image ourLogo;
+    private CheckBox IsDebugSession;
 
     protected void $define() {
 
@@ -82,6 +84,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         ourLogo.ScalePictureToFit(false);
         ourLogo.Height(320);
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        IsDebugSession = new CheckBox(Login);
+        IsDebugSession.Text("This is a debugging session");
+        IsDebugSession.Checked(true);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -133,6 +138,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.pID= parser.getString("pID");
                 applicationSettings.lastLogin= inputUsername.Text();
                 applicationSettings.sessionID=parser.getString("sessionID");
+                applicationSettings.IsDebugSession=true;
                 applicationSettings.set();
                 startNewForm("screen03_MainMenu",null);
             } else {
