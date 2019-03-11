@@ -16,9 +16,15 @@ import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
+import com.google.appinventor.components.runtime.util.YailList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
+
+import java.util.ArrayList;
 //import com.google.appinventor.components.runtime.util;
 
 
@@ -29,8 +35,9 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private VerticalArrangement ChatWith;
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
-    private Label ChatLabel, pID, OtherpIDLabel, DriverOrNavigatorLabel;
-    private Notifier MessageSent_Notifier, Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
+    private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
+    private List<String> ListofPoolID;
+    private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
     private Web ChatWeb, PoolWeb;
     private WebViewer ChatsViewer;
 
@@ -48,12 +55,14 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         MainMenu.Width(40);
         MainMenu.Height(40);
         MainMenu.Image("buttonHome.png");
+
         pID = new Label(toolbarHz);
         pID.Text("I am user: #" + applicationSettings.pID);
         pID.Height(40);
         pID.FontSize(20);
         pID.WidthPercent(70);
         pID.TextAlignment(Component.ALIGNMENT_CENTER);
+
         Refresh = new Button(toolbarHz);
         Refresh.Width(40);
         Refresh.Height(40);
@@ -74,6 +83,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "&showHtml=1" +
                 "&iam=" + applicationSettings.pID
         );
+
         chatText = new TextBox(ChatWith);
         chatText.Text("");
         pIDHZ = new HorizontalArrangement(ChatWith);
@@ -81,6 +91,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
         OtherpIDLabel.Visible(true);
         DriverOrNavigatorLabel = new Label(pIDHZ);
+        PoolID = new Label(pIDHZ);
+
         SendHZ = new HorizontalArrangement(ChatWith);
         Send = new Button(SendHZ);
         Send.Text("Send");
@@ -107,13 +119,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 if (params[0].equals("Driver")) {
                     PoolWeb.Url(
                             applicationSettings.baseURL +
-                                    "?action=POST&entity=pool&sessionID=" +
+                                    "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
                                     "&driver_pID=" +
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&rID=2"
+                                    "&rID=22"
                     );
                     PoolWeb.Get();
                     return true;
@@ -121,13 +133,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 if (params[0].equals("Navigator")) {
                     PoolWeb.Url(
                             applicationSettings.baseURL +
-                                    "?action=POST&entity=pool&sessionID=" +
+                                    "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
                                     "&navigator_pID=" +
                                     applicationSettings.pID +
                                     "&driver_pID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&rID=2"
+                                    "&rID=22"
                     );
                     PoolWeb.Get();
                     return true;
@@ -173,10 +185,16 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 return true;
             }
+            else if (component.equals(PoolWeb)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getPoolList (status, textOfResponse);
+                return true;
+            }
             return true;
         }
         return true;
-
     }
 
     void callBackend() {
@@ -210,5 +228,20 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         else {
             return false;
         }
+    }
+    public void getPoolList (String status, String textOfResponse) {
+        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
+        dbg("PoolID: " + textOfResponse);
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            temp = parser.getString("result");
+            if (parser.getString("result").equals("OK")) {
+                PoolID = parser.getString("pool_ID");
+            }
+        }
+    }
+    void dbg (String debugMsg) {
+        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 }
