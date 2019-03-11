@@ -145,9 +145,9 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         }
         else if (eventName.equals("AfterPicking")) {
             messagesPopUp.ShowChooseDialog("Choose YES to fire Death-Star weapon, or NO self-destruct Death-Star","Selection made","YES","NO",false);
-                return true;
+            return true;
         }
-            else if (eventName.equals("Click")) {
+        else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
                 finish();
                 return true;
