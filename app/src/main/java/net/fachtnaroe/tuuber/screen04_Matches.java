@@ -197,17 +197,17 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             if (status.equals("200")) try {
                 ListOfMatchesFromWeb = new ArrayList<String>();
                 JSONObject parser = new JSONObject(TextOfResponse);
-                if (!parser.getString("Match").equals("")) {
-                    JSONArray matchArray = parser.getJSONArray("Match");
+                if (!parser.getString("matches").equals("")) {
+                    JSONArray matchArray = parser.getJSONArray("matches");
                     for (int I = 0; I < matchArray.length(); I++) {
-                        if (binary_same_as(Integer.valueOf(matchArray.getJSONObject(I).getString("days")), 2) )
+                        if (binary_same_as(Integer.valueOf(matchArray.getJSONObject(I).getString("day")), 2) )
                         ListOfMatchesFromWeb.add(
                                 matchArray.getJSONObject(I).getString("rID")
                                         +
                                         ":: "
                                         +
                                         "From "
-                                        + matchArray.getJSONObject(I).getString("days")
+                                        + matchArray.getJSONObject(I).getString("day")
                                         + " to "
 
 
@@ -217,13 +217,15 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                     YailList tempData=YailList.makeList( ListOfMatchesFromWeb);
                     MatchesMade.Elements(tempData);
 
-                } else {
+                }
+                else {
                     messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
                 }
             }  catch (JSONException a) {
                 // if an exception occurs, code for it in here
                 messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
-        } else {
+        }
+        else {
                 messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
             }
         }
