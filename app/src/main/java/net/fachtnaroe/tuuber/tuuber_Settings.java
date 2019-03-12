@@ -17,7 +17,7 @@ public class tuuber_Settings {
     public String otherpIDforChat ="";
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin="";
-    public String TermsAndConditions = "You must use the app only in the way we intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
+    public String TermsAndConditions = "You must use the app only in the manner intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
     public String ourLogo="MultiLayerLogo-002.png";
     public String notificationSoundFileName="";
     public Integer intListViewsize=0;

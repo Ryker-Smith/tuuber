@@ -91,11 +91,17 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "Changed");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
+            return true;
+        }
+        else if (eventName.equals("Changed")) {
+            // for debugging session
+            applicationSettings.IsDebugSession= IsDebugSession.Checked();
             return true;
         }
         else if (eventName.equals("Click")) {

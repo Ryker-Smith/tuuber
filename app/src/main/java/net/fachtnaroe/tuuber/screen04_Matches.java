@@ -38,7 +38,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
-
     protected void $define() {
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
@@ -63,6 +62,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         Refresh.Image("buttonRefresh.png");
         MyRouteList = new ListView(Matches);
         MyRouteList.HeightPercent(35);
+        MyRouteList.TextSize(applicationSettings.intListViewsize);
         MatchesButtons = new HorizontalArrangement(Matches);
         AddToMatches =new Button(MatchesButtons);
         AddToMatches.Text("Click to see Matches");
@@ -70,6 +70,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MatchesAvailable = new Web(Matches);
         MatchesMade = new ListView(Matches);
         MatchesMade.HeightPercent(35);
+        MatchesMade.TextSize(applicationSettings.intListViewsize);
         HorizontalArragment3 = new HorizontalArrangement(Matches);
         DisplayDetails= new Button(HorizontalArragment3);
         DisplayDetails.Text("Display Details");
@@ -83,7 +84,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         Routes.Url(
-                baseURL + "?entity=town&action=LIST"
+                applicationSettings.baseURL + "?entity=town&action=LIST"
                         + "&"
                         + "sessionID="
                         + applicationSettings.sessionID
@@ -95,12 +96,10 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
-//            if (this.BackPressed()) {
-                // one of the above should be redundant
                 closeForm(new Intent());
-//            }
+
         }
-        if (eventName.equals("Click")){
+        else if (eventName.equals("Click")){
             if (component.equals(MainMenu)) {
                 switchForm("screen03_MainMenu");
                 return true;
@@ -134,7 +133,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 String currentString = MatchesID;
                 String[] separated = currentString.split(":");
                 MatchID.Text(separated[0]);
-
                 return true;
              }
         }
@@ -143,17 +141,14 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-
                 getRouteWebGotText(status, textOfResponse);
                 return true;
              }
              else if (component.equals(MatchesAvailable)){
-
                     dbg((String)params[0]);
                     String status = params[1].toString();
                     String TextOfResponse = (String)params[3];
                     MatchesAvailableGotText(status , TextOfResponse);
-
                     return true;
              }
         }
@@ -187,8 +182,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                 routesArray.getJSONObject(i).getString("rID")
                                         +
                                         ":: "
-                                        +
-                                        "From "
+                                        + "From "
                                         + routesArray.getJSONObject(i).getString("origin")
                                         + " to "
                                         + routesArray.getJSONObject(i).getString("destination" )
@@ -199,7 +193,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                     }
                     YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
                     MyRouteList.Elements(tempData);
-                } else {
+                }
+                else {
                     messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
                 }
             } catch (JSONException e) {
@@ -210,6 +205,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
             }
         }
+
         public void MatchesAvailableGotText(String status, String TextOfResponse) {
             if (status.equals("200")) try {
                 ListOfMatchesFromWeb = new ArrayList<String>();
@@ -217,7 +213,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 if (!parser.getString("matches").equals("")) {
                     JSONArray matchArray = parser.getJSONArray("matches");
                     if (matchArray.length() == 0 ){
-                        messagesPopUp.ShowMessageDialog("No Matches Available" +  matchArray.length(), "Information", "OK");
+                        messagesPopUp.ShowMessageDialog("No Matches Available", "Information", "OK");
                     }
                     else {
                         // messagesPopUp.ShowMessageDialog("No Matches Available" +  matchArray.length(), "Information", "OK");
@@ -226,14 +222,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                     matchArray.getJSONObject(I).getString("rID")
                                             +
                                             ":: "
-                                            +
-                                            "From "
-                                            + matchArray.getJSONObject(I).getString("day")
-                                            + " to "
-
-
+                                            + matchArray.getJSONObject(I).getString("realName")
                             );
-
                         }
                         YailList tempData = YailList.makeList(ListOfMatchesFromWeb);
                         MatchesMade.Elements(tempData);
@@ -250,7 +240,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             }
         }
 
-
     boolean binary_same_as(Integer first, Integer second) {
         if ((first & second) == second) {
             return true;
@@ -259,8 +248,10 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             return false;
         }
     }
+
     void getRoutesFromBackEnd() {
-        getRouteWeb.Url(applicationSettings.baseURL
+        getRouteWeb.Url(
+                applicationSettings.baseURL
                 + "?action=LIST"
                 + "&entity=ROUTE"
                 + "&pID=" + applicationSettings.pID
