@@ -3,28 +3,22 @@ package net.fachtnaroe.tuuber;
 //import android.support.v7.app.AppCompatActivity;
 
 import com.google.appinventor.components.runtime.Button;
-import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
-import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
-import com.google.appinventor.components.runtime.util.YailList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
 
-import java.util.ArrayList;
 //import com.google.appinventor.components.runtime.util;
 
 
@@ -33,7 +27,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private TextBox chatText;
     private VerticalArrangement ChatWith;
-    private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
+    private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
     private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
@@ -300,6 +294,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             return false;
         }
     }
+    
     public void getPoolDriverList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
@@ -319,6 +314,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         catch (JSONException e) {
         }
     }
+
     public void getPoolNavigatorList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
