@@ -35,7 +35,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
     private ListView MyRouteList, MatchesMade;
     private Label User_ID;
-    private List<String> ListOfRoutesFromWeb;
+    private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
 
@@ -76,6 +76,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MatchesAvailable = new Web(Matches);
         SelectMyRoute =new Button(HorizontalArragment3);
         SelectMyRoute.Text("Send Chat");
+        messagesPopUp = new Notifier(Matches);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -103,11 +104,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
        else if (component.equals(Refresh) && eventName.equals("Click")){
             getRoutesFromBackEnd();
             return true;
-        }
+       }
         else if (component.equals(AddToMatches)&& eventName.equals("Click")) {
-
-           if (component.equals(AddToMatches)) {
-               MatchesAvailable.Url(
+           if (component.equals(AddToMatches)) { MatchesAvailable.Url(
                       applicationSettings.baseURL
                               + "?action=GET"
                               + "&entity=Match"
@@ -129,7 +128,16 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 getRouteWebGotText(status, textOfResponse);
                 return true;
             }
+            else if (eventName.equals("GotText")) {
+                if (component.equals(MatchesAvailable)){
 
+                    dbg((String)params[0]);
+                    String status = params[1].toString();
+                    String TextOfResponse = (String)params[3];
+                    MatchesAvailableGotText(status , TextOfResponse);
+
+                }
+            }
         }
 
         return true;
@@ -179,9 +187,43 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 }
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("JSON Exception(1)", "Information", "OK");
             }
             else {
+                messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            }
+        }
+        public void MatchesAvailableGotText(String status, String TextOfResponse) {
+            if (status.equals("200")) try {
+                ListOfMatchesFromWeb = new ArrayList<String>();
+                JSONObject parser = new JSONObject(TextOfResponse);
+                if (!parser.getString("Match").equals("")) {
+                    JSONArray matchArray = parser.getJSONArray("Match");
+                    for (int I = 0; I < matchArray.length(); I++) {
+                        if (binary_same_as(Integer.valueOf(matchArray.getJSONObject(I).getString("days")), 2) )
+                        ListOfMatchesFromWeb.add(
+                                matchArray.getJSONObject(I).getString("rID")
+                                        +
+                                        ":: "
+                                        +
+                                        "From "
+                                        + matchArray.getJSONObject(I).getString("days")
+                                        + " to "
+
+
+                        );
+
+                    }
+                    YailList tempData=YailList.makeList( ListOfMatchesFromWeb);
+                    MatchesMade.Elements(tempData);
+
+                } else {
+                    messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
+                }
+            }  catch (JSONException a) {
+                // if an exception occurs, code for it in here
+                messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
+        } else {
                 messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
             }
         }
