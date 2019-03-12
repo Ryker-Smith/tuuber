@@ -38,7 +38,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
     private List<String> ListofPoolID;
     private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
-    private Web ChatWeb, PoolWeb;
+    private Web ChatWeb, PoolWeb, PoolNoIDWeb, PoolIDWeb;
     private WebViewer ChatsViewer;
 
 
@@ -103,6 +103,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Driver_Or_Navigator_ChoiceDialogNotifier = new Notifier(ChatWith);
         ChatWeb = new Web(ChatWith);
         PoolWeb = new Web(ChatWith);
+        PoolNoIDWeb = new Web(ChatWith);
+        PoolIDWeb = new Web(ChatWith);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
@@ -190,6 +192,72 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolList (status, textOfResponse);
+                if (PoolID.Text().equals("")) {
+                    if (params[0].equals("Navigator")) {
+                        PoolNoIDWeb.Url(
+                                applicationSettings.baseURL +
+                                        "?action=POST&entity=pool&sessionID=" +
+                                        applicationSettings.sessionID +
+                                        "&navigator_pID=" +
+                                        applicationSettings.pID +
+                                        "&driver_pID=" +
+                                        applicationSettings.otherpIDforChat +
+                                        "&rID=22"
+                        );
+                        PoolNoIDWeb.Get();
+                        return true;
+                    }
+                    else if (params[0].equals("Driver")) {
+                        PoolNoIDWeb.Url(
+                                applicationSettings.baseURL +
+                                        "?action=POST&entity=pool&sessionID=" +
+                                        applicationSettings.sessionID +
+                                        "&driver_pID=" +
+                                        applicationSettings.pID +
+                                        "&navigator_pID=" +
+                                        applicationSettings.otherpIDforChat +
+                                        "&rID=22"
+                        );
+                        PoolNoIDWeb.Get();
+                        return true;
+                    }
+                }
+                else if (!PoolID.Text().equals("")) {
+                    if (params[0].equals("Navigator")) {
+                        PoolIDWeb.Url(
+                                applicationSettings.baseURL +
+                                        "?action=PUT&entity=pool&sessionID=" +
+                                        applicationSettings.sessionID +
+                                        "&navigator_pID=" +
+                                        applicationSettings.pID +
+                                        "&driver_pID=" +
+                                        applicationSettings.otherpIDforChat +
+                                        "&rID=22" +
+                                        "&pool_ID=" +
+                                        PoolID.Text() +
+                                        "&pool_Status=1"
+                        );
+                        PoolIDWeb.Get();
+                        return true;
+                    }
+                    else if (params[0].equals("Driver")) {
+                        PoolIDWeb.Url(
+                                applicationSettings.baseURL +
+                                        "?action=PUT&entity=pool&sessionID=" +
+                                        applicationSettings.sessionID +
+                                        "&driver_pID=" +
+                                        applicationSettings.pID +
+                                        "&navigator_pID=" +
+                                        applicationSettings.otherpIDforChat +
+                                        "&rID=22" +
+                                        "&pool_ID=" +
+                                        PoolID.Text() +
+                                        "&pool_Status=1"
+                        );
+                        PoolIDWeb.Get();
+                        return true;
+                    }
+                }
                 return true;
             }
             return true;
