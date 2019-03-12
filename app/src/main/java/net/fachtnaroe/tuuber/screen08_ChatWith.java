@@ -36,9 +36,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private HorizontalArrangement ChatHZ, ChatLabelHZ, SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
-    private List<String> ListofPoolID;
     private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
-    private Web ChatWeb, PoolWeb;
+    private Web ChatWeb, PoolWebDriver, PoolWebNavigator, PoolNoIDWeb, PoolIDWeb;
     private WebViewer ChatsViewer;
 
 
@@ -102,7 +101,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
         Driver_Or_Navigator_ChoiceDialogNotifier = new Notifier(ChatWith);
         ChatWeb = new Web(ChatWith);
-        PoolWeb = new Web(ChatWith);
+        PoolWebDriver = new Web(ChatWith);
+        PoolWebNavigator = new Web(ChatWith);
+        PoolNoIDWeb = new Web(ChatWith);
+        PoolIDWeb = new Web(ChatWith);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
@@ -117,7 +119,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 Driver_Or_Navigator_ChoiceDialogNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
                 DriverOrNavigatorLabel.Text((String) params[0]);
                 if (params[0].equals("Driver")) {
-                    PoolWeb.Url(
+                    PoolWebDriver.Url(
                             applicationSettings.baseURL +
                                     "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -127,11 +129,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    PoolWeb.Get();
+                    PoolWebDriver.Get();
                     return true;
                 }
                 if (params[0].equals("Navigator")) {
-                    PoolWeb.Url(
+                    PoolWebNavigator.Url(
                             applicationSettings.baseURL +
                                     "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -141,7 +143,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    PoolWeb.Get();
+                    PoolWebNavigator.Get();
                     return true;
                 }
             }
@@ -185,11 +187,80 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 return true;
             }
-            else if (component.equals(PoolWeb)) {
+            else if (component.equals(PoolWebDriver)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                getPoolList (status, textOfResponse);
+                getPoolDriverList (status, textOfResponse);
+                if (PoolID.Text().equals("")) {
+                    PoolNoIDWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&driver_pID=" +
+                                    applicationSettings.pID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=22"
+                    );
+                    PoolNoIDWeb.Get();
+                    return true;
+                }
+                else if (!PoolID.Text().equals("")) {
+                    PoolIDWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=PUT&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&driver_pID=" +
+                                    applicationSettings.pID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=22" +
+                                    "&pool_ID=" +
+                                    PoolID.Text() +
+                                    "&pool_Status=1"
+                    );
+                    PoolIDWeb.Get();
+                    return true;
+                }
+                return true;
+            }
+            else if (component.equals(PoolWebNavigator)) {
+                dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                getPoolNavigatorList (status, textOfResponse);
+                if (PoolID.Text().equals("")) {
+                    PoolNoIDWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.pID +
+                                    "&driver_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=22"
+                    );
+                    PoolNoIDWeb.Get();
+                    return true;
+                }
+                else if (!PoolID.Text().equals("")) {
+                    PoolIDWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=PUT&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&navigator_pID=" +
+                                    applicationSettings.pID +
+                                    "&driver_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&rID=22" +
+                                    "&pool_ID=" +
+                                    PoolID.Text() +
+                                    "&pool_Status=1"
+                    );
+                    PoolIDWeb.Get();
+                    return true;
+                }
                 return true;
             }
             return true;
@@ -229,7 +300,26 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             return false;
         }
     }
-    public void getPoolList (String status, String textOfResponse) {
+    public void getPoolDriverList (String status, String textOfResponse) {
+        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+        dbg(status);
+        dbg("PoolID: " + textOfResponse);
+        /*
+          Request pool info, here prcess reply:
+          if no pool, send POST to make pool
+          else get pool_ID, send PUT to amend status
+
+           */
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            if (!parser.getString("pool_ID").equals("")) {
+                PoolID.Text(parser.getString("pool_ID"));
+            }
+        }
+        catch (JSONException e) {
+        }
+    }
+    public void getPoolNavigatorList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
         dbg("PoolID: " + textOfResponse);

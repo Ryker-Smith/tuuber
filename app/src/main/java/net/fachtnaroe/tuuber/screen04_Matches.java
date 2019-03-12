@@ -244,7 +244,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             }  catch (JSONException a) {
                 // if an exception occurs, code for it in here
                 messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
-        } else {
+        }
+        else {
                 messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
             }
         }
