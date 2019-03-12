@@ -294,7 +294,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             return false;
         }
     }
-    
+
     public void getPoolDriverList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
