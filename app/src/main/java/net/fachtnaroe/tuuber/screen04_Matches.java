@@ -34,7 +34,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
     private ListView MyRouteList, MatchesMade;
-    private Label User_ID;
+    private Label User_ID , MatchID;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
@@ -77,7 +77,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         SelectMyRoute =new Button(HorizontalArragment3);
         SelectMyRoute.Text("Send Chat");
         messagesPopUp = new Notifier(Matches);
+        MatchID= new Label(HorizontalArragment3);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         Routes.Url(
@@ -98,49 +100,64 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 closeForm(new Intent());
 //            }
         }
-        else if (component.equals(MainMenu) && eventName.equals("Click")) {
-                switchForm("screen03_MainMenu");}
-
-       else if (component.equals(Refresh) && eventName.equals("Click")){
-            getRoutesFromBackEnd();
-            return true;
-       }
-        else if (component.equals(AddToMatches)&& eventName.equals("Click")) {
-           if (component.equals(AddToMatches)) { MatchesAvailable.Url(
-                      applicationSettings.baseURL
-                              + "?action=GET"
-                              + "&entity=Match"
-                              +  "&sessionID="
-                              + applicationSettings.sessionID
-               );
-                dbg(MatchesAvailable.Url());
-                MatchesAvailable.Get();
+        if (eventName.equals("Click")){
+            if (component.equals(MainMenu)) {
+                switchForm("screen03_MainMenu");
                 return true;
             }
+            else if (component.equals(Refresh)){
+                getRoutesFromBackEnd();
+                return true;
+            }
+            else if (component.equals(AddToMatches)) {
+                if (component.equals(AddToMatches)) {
+                    MatchesAvailable.Url(
+                            applicationSettings.baseURL
+                                    + "?action=GET"
+                                    + "&entity=Match"
+                                    +  "&sessionID="
+                                    + applicationSettings.sessionID
+                                    + "&"
+                                    + "rID="
+                                    + MatchID.Text()
+                    );
+                    dbg(MatchesAvailable.Url());
+                    MatchesAvailable.Get();
+                    return true;
+                }
+            }
+        }
+        else if (eventName.equals("AfterPicking")) {
+             if (component.equals(MyRouteList)) {
+                String MatchesID = new String();
+                MatchesID = MyRouteList.Selection();
+                String currentString = MatchesID;
+                String[] separated = currentString.split(":");
+                MatchID.Text(separated[0]);
 
+                return true;
+             }
         }
         else if (eventName.equals("GotText")) {
-            if (component.equals(getRouteWeb)) {
+             if (component.equals(getRouteWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
 
                 getRouteWebGotText(status, textOfResponse);
                 return true;
-            }
-            else if (eventName.equals("GotText")) {
-                if (component.equals(MatchesAvailable)){
+             }
+             else if (component.equals(MatchesAvailable)){
 
                     dbg((String)params[0]);
                     String status = params[1].toString();
                     String TextOfResponse = (String)params[3];
                     MatchesAvailableGotText(status , TextOfResponse);
 
-                }
-            }
+                    return true;
+             }
         }
-
-        return true;
+        return false;
     }
         public void getRouteWebGotText(String status, String textOfResponse) {
             // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
@@ -197,26 +214,30 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             if (status.equals("200")) try {
                 ListOfMatchesFromWeb = new ArrayList<String>();
                 JSONObject parser = new JSONObject(TextOfResponse);
-                if (!parser.getString("Match").equals("")) {
-                    JSONArray matchArray = parser.getJSONArray("Match");
-                    for (int I = 0; I < matchArray.length(); I++) {
-                        if (binary_same_as(Integer.valueOf(matchArray.getJSONObject(I).getString("days")), 2) )
-                        ListOfMatchesFromWeb.add(
-                                matchArray.getJSONObject(I).getString("rID")
-                                        +
-                                        ":: "
-                                        +
-                                        "From "
-                                        + matchArray.getJSONObject(I).getString("days")
-                                        + " to "
-
-
-                        );
-
+                if (!parser.getString("matches").equals("")) {
+                    JSONArray matchArray = parser.getJSONArray("matches");
+                    if (matchArray.length() == 0 ){
+                        messagesPopUp.ShowMessageDialog("No Matches Available" +  matchArray.length(), "Information", "OK");
                     }
-                    YailList tempData=YailList.makeList( ListOfMatchesFromWeb);
-                    MatchesMade.Elements(tempData);
+                    else {
+                        // messagesPopUp.ShowMessageDialog("No Matches Available" +  matchArray.length(), "Information", "OK");
+                        for (int I = 0; I < matchArray.length(); I++) {
+                            ListOfMatchesFromWeb.add(
+                                    matchArray.getJSONObject(I).getString("rID")
+                                            +
+                                            ":: "
+                                            +
+                                            "From "
+                                            + matchArray.getJSONObject(I).getString("day")
+                                            + " to "
 
+
+                            );
+
+                        }
+                        YailList tempData = YailList.makeList(ListOfMatchesFromWeb);
+                        MatchesMade.Elements(tempData);
+                    }
                 } else {
                     messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
                 }
