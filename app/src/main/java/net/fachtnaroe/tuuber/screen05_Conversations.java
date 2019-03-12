@@ -97,7 +97,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         buttonInitiateNewChat.Text("Accept inbound");
         buttonInitiateNewChat.Enabled(false);
         buttonRemoveChatRequestInbound = new Button(InboundButtonsHZ);
-        buttonRemoveChatRequestInbound.Text("Declineinbound");
+        buttonRemoveChatRequestInbound.Text("Decline inbound");
         buttonRemoveChatRequestInbound.Enabled(false);
 
         OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
