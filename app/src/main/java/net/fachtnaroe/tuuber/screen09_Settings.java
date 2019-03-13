@@ -14,8 +14,10 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
+import com.google.appinventor.components.runtime.Slider;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 import com.google.appinventor.components.runtime.util.YailList;
@@ -35,7 +37,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web detailsWeb, detailsWebSave, passwordWeb, passwordWebSave;
     Notifier messages;
-    TextBox listViewSizeBox, versionBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
+    TextBox listViewSizeBox, phoneBox, eMailBox, userFirstBox, userFamilyBox, backgroundImageTextBox;
     PasswordTextBox oldPassBox, newPassBox, confirmPassBox;
     Button submitDetails, submitPassword, buttonMainMenu, buttonRefresh, submitCustomisation;
     Label listViewSizeLabel, phoneLabel, eMailLabel, userFirstLabel, userFamilyLabel, oldPassLabel, newPassLabel, confirmPassLabel, label_pID;
@@ -43,14 +45,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     VerticalArrangement detailsVt, passwordVt, customisationVt;
     Notifier messagesPopUp;
     ImagePicker myImagePicker;
+    fachtnaSlider slider_FontSize;
 
     protected void $define() {
 
-//        dbg("Start $define " + formName);
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
-        VerticalArrangement screen09_Settings = new VerticalArrangement(this);
+        VerticalScrollArrangement screen09_Settings = new VerticalScrollArrangement(this);
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
 
@@ -72,74 +74,84 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         buttonRefresh.FontSize(8);
         buttonRefresh.Image("buttonRefresh.png");
 
-        messagesPopUp = new Notifier(screen09_Settings);
-
         customisationVt = new VerticalArrangement(screen09_Settings);
-        backgroundImageTextBox = new TextBox(screen09_Settings);
+        customisationVt.BackgroundColor(Component.COLOR_NONE);
+        customisationVt.WidthPercent(100);
+        backgroundImageTextBox = new TextBox(customisationVt);
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
+
         myImagePicker = new ImagePicker(customisationVt);
         myImagePicker.Text("Crash Program");
-
-        submitCustomisation = new Button(customisationVt);
-        submitCustomisation.Text("Save");
-
-        detailsWeb = new Web(this);
-        detailsWebSave = new Web(this);
-        passwordWeb = new Web(this);
-        passwordWebSave = new Web(this);
-
-        listViewSizeHz=new HorizontalArrangement(screen09_Settings);
+        myImagePicker.FontSize(8);
+        listViewSizeHz=new HorizontalArrangement(customisationVt);
         listViewSizeLabel=new Label(listViewSizeHz);
-        listViewSizeLabel.Text("List font size:");
+        listViewSizeLabel.Text("List<br>font size:");
+        listViewSizeLabel.HTMLFormat(true);
         listViewSizeBox = new TextBox(listViewSizeHz);
         listViewSizeBox.NumbersOnly(true);
         listViewSizeBox.Text(applicationSettings.intListViewsize.toString());
+        listViewSizeBox.Width(50);
+        listViewSizeBox.TextAlignment(Component.ALIGNMENT_CENTER);
+        slider_FontSize= new fachtnaSlider(customisationVt);
+        slider_FontSize.MinValue(1);
+        slider_FontSize.MaxValue(100);
+        slider_FontSize.ColorLeft(Component.COLOR_RED);
+        slider_FontSize.ColorRight(Component.COLOR_RED);
+        slider_FontSize.ThumbEnabled(true);
+        slider_FontSize.WidthPercent(100);
+        slider_FontSize.Height(10);
+        slider_FontSize.ThumbPosition(Integer.valueOf(listViewSizeBox.Text()));
+
+        submitCustomisation = new Button(customisationVt);
+        submitCustomisation.Text("Save program settings");
+
         detailsVt = new VerticalArrangement(screen09_Settings);
+        detailsVt.BackgroundColor(Component.COLOR_NONE);
         userFirstHz = new HorizontalArrangement(detailsVt);
         userFirstLabel = new Label(userFirstHz);
-        userFirstLabel.Text("First name:");
+        userFirstLabel.HTMLFormat(true);
+        userFirstLabel.Text("First<br>name:");
         userFirstBox = new TextBox(userFirstHz);
-
         userFamilyHz = new HorizontalArrangement(detailsVt);
         userFamilyLabel = new Label(userFamilyHz);
-        userFamilyLabel.Text("Family name:");
+        userFamilyLabel.Text("Family<br>name:");
+        userFamilyLabel.HTMLFormat(true);
         userFamilyBox = new TextBox(userFamilyHz);
-
         phoneHz = new HorizontalArrangement(detailsVt);
         phoneLabel = new Label(phoneHz);
         phoneLabel.Text("Phone:");
         phoneBox = new TextBox(phoneHz);
-
         eMailHz = new HorizontalArrangement(detailsVt);
         eMailLabel = new Label(eMailHz);
         eMailLabel.Text("eMail:");
         eMailBox = new TextBox(eMailHz);
-        w100listTB(eMailBox, phoneBox, userFamilyBox, userFirstBox);
 
         submitDetails = new Button(detailsVt);
-        submitDetails.Text("Save changes");
+        submitDetails.Text("Save detail changes");
+
         passwordVt = new VerticalArrangement(screen09_Settings);
+        passwordVt.BackgroundColor(Component.COLOR_NONE);
         oldPassHz = new HorizontalArrangement(passwordVt);
         oldPassLabel = new Label(oldPassHz);
         oldPassLabel.Text("Old password:");
         oldPassBox = new PasswordTextBox(oldPassHz);
-
         newPassHz = new HorizontalArrangement(passwordVt);
         newPassLabel = new Label(newPassHz);
         newPassLabel.Text("New password:");
         newPassBox = new PasswordTextBox(newPassHz);
-
         confirmHz = new HorizontalArrangement(passwordVt);
         confirmPassLabel = new Label(confirmHz);
         confirmPassLabel.Text("Confirm new:");
         confirmPassBox = new PasswordTextBox(confirmHz);
 
         submitPassword = new Button(passwordVt);
-        submitPassword.Text("Change now");
+        submitPassword.Text("Change password now");
 
         w100listPTB(oldPassBox, newPassBox, confirmPassBox);
+        w100listTB(eMailBox, phoneBox, userFamilyBox, userFirstBox);
 
         messages = new Notifier(screen09_Settings);
+        messagesPopUp = new Notifier(screen09_Settings);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -148,6 +160,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "BeforePicking");
         EventDispatcher.registerEventForDelegation(this, formName, "ActivityResult");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "PositionChanged");
+
+        detailsWeb = new Web(this);
+        detailsWebSave = new Web(this);
+        passwordWeb = new Web(this);
+        passwordWebSave = new Web(this);
 
         detailsWeb.Url(applicationSettings.baseURL
                 + "?action=GET"
@@ -165,6 +183,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         if (eventName.equals("BackPressed")) {
             finish();
+            return true;
+        }
+        else if (eventName.equals("PositionChanged")) {
+            listViewSizeBox.Text( Integer.toString( Math.round( slider_FontSize.ThumbPosition() ) ) );
             return true;
         }
         else if (eventName.equals("ActivityResult")) {
