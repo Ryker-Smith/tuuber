@@ -30,11 +30,11 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private Web getRouteWeb, Routes, MatchesAvailable;
     private Notifier messagesPopUp;
-    private Button SelectMyRoute, MainMenu, DisplayDetails, Refresh , AddToMatches;
+    private Button SendRequest, MainMenu, Refresh , AddToMatches;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
     private ListView MyRouteList, MatchesMade;
-    private Label User_ID , MatchID;
+    private Label User_ID , MatchID, OtherRoutepID, otherpID;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
@@ -72,13 +72,14 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MatchesMade.HeightPercent(35);
         MatchesMade.TextSize(applicationSettings.intListViewsize);
         HorizontalArragment3 = new HorizontalArrangement(Matches);
-        DisplayDetails= new Button(HorizontalArragment3);
-        DisplayDetails.Text("Display Details");
         MatchesAvailable = new Web(Matches);
-        SelectMyRoute =new Button(HorizontalArragment3);
-        SelectMyRoute.Text("Send Chat");
+        SendRequest =new Button(HorizontalArragment3);
+        SendRequest.Text("Send Chat");
+        SendRequest.Enabled(false);
         messagesPopUp = new Notifier(Matches);
         MatchID= new Label(HorizontalArragment3);
+        OtherRoutepID = new Label(HorizontalArragment3);
+        otherpID = new Label(HorizontalArragment3);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -134,6 +135,19 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 String[] separated = currentString.split(":");
                 MatchID.Text(separated[0]);
                 return true;
+             }
+
+             else if (component.equals(MatchesMade)){
+                 String otherPidSplit = new String();
+                 otherPidSplit = MatchesMade.Selection();
+                 String NewString = otherPidSplit;
+                 String[] seperated2 = NewString.split("::");
+                 String AnotherString = seperated2[1];
+                 String[] seperated3 = AnotherString.split("::");
+                 otherpID.Text(seperated2[0]);
+                 OtherRoutepID.Text(seperated3[0]);
+                 SendRequest.Enabled(true);
+                 return true;
              }
         }
         else if (eventName.equals("GotText")) {
@@ -219,6 +233,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         // messagesPopUp.ShowMessageDialog("No Matches Available" +  matchArray.length(), "Information", "OK");
                         for (int I = 0; I < matchArray.length(); I++) {
                             ListOfMatchesFromWeb.add(
+                                    matchArray.getJSONObject(I).getString("pID")
+                                    + "::" +
                                     matchArray.getJSONObject(I).getString("rID")
                                             +
                                             ":: "
