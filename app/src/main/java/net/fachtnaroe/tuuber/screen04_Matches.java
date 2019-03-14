@@ -34,7 +34,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
     private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
     private ListView MyRouteList, MatchesMade;
-    private Label User_ID , MatchID, OtherRoutepID, otherpID;
+    private Label User_ID , MatchID, OtherRoutepID, otherpID, DriverYNLabel;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
     private String baseURL = "https://fachtnaroe.net/tuuber";
 
@@ -77,6 +77,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         SendRequest.Text("Send Chat");
         SendRequest.Enabled(false);
         messagesPopUp = new Notifier(Matches);
+        DriverYNLabel = new Label(HorizontalArragment3);
         MatchID= new Label(HorizontalArragment3);
         OtherRoutepID = new Label(HorizontalArragment3);
         otherpID = new Label(HorizontalArragment3);
@@ -132,8 +133,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 String MatchesID = new String();
                 MatchesID = MyRouteList.Selection();
                 String currentString = MatchesID;
-                String[] separated = currentString.split(":");
+                String[] separated = currentString.split("::");
                 MatchID.Text(separated[0]);
+
                 return true;
              }
 
@@ -144,8 +146,11 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                  String[] seperated2 = NewString.split("::");
                  String AnotherString = seperated2[1];
                  String[] seperated3 = AnotherString.split("::");
+                 String NextString = otherPidSplit;
+                 String[] separated4 = NextString.split("&");
                  otherpID.Text(seperated2[0]);
                  OtherRoutepID.Text(seperated3[0]);
+                 DriverYNLabel.Text(separated4[1]);
                  SendRequest.Enabled(true);
                  return true;
              }
@@ -202,6 +207,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                         + routesArray.getJSONObject(i).getString("destination" )
                                         + " on "
                                         + temp
+                                        + "&"
+                                        + routesArray.getJSONObject(i).getString("driver")
 
                         );
                     }
@@ -239,6 +246,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                             +
                                             ":: "
                                             + matchArray.getJSONObject(I).getString("realName")
+                                            + "&"
+                                            + matchArray.getJSONObject(I).getString("driver")
                             );
                         }
                         YailList tempData = YailList.makeList(ListOfMatchesFromWeb);
