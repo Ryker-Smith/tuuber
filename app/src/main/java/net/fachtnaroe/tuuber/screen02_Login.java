@@ -144,7 +144,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.pID= parser.getString("pID");
                 applicationSettings.lastLogin= inputUsername.Text();
                 applicationSettings.sessionID=parser.getString("sessionID");
-                applicationSettings.IsDebugSession=true;
+                applicationSettings.IsDebugSession=IsDebugSession.Checked();
                 applicationSettings.set();
                 startNewForm("screen03_MainMenu",null);
             } else {
