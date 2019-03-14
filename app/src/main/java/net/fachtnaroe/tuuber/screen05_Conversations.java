@@ -24,7 +24,7 @@ import java.util.List;
 public class screen05_Conversations extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private VerticalScrollArrangement Conversations;
+    private VerticalArrangement Conversations;
     private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz;
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
@@ -41,7 +41,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
-        Conversations = new VerticalScrollArrangement(this);
+        Conversations = new VerticalArrangement(this);
 
         toolbarHz = new HorizontalArrangement(Conversations);
         MainMenu = new Button(toolbarHz);
@@ -61,12 +61,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Refresh.Image("buttonRefresh.png");
 
         vt_Open = new VerticalArrangement(Conversations);
-        vt_Open.HeightPercent(15);
+        vt_Open.HeightPercent(35);
         label_Open = new Label(vt_Open);
         label_Open.Text("Open Conversations");
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
-        listview_Open.Visible(true);
+        listview_Open.HeightPercent(100);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
@@ -79,7 +79,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         label_In.Text("Pending (Inbound)");
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
-        listview_In.Visible(true);
+        listview_In.HeightPercent(100);
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
@@ -95,6 +95,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         label_Out.Text("Pending (Outbound)");
         listview_Out = new ListView(vt_Out);
         listview_Out.TextSize(applicationSettings.intListViewsize);
+        listview_Out.HeightPercent(100);
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
