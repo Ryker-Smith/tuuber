@@ -61,10 +61,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Refresh.Image("buttonRefresh.png");
 
         vt_Open = new VerticalArrangement(Conversations);
-        vt_Open.HeightPercent(15);
+        vt_Open.HeightPercent(18);
         label_Open = new Label(vt_Open);
         label_Open.Text("Open Conversations");
         listview_Open = new ListView(vt_Open);
+        listview_Open.HeightPercent(15);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.Visible(true);
 
@@ -74,10 +75,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_OpenChatScreen.Enabled(false);
 
         vt_In = new VerticalArrangement(Conversations);
-        vt_In.HeightPercent(15);
+        vt_In.HeightPercent(18);
         label_In = new Label(vt_In);
         label_In.Text("Pending (Inbound)");
         listview_In = new ListView(vt_In);
+        listview_In.HeightPercent(15);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Visible(true);
 
@@ -90,10 +92,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_DeclineInbound.Enabled(false);
 
         vt_Out = new VerticalArrangement(Conversations);
-        vt_Out.HeightPercent(15);
+        vt_Out.HeightPercent(18);
         label_Out = new Label(vt_Out);
         label_Out.Text("Pending (Outbound)");
         listview_Out = new ListView(vt_Out);
+        listview_Out.HeightPercent(15);
         listview_Out.TextSize(applicationSettings.intListViewsize);
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
