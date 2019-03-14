@@ -9,6 +9,7 @@ import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
+import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
@@ -24,14 +25,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     private tuuber_Settings applicationSettings;
     private VerticalScrollArrangement Conversations;
-    private HorizontalArrangement ContactsHZ, OutboundInitiationHZ, OutboundInitiationLabelHZ, OutboundInitiationButtonHZ, InboundInitiationHZ, InboundInitiationLabelHZ, InboundButtonsHZ, ContactsLabelHZ, ChatsScreenHZ, toolbarHz;
+    private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz;
+    private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
-    private String baseURL = "https://fachtnaroe.net/tuuber-2019";
-    private Button buttonGoToChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
-    private Label ContactsLabel, OutboundInitiationLabel, InboundInitiationLabel, pID;
-    private Web Contact1Web, Contact2Web, InboundWeb,InboundWebCreate, InboundWebRemove, OutboundWeb, OutboundWebRemove;
+    private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
+    private Label label_Open, label_Out, label_In, pID;
+    private Web web_Contact1, web_Contact2, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
-    private Notifier messagesPopUp;
+    private Notifier notifier_Messages;
     String string_InboundLineID, string_InboundpID, string_OutboundpID, string_OutboundLineID;
 
 
@@ -59,26 +60,24 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Refresh.FontSize(8);
         Refresh.Image("buttonRefresh.png");
 
-        ContactsLabelHZ = new HorizontalArrangement(Conversations);
-        ContactsLabel = new Label(ContactsLabelHZ);
-        ContactsLabel.Text("Open Conversations");
-        ContactsHZ = new HorizontalArrangement(Conversations);
-        listview_Open = new ListView(ContactsHZ);
-        listview_Open.HeightPercent(15);
+        vt_Open = new VerticalArrangement(Conversations);
+        vt_Open.HeightPercent(15);
+        label_Open = new Label(vt_Open);
+        label_Open.Text("Open Conversations");
+        listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.Visible(true);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
-        buttonGoToChatScreen = new Button(ChatsScreenHZ);
-        buttonGoToChatScreen.Text("Chat");
-        buttonGoToChatScreen.Enabled(false);
+        button_OpenChatScreen = new Button(ChatsScreenHZ);
+        button_OpenChatScreen.Text("Chat");
+        button_OpenChatScreen.Enabled(false);
 
-        InboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
-        InboundInitiationLabel = new Label(InboundInitiationLabelHZ);
-        InboundInitiationLabel.Text("Pending (Inbound)");
-        InboundInitiationHZ = new HorizontalArrangement(Conversations);
-        listview_In = new ListView(InboundInitiationHZ);
-        listview_In.HeightPercent(15);
+        vt_In = new VerticalArrangement(Conversations);
+        vt_In.HeightPercent(15);
+        label_In = new Label(vt_In);
+        label_In.Text("Pending (Inbound)");
+        listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Visible(true);
 
@@ -90,26 +89,26 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_DeclineInbound.Text("Decline inbound");
         button_DeclineInbound.Enabled(false);
 
-        OutboundInitiationLabelHZ = new HorizontalArrangement(Conversations);
-        OutboundInitiationLabel = new Label(OutboundInitiationLabelHZ);
-        OutboundInitiationLabel.Text("Pending (Outbound)");
-        OutboundInitiationHZ = new HorizontalArrangement(Conversations);
-        listview_Out = new ListView(OutboundInitiationHZ);
-        listview_Out.HeightPercent(15);
+        vt_Out = new VerticalArrangement(Conversations);
+        vt_Out.HeightPercent(15);
+        label_Out = new Label(vt_Out);
+        label_Out.Text("Pending (Outbound)");
+        listview_Out = new ListView(vt_Out);
         listview_Out.TextSize(applicationSettings.intListViewsize);
+
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
         button_CancelOutbound.Enabled(false);
 
-        Contact1Web = new Web(this);
-        Contact2Web = new Web(this);
-        InboundWeb = new Web(this);
-        InboundWebCreate = new Web(this);
-        InboundWebRemove = new Web(this);
-        OutboundWeb = new Web(this);
-        OutboundWebRemove = new Web(this);
-        messagesPopUp = new Notifier(Conversations);
+        web_Contact1 = new Web(this);
+        web_Contact2 = new Web(this);
+        web_Inbound = new Web(this);
+        web_AcceptInbound = new Web(this);
+        web_DeclineInbound = new Web(this);
+        web_Outbound = new Web(this);
+        web_OutboundCancel = new Web(this);
+        notifier_Messages = new Notifier(Conversations);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -123,12 +122,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             if (component.equals(MainMenu))  {
                 finish();
             }
-            if (component.equals(buttonGoToChatScreen)) {
+            if (component.equals(button_OpenChatScreen)) {
                 startNewForm("screen08_ChatWith",null);
                 return true;
             }
             if (component.equals(button_AcceptInbound)) {
-                InboundWebCreate.Url(
+                web_AcceptInbound.Url(
                         applicationSettings.baseURL +
                                 "?action=POST&entity=CHAT&sessionID=" +
                                 applicationSettings.sessionID +
@@ -139,8 +138,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 "&status=open&text=" +
                                 ""
                 );
-                InboundWebCreate.Get();
-                InboundWebRemove.Url(
+                web_AcceptInbound.Get();
+                web_DeclineInbound.Url(
                         applicationSettings.baseURL +
                                 "?action=DELETE&entity=CHAT&sessionID=" +
                                 applicationSettings.sessionID +
@@ -152,12 +151,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 "&line_ID=" +
                                 string_InboundLineID
                 );
-                InboundWebRemove.Get();
+                web_DeclineInbound.Get();
                 return true;
                 //startNewForm("screen08_ChatWith",null);
             }
             else if (component.equals(button_DeclineInbound)) {
-                InboundWebRemove.Url(
+                web_DeclineInbound.Url(
                         applicationSettings.baseURL +
                                 "?action=DELETE&entity=CHAT&sessionID=" +
                                 applicationSettings.sessionID +
@@ -169,11 +168,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 "&line_ID=" +
                                 string_InboundLineID
                 );
-                InboundWebRemove.Get();
+                web_DeclineInbound.Get();
                 return true;
             }
             else if (component.equals(button_CancelOutbound)) {
-                OutboundWebRemove.Url(
+                web_OutboundCancel.Url(
                         applicationSettings.baseURL +
                                 "?action=DELETE&entity=CHAT&sessionID=" +
                                 applicationSettings.sessionID +
@@ -184,7 +183,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 "&status=init&line_ID=" +
                                 string_OutboundLineID
                 );
-                OutboundWebRemove.Get();
+                web_OutboundCancel.Get();
                 return true;
             }
             else if (component.equals(Refresh)) {
@@ -193,20 +192,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         }
         else if (eventName.equals("AfterPicking")) {
             if (component.equals(listview_Open)) {
-                String OtherpIDText = new String();
-                OtherpIDText = listview_Open.Selection();
-                String currentString = OtherpIDText;
+                String currentString = listview_Open.Selection();
                 String[] separated = currentString.split(":");
                 applicationSettings.otherpIDforChat =separated[0];
                 applicationSettings.set();
-                buttonGoToChatScreen.Enabled(true);
+                button_OpenChatScreen.Enabled(true);
             }
             if (component.equals(listview_In)) {
-                String InboundpIDText = new String();
-                InboundpIDText = listview_In.Selection();
-                String currentString = InboundpIDText;
+                String currentString = listview_In.Selection();
                 String[] seperated = currentString.split(":");
-                String newString = InboundpIDText;
+                String newString = listview_In.Selection();;
                 String[] seperated2 = newString.split("=");
                 string_InboundpID=seperated[0];
                 string_InboundLineID=seperated2[1];
@@ -214,11 +209,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 button_DeclineInbound.Enabled(true);
             }
             if (component.equals(listview_Out)) {
-                String OutboundpIDText = new String();
-                OutboundpIDText = listview_Out.Selection();
-                String nextString = OutboundpIDText;
+                String nextString = listview_Out.Selection();
                 String[] seperated3 = nextString.split(":");
-                String anotherString = OutboundpIDText;
+                String anotherString = listview_Out.Selection();
                 String[] seperated4 = anotherString.split("=");
                 string_OutboundpID=seperated3[0];
                 string_OutboundLineID=seperated4[1];
@@ -226,38 +219,38 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
         }
         else if (eventName.equals("GotText")) {
-            if (component.equals(Contact1Web)) {
+            if (component.equals(web_Contact1)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getContact1List(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(Contact2Web)) {
+            else if (component.equals(web_Contact2)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getContact2List(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(InboundWeb)) {
+            else if (component.equals(web_Inbound)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getInboundList(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(OutboundWeb)) {
+            else if (component.equals(web_Outbound)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getOutboundList(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(InboundWebRemove)) {
+            else if (component.equals(web_DeclineInbound)) {
                 callBackEnd();
             }
-            else if (component.equals(OutboundWebRemove)) {
+            else if (component.equals(web_OutboundCancel)) {
                 callBackEnd();
             }
         }
@@ -265,33 +258,33 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     }
 
     void callBackEnd() {
-        Contact1Web.Url(
-                baseURL +
+        web_Contact1.Url(
+                applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&respondent_pID=" +
                         applicationSettings.pID +
                         "&status=open"
         );
-        Contact1Web.Get();
-        InboundWeb.Url(
-                baseURL +
+        web_Contact1.Get();
+        web_Inbound.Url(
+                applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&respondent_pID=" +
                         applicationSettings.pID +
                         "&status=init"
         );
-        InboundWeb.Get();
-        OutboundWeb.Url(
-                baseURL +
+        web_Inbound.Get();
+        web_Outbound.Url(
+                applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&initiator_pID=" +
                         applicationSettings.pID +
                         "&status=init"
         );
-        OutboundWeb.Get();
+        web_Outbound.Get();
     }
 
     public void getContact1List (String status, String textOfResponse) {
@@ -316,35 +309,31 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
                     );
                 }
-//                String[] temp= new String[listview_Open.Elements().toStringArray().length];
-//                temp=listview_Open.Elements().toStringArray();
-//                for (int i=0; i< temp.length; i++) {
-//                    ListofContactWeb1.add(temp[i]);
-//                }
+
                 YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
 //                ListofContactWeb1.add(listview_Open.Elements().toString());
                 listview_Open.Elements(tempData);
 
 
             } else {
-                messagesPopUp.ShowMessageDialog("Error getting Contact1 details", "Information", "OK" );
+                notifier_Messages.ShowMessageDialog("Error getting Contact1 details", "Information", "OK" );
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception (1)", "Information", "OK" );
+            notifier_Messages.ShowMessageDialog("JSON Exception (1)", "Information", "OK" );
         }
         else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
+            notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
-        Contact2Web.Url(
-                baseURL +
+        web_Contact2.Url(
+                applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&initiator_pID=" +
                         applicationSettings.pID +
                         "&status=open"
         );
-        Contact2Web.Get();
+        web_Contact2.Get();
 
     }
 
@@ -384,14 +373,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 listview_Open.Elements(tempData2);
 
             } else {
-                messagesPopUp.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
         }
         else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
 
     }
@@ -424,14 +413,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 listview_In.Elements(tempData3);
 
             } else {
-                messagesPopUp.ShowMessageDialog("Error getting Inbound details", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error getting Inbound details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception (3)", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("JSON Exception (3)", "Information", "OK");
         }
         else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
 
     }
@@ -442,7 +431,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         if (status.equals("200") ) try {
 
             ListofOutboundWeb = new ArrayList<String>();
-
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat").equals("")) {
 
@@ -457,23 +445,20 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                     Outbound.getJSONObject(i).getString("family") +
                                     "=" +
                                     Outbound.getJSONObject(i).getString("line_ID")
-
-
-
                     );
                 }
                 YailList tempData4=YailList.makeList( ListofOutboundWeb );
                 listview_Out.Elements(tempData4);
 
             } else {
-                messagesPopUp.ShowMessageDialog("Error getting Outbound details", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error getting Outbound details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
         }
         else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
 
     }
