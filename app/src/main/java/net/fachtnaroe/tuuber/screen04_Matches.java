@@ -28,7 +28,7 @@ import java.util.List;
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private Web getRouteWeb, Routes, MatchesAvailable;
+    private Web getRouteWeb, Routes, MatchesAvailable, SendingChat;
     private Notifier messagesPopUp;
     private Button SendRequest, MainMenu, Refresh , AddToMatches;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
@@ -81,6 +81,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MatchID= new Label(HorizontalArragment3);
         OtherRoutepID = new Label(HorizontalArragment3);
         otherpID = new Label(HorizontalArragment3);
+        SendingChat = new Web(Matches);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -109,6 +110,30 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             else if (component.equals(Refresh)){
                 getRoutesFromBackEnd();
                 return true;
+            }
+            else if (component.equals(SendRequest)) {
+                SendingChat.Url(
+                        applicationSettings.baseURL
+                        +"?action=POST"
+                        +"&entity=chat"
+                        +"&sessionID="
+                        +applicationSettings.sessionID
+                        +"&initiator_pID="
+                        +applicationSettings.pID
+                        +"&respondent_pID="
+                        +otherpID.Text()
+                        +"&status=init"
+                        +"&text="
+                        +OtherRoutepID.Text()
+                        +DriverYNLabel.Text()
+
+
+                );
+                SendingChat.Get();
+                return true;
+
+
+
             }
             else if (component.equals(AddToMatches)) {
                 if (component.equals(AddToMatches)) {

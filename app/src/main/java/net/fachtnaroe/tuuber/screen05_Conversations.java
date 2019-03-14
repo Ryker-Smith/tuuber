@@ -78,6 +78,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         label_In = new Label(vt_In);
         label_In.Text("Pending (Inbound)");
         listview_In = new ListView(vt_In);
+        listview_In.HeightPercent(15);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.HeightPercent(100);
 

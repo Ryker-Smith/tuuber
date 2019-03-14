@@ -95,7 +95,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My Routes:");
         routesDisplay = new ListView(RoutesScreen);
-        routesDisplay.HeightPercent(35);
+        routesDisplay.HeightPercent(30);
         routesDescription = new Label(RoutesScreen);
         routesDescription.Text("Route description area:");
         saveRouteWeb = new Web(RoutesScreen);
