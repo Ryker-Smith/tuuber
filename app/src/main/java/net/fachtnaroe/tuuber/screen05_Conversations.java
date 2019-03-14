@@ -407,7 +407,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                     " " +
                                     Inbound.getJSONObject(i).getString("family") +
                                     "=" +
-                                    Inbound.getJSONObject(i).getString("line_ID")
+                                    Inbound.getJSONObject(i).getString("line_ID") +
+                                    "," +
+                                    Inbound.getJSONObject(i).getString("text")
 
                     );
                 }
