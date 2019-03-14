@@ -36,7 +36,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private ListView MyRouteList, MatchesMade;
     private Label User_ID , MatchID, OtherRoutepID, otherpID, DriverYNLabel;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
-    private String baseURL = "https://fachtnaroe.net/tuuber";
 
     protected void $define() {
         applicationSettings = new tuuber_Settings(this);
@@ -141,7 +140,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                             applicationSettings.baseURL
                                     + "?action=GET"
                                     + "&entity=Match"
-                                    +  "&sessionID="
+                                    + "&sessionID="
                                     + applicationSettings.sessionID
                                     + "&"
                                     + "rID="

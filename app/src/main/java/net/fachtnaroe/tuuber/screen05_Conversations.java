@@ -61,12 +61,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         Refresh.Image("buttonRefresh.png");
 
         vt_Open = new VerticalArrangement(Conversations);
-        vt_Open.HeightPercent(35);
+        vt_Open.HeightPercent(20);
         label_Open = new Label(vt_Open);
         label_Open.Text("Open Conversations");
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.HeightPercent(100);
+        listview_Open.SelectionColor(Component.COLOR_DKGRAY);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
@@ -74,13 +75,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_OpenChatScreen.Enabled(false);
 
         vt_In = new VerticalArrangement(Conversations);
-        vt_In.HeightPercent(15);
+        vt_In.HeightPercent(20);
         label_In = new Label(vt_In);
         label_In.Text("Pending (Inbound)");
         listview_In = new ListView(vt_In);
-        listview_In.HeightPercent(15);
         listview_In.TextSize(applicationSettings.intListViewsize);
-        listview_In.HeightPercent(100);
+        listview_In.Height(100);
+        listview_In.SelectionColor(Component.COLOR_DKGRAY);
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
@@ -91,12 +92,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_DeclineInbound.Enabled(false);
 
         vt_Out = new VerticalArrangement(Conversations);
-        vt_Out.HeightPercent(15);
+        vt_Out.HeightPercent(20);
         label_Out = new Label(vt_Out);
         label_Out.Text("Pending (Outbound)");
         listview_Out = new ListView(vt_Out);
         listview_Out.TextSize(applicationSettings.intListViewsize);
-        listview_Out.HeightPercent(100);
+        listview_Out.Height(100);
+        listview_Out.SelectionColor(Component.COLOR_DKGRAY);
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
@@ -123,12 +125,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         if (eventName.equals("Click")) {
             if (component.equals(MainMenu))  {
                 finish();
+                return true;
             }
-            if (component.equals(button_OpenChatScreen)) {
+            else if (component.equals(button_OpenChatScreen)) {
                 startNewForm("screen08_ChatWith",null);
                 return true;
             }
-            if (component.equals(button_AcceptInbound)) {
+            else if (component.equals(button_AcceptInbound)) {
                 web_AcceptInbound.Url(
                         applicationSettings.baseURL +
                                 "?action=POST&entity=CHAT&sessionID=" +
@@ -190,6 +193,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
             else if (component.equals(Refresh)) {
                 callBackEnd();
+                return true;
             }
         }
         else if (eventName.equals("AfterPicking")) {
@@ -199,25 +203,30 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 applicationSettings.otherpIDforChat =separated[0];
                 applicationSettings.set();
                 button_OpenChatScreen.Enabled(true);
+                return true;
             }
-            if (component.equals(listview_In)) {
+            else if (component.equals(listview_In)) {
                 String currentString = listview_In.Selection();
-                String[] seperated = currentString.split(":");
+                String[] separated = currentString.split(":");
                 String newString = listview_In.Selection();;
-                String[] seperated2 = newString.split("=");
-                string_InboundpID=seperated[0];
-                string_InboundLineID=seperated2[1];
+//                String[] separated2 = newString.split("=");
+                string_InboundpID=separated[0];
+//                string_InboundLineID=separated2[1];
                 button_AcceptInbound.Enabled(true);
                 button_DeclineInbound.Enabled(true);
+                dbg("Inbound selection");
+                return true;
             }
-            if (component.equals(listview_Out)) {
+            else if (component.equals(listview_Out)) {
                 String nextString = listview_Out.Selection();
-                String[] seperated3 = nextString.split(":");
+                String[] separated3 = nextString.split(":");
                 String anotherString = listview_Out.Selection();
-                String[] seperated4 = anotherString.split("=");
-                string_OutboundpID=seperated3[0];
-                string_OutboundLineID=seperated4[1];
+//                String[] separated4 = anotherString.split("=");
+                string_OutboundpID=separated3[0];
+//                string_OutboundLineID=separated4[1];
                 button_CancelOutbound.Enabled(true);
+                dbg("Outbound selection");
+                return true;
             }
         }
         else if (eventName.equals("GotText")) {
@@ -251,12 +260,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
             else if (component.equals(web_DeclineInbound)) {
                 callBackEnd();
+                return true;
             }
             else if (component.equals(web_OutboundCancel)) {
                 callBackEnd();
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     void callBackEnd() {
@@ -308,16 +319,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                     contacts1Array.getJSONObject(i).getString("first" ) +
                                     " " +
                                     contacts1Array.getJSONObject(i).getString("family")
-
                     );
                 }
 
                 YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
-//                ListofContactWeb1.add(listview_Open.Elements().toString());
+                ListofContactWeb1.add(listview_Open.Elements().toString());
                 listview_Open.Elements(tempData);
-
-
-            } else {
+            }
+            else {
                 notifier_Messages.ShowMessageDialog("Error getting Contact1 details", "Information", "OK" );
             }
         } catch (JSONException e) {
@@ -364,7 +373,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     );
                 }
 
-                String[] temp= new String[listview_Open.Elements().toStringArray().length];
+                String[] temp;
                 temp= listview_Open.Elements().toStringArray();
                 for (int i=0; i< temp.length; i++) {
                     ListofContactWeb2.add(temp[i]);
@@ -400,21 +409,17 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 JSONArray Inbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     if (Inbound.getJSONObject(i).toString().equals("{}")) break;
-                    ListofInboundWeb.add(
-                            Inbound.getJSONObject(i).getString("initiator_pID") +
-                                    "::" +
-                                    Inbound.getJSONObject(i).getString("first") +
-                                    " " +
-                                    Inbound.getJSONObject(i).getString("family") +
-                                    "=" +
-                                    Inbound.getJSONObject(i).getString("line_ID") +
-                                    "," +
-                                    Inbound.getJSONObject(i).getString("text")
-
-                    );
+                    String anItem = Inbound.getJSONObject(i).getString("initiator_pID") +
+                            "::" +
+                            Inbound.getJSONObject(i).getString("first") +
+                            " " +
+                            Inbound.getJSONObject(i).getString("family");
+                    ListofInboundWeb.add( anItem );
+//                    dbg(anItem);
                 }
-                YailList tempData3=YailList.makeList( ListofInboundWeb );
-                listview_In.Elements(tempData3);
+//                YailList tempData3=YailList.makeList( ListofInboundWeb );
+                listview_In.Elements(YailList.makeList( ListofInboundWeb ));
+
 
             } else {
                 notifier_Messages.ShowMessageDialog("Error getting Inbound details", "Information", "OK");
@@ -441,18 +446,18 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 JSONArray Outbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     if (Outbound.getJSONObject(i).toString().equals("{}")) break;
-                    ListofOutboundWeb.add(
-                            Outbound.getJSONObject(i).getString("respondent_pID") +
-                                    "::" +
-                                    Outbound.getJSONObject(i).getString("first") +
-                                    " " +
-                                    Outbound.getJSONObject(i).getString("family") +
-                                    "=" +
-                                    Outbound.getJSONObject(i).getString("line_ID")
-                    );
+                    String anItem = Outbound.getJSONObject(i).getString("respondent_pID") +
+                            "::" +
+                            Outbound.getJSONObject(i).getString("first") +
+                            " " +
+                            Outbound.getJSONObject(i).getString("family");
+                    ListofOutboundWeb.add( anItem );
+                    dbg(anItem);
                 }
-                YailList tempData4=YailList.makeList( ListofOutboundWeb );
-                listview_Out.Elements(tempData4);
+                YailList tempData=YailList.makeList( ListofOutboundWeb );
+                listview_Out.Elements(YailList.makeList(ListofOutboundWeb));
+                dbg(tempData.toString());
+//                YailList.makeList(ListofOutboundWeb);
 
             } else {
                 notifier_Messages.ShowMessageDialog("Error getting Outbound details", "Information", "OK");

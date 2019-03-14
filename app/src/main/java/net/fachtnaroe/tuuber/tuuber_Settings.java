@@ -23,7 +23,8 @@ public class tuuber_Settings {
     public Integer intListViewsize=0;
     public boolean IsDebugSession=false;
 
-    public final String default_baseURL="https://fachtnaroe.net/tuuber-test";
+    public final String default_baseURL="https://fachtnaroe.net/tuuber";
+    public final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
     public final String default_sessionID="a1b2c3d4";
     public String default_pID="-1";
     public String default_otherpIDforChat ="-1";
@@ -58,6 +59,10 @@ public class tuuber_Settings {
         otherpIDforChat =(String) localDB.GetValue("otherpIDforChat", otherpIDforChat);
         notificationSoundFileName=(String) localDB.GetValue("notificationSoundFileName",default_notificationSoundFileName);
         intListViewsize=(Integer) localDB.GetValue("intListViewsize",default_intListViewsize);
+//        dbg("Backend: " + baseURL);
+        if (IsDebugSession) {
+            baseURL=debug_baseURL;
+        }
         return "OK";
     }
 
@@ -74,4 +79,5 @@ public class tuuber_Settings {
         return "OK";
     }
 
+    void dbg(String debugMsg) { System.err.print("~~~> " + debugMsg + " <~~~\n");  }
 }
