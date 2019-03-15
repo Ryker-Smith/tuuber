@@ -3,6 +3,7 @@ package net.fachtnaroe.tuuber;
 //import android.support.v7.app.AppCompatActivity;
 
 import com.google.appinventor.components.runtime.Button;
+import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
@@ -27,6 +28,7 @@ import java.util.TimerTask;
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
+    private Clock TimerRefreshBackend;
     private TextBox chatText;
     private VerticalArrangement ChatWith;
     private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
@@ -35,6 +37,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
     private Web ChatWeb, PoolWebDriver, PoolWebNavigator, PoolNoIDWeb, PoolIDWeb;
     private WebViewer ChatsViewer;
+    int timetorefresh = 5000;
 
 
     protected void $define() {
@@ -70,7 +73,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatsViewerHZ.WidthPercent(100);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
         ChatsViewer.HeightPercent(40);
-        ChatsViewer.WidthPercent(90);
+        ChatsViewer.WidthPercent(100);
         ChatsViewer.HomeUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
@@ -84,6 +87,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
         chatText = new TextBox(ChatWith);
         chatText.Text("");
+        chatText.WidthPercent(100);
         pIDHZ = new HorizontalArrangement(ChatWith);
         OtherpIDLabel = new Label(pIDHZ);
         OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
@@ -106,14 +110,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         PoolWebNavigator = new Web(ChatWith);
         PoolNoIDWeb = new Web(ChatWith);
         PoolIDWeb = new Web(ChatWith);
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        });
+        TimerRefreshBackend = new Clock(ChatWith);
+        TimerRefreshBackend.TimerEnabled(false);
+        TimerRefreshBackend.TimerInterval(timetorefresh);
+        TimerRefreshBackend.TimerEnabled(true);
 
+        EventDispatcher.registerEventForDelegation(this, formName, "Timer");
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -121,7 +123,9 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-
+        if (eventName.equals("Timer")) {
+            callBackend();
+        }
         if (eventName.equals("AfterChoosing")) {
             if (component.equals(Driver_Or_Navigator_ChoiceDialogNotifier)) {
                 Driver_Or_Navigator_ChoiceDialogNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
@@ -187,8 +191,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         else if (eventName.equals("GotText")) {
             if (component.equals(ChatWeb)) {
                 if (web_ResultGotText(params[1].toString(), params[3].toString())) {
+//                    startTimer();
                     chatText.Text("");
-                    callBackend();
                 } else {
                     chatText.BackgroundColor(Component.COLOR_RED);
                     MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
@@ -329,6 +333,26 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
     }
 
+//    public void startTimer() {
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//                ChatsViewer.GoHome();
+//                ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
+//                        "?action=LIST&entity=chat&sessionID=" +
+//                        applicationSettings.sessionID +
+//                        "&initiator_pID=" +
+//                        applicationSettings.pID +
+//                        "&respondent_pID=" +
+//                        applicationSettings.otherpIDforChat +
+//                        "&showHtml=1" +
+//                        "&iam=" + applicationSettings.pID
+//                );
+//            }
+//        },
+//        5000,5000);
+//    }
     public void getPoolNavigatorList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
