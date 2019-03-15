@@ -64,8 +64,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
         this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
+        ChatsViewerHZ.AlignHorizontal(ALIGNMENT_CENTER);
+        ChatsViewerHZ.WidthPercent(100);
         ChatsViewer = new WebViewer(ChatsViewerHZ);
         ChatsViewer.HeightPercent(40);
+        ChatsViewer.WidthPercent(90);
         ChatsViewer.HomeUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
@@ -87,6 +90,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         PoolID = new Label(pIDHZ);
 
         SendHZ = new HorizontalArrangement(ChatWith);
+        SendHZ.WidthPercent(100);
+        SendHZ.AlignHorizontal(ALIGNMENT_OPPOSITE);
         Send = new Button(SendHZ);
         Send.Text("Send");
         PoolHZ = new HorizontalArrangement(ChatWith);
