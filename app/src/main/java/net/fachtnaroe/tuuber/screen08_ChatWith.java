@@ -4,7 +4,6 @@ package net.fachtnaroe.tuuber;
 
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
-import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
@@ -18,6 +17,8 @@ import com.google.appinventor.components.runtime.WebViewer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 //import com.google.appinventor.components.runtime.util;
@@ -28,9 +29,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private TextBox chatText;
     private VerticalArrangement ChatWith;
-    private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, TimerHZ, ChatsViewerHZ, toolbarHz;
+    private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
-    private Clock Timer;
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
     private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
     private Web ChatWeb, PoolWebDriver, PoolWebNavigator, PoolNoIDWeb, PoolIDWeb;
@@ -65,8 +65,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Refresh.Image("buttonRefresh.png");
 
         this.BackgroundImage(applicationSettings.backgroundImageName);
-//        TimerHZ = new HorizontalArrangement(ChatWith);
-//        Timer = new Clock(TimerHZ);
         ChatsViewerHZ = new HorizontalArrangement(ChatWith);
         ChatsViewerHZ.AlignHorizontal(ALIGNMENT_CENTER);
         ChatsViewerHZ.WidthPercent(100);
@@ -108,6 +106,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         PoolWebNavigator = new Web(ChatWith);
         PoolNoIDWeb = new Web(ChatWith);
         PoolIDWeb = new Web(ChatWith);
+//        Timer timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        });
 
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
