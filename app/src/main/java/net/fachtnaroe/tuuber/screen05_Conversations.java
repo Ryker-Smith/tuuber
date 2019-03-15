@@ -329,7 +329,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             else {
                 notifier_Messages.ShowMessageDialog("Error getting Contact1 details", "Information", "OK" );
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             // if an exception occurs, code for it in here
             notifier_Messages.ShowMessageDialog("JSON Exception (1)", "Information", "OK" );
         }
@@ -345,22 +346,17 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                         "&status=open"
         );
         web_Contact2.Get();
-
     }
-
 
     public void getContact2List (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
         dbg(textOfResponse);
         if (status.equals("200") ) try {
-
             ListofContactWeb2 = new ArrayList<String>();
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat").equals("")) {
-
                 JSONArray contacts2 = parser.getJSONArray("chat");
-
                 for(int i = 0 ; i < contacts2.length() ; i++){
                     if (contacts2.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb2.add(
@@ -369,32 +365,31 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                     contacts2.getJSONObject(i).getString("first") +
                                     " " +
                                     contacts2.getJSONObject(i).getString("family")
-
                     );
                 }
-
                 String[] temp;
                 temp= listview_Open.Elements().toStringArray();
                 for (int i=0; i< temp.length; i++) {
                     ListofContactWeb2.add(temp[i]);
                 }
                 YailList tempData2 = YailList.makeList(ListofContactWeb1.toArray());
-//                ListofContactWeb1.add(listview_Open.Elements().toString());
                 tempData2=YailList.makeList( ListofContactWeb2 );
                 listview_Open.Elements(tempData2);
 
-            } else {
+            }
+            else {
                 notifier_Messages.ShowMessageDialog("Error getting Contact2 details", "Information", "OK");
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             // if an exception occurs, code for it in here
             notifier_Messages.ShowMessageDialog("JSON Exception (2)", "Information", "OK");
         }
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-
     }
+
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
@@ -421,10 +416,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 listview_In.Elements(YailList.makeList( ListofInboundWeb ));
 
 
-            } else {
+            }
+            else {
                 notifier_Messages.ShowMessageDialog("Error getting Inbound details", "Information", "OK");
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             // if an exception occurs, code for it in here
             notifier_Messages.ShowMessageDialog("JSON Exception (3)", "Information", "OK");
         }
@@ -436,13 +433,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     public void getOutboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
-        dbg(textOfResponse);
+        dbg("OUTBOUND: " + textOfResponse);
         if (status.equals("200") ) try {
 
             ListofOutboundWeb = new ArrayList<String>();
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat").equals("")) {
-
                 JSONArray Outbound = parser.getJSONArray("chat");
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     if (Outbound.getJSONObject(i).toString().equals("{}")) break;
@@ -457,12 +453,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 YailList tempData=YailList.makeList( ListofOutboundWeb );
                 listview_Out.Elements(YailList.makeList(ListofOutboundWeb));
                 dbg(tempData.toString());
-//                YailList.makeList(ListofOutboundWeb);
-
-            } else {
+            }
+            else {
                 notifier_Messages.ShowMessageDialog("Error getting Outbound details", "Information", "OK");
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e) {
             // if an exception occurs, code for it in here
             notifier_Messages.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
         }
