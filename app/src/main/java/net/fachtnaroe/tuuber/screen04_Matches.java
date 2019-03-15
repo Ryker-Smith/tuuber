@@ -124,6 +124,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         +"&status=init"
                         +"&text="
                         +OtherRoutepID.Text()
+                        +","
                         +DriverYNLabel.Text()
 
 
