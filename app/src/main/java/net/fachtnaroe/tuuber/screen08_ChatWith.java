@@ -34,7 +34,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
-    private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier;
+    private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier, MessageSent_Notifier;
     private Web ChatWeb, PoolWebDriver, PoolWebNavigator, PoolNoIDWeb, PoolIDWeb;
     private WebViewer ChatsViewer;
     int timetorefresh = 5000;
@@ -105,6 +105,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Pool.Text("Make Pool");
 
         Driver_Or_Navigator_ChoiceDialogNotifier = new Notifier(ChatWith);
+        MessageError_Notifier = new Notifier(ChatWith);
+        MessageSent_Notifier = new Notifier(ChatWith);
         ChatWeb = new Web(ChatWith);
         PoolWebDriver = new Web(ChatWith);
         PoolWebNavigator = new Web(ChatWith);
@@ -191,8 +193,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         else if (eventName.equals("GotText")) {
             if (component.equals(ChatWeb)) {
                 if (web_ResultGotText(params[1].toString(), params[3].toString())) {
-//                    startTimer();
                     chatText.Text("");
+                    MessageSent_Notifier.ShowMessageDialog("Message Successfully Sent", "Message Sent", "Ok");
                 } else {
                     chatText.BackgroundColor(Component.COLOR_RED);
                     MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
@@ -333,26 +335,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
     }
 
-//    public void startTimer() {
-//        Timer timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//                ChatsViewer.GoHome();
-//                ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
-//                        "?action=LIST&entity=chat&sessionID=" +
-//                        applicationSettings.sessionID +
-//                        "&initiator_pID=" +
-//                        applicationSettings.pID +
-//                        "&respondent_pID=" +
-//                        applicationSettings.otherpIDforChat +
-//                        "&showHtml=1" +
-//                        "&iam=" + applicationSettings.pID
-//                );
-//            }
-//        },
-//        5000,5000);
-//    }
     public void getPoolNavigatorList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
