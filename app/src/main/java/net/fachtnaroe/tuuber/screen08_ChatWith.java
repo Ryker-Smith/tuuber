@@ -166,18 +166,26 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(Send)) {
-                ChatWeb.Url(
-                        applicationSettings.baseURL +
-                                "?action=POST&entity=CHAT&sessionID=" +
-                                applicationSettings.sessionID +
-                                "&initiator_pID=" +
-                                applicationSettings.pID +
-                                "&respondent_pID=" +
-                                applicationSettings.otherpIDforChat +
-                                "&status=open&text=" +
-                                chatText.Text()
-                );
-                ChatWeb.Get();
+                if (chatText.Text().equals("")) {
+                    MessageError_Notifier.ShowMessageDialog("Fill in Textbox", "Error", "Ok");
+                    callBackend();
+                    return true;
+                }
+                else if (!chatText.Text().equals("")) {
+                    ChatWeb.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=CHAT&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&initiator_pID=" +
+                                    applicationSettings.pID +
+                                    "&respondent_pID=" +
+                                    applicationSettings.otherpIDforChat +
+                                    "&status=open&text=" +
+                                    chatText.Text()
+                    );
+                    ChatWeb.Get();
+                    return true;
+                }
                 return true;
             }
             else if (component.equals(Refresh)) {
