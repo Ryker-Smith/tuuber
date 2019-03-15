@@ -18,8 +18,6 @@ import com.google.appinventor.components.runtime.WebViewer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 //import com.google.appinventor.components.runtime.util;
@@ -34,10 +32,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
     private Button Send, Refresh, Pool, MainMenu;
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
-    private Notifier Driver_Or_Navigator_ChoiceDialogNotifier, MessageError_Notifier, MessageSent_Notifier;
-    private Web ChatWeb, PoolWebDriver, PoolWebNavigator, PoolNoIDWeb, PoolIDWeb;
+    private Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
+    private Web ChatWeb, PoolWebDriver, PoolWebNavigator, NoPoolCreatedWeb, PoolCreatedWeb;
     private WebViewer ChatsViewer;
-    int timetorefresh = 5000;
+    int TimeToRefresh = 5000;
 
 
     protected void $define() {
@@ -104,17 +102,17 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         Pool = new Button(PoolHZ);
         Pool.Text("Make Pool");
 
-        Driver_Or_Navigator_ChoiceDialogNotifier = new Notifier(ChatWith);
+        D_OR_N_ChoiceNotifier = new Notifier(ChatWith);
         MessageError_Notifier = new Notifier(ChatWith);
         MessageSent_Notifier = new Notifier(ChatWith);
         ChatWeb = new Web(ChatWith);
         PoolWebDriver = new Web(ChatWith);
         PoolWebNavigator = new Web(ChatWith);
-        PoolNoIDWeb = new Web(ChatWith);
-        PoolIDWeb = new Web(ChatWith);
+        NoPoolCreatedWeb = new Web(ChatWith);
+        PoolCreatedWeb = new Web(ChatWith);
         TimerRefreshBackend = new Clock(ChatWith);
         TimerRefreshBackend.TimerEnabled(false);
-        TimerRefreshBackend.TimerInterval(timetorefresh);
+        TimerRefreshBackend.TimerInterval(TimeToRefresh);
         TimerRefreshBackend.TimerEnabled(true);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
@@ -129,8 +127,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             callBackend();
         }
         if (eventName.equals("AfterChoosing")) {
-            if (component.equals(Driver_Or_Navigator_ChoiceDialogNotifier)) {
-                Driver_Or_Navigator_ChoiceDialogNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
+            if (component.equals(D_OR_N_ChoiceNotifier)) {
+                D_OR_N_ChoiceNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
                 DriverOrNavigatorLabel.Text((String) params[0]);
                 if (params[0].equals("Driver")) {
                     PoolWebDriver.Url(
@@ -186,7 +184,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 callBackend();
             }
             else if (component.equals(Pool)) {
-                Driver_Or_Navigator_ChoiceDialogNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
+                D_OR_N_ChoiceNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
             }
             return true;
         }
@@ -207,7 +205,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String textOfResponse = (String) params[3];
                 getPoolDriverList (status, textOfResponse);
                 if (PoolID.Text().equals("")) {
-                    PoolNoIDWeb.Url(
+                    NoPoolCreatedWeb.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -217,11 +215,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    PoolNoIDWeb.Get();
+                    NoPoolCreatedWeb.Get();
                     return true;
                 }
                 else if (!PoolID.Text().equals("")) {
-                    PoolIDWeb.Url(
+                    PoolCreatedWeb.Url(
                             applicationSettings.baseURL +
                                     "?action=PUT&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -234,7 +232,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     PoolID.Text() +
                                     "&pool_Status=1"
                     );
-                    PoolIDWeb.Get();
+                    PoolCreatedWeb.Get();
                     return true;
                 }
                 return true;
@@ -245,7 +243,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String textOfResponse = (String) params[3];
                 getPoolNavigatorList (status, textOfResponse);
                 if (PoolID.Text().equals("")) {
-                    PoolNoIDWeb.Url(
+                    NoPoolCreatedWeb.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -255,11 +253,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    PoolNoIDWeb.Get();
+                    NoPoolCreatedWeb.Get();
                     return true;
                 }
                 else if (!PoolID.Text().equals("")) {
-                    PoolIDWeb.Url(
+                    PoolCreatedWeb.Url(
                             applicationSettings.baseURL +
                                     "?action=PUT&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -272,7 +270,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     PoolID.Text() +
                                     "&pool_Status=1"
                     );
-                    PoolIDWeb.Get();
+                    PoolCreatedWeb.Get();
                     return true;
                 }
                 return true;
