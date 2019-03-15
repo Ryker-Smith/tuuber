@@ -18,7 +18,6 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
     Clock timerNextScreen;
     tuuber_Settings applicationSettings;
     VerticalArrangement SplashScreen;
-    Button tempButton;
     Image ourLogo;
     Label spacer;
     int thisIsA_Bad_Idea = 320;

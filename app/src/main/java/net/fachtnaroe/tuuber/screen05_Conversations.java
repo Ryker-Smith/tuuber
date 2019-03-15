@@ -40,6 +40,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        dbg(applicationSettings.backgroundImageName);
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Conversations = new VerticalArrangement(this);
 
@@ -174,6 +175,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 string_InboundLineID
                 );
                 web_DeclineInbound.Get();
+                dbg(web_DeclineInbound.Url());
                 return true;
             }
             else if (component.equals(button_CancelOutbound)) {
@@ -188,6 +190,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 "&status=init&line_ID=" +
                                 string_OutboundLineID
                 );
+                dbg(web_OutboundCancel.Url());
                 web_OutboundCancel.Get();
                 return true;
             }
@@ -259,12 +262,20 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                dbg(status);
+                dbg(textOfResponse);
                 callBackEnd();
                 return true;
             }
             else if (component.equals(web_OutboundCancel)) {
-                callBackEnd();
-                return true;
+                    String status = params[1].toString();
+                    String textOfResponse = (String) params[3];
+                    dbg(status);
+                    dbg(textOfResponse);
+                    callBackEnd();
+                    return true;
             }
         }
         return false;
@@ -388,6 +399,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
+        button_OpenChatScreen.Enabled(false);
     }
 
     public void getInboundList (String status, String textOfResponse) {
@@ -428,8 +440,10 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-
+        button_AcceptInbound.Enabled(false);
+        button_DeclineInbound.Enabled(false);
     }
+
     public void getOutboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
@@ -465,6 +479,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
+        button_CancelOutbound.Enabled(false);
 
     }
     void dbg (String debugMsg) {

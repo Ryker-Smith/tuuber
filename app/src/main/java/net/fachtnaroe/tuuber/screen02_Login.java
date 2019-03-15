@@ -59,7 +59,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         UserNameLabel.FontBold(true);
 
         inputUsername = new TextBox (usernameHz);
-        inputUsername.BackgroundColor(Component.COLOR_WHITE);
+        inputUsername.BackgroundColor(Component.COLOR_NONE);
         if (applicationSettings.lastLogin == applicationSettings.default_lastLogin) {
             inputUsername.Text("testing.this@tcfe.ie");
         }
