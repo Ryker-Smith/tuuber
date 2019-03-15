@@ -21,6 +21,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.HashMap; // import the HashMap class
+
 public class screen05_Conversations extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
@@ -34,7 +36,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private List<String> ListofContactWeb1, ListofContactWeb2, ListofInboundWeb, ListofOutboundWeb;
     private Notifier notifier_Messages;
     String string_InboundLineID, string_InboundpID, string_OutboundpID, string_OutboundLineID;
-
+    HashMap<Integer, String> conversationsOpen = new HashMap<Integer, String>();
 
     protected void $define() {
 
@@ -283,7 +285,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     void callBackEnd() {
         web_Contact1.Url(
-                applicationSettings.baseURL +
+                        applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&respondent_pID=" +
@@ -292,7 +294,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         );
         web_Contact1.Get();
         web_Inbound.Url(
-                applicationSettings.baseURL +
+                        applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&respondent_pID=" +
@@ -301,7 +303,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         );
         web_Inbound.Get();
         web_Outbound.Url(
-                applicationSettings.baseURL +
+                        applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&initiator_pID=" +
@@ -331,7 +333,15 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                     " " +
                                     contacts1Array.getJSONObject(i).getString("family")
                     );
+                    conversationsOpen.put(contacts1Array.getJSONObject(i).getInt("initiator_pID" ) ,
+                            contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
+                                    ":: " +
+                                    contacts1Array.getJSONObject(i).getString("first" ) +
+                                    " " +
+                                    contacts1Array.getJSONObject(i).getString("family")
+                    );
                 }
+
 
                 YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
                 ListofContactWeb1.add(listview_Open.Elements().toString());
@@ -349,14 +359,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
         web_Contact2.Url(
-                applicationSettings.baseURL +
+                        applicationSettings.baseURL +
                         "?action=LIST&entity=chat&sessionID=" +
                         applicationSettings.sessionID +
                         "&initiator_pID=" +
                         applicationSettings.pID +
                         "&status=open"
         );
-        web_Contact2.Get();
+//        web_Contact2.Get();
     }
 
     public void getContact2List (String status, String textOfResponse) {
@@ -367,16 +377,29 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             ListofContactWeb2 = new ArrayList<String>();
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("chat").equals("")) {
-                JSONArray contacts2 = parser.getJSONArray("chat");
-                for(int i = 0 ; i < contacts2.length() ; i++){
-                    if (contacts2.getJSONObject(i).toString().equals("{}")) break;
+                JSONArray contacts2Array = parser.getJSONArray("chat");
+                for(int i = 0 ; i < contacts2Array.length() ; i++){
+                    if (contacts2Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb2.add(
-                            contacts2.getJSONObject(i).getString("respondent_pID") +
+                            contacts2Array.getJSONObject(i).getString("respondent_pID") +
                                     ":: " +
-                                    contacts2.getJSONObject(i).getString("first") +
+                                    contacts2Array.getJSONObject(i).getString("first") +
                                     " " +
-                                    contacts2.getJSONObject(i).getString("family")
+                                    contacts2Array.getJSONObject(i).getString("family")
                     );
+                    conversationsOpen.put(contacts2Array.getJSONObject(i).getInt("initiator_pID" ) ,
+                            contacts2Array.getJSONObject(i).getString("initiator_pID" ) +
+                                    ":: " +
+                                    contacts2Array.getJSONObject(i).getString("first" ) +
+                                    " " +
+                                    contacts2Array.getJSONObject(i).getString("family")
+                    );
+                }
+
+                // https://www.w3schools.com/java/java_hashmap.asp
+                ListofContactWeb2 = new ArrayList<String>();
+                for (Integer i : conversationsOpen.keySet()) {
+                    ListofContactWeb2.add(conversationsOpen.get(i));
                 }
                 String[] temp;
                 temp= listview_Open.Elements().toStringArray();
@@ -400,6 +423,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
         button_OpenChatScreen.Enabled(false);
+        for (Integer i : conversationsOpen.keySet()) {
+            dbg("CONVERSATION: " + i.toString());
+        }
     }
 
     public void getInboundList (String status, String textOfResponse) {
@@ -426,8 +452,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 }
 //                YailList tempData3=YailList.makeList( ListofInboundWeb );
                 listview_In.Elements(YailList.makeList( ListofInboundWeb ));
-
-
             }
             else {
                 notifier_Messages.ShowMessageDialog("Error getting Inbound details", "Information", "OK");
@@ -480,8 +504,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
         button_CancelOutbound.Enabled(false);
-
     }
+
     void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
