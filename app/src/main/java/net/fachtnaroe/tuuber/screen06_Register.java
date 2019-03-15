@@ -44,6 +44,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         applicationSettings.get();
         this.BackgroundImage(applicationSettings.backgroundImageName);
         Register = new VerticalArrangement (this);
+        Register.WidthPercent(100);
+        Register.HeightPercent(100);
         Image1 = new Image (Register);
         PhoneHZ = new HorizontalArrangement (Register);
         eMailHZ = new HorizontalArrangement (Register);
