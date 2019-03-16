@@ -26,17 +26,16 @@ import org.json.JSONObject;
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private Clock timer_RefreshBackend;
-    private TextBox text_ChatLine;
-    private VerticalArrangement ChatWith;
-    private HorizontalArrangement hz_ChatLine, hz_PoolLine, pIDHZ, hz_ChatsViewer, toolbarHz;
-    private Button button_SendText, button_Refresh, button_MakePool, MainMenu;
-    private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
-    private Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
-    private Web web_Chat, PoolWebDriver, PoolWebNavigator, NoPoolCreatedWeb, PoolCreatedWeb;
-    private WebViewer webview_Chat;
-    int int_ChatRefreshTime = 5000;
-
+    Clock timer_RefreshBackend;
+    TextBox text_ChatLine;
+    VerticalArrangement ChatWith;
+    HorizontalArrangement hz_ChatLine, hz_PoolLine, pIDHZ, hz_ChatsViewer, hz_toolbar;
+    Button button_SendText, button_Refresh, button_MakePool, MainMenu;
+    Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
+    Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
+    Web web_Chat, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated;
+    WebViewer webview_Chat;
+    int int_RefreshBackendTimeInterval = 5000;
 
     protected void $define() {
 
@@ -47,20 +46,20 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
 
-        toolbarHz = new HorizontalArrangement(ChatWith);
-        MainMenu = new Button(toolbarHz);
+        hz_toolbar = new HorizontalArrangement(ChatWith);
+        MainMenu = new Button(hz_toolbar);
         MainMenu.Width(40);
         MainMenu.Height(40);
         MainMenu.Image("buttonHome.png");
 
-        pID = new Label(toolbarHz);
+        pID = new Label(hz_toolbar);
         pID.Text("I am user: #" + applicationSettings.pID);
         pID.Height(40);
         pID.FontSize(20);
         pID.WidthPercent(70);
         pID.TextAlignment(Component.ALIGNMENT_CENTER);
 
-        button_Refresh = new Button(toolbarHz);
+        button_Refresh = new Button(hz_toolbar);
         button_Refresh.Width(40);
         button_Refresh.Height(40);
         button_Refresh.FontSize(8);
@@ -73,18 +72,22 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         webview_Chat = new WebViewer(hz_ChatsViewer);
         webview_Chat.HeightPercent(40);
         webview_Chat.WidthPercent(100);
-        webview_Chat.HomeUrl(applicationSettings.default_baseURL +
-                "?action=LIST&entity=chat&sessionID=" +
+
+        webview_Chat.HomeUrl(
+                applicationSettings.baseURL +
+                "?action=LIST&entity=DISC&sessionID=" +
                 applicationSettings.sessionID +
                 "&showHtml=1" +
-                "&iam=" + applicationSettings.pID
+                "&iam=" + applicationSettings.pID +
+                "&link_ID=" +
+                applicationSettings.otherpIDforChat
         );
-
+        dbg(webview_Chat.HomeUrl());
         hz_ChatLine = new HorizontalArrangement(ChatWith);
         hz_ChatLine.WidthPercent(100);
 //        hz_ChatLine.AlignHorizontal(ALIGNMENT_OPPOSITE);
         text_ChatLine = new TextBox(hz_ChatLine);
-        text_ChatLine.Text(">>>");
+        text_ChatLine.Text("");
         text_ChatLine.WidthPercent(85);
         button_SendText = new Button(hz_ChatLine);
         button_SendText.Text("but");
@@ -105,14 +108,14 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         MessageError_Notifier = new Notifier(ChatWith);
         MessageSent_Notifier = new Notifier(ChatWith);
         web_Chat = new Web(ChatWith);
-        PoolWebDriver = new Web(ChatWith);
-        PoolWebNavigator = new Web(ChatWith);
-        NoPoolCreatedWeb = new Web(ChatWith);
-        PoolCreatedWeb = new Web(ChatWith);
+        web_PoolDriver = new Web(ChatWith);
+        web_PoolNavigator = new Web(ChatWith);
+        web_NoPoolCreated = new Web(ChatWith);
+        web_PoolCreated = new Web(ChatWith);
         timer_RefreshBackend = new Clock(ChatWith);
         timer_RefreshBackend.TimerEnabled(false);
-        timer_RefreshBackend.TimerInterval(int_ChatRefreshTime);
-        timer_RefreshBackend.TimerEnabled(true);
+        timer_RefreshBackend.TimerInterval(int_RefreshBackendTimeInterval);
+        timer_RefreshBackend.TimerEnabled(false);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
@@ -122,6 +125,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("Timer")) {
             callBackend();
         }
@@ -130,7 +134,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 D_OR_N_ChoiceNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
                 DriverOrNavigatorLabel.Text((String) params[0]);
                 if (params[0].equals("Driver")) {
-                    PoolWebDriver.Url(
+                    web_PoolDriver.Url(
                             applicationSettings.baseURL +
                                     "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -140,11 +144,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    PoolWebDriver.Get();
+                    web_PoolDriver.Get();
                     return true;
                 }
                 if (params[0].equals("Navigator")) {
-                    PoolWebNavigator.Url(
+                    web_PoolNavigator.Url(
                             applicationSettings.baseURL +
                                     "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -154,7 +158,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    PoolWebNavigator.Get();
+                    web_PoolNavigator.Get();
                     return true;
                 }
             }
@@ -206,13 +210,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 return true;
             }
-            else if (component.equals(PoolWebDriver)) {
+            else if (component.equals(web_PoolDriver)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolDriverList (status, textOfResponse);
                 if (PoolID.Text().equals("")) {
-                    NoPoolCreatedWeb.Url(
+                    web_NoPoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -222,11 +226,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    NoPoolCreatedWeb.Get();
+                    web_NoPoolCreated.Get();
                     return true;
                 }
                 else if (!PoolID.Text().equals("")) {
-                    PoolCreatedWeb.Url(
+                    web_PoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=PUT&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -239,18 +243,18 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     PoolID.Text() +
                                     "&pool_Status=1"
                     );
-                    PoolCreatedWeb.Get();
+                    web_PoolCreated.Get();
                     return true;
                 }
                 return true;
             }
-            else if (component.equals(PoolWebNavigator)) {
+            else if (component.equals(web_PoolNavigator)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolNavigatorList (status, textOfResponse);
                 if (PoolID.Text().equals("")) {
-                    NoPoolCreatedWeb.Url(
+                    web_NoPoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -260,11 +264,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.otherpIDforChat +
                                     "&rID=22"
                     );
-                    NoPoolCreatedWeb.Get();
+                    web_NoPoolCreated.Get();
                     return true;
                 }
                 else if (!PoolID.Text().equals("")) {
-                    PoolCreatedWeb.Url(
+                    web_PoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=PUT&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -277,7 +281,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     PoolID.Text() +
                                     "&pool_Status=1"
                     );
-                    PoolCreatedWeb.Get();
+                    web_PoolCreated.Get();
                     return true;
                 }
                 return true;
@@ -289,16 +293,17 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     void callBackend() {
         webview_Chat.GoHome();
-        webview_Chat.GoToUrl(applicationSettings.default_baseURL +
-                "?action=LIST&entity=chat&sessionID=" +
-                applicationSettings.sessionID +
-                "&initiator_pID=" +
-                applicationSettings.pID +
-                "&respondent_pID=" +
-                applicationSettings.otherpIDforChat +
-                "&showHtml=1" +
-                "&iam=" + applicationSettings.pID
-        );
+
+//        webview_Chat.GoToUrl(applicationSettings.default_baseURL +
+//                "?action=LIST&entity=chat&sessionID=" +
+//                applicationSettings.sessionID +
+//                "&initiator_pID=" +
+//                applicationSettings.pID +
+//                "&respondent_pID=" +
+//                applicationSettings.otherpIDforChat +
+//                "&showHtml=1" +
+//                "&iam=" + applicationSettings.pID
+//        );
     }
 
     public boolean web_ResultGotText(String status, String textOfResponse) {
@@ -345,7 +350,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         dbg(status);
         dbg("PoolID: " + textOfResponse);
         /*
-          Request pool info, here prcess reply:
+          Request pool info, here process reply:
           if no pool, send POST to make pool
           else get pool_ID, send PUT to amend status
 
