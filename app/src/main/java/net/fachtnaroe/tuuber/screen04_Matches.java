@@ -131,9 +131,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 );
                 SendingChat.Get();
                 return true;
-
-
-
             }
             else if (component.equals(AddToMatches)) {
                 if (component.equals(AddToMatches)) {
@@ -222,6 +219,13 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32) ) {
                             temp="Friday";
                         }
+                        String string_driverStatus;
+                        if ( (routesArray.getJSONObject(i).getString("driver").equals(("Y")))) {
+                            string_driverStatus="drives";
+                        }
+                        else {
+                            string_driverStatus="navigates";
+                        }
                         ListOfRoutesFromWeb.add(
                                 routesArray.getJSONObject(i).getString("rID")
                                         +
@@ -232,8 +236,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                         + routesArray.getJSONObject(i).getString("destination" )
                                         + " on "
                                         + temp
-                                        + "&"
-                                        + routesArray.getJSONObject(i).getString("driver")
+                                        + " ("  + string_driverStatus + ")"
 
                         );
                     }
