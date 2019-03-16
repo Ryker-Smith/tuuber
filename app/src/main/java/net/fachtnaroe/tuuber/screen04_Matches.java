@@ -30,12 +30,14 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private tuuber_Settings applicationSettings;
     private Web getRouteWeb, Routes, MatchesAvailable, SendingChat;
     private Notifier messagesPopUp;
-    private Button SendRequest, MainMenu, Refresh , AddToMatches;
+    private Button button_InitiateChat, MainMenu, Refresh , button_FindMatches;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
-    private HorizontalArrangement MatchesButtons, MenuButtons, HorizontalArragment3;
-    private ListView MyRouteList, MatchesMade;
-    private Label User_ID , MatchID, OtherRoutepID, otherpID, DriverYNLabel;
+    private HorizontalArrangement MatchesButtons, MenuButtons, hz_Arrangement3;
+    private ListView list_MyRoutes, list_MatchesFound;
+    private Label User_ID , OtherRoutepID, otherpID, DriverYNLabel;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
+
+    private Integer int_SelectedRoute = -1;
 
     protected void $define() {
         applicationSettings = new tuuber_Settings(this);
@@ -59,27 +61,27 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         User_ID.TextAlignment(Component.ALIGNMENT_CENTER);
         Refresh = new Button(MenuButtons);
         Refresh.Image("buttonRefresh.png");
-        MyRouteList = new ListView(Matches);
-        MyRouteList.HeightPercent(35);
-        MyRouteList.TextSize(applicationSettings.intListViewsize);
+        list_MyRoutes = new ListView(Matches);
+        list_MyRoutes.HeightPercent(35);
+        list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         MatchesButtons = new HorizontalArrangement(Matches);
-        AddToMatches =new Button(MatchesButtons);
-        AddToMatches.Text("Click to see Matches");
+        button_FindMatches =new Button(MatchesButtons);
+        button_FindMatches.Text("Click to see Matches");
+        button_FindMatches.Enabled(false);
         getRouteWeb = new Web(Matches);
         MatchesAvailable = new Web(Matches);
-        MatchesMade = new ListView(Matches);
-        MatchesMade.HeightPercent(35);
-        MatchesMade.TextSize(applicationSettings.intListViewsize);
-        HorizontalArragment3 = new HorizontalArrangement(Matches);
+        list_MatchesFound = new ListView(Matches);
+        list_MatchesFound.HeightPercent(35);
+        list_MatchesFound.TextSize(applicationSettings.intListViewsize);
+        hz_Arrangement3 = new HorizontalArrangement(Matches);
         MatchesAvailable = new Web(Matches);
-        SendRequest =new Button(HorizontalArragment3);
-        SendRequest.Text("Send Chat");
-        SendRequest.Enabled(false);
+        button_InitiateChat =new Button(hz_Arrangement3);
+        button_InitiateChat.Text("Send Chat");
+        button_InitiateChat.Enabled(false);
         messagesPopUp = new Notifier(Matches);
-        DriverYNLabel = new Label(HorizontalArragment3);
-        MatchID= new Label(HorizontalArragment3);
-        OtherRoutepID = new Label(HorizontalArragment3);
-        otherpID = new Label(HorizontalArragment3);
+        DriverYNLabel = new Label(hz_Arrangement3);
+        OtherRoutepID = new Label(hz_Arrangement3);
+        otherpID = new Label(hz_Arrangement3);
         SendingChat = new Web(Matches);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
@@ -107,10 +109,12 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(Refresh)){
+                button_FindMatches.Enabled(false);
+                button_InitiateChat.Enabled(false);
                 getRoutesFromBackEnd();
                 return true;
             }
-            else if (component.equals(SendRequest)) {
+            else if (component.equals(button_InitiateChat)) {
                 SendingChat.Url(
                         applicationSettings.baseURL
                         +"?action=POST"
@@ -126,14 +130,12 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         +OtherRoutepID.Text()
                         +","
                         +DriverYNLabel.Text()
-
-
                 );
                 SendingChat.Get();
                 return true;
             }
-            else if (component.equals(AddToMatches)) {
-                if (component.equals(AddToMatches)) {
+            else if (component.equals(button_FindMatches)) {
+                if (component.equals(button_FindMatches)) {
                     MatchesAvailable.Url(
                             applicationSettings.baseURL
                                     + "?action=GET"
@@ -142,7 +144,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                     + applicationSettings.sessionID
                                     + "&"
                                     + "rID="
-                                    + MatchID.Text()
+                                    + int_SelectedRoute.toString()
                     );
                     dbg(MatchesAvailable.Url());
                     MatchesAvailable.Get();
@@ -151,19 +153,17 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             }
         }
         else if (eventName.equals("AfterPicking")) {
-             if (component.equals(MyRouteList)) {
-                String MatchesID = new String();
-                MatchesID = MyRouteList.Selection();
-                String currentString = MatchesID;
-                String[] separated = currentString.split("::");
-                MatchID.Text(separated[0]);
-
+             if (component.equals(list_MyRoutes)) {
+                String[] temp = list_MyRoutes.Selection().split("=");
+                temp[1]=temp[1].replace(")","");
+                int_SelectedRoute=Integer.valueOf( temp[1] );
+                dbg(int_SelectedRoute.toString());
+                button_FindMatches.Enabled(true);
                 return true;
              }
-
-             else if (component.equals(MatchesMade)){
+             else if (component.equals(list_MatchesFound)){
                  String otherPidSplit = new String();
-                 otherPidSplit = MatchesMade.Selection();
+                 otherPidSplit = list_MatchesFound.Selection();
                  String NewString = otherPidSplit;
                  String[] seperated2 = NewString.split("::");
                  String AnotherString = seperated2[1];
@@ -173,7 +173,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                  otherpID.Text(seperated2[0]);
                  OtherRoutepID.Text(seperated3[0]);
                  DriverYNLabel.Text(separated4[1]);
-                 SendRequest.Enabled(true);
+                 button_InitiateChat.Enabled(true);
                  return true;
              }
         }
@@ -239,7 +239,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         );
                     }
                     YailList tempData=YailList.makeList( ListOfRoutesFromWeb);
-                    MyRouteList.Elements(tempData);
+                    list_MyRoutes.Elements(tempData);
                 }
                 else {
                     messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
@@ -277,7 +277,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                             );
                         }
                         YailList tempData = YailList.makeList(ListOfMatchesFromWeb);
-                        MatchesMade.Elements(tempData);
+                        list_MatchesFound.Elements(tempData);
                     }
                 } else {
                     messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
