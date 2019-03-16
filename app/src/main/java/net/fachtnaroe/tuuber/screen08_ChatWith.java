@@ -81,6 +81,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "&iam=" + applicationSettings.pID +
                 "&link_ID=" +
                 applicationSettings.otherpIDforChat // <~~ this must change
+                + "#bottom"
         );
         dbg(webview_Chat.HomeUrl());
         hz_ChatLine = new HorizontalArrangement(ChatWith);
@@ -284,11 +285,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     void callBackend() {
+        webview_Chat.ClearLocations();
+        webview_Chat.ClearCaches();
         webview_Chat.GoHome();
     }
 
     public boolean web_ResultGotText(String status, String textOfResponse) {
-        String temp=new String();
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("result").equals("OK")) {
