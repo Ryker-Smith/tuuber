@@ -48,24 +48,26 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Label routesDescription;
     private Label routesAction;
     private String Test;
-    private ListPicker TownsList, townsDisplay;
+    private ListPicker townsDisplay;
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
-    private Button MainMenu, To, From, Save, Delete;
+    private Button To, From, Save, Delete;
     private Button buttonMainMenu, buttonRefresh;
     TinyDB localDB;
     //    private CheckBox M, T, W, Th,F;
-    private ListView routesDisplay;
+    private ListView list_MyRoutes;
     public String days;
     //    private TextBox TownSingle, TownsDecoded, DriverYN;
 //    private ListPicker O, DestinationList, OriginList2, DestinationList2;
     private CheckBox mon, tues, weds, thurs, fri, DriverYoN;
-    private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb, getDayFromWeb;
+    private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify = new String("to");
     String rID;
     Integer day = -1;// used to store the day selection of the user
     Integer saveedit = 0;
     String driver, destination, origin, action;
+    Integer int_SelectedRoute;
+
     protected void $define() {
 
         applicationSettings = new tuuber_Settings(this);
@@ -94,8 +96,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My Routes:");
-        routesDisplay = new ListView(RoutesScreen);
-        routesDisplay.HeightPercent(30);
+        list_MyRoutes = new ListView(RoutesScreen);
+        list_MyRoutes.HeightPercent(30);
         routesDescription = new Label(RoutesScreen);
         routesDescription.Text("Route description area:");
         saveRouteWeb = new Web(RoutesScreen);
@@ -127,9 +129,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         townsDisplay = new ListPicker(RoutesScreen);
         townsDisplay.Text("Press for list of towns");
         townsDisplay.Selection();
-//        RoutsList = new ArrayList();
-//        YailList tempData=YailList.makeList(RoutsList);
-//        townsDisplay.Elements(tempData);
         routesAction = new Label(RoutesScreen);
         routesAction.Text("Route actions:");
         ButtonHolder = new HorizontalArrangement(RoutesScreen);
@@ -137,25 +136,16 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Save.Text("Save");
         Delete = new Button(ButtonHolder);
         Delete.Text("Delete");
-        routesDisplay.TextSize(applicationSettings.intListViewsize);
-        //Save = new Button(RoutesScreen);
-        //Delete = new Button(RoutesScreen);
-        //Save.Text("Save");
-        //Delete.Text("Delete");
+        list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         Templemore.Image("Arrow_Right_Templemore.png");
         Templemore.Width(50);
         Templemore.Height(50);
         Test2 = new Label(RoutesScreen);
         Test2.BackgroundColor(COLOR_WHITE);
-
-
         DeleteRoute = new Web(RoutesScreen);
         GetTowns = new Web(RoutesScreen);
         getRoute = new Web(RoutesScreen);
         Save.Enabled(false);
-
-
-
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
@@ -170,7 +160,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         );
         TownsWeb.Get();
         getRoutesFromBackEnd();
-
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -187,11 +176,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     thurs.Checked(false);
                     fri.Checked(false);
                     Save.Enabled(true);
-                } else {
+                }
+                else {
                     Save.Enabled(false);
                 }
                 return true;
-            } else if (component.equals(tues)) {
+            }
+            else if (component.equals(tues)) {
                 if (tues.Checked() == true) {
                     day = 4;
                     mon.Checked(false);
@@ -199,11 +190,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     thurs.Checked(false);
                     fri.Checked(false);
                     Save.Enabled(true);
-                } else {
+                }
+                else {
                     Save.Enabled(false);
                 }
                 return true;
-            } else if (component.equals(weds)) {
+            }
+            else if (component.equals(weds)) {
                 if (weds.Checked() == true) {
                     day = 8;
                     tues.Checked(false);
@@ -211,11 +204,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     thurs.Checked(false);
                     fri.Checked(false);
                     Save.Enabled(true);
-                } else {
+                }
+                else {
                     Save.Enabled(false);
                 }
                 return true;
-            } else if (component.equals(thurs)) {
+            }
+            else if (component.equals(thurs)) {
                 if (thurs.Checked() == true) {
                     day = 16;
                     tues.Checked(false);
@@ -223,11 +218,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     mon.Checked(false);
                     fri.Checked(false);
                     Save.Enabled(true);
-                } else {
+                }
+                else {
                     Save.Enabled(false);
                 }
                 return true;
-            } else if (component.equals(fri)) {
+            }
+            else if (component.equals(fri)) {
                 if (fri.Checked() == true) {
                     day = 32;
                     tues.Checked(false);
@@ -235,38 +232,41 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     thurs.Checked(false);
                     mon.Checked(false);
                     Save.Enabled(true);
-                } else {
+                }
+                else {
                     Save.Enabled(false);
                 }
                 return true;
             }
-        } else if (eventName.equals("AfterPicking")) {
+        }
+        else if (eventName.equals("AfterPicking")) {
 
-            if (component.equals(routesDisplay)) {
-                String CheckrID = new String();
-                CheckrID = routesDisplay.Selection();
-                String currentstring = CheckrID;
-                String[] separated = currentstring.split(":");
+            if (component.equals(list_MyRoutes)) {
+                String[] temp = list_MyRoutes.Selection().split("=");
+                temp[1]=temp[1].replace(")","");
+                int_SelectedRoute=Integer.valueOf( temp[1] );
                 getRoute.Url(
                         baseURL
                                 + "?action=GET"
                                 + "&entity=ROUTE"
-                                + "&" + "rID=" + separated[0]
+                                + "&" + "rID=" + int_SelectedRoute
                                 + "&sessionID=" + applicationSettings.sessionID
                 );
                 saveedit = 1;
                 getRoute.Get();
                 return true;
-            } else if (component.equals(townsDisplay)) {
+            }
+            else if (component.equals(townsDisplay)) {
                 townsDisplay.Text(townsDisplay.Selection());
                 return true;
             }
-
-        } else if (eventName.equals("Click")) {
+        }
+        else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
                 finish();
                 return true;
-            } else if (component.equals(townsDisplay)) {
+            }
+            else if (component.equals(townsDisplay)) {
                 GetTowns.Url(
                         baseURL
                                 + "?action=LIST"
@@ -276,10 +276,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 );
                 dbg(GetTowns.Url());
                 GetTowns.Get();
-            } else if (component.equals(buttonRefresh)) {
+            }
+            else if (component.equals(buttonRefresh)) {
                 getRoutesFromBackEnd();
                 return true;
-            } else if (component.equals(Delete)) {
+            }
+            else if (component.equals(Delete)) {
                 String RouteID = townsDisplay.Selection();
                 DeleteRoute.Url(
                         baseURL
@@ -292,17 +294,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 DeleteRoute.Get();
                 getRoutesFromBackEnd();
 
-            } else if (component.equals(Save)) {
+            }
+            else if (component.equals(Save)) {
                 dbg("Saving");
                 if(saveedit.equals(0)){
-
                     action="POST";
-
                 }
                 else{
-
                     action="PUT";
-
                 }
                 if ((!mon.Checked()) && (!tues.Checked()) && (!weds.Checked()) && (!thurs.Checked()) && (!fri.Checked()) && (!DriverYoN.Checked())) {
                     return true;
@@ -312,13 +311,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 temp = temp + "&";
                 if (DriverYoN.Checked()) {
                     temp = temp + "driver=Y";
-                } else {
+                }
+                else {
                     temp = temp + "driver=N";
                 }
                 String Directions = new String();
                 if (Specify.equals("to")) {
                     Directions = "&destination=Templemore&origin=" + townsDisplay.Text();
-                } else {
+                }
+                else {
                     Directions = "&origin=Templemore&destination=" + townsDisplay.Text();
                 }
                 saveRouteWeb.Url(
@@ -334,31 +335,37 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 saveRouteWeb.Get();
                 dbg(saveRouteWeb.Url());
                 return true;
-            } else if (component.equals(To)) {
+            }
+            else if (component.equals(To)) {
                 Templemore.Image("Arrow_Right_Templemore.png");
                 Specify = "to";
-            } else if (component.equals(From)) {
+            }
+            else if (component.equals(From)) {
                 Templemore.Image("Arrow_Left_Templemore.png");
                 Specify = "from";
-            } else if (component.equals(Delete)) {
             }
-        } else if (eventName.equals("GotText")) {
+            else if (component.equals(Delete)) {
+            }
+        }
+        else if (eventName.equals("GotText")) {
             if (component.equals(getRouteWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getRouteWebGotText(status, textOfResponse);
                 return true;
-            } else if (component.equals(TownsWeb)) {
+            }
+            else if (component.equals(TownsWeb)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getTownList(status, textOfResponse);
                 return true;
-            } else if (component.equals(saveRouteWeb)) {
+            }
+            else if (component.equals(saveRouteWeb)) {
                 getRouteWeb.Get();
-            } else if (component.equals(getRoute)) {
-//                dbg((String) params[3]);
+            }
+            else if (component.equals(getRoute)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getDay(status, textOfResponse);
@@ -391,22 +398,27 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     } else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32)) {
                         temp = "Friday";
                     }
+                    String string_driverStatus;
+                    if ( (routesArray.getJSONObject(i).getString("driver").equals(("Y")))) {
+                        string_driverStatus="Driving";
+                    }
+                    else {
+                        string_driverStatus="Going";
+                    }
                     ListOfRoutesFromWeb.add(
-                            routesArray.getJSONObject(i).getString("rID")
-                                    +
-                                    ":: "
-                                    +
-                                    "From "
+                            string_driverStatus
+                                    + " from "
                                     + routesArray.getJSONObject(i).getString("origin")
                                     + " to "
-                                    + routesArray.getJSONObject(i).getString("destination")
+                                    + routesArray.getJSONObject(i).getString("destination" )
                                     + " on "
                                     + temp
+                                    + " (rID="  + routesArray.getJSONObject(i).getString("rID") + ")"
 
                     );
                 }
                 YailList tempData = YailList.makeList(ListOfRoutesFromWeb);
-                routesDisplay.Elements(tempData);
+                list_MyRoutes.Elements(tempData);
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
             }
@@ -456,7 +468,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 + "&sessionID=" + applicationSettings.sessionID
         );
         getRouteWeb.Get();
-
     }
 
     boolean binary_same_as(Integer first, Integer second) {
@@ -522,8 +533,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
     }
-
-
 
     public void setday(Integer days){
         if (binary_same_as(days, 2)) {
