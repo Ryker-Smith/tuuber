@@ -51,7 +51,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         MainMenu.Height(40);
         MainMenu.Image("buttonHome.png");
         pID = new Label(toolbarHz);
-        pID.Text("I am user: #" + applicationSettings.pID);
+        pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Conversations</small></small>");
         pID.Height(40);
         pID.FontSize(20);
         pID.WidthPercent(70);
@@ -133,61 +133,49 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 return true;
             }
             else if (component.equals(button_AcceptInbound)) {
+                String[] temp=listview_In.Selection().split("=");
+                String link_ID=temp[1].replace(")","");
                 web_AcceptInbound.Url(
                         applicationSettings.baseURL +
-                                "?action=POST&entity=CHAT&sessionID=" +
+                                "?action=PUT&entity=LINK&sessionID=" +
                                 applicationSettings.sessionID +
-                                "&respondent_pID=" +
-                                string_InboundpID +
-                                "&initiator_pID=" +
+                                "&iam=" +
                                 applicationSettings.pID +
-                                "&status=open&text=" +
-                                ""
+                                "&link_ID=" +
+                                link_ID +
+                                "&status=open"
                 );
                 web_AcceptInbound.Get();
-                web_DeclineInbound.Url(
-                        applicationSettings.baseURL +
-                                "?action=DELETE&entity=CHAT&sessionID=" +
-                                applicationSettings.sessionID +
-                                "&respondent_pID=" +
-                                applicationSettings.pID +
-                                "&initiator_pID=" +
-                                string_InboundpID +
-                                "&status=init" +
-                                "&line_ID=" +
-                                string_InboundLineID
-                );
-                web_DeclineInbound.Get();
+                callBackEnd();
                 return true;
             }
             else if (component.equals(button_DeclineInbound)) {
+                String[] temp=listview_In.Selection().split("=");
+                String link_ID=temp[1].replace(")","");
                 web_DeclineInbound.Url(
                         applicationSettings.baseURL +
-                                "?action=DELETE&entity=CHAT&sessionID=" +
+                                "?action=DELETE&entity=LINK&sessionID=" +
                                 applicationSettings.sessionID +
-                                "&respondent_pID=" +
+                                "&iam=" +
                                 applicationSettings.pID +
-                                "&initiator_pID=" +
-                                string_InboundpID +
-                                "&status=init" +
-                                "&line_ID=" +
-                                string_InboundLineID
+                                "&link_ID=" +
+                                link_ID
                 );
                 web_DeclineInbound.Get();
                 dbg(web_DeclineInbound.Url());
                 return true;
             }
             else if (component.equals(button_CancelOutbound)) {
+                String[] temp=listview_Out.Selection().split("=");
+                String link_ID=temp[1].replace(")","");
                 web_OutboundCancel.Url(
                         applicationSettings.baseURL +
-                                "?action=DELETE&entity=CHAT&sessionID=" +
+                                "?action=DELETE&entity=LINK&sessionID=" +
                                 applicationSettings.sessionID +
-                                "&initiator_pID=" +
+                                "&iam=" +
                                 applicationSettings.pID +
-                                "&respondent_pID=" +
-                                string_OutboundpID +
-                                "&status=init&line_ID=" +
-                                string_OutboundLineID
+                                "&link_ID=" +
+                                link_ID
                 );
                 dbg(web_OutboundCancel.Url());
                 web_OutboundCancel.Get();
@@ -233,13 +221,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 getContact1List(status, textOfResponse);
                 return true;
             }
-//            else if (component.equals(web_Contact2)) {
-//                dbg((String) params[0]);
-//                String status = params[1].toString();
-//                String textOfResponse = (String) params[3];
-//                getContact2List(status, textOfResponse);
-//                return true;
-//            }
             else if (component.equals(web_Inbound)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
