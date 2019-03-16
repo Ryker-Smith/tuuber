@@ -221,22 +221,20 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         }
                         String string_driverStatus;
                         if ( (routesArray.getJSONObject(i).getString("driver").equals(("Y")))) {
-                            string_driverStatus="drives";
+                            string_driverStatus="Driving";
                         }
                         else {
-                            string_driverStatus="navigates";
+                            string_driverStatus="Going";
                         }
                         ListOfRoutesFromWeb.add(
-                                routesArray.getJSONObject(i).getString("rID")
-                                        +
-                                        ":: "
-                                        + "From "
+                                string_driverStatus
+                                        + " from "
                                         + routesArray.getJSONObject(i).getString("origin")
                                         + " to "
                                         + routesArray.getJSONObject(i).getString("destination" )
                                         + " on "
                                         + temp
-                                        + " ("  + string_driverStatus + ")"
+                                        + " (rID="  + routesArray.getJSONObject(i).getString("rID") + ")"
 
                         );
                     }
