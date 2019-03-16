@@ -29,11 +29,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     Clock timer_RefreshBackend;
     TextBox text_ChatLine;
     VerticalArrangement ChatWith;
-    HorizontalArrangement hz_ChatLine, hz_PoolLine, pIDHZ, hz_ChatsViewer, hz_toolbar;
+    HorizontalArrangement hz_ChatLine, hz_PoolLine, hz_ChatsViewer, hz_toolbar;
     Button button_SendText, button_Refresh, button_MakePool, MainMenu;
-    Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
+    Label pID, DriverOrNavigatorLabel, PoolID;
     Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
-    Web web_Chat, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated;
+    Web web_ChatLine, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
 
@@ -80,25 +80,17 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 "&showHtml=1" +
                 "&iam=" + applicationSettings.pID +
                 "&link_ID=" +
-                applicationSettings.otherpIDforChat
+                applicationSettings.otherpIDforChat // <~~ this must change
         );
         dbg(webview_Chat.HomeUrl());
         hz_ChatLine = new HorizontalArrangement(ChatWith);
         hz_ChatLine.WidthPercent(100);
-//        hz_ChatLine.AlignHorizontal(ALIGNMENT_OPPOSITE);
         text_ChatLine = new TextBox(hz_ChatLine);
         text_ChatLine.Text("");
         text_ChatLine.WidthPercent(85);
         button_SendText = new Button(hz_ChatLine);
         button_SendText.Text("but");
         button_SendText.WidthPercent(15);
-
-        //        pIDHZ = new HorizontalArrangement(ChatWith);
-//        OtherpIDLabel = new Label(pIDHZ);
-//        OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
-//        OtherpIDLabel.Visible(true);
-//        DriverOrNavigatorLabel = new Label(pIDHZ);
-//        PoolID = new Label(pIDHZ);
 
         hz_PoolLine = new HorizontalArrangement(ChatWith);
         button_MakePool = new Button(hz_PoolLine);
@@ -107,7 +99,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         D_OR_N_ChoiceNotifier = new Notifier(ChatWith);
         MessageError_Notifier = new Notifier(ChatWith);
         MessageSent_Notifier = new Notifier(ChatWith);
-        web_Chat = new Web(ChatWith);
+        web_ChatLine = new Web(ChatWith);
         web_PoolDriver = new Web(ChatWith);
         web_PoolNavigator = new Web(ChatWith);
         web_NoPoolCreated = new Web(ChatWith);
@@ -115,7 +107,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend = new Clock(ChatWith);
         timer_RefreshBackend.TimerEnabled(false);
         timer_RefreshBackend.TimerInterval(int_RefreshBackendTimeInterval);
-        timer_RefreshBackend.TimerEnabled(false);
+        timer_RefreshBackend.TimerEnabled(true);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
@@ -175,18 +167,18 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                     return true;
                 }
                 else if (!text_ChatLine.Text().equals("")) {
-                    web_Chat.Url(
+                    web_ChatLine.Url(
                             applicationSettings.baseURL +
-                                    "?action=POST&entity=CHAT&sessionID=" +
+                                    "?action=POST&entity=DISC&sessionID=" +
                                     applicationSettings.sessionID +
-                                    "&initiator_pID=" +
+                                    "&iam=" +
                                     applicationSettings.pID +
-                                    "&respondent_pID=" +
+                                    "&link_ID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&status=open&text=" +
+                                    "&text=" +
                                     text_ChatLine.Text()
                     );
-                    web_Chat.Get();
+                    web_ChatLine.Get();
                     return true;
                 }
                 return true;
@@ -200,10 +192,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("GotText")) {
-            if (component.equals(web_Chat)) {
+            if (component.equals(web_ChatLine)) {
                 if (web_ResultGotText(params[1].toString(), params[3].toString())) {
                     text_ChatLine.Text("");
-                    MessageSent_Notifier.ShowMessageDialog("Message Successfully Sent", "Message Sent", "Ok");
+//                    MessageSent_Notifier.ShowMessageDialog("Message Successfully Sent", "Message Sent", "Ok");
                 } else {
                     text_ChatLine.BackgroundColor(Component.COLOR_RED);
                     MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
@@ -293,25 +285,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     void callBackend() {
         webview_Chat.GoHome();
-
-//        webview_Chat.GoToUrl(applicationSettings.default_baseURL +
-//                "?action=LIST&entity=chat&sessionID=" +
-//                applicationSettings.sessionID +
-//                "&initiator_pID=" +
-//                applicationSettings.pID +
-//                "&respondent_pID=" +
-//                applicationSettings.otherpIDforChat +
-//                "&showHtml=1" +
-//                "&iam=" + applicationSettings.pID
-//        );
     }
 
     public boolean web_ResultGotText(String status, String textOfResponse) {
         String temp=new String();
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
-            temp = parser.getString("line_ID");
-            if (!parser.getString("line_ID").equals("-1")) {
+            if (!parser.getString("result").equals("OK")) {
                 return true;
             } else {
                 return false;
