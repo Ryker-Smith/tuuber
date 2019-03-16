@@ -28,7 +28,7 @@ import java.util.List;
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private Web getRouteWeb, Routes, MatchesAvailable, SendingChat;
+    private Web web_MyRoutes, Routes, web_MatchesFound, SendingChat;
     private Notifier messagesPopUp;
     private Button button_InitiateChat, MainMenu, Refresh , button_FindMatches;
     private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
@@ -68,13 +68,13 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         button_FindMatches =new Button(MatchesButtons);
         button_FindMatches.Text("Click to see Matches");
         button_FindMatches.Enabled(false);
-        getRouteWeb = new Web(Matches);
-        MatchesAvailable = new Web(Matches);
+        web_MyRoutes = new Web(Matches);
+        web_MatchesFound = new Web(Matches);
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
         list_MatchesFound.TextSize(applicationSettings.intListViewsize);
         hz_Arrangement3 = new HorizontalArrangement(Matches);
-        MatchesAvailable = new Web(Matches);
+        web_MatchesFound = new Web(Matches);
         button_InitiateChat =new Button(hz_Arrangement3);
         button_InitiateChat.Text("Send Chat");
         button_InitiateChat.Enabled(false);
@@ -136,7 +136,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_FindMatches)) {
                 if (component.equals(button_FindMatches)) {
-                    MatchesAvailable.Url(
+                    web_MatchesFound.Url(
                             applicationSettings.baseURL
                                     + "?action=GET"
                                     + "&entity=Match"
@@ -146,8 +146,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                     + "rID="
                                     + int_SelectedRoute.toString()
                     );
-                    dbg(MatchesAvailable.Url());
-                    MatchesAvailable.Get();
+                    dbg(web_MatchesFound.Url());
+                    web_MatchesFound.Get();
                     return true;
                 }
             }
@@ -173,23 +173,24 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                  otherpID.Text(seperated2[0]);
                  OtherRoutepID.Text(seperated3[0]);
                  DriverYNLabel.Text(separated4[1]);
+
                  button_InitiateChat.Enabled(true);
                  return true;
              }
         }
         else if (eventName.equals("GotText")) {
-             if (component.equals(getRouteWeb)) {
+             if (component.equals(web_MyRoutes)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getRouteWebGotText(status, textOfResponse);
                 return true;
              }
-             else if (component.equals(MatchesAvailable)){
+             else if (component.equals(web_MatchesFound)){
                     dbg((String)params[0]);
                     String status = params[1].toString();
                     String TextOfResponse = (String)params[3];
-                    MatchesAvailableGotText(status , TextOfResponse);
+                    fn_GotText_MatchesFound(status, TextOfResponse);
                     return true;
              }
         }
@@ -253,7 +254,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             }
         }
 
-        public void MatchesAvailableGotText(String status, String TextOfResponse) {
+        public void fn_GotText_MatchesFound(String status, String TextOfResponse) {
             if (status.equals("200")) try {
                 ListOfMatchesFromWeb = new ArrayList<String>();
                 JSONObject parser = new JSONObject(TextOfResponse);
@@ -266,14 +267,12 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                         // messagesPopUp.ShowMessageDialog("No Matches Available" +  matchArray.length(), "Information", "OK");
                         for (int I = 0; I < matchArray.length(); I++) {
                             ListOfMatchesFromWeb.add(
-                                    matchArray.getJSONObject(I).getString("pID")
-                                    + "::" +
-                                    matchArray.getJSONObject(I).getString("rID")
-                                            +
-                                            ":: "
-                                            + matchArray.getJSONObject(I).getString("realName")
-                                            + "&"
-                                            + matchArray.getJSONObject(I).getString("driver")
+                                    matchArray.getJSONObject(I).getString("realName") +
+                                    " (" +
+                                    "pID=" + matchArray.getJSONObject(I).getString("pID") +
+                                    ";" +
+                                    "rID=" + matchArray.getJSONObject(I).getString("rID") +
+                                    ")"
                             );
                         }
                         YailList tempData = YailList.makeList(ListOfMatchesFromWeb);
@@ -301,14 +300,14 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     }
 
     void getRoutesFromBackEnd() {
-        getRouteWeb.Url(
+        web_MyRoutes.Url(
                 applicationSettings.baseURL
                 + "?action=LIST"
                 + "&entity=ROUTE"
                 + "&pID=" + applicationSettings.pID
                 + "&sessionID=" + applicationSettings.sessionID
         );
-        getRouteWeb.Get();
+        web_MyRoutes.Get();
     }
 
     void dbg (String debugMsg) {
