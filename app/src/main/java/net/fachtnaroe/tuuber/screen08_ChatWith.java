@@ -26,16 +26,16 @@ import org.json.JSONObject;
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
-    private Clock TimerRefreshBackend;
-    private TextBox chatText;
+    private Clock timer_RefreshBackend;
+    private TextBox text_ChatLine;
     private VerticalArrangement ChatWith;
-    private HorizontalArrangement SendHZ, PoolHZ, pIDHZ, ChatsViewerHZ, toolbarHz;
-    private Button Send, Refresh, Pool, MainMenu;
+    private HorizontalArrangement hz_ChatLine, hz_PoolLine, pIDHZ, hz_ChatsViewer, toolbarHz;
+    private Button button_SendText, button_Refresh, button_MakePool, MainMenu;
     private Label pID, OtherpIDLabel, DriverOrNavigatorLabel, PoolID;
     private Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
-    private Web ChatWeb, PoolWebDriver, PoolWebNavigator, NoPoolCreatedWeb, PoolCreatedWeb;
-    private WebViewer ChatsViewer;
-    int TimeToRefresh = 5000;
+    private Web web_Chat, PoolWebDriver, PoolWebNavigator, NoPoolCreatedWeb, PoolCreatedWeb;
+    private WebViewer webview_Chat;
+    int int_ChatRefreshTime = 5000;
 
 
     protected void $define() {
@@ -43,6 +43,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         ChatWith=new VerticalArrangement(this);
+        this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
 
@@ -59,61 +60,59 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         pID.WidthPercent(70);
         pID.TextAlignment(Component.ALIGNMENT_CENTER);
 
-        Refresh = new Button(toolbarHz);
-        Refresh.Width(40);
-        Refresh.Height(40);
-        Refresh.FontSize(8);
-        Refresh.Image("buttonRefresh.png");
+        button_Refresh = new Button(toolbarHz);
+        button_Refresh.Width(40);
+        button_Refresh.Height(40);
+        button_Refresh.FontSize(8);
+        button_Refresh.Image("buttonRefresh.png");
 
-        this.BackgroundImage(applicationSettings.backgroundImageName);
-        ChatsViewerHZ = new HorizontalArrangement(ChatWith);
-        ChatsViewerHZ.AlignHorizontal(ALIGNMENT_CENTER);
-        ChatsViewerHZ.WidthPercent(100);
-        ChatsViewer = new WebViewer(ChatsViewerHZ);
-        ChatsViewer.HeightPercent(40);
-        ChatsViewer.WidthPercent(100);
-        ChatsViewer.HomeUrl(applicationSettings.default_baseURL +
+
+        hz_ChatsViewer = new HorizontalArrangement(ChatWith);
+        hz_ChatsViewer.AlignHorizontal(ALIGNMENT_CENTER);
+        hz_ChatsViewer.WidthPercent(100);
+        webview_Chat = new WebViewer(hz_ChatsViewer);
+        webview_Chat.HeightPercent(40);
+        webview_Chat.WidthPercent(100);
+        webview_Chat.HomeUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
-                "&initiator_pID=" +
-                applicationSettings.pID +
-                "&respondent_pID=" +
-                applicationSettings.otherpIDforChat +
                 "&showHtml=1" +
                 "&iam=" + applicationSettings.pID
         );
 
-        chatText = new TextBox(ChatWith);
-        chatText.Text("");
-        chatText.WidthPercent(100);
-        pIDHZ = new HorizontalArrangement(ChatWith);
-        OtherpIDLabel = new Label(pIDHZ);
-        OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
-        OtherpIDLabel.Visible(true);
-        DriverOrNavigatorLabel = new Label(pIDHZ);
-        PoolID = new Label(pIDHZ);
+        hz_ChatLine = new HorizontalArrangement(ChatWith);
+        hz_ChatLine.WidthPercent(100);
+//        hz_ChatLine.AlignHorizontal(ALIGNMENT_OPPOSITE);
+        text_ChatLine = new TextBox(hz_ChatLine);
+        text_ChatLine.Text(">>>");
+        text_ChatLine.WidthPercent(85);
+        button_SendText = new Button(hz_ChatLine);
+        button_SendText.Text("but");
+        button_SendText.WidthPercent(15);
 
-        SendHZ = new HorizontalArrangement(ChatWith);
-        SendHZ.WidthPercent(100);
-        SendHZ.AlignHorizontal(ALIGNMENT_OPPOSITE);
-        Send = new Button(SendHZ);
-        Send.Text("Send");
-        PoolHZ = new HorizontalArrangement(ChatWith);
-        Pool = new Button(PoolHZ);
-        Pool.Text("Make Pool");
+        //        pIDHZ = new HorizontalArrangement(ChatWith);
+//        OtherpIDLabel = new Label(pIDHZ);
+//        OtherpIDLabel.Text(applicationSettings.otherpIDforChat);
+//        OtherpIDLabel.Visible(true);
+//        DriverOrNavigatorLabel = new Label(pIDHZ);
+//        PoolID = new Label(pIDHZ);
+
+        hz_PoolLine = new HorizontalArrangement(ChatWith);
+        button_MakePool = new Button(hz_PoolLine);
+        button_MakePool.Text("Make button_MakePool");
 
         D_OR_N_ChoiceNotifier = new Notifier(ChatWith);
         MessageError_Notifier = new Notifier(ChatWith);
         MessageSent_Notifier = new Notifier(ChatWith);
-        ChatWeb = new Web(ChatWith);
+        web_Chat = new Web(ChatWith);
         PoolWebDriver = new Web(ChatWith);
         PoolWebNavigator = new Web(ChatWith);
         NoPoolCreatedWeb = new Web(ChatWith);
         PoolCreatedWeb = new Web(ChatWith);
-        TimerRefreshBackend = new Clock(ChatWith);
-        TimerRefreshBackend.TimerEnabled(false);
-        TimerRefreshBackend.TimerInterval(TimeToRefresh);
-        TimerRefreshBackend.TimerEnabled(true);
+        timer_RefreshBackend = new Clock(ChatWith);
+        timer_RefreshBackend.TimerEnabled(false);
+        timer_RefreshBackend.TimerInterval(int_ChatRefreshTime);
+        timer_RefreshBackend.TimerEnabled(true);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
@@ -126,7 +125,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         if (eventName.equals("Timer")) {
             callBackend();
         }
-        if (eventName.equals("AfterChoosing")) {
+        else if (eventName.equals("AfterChoosing")) {
             if (component.equals(D_OR_N_ChoiceNotifier)) {
                 D_OR_N_ChoiceNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
                 DriverOrNavigatorLabel.Text((String) params[0]);
@@ -165,14 +164,14 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 finish();
                 return true;
             }
-            else if (component.equals(Send)) {
-                if (chatText.Text().equals("")) {
+            else if (component.equals(button_SendText)) {
+                if (text_ChatLine.Text().equals("")) {
                     MessageError_Notifier.ShowMessageDialog("Fill in Textbox", "Error", "Ok");
                     callBackend();
                     return true;
                 }
-                else if (!chatText.Text().equals("")) {
-                    ChatWeb.Url(
+                else if (!text_ChatLine.Text().equals("")) {
+                    web_Chat.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=CHAT&sessionID=" +
                                     applicationSettings.sessionID +
@@ -181,28 +180,28 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&respondent_pID=" +
                                     applicationSettings.otherpIDforChat +
                                     "&status=open&text=" +
-                                    chatText.Text()
+                                    text_ChatLine.Text()
                     );
-                    ChatWeb.Get();
+                    web_Chat.Get();
                     return true;
                 }
                 return true;
             }
-            else if (component.equals(Refresh)) {
+            else if (component.equals(button_Refresh)) {
                 callBackend();
             }
-            else if (component.equals(Pool)) {
+            else if (component.equals(button_MakePool)) {
                 D_OR_N_ChoiceNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
             }
             return true;
         }
         else if (eventName.equals("GotText")) {
-            if (component.equals(ChatWeb)) {
+            if (component.equals(web_Chat)) {
                 if (web_ResultGotText(params[1].toString(), params[3].toString())) {
-                    chatText.Text("");
+                    text_ChatLine.Text("");
                     MessageSent_Notifier.ShowMessageDialog("Message Successfully Sent", "Message Sent", "Ok");
                 } else {
-                    chatText.BackgroundColor(Component.COLOR_RED);
+                    text_ChatLine.BackgroundColor(Component.COLOR_RED);
                     MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
                 }
                 return true;
@@ -289,8 +288,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     void callBackend() {
-        ChatsViewer.GoHome();
-        ChatsViewer.GoToUrl(applicationSettings.default_baseURL +
+        webview_Chat.GoHome();
+        webview_Chat.GoToUrl(applicationSettings.default_baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
                 "&initiator_pID=" +

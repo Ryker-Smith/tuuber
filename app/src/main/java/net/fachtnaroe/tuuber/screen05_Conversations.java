@@ -51,6 +51,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         MainMenu.Height(40);
         MainMenu.Image("buttonHome.png");
         pID = new Label(toolbarHz);
+        pID.HTMLFormat(true);
         pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Conversations</small></small>");
         pID.Height(40);
         pID.FontSize(20);
@@ -188,9 +189,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         }
         else if (eventName.equals("AfterPicking")) {
             if (component.equals(listview_Open)) {
-                String currentString = listview_Open.Selection();
-                String[] separated = currentString.split(":");
-                applicationSettings.otherpIDforChat =separated[0];
+                String[] separated = listview_Open.Selection().split("=");
+                separated[1]=separated[1].replace(")","");
+                applicationSettings.otherpIDforChat =separated[1];
                 applicationSettings.set();
                 button_OpenChatScreen.Enabled(true);
                 return true;
@@ -206,8 +207,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             }
             else if (component.equals(listview_Out)) {
                 String nextString = listview_Out.Selection();
-                String[] separated3 = nextString.split(":");
-                string_OutboundpID=separated3[0];
+                String[] separated = nextString.split(":");
+                string_OutboundpID=separated[0];
                 button_CancelOutbound.Enabled(true);
                 dbg("Outbound selection");
                 return true;
@@ -307,16 +308,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                     contacts1Array.getJSONObject(i).getString("link_ID" )
                                     + ")"
                     );
-//                    conversationsOpen.put(contacts1Array.getJSONObject(i).getInt("initiator_pID" ) ,
-//                            contacts1Array.getJSONObject(i).getString("initiator_pID" ) +
-//                                    ":: " +
-//                                    contacts1Array.getJSONObject(i).getString("first" ) +
-//                                    " " +
-//                                    contacts1Array.getJSONObject(i).getString("family")
-//                    );
                 }
-
-
                 YailList tempData = YailList.makeList(ListofContactWeb1.toArray());
                 ListofContactWeb1.add(listview_Open.Elements().toString());
                 listview_Open.Elements(tempData);
@@ -333,7 +325,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
     }
-
 
     public void getInboundList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
@@ -355,9 +346,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                             Inbound.getJSONObject(i).getString("link_ID")
                             + ")";
                     ListofInboundWeb.add( anItem );
-//                    dbg(anItem);
                 }
-//                YailList tempData3=YailList.makeList( ListofInboundWeb );
                 listview_In.Elements(YailList.makeList( ListofInboundWeb ));
             }
             else {
