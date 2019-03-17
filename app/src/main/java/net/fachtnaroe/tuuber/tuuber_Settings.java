@@ -47,7 +47,7 @@ public class tuuber_Settings {
         lastLogin=default_lastLogin;
         notificationSoundFileName=default_notificationSoundFileName;
         intListViewsize=default_intListViewsize;
-        IsDebugSession=true;
+        IsDebugSession=false;
     }
 
     public String get () {

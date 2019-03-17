@@ -70,6 +70,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.HeightPercent(100);
+        listview_Open.WidthPercent(100);
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
@@ -84,6 +85,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Height(100);
+        listview_In.WidthPercent(100);
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
@@ -101,6 +103,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_Out = new ListView(vt_Out);
         listview_Out.TextSize(applicationSettings.intListViewsize);
         listview_Out.Height(100);
+        listview_Out.WidthPercent(100);
         listview_Out.SelectionColor(Component.COLOR_DKGRAY);
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);

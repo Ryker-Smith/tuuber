@@ -1,33 +1,22 @@
 package net.fachtnaroe.tuuber;
 
-import android.content.Intent;
-import android.content.res.Resources;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
-import com.google.appinventor.components.runtime.HorizontalArrangement;
-import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Notifier;
+import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
-import com.google.appinventor.components.runtime.util.AlignmentUtil;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-import static android.support.v4.content.res.TypedArrayUtils.getResourceId;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button Routes, Matches, Conversations, Settings, Terms, experimental, buttonLogOut;
+    private Button button_Routes, button_Matches, button_Conversations, button_Settings, button_TsAndCs, button_Experimental, button_LogOut;
 
     tuuber_Settings applicationSettings;
-    boolean form_made=false;
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
-    ArrayList<HorizontalArrangement> hz;//= new Array ();
+    Integer int_ColWidth;
 
     protected void $define() {
 
@@ -38,24 +27,79 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MessagesPopup = new Notifier(MainMenu);
-        Routes = new Button(MainMenu);
-        Routes.Text("Routes");
-        Matches = new Button(MainMenu);
-        Matches.Text("Matches");
-        Conversations = new Button(MainMenu);
-        Conversations.Text("Conversations");
-        Settings = new Button(MainMenu);
-        Settings.Text("Settings");
-        Terms = new Button(MainMenu);
-        Terms.Text("Terms & Conditions");
-        experimental= new Button(MainMenu);
-        experimental.Text("Experimental Stuff");
-        buttonLogOut = new Button(MainMenu);
-        buttonLogOut.Text("Log Out");
-        MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
-        hz=new ArrayList();
 
-        button_CommonFormatting(Routes, Matches, Conversations, Settings, Terms, experimental,buttonLogOut);
+        TableArrangement menu=new TableArrangement(MainMenu);
+
+        int_ColWidth = (this.Width()/3);
+
+        menu.Columns(3);
+        menu.Rows(14);
+        menu.WidthPercent(100);
+        menu.HeightPercent(100);
+
+        Integer int_SideOffset=15;
+        Button button_PadLeft=new Button(menu);
+        button_PadLeft.Column(0);
+        button_PadLeft.Row(0);
+        button_PadLeft.Text("");
+        button_PadLeft.Visible(true);
+        button_PadLeft.BackgroundColor(Component.COLOR_NONE);
+        button_PadLeft.WidthPercent(25);
+
+        Button button_PadRight=new Button(menu);
+        button_PadRight.Column(2);
+        button_PadRight.Row(0);
+        button_PadRight.Text("");
+        button_PadRight.Visible(true);
+        button_PadRight.BackgroundColor(Component.COLOR_NONE);
+        button_PadRight.WidthPercent(25);
+
+        button_Routes = new Button(menu);
+        button_Routes.Text("Routes");
+        button_Routes.Row(1);
+
+        int int_NumButtonsToPad=6;
+        Button[] button_Pad=new Button[int_NumButtonsToPad];
+        for (int i=0;i< int_NumButtonsToPad; i++) {
+            button_Pad[i] = new Button(menu);
+            button_Pad[i].BackgroundColor(Component.COLOR_NONE);
+            button_Pad[i].TextColor(Component.COLOR_BLACK);
+            button_Pad[i].Text(String.valueOf(i));
+            button_Pad[i].Height(10);
+            button_Pad[i].Width(20);
+            button_Pad[i].Column(1);
+            button_Pad[i].Row(2 + (i*2) );
+        }
+
+        button_Matches = new Button(menu);
+        button_Matches.Text("Matches");
+        button_Matches.Row(3);
+
+        button_Conversations = new Button(menu);
+        button_Conversations.Text("Conversations");
+        button_Conversations.Row(5);
+
+        button_Settings = new Button(menu);
+        button_Settings.Text("Settings");
+        button_Settings.Row(7);
+
+        button_TsAndCs = new Button(menu);
+        button_TsAndCs.Text("Terms & Conditions");
+        button_TsAndCs.Row(9);
+
+        button_Experimental = new Button(menu);
+        button_Experimental.Text("Experimental Stuff");
+        button_Experimental.Row(11);
+
+        button_LogOut = new Button(menu);
+        button_LogOut.Text("Log Out");
+        button_LogOut.Row(13);
+
+        button_CommonFormatting(
+                button_Routes, button_Matches,
+                button_Conversations, button_Settings,
+                button_TsAndCs, button_Experimental,
+                button_LogOut);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -64,46 +108,42 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
 
-//        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
+        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("BackPressed")) {
             return true;
         }
         else if (eventName.equals("OtherScreenClosed")) {
             if (params[0].equals("screen09_Settings")) {
                 applicationSettings.get();
-//                this.recreate();
                 return true;
             }
         }
         else if (eventName.equals("Click")) {
-            if (component.equals(Matches)) {
-                // eg startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
-                // finishActivityWithResult("elbow");
-                // finishActivityWithTextResult();
+            if (component.equals(button_Matches)) {
                 startNewForm("screen04_Matches",null   );
                 return true;
             }
-            else if (component.equals(Conversations)) {
+            else if (component.equals(button_Conversations)) {
                 startNewForm("screen05_Conversations",null );
                 return true;
             }
-            else if (component.equals(Routes)) {
+            else if (component.equals(button_Routes)) {
                 startNewForm("screen07_Routes",null);
                 return true;
             }
-            else if (component.equals(Settings)) {
+            else if (component.equals(button_Settings)) {
                 startNewForm("screen09_Settings",null);
                 return true;
             }
-            else if (component.equals(Terms)) {
+            else if (component.equals(button_TsAndCs)) {
                 startNewForm("screen10_TermsAndConditions",null);
                 return true;
             }
-            else if (component.equals(experimental)) {
+            else if (component.equals(button_Experimental)) {
                 startNewForm("experimental_doNotUseThis",null);
                 return true;
             }
-            else if (component.equals(buttonLogOut)) {
+            else if (component.equals(button_LogOut)) {
                 System.exit(0);
 
                 return true;
@@ -125,9 +165,12 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         while ((i < len) && (b[i] != null)) {
             b[i].WidthPercent(50);
             b[i].BackgroundColor(Component.COLOR_BLACK);
-            b[i].FontBold(true);
+            b[i].FontBold(false);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
+            b[i].FontSize(12);
+            b[i].Column(1);
+            b[i].Width(int_ColWidth);
             i++;
         }
     }

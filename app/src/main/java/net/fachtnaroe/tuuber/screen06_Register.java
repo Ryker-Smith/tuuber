@@ -230,8 +230,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             }
             if (component.equals(TermsConditions)) {
                 dbg("error");
-//                startActivity(new Intent().setClass(this, screen10_TermsAndConditions.class));
-//                startActivityForResult(new Intent().setClass(this, screen10_TermsAndConditions.class),23);
                 startNewForm("screen10_TermsAndConditions","none");
                 return true;
             }

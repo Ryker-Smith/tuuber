@@ -28,10 +28,10 @@ import org.json.JSONObject;
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
-    private Button LoginButton, RegisterButton;
+    private Button button_Login, button_Register;
 //    private Image Header;
 
-    private Web LoginWeb;
+    private Web web_Login;
     private VerticalScrollArrangement Login;
     private Notifier ErrorNotifier;
     private HorizontalArrangement usernameHz, loginHz, passwordHz;
@@ -52,7 +52,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login.HeightPercent(100);
         ErrorNotifier = new Notifier(Login);
 
-        LoginWeb = new Web(Login);
+        web_Login = new Web(Login);
         usernameHz = new HorizontalArrangement(Login);
         UserNameLabel= new Label (usernameHz);
         UserNameLabel.Text("Username:");
@@ -74,11 +74,11 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         inputPassword.Text("tcfetcfe");
 
         loginHz = new HorizontalArrangement(Login);
-        LoginButton = new Button (loginHz);
-        LoginButton.Text("Login");
-        RegisterButton = new Button(Login);
-        RegisterButton.Text("Register");
-        button_CommonFormatting(LoginButton, RegisterButton);
+        button_Login = new Button (loginHz);
+        button_Login.Text("Login");
+        button_Register = new Button(Login);
+        button_Register.Text("Register");
+        button_CommonFormatting(button_Login, button_Register);
         ourLogo=new Image(Login);
         ourLogo.Picture(applicationSettings.ourLogo);
         ourLogo.ScalePictureToFit(false);
@@ -105,8 +105,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("Click")) {
-            if (component.equals(LoginButton)) {
-                LoginWeb.Url(
+            if (component.equals(button_Login)) {
+
+                web_Login.Url(
                         applicationSettings.baseURL
                                 + "?cmd=LOGIN"
                                 + "&email="
@@ -114,16 +115,16 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                                 + "&password="
                                 + inputPassword.Text()
                 );
-                LoginWeb.Get();
+                web_Login.Get();
                 return true;
             }
-            else if (component.equals(RegisterButton)) {
+            else if (component.equals(button_Register)) {
                 startNewForm("screen06_Register",null);
                 return true;
             }
         }
         else if (eventName.equals("GotText")) {
-            if (component.equals(LoginWeb)) {
+            if (component.equals(web_Login)) {
                 Integer status = (Integer) params[1];
                 String textOfResponse = (String) params[3];
                 webGotText(status.toString(), textOfResponse);
