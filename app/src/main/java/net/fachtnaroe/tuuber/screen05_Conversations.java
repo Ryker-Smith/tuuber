@@ -42,7 +42,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         dbg(applicationSettings.backgroundImageName);
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
         Conversations = new VerticalArrangement(this);
 
         toolbarHz = new HorizontalArrangement(Conversations);

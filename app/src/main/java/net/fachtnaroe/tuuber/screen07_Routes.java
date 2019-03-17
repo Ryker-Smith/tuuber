@@ -74,7 +74,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         applicationSettings.get();
         RoutesScreen = new VerticalArrangement(this);
 
-        RoutesScreen.Image(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
         // The 'toolbar'
         toolbarHz = new HorizontalArrangement(RoutesScreen);
         buttonMainMenu = new Button(toolbarHz);
@@ -82,7 +87,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         buttonMainMenu.Height(40);
         buttonMainMenu.Image("buttonHome.png");
         label_pID = new Label(toolbarHz);
-        label_pID.Text("I am user: #" + applicationSettings.pID);
+        label_pID.HTMLFormat(true);
+        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Routes</small></small>");
         label_pID.Height(40);
         label_pID.FontSize(20);
         label_pID.WidthPercent(70);
@@ -263,7 +269,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Click")) {
             if (component.equals(buttonMainMenu)) {
-                finish();
+                switchForm("screen03_MainMenu");
                 return true;
             }
             else if (component.equals(townsDisplay)) {

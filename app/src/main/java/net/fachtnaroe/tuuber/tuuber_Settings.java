@@ -32,8 +32,8 @@ public class tuuber_Settings {
     public String default_lastLogin="";
     public String default_notificationSoundFileName="";
     public Integer default_intListViewsize=40;
-
     public Integer minimimum_intListViewsize=5;
+    public boolean default_IsDebugSession=false;
 
     TinyDB localDB;
 
@@ -47,7 +47,7 @@ public class tuuber_Settings {
         lastLogin=default_lastLogin;
         notificationSoundFileName=default_notificationSoundFileName;
         intListViewsize=default_intListViewsize;
-        IsDebugSession=false;
+        IsDebugSession=default_IsDebugSession;
     }
 
     public String get () {
@@ -59,6 +59,7 @@ public class tuuber_Settings {
         otherpIDforChat =(String) localDB.GetValue("otherpIDforChat", otherpIDforChat);
         notificationSoundFileName=(String) localDB.GetValue("notificationSoundFileName",default_notificationSoundFileName);
         intListViewsize=(Integer) localDB.GetValue("intListViewsize",default_intListViewsize);
+        IsDebugSession=(boolean) localDB.GetValue("IsDebugSession",default_IsDebugSession);
 //        dbg("Backend: " + baseURL);
         if (IsDebugSession) {
             baseURL=debug_baseURL;

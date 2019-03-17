@@ -40,7 +40,7 @@
             android:label="@string/title_activity_screen03__main_menu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen04_Matches"
-            android:windowSoftInputMode="stateVisible|adjustPan"/>
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".screen06_Register"
             android:windowSoftInputMode="adjustPan"/>

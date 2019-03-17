@@ -52,7 +52,12 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
 
         screenArrangement = new VerticalArrangement(this);
         screenArrangement.WidthPercent(100);

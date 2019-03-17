@@ -42,7 +42,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
         Register = new VerticalArrangement (this);
         Register.WidthPercent(100);
         Register.HeightPercent(100);
@@ -256,15 +261,15 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         String temp=new String();
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
-            temp = parser.getString("result");
             if (parser.getString("result").equals("OK")) {
-                Creation_Notifier.ShowMessageDialog("User created", "Success!", "Confirm");
+                Creation_Notifier.ShowMessageDialog("User created", "Success!", "Grand");
+                screen06_Register.finishActivity();
             } else {
-                Web_Notifier.ShowMessageDialog("Creation failed, check details", "Information", "OK");
+                Web_Notifier.ShowMessageDialog("Creation failed, check details (1)(" + textOfResponse +")", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            Web_Notifier.ShowMessageDialog("Creation failed, check details" + temp, "Information", "OK");
+            Web_Notifier.ShowMessageDialog("Creation failed, check details (2)(" + textOfResponse +")", "Information", "OK");
         }
         else {
             Web_Notifier.ShowMessageDialog("Problem connecting with server","Information", "OK");

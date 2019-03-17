@@ -45,7 +45,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
 
         Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
@@ -86,7 +91,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
         IsDebugSession = new CheckBox(Login);
         IsDebugSession.Text("This is a debugging session");
-        IsDebugSession.Checked(true);
+        IsDebugSession.Checked(applicationSettings.IsDebugSession);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -106,7 +111,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Click")) {
             if (component.equals(button_Login)) {
-
                 web_Login.Url(
                         applicationSettings.baseURL
                                 + "?cmd=LOGIN"
@@ -119,7 +123,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_Register)) {
-                startNewForm("screen06_Register",null);
+                switchForm("screen06_Register");
                 return true;
             }
         }
@@ -129,8 +133,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 String textOfResponse = (String) params[3];
                 webGotText(status.toString(), textOfResponse);
                 return true;
-            } else {
-                return false;
             }
         }
         return false;
@@ -147,7 +149,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.sessionID=parser.getString("sessionID");
                 applicationSettings.IsDebugSession=IsDebugSession.Checked();
                 applicationSettings.set();
-                startNewForm("screen03_MainMenu",null);
+                switchForm("screen03_MainMenu");
             } else {
                 ErrorNotifier.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }

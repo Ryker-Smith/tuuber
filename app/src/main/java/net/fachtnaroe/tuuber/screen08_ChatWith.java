@@ -41,8 +41,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
         ChatWith=new VerticalArrangement(this);
-        this.BackgroundImage(applicationSettings.backgroundImageName);
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
 
@@ -158,7 +163,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Click")) {
             if (component.equals(MainMenu)) {
-                finish();
+                switchForm("screen03_MainMenu");
                 return true;
             }
             else if (component.equals(button_SendText)) {

@@ -42,7 +42,12 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     protected void $define() {
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
 
         Matches = new VerticalArrangement(this);
         Matches.HeightPercent(100);

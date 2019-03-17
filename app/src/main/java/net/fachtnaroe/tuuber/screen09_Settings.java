@@ -51,7 +51,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
         VerticalScrollArrangement screen09_Settings = new VerticalScrollArrangement(this);
         screen09_Settings.WidthPercent(100);
         screen09_Settings.HeightPercent(100);
@@ -63,7 +68,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         buttonMainMenu.Height(40);
         buttonMainMenu.Image("buttonHome.png");
         label_pID = new Label(toolbarHz);
-        label_pID.Text("I am user: #" + applicationSettings.pID);
+        label_pID.HTMLFormat(true);
+        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Settings</small></small>");
         label_pID.Height(40);
         label_pID.FontSize(20);
         label_pID.WidthPercent(70);

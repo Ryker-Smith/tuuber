@@ -22,8 +22,15 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        dbg("Debug session: " + applicationSettings.IsDebugSession);
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
+
         MainMenu = new VerticalArrangement(this);
-        MainMenu.Image(applicationSettings.backgroundImageName);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         MessagesPopup = new Notifier(MainMenu);
@@ -59,6 +66,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Routes.Row(1);
 
         int int_NumButtonsToPad=6;
+//        if (applicationSettings.IsDebugSession) {
+//            int_NumButtonsToPad--;
+//        }
         Button[] button_Pad=new Button[int_NumButtonsToPad];
         for (int i=0;i< int_NumButtonsToPad; i++) {
             button_Pad[i] = new Button(menu);
@@ -91,6 +101,10 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Experimental.Text("Experimental Stuff");
         button_Experimental.Row(11);
 
+        if (!applicationSettings.IsDebugSession) {
+            button_Experimental.Visible(false);
+        }
+
         button_LogOut = new Button(menu);
         button_LogOut.Text("Log Out");
         button_LogOut.Row(13);
@@ -120,32 +134,31 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Click")) {
             if (component.equals(button_Matches)) {
-                startNewForm("screen04_Matches",null   );
+                switchFormWithStartValue("screen04_Matches",null   );
                 return true;
             }
             else if (component.equals(button_Conversations)) {
-                startNewForm("screen05_Conversations",null );
+                switchFormWithStartValue("screen05_Conversations",null );
                 return true;
             }
             else if (component.equals(button_Routes)) {
-                startNewForm("screen07_Routes",null);
+                switchFormWithStartValue("screen07_Routes",null);
                 return true;
             }
             else if (component.equals(button_Settings)) {
-                startNewForm("screen09_Settings",null);
+                switchFormWithStartValue("screen09_Settings",null);
                 return true;
             }
             else if (component.equals(button_TsAndCs)) {
-                startNewForm("screen10_TermsAndConditions",null);
+                switchFormWithStartValue("screen10_TermsAndConditions",null);
                 return true;
             }
             else if (component.equals(button_Experimental)) {
-                startNewForm("experimental_doNotUseThis",null);
+                switchFormWithStartValue("experimental_doNotUseThis",null);
                 return true;
             }
             else if (component.equals(button_LogOut)) {
-                System.exit(0);
-
+                System.exit(1);
                 return true;
             }
         }

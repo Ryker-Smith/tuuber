@@ -34,7 +34,13 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
 
     protected void $define() {
         applicationSettings = new tuuber_Settings(this);
-        this.BackgroundImage(applicationSettings.backgroundImageName);
+        applicationSettings.get();
+        try {
+            this.BackgroundImage(applicationSettings.backgroundImageName);
+        }
+        catch (Exception e) {
+            dbg(e.toString());
+        }
         tacvz = new VerticalArrangement(this);
         tacvz.WidthPercent(100);
         tacvz.HeightPercent(100);
