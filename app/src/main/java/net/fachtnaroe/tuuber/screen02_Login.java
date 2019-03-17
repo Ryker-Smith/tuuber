@@ -40,7 +40,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private TextBox inputUsername;
     private PasswordTextBox inputPassword;
     private Image ourLogo;
-    private CheckBox IsDebugSession;
+    private CheckBox IsDebugSession, checkbox_SavePassword;
     Integer int_ColWidth;
 
     protected void $define() {
@@ -86,7 +86,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         PasswordLabel.WidthPercent(25);
         PasswordLabel.TextAlignment(Component.ALIGNMENT_OPPOSITE);
         inputPassword = new PasswordTextBox(passwordHz);
-        inputPassword.Text("tcfetcfe");
+        if (applicationSettings.SavePassword) {
+            inputPassword.Text(applicationSettings.string_SavedPassword);
+        }
+        else {
+            inputPassword.Text("");
+        }
         inputPassword.WidthPercent(70);
 
         TableArrangement menu=new TableArrangement(Login);
@@ -138,6 +143,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         ourLogo.ScalePictureToFit(false);
         ourLogo.Height(320);
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        checkbox_SavePassword = new CheckBox(Login);
+        checkbox_SavePassword.Text("Save password");
+        checkbox_SavePassword.Checked(applicationSettings.SavePassword);
         IsDebugSession = new CheckBox(Login);
         IsDebugSession.Text("This is a debugging session");
         IsDebugSession.Checked(applicationSettings.IsDebugSession);
@@ -197,6 +205,13 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.lastLogin= inputUsername.Text();
                 applicationSettings.sessionID=parser.getString("sessionID");
                 applicationSettings.IsDebugSession=IsDebugSession.Checked();
+                applicationSettings.SavePassword=checkbox_SavePassword.Checked();
+                if (applicationSettings.SavePassword) {
+                    applicationSettings.string_SavedPassword=inputPassword.Text();
+                }
+                else {
+                    applicationSettings.string_SavedPassword="NotSaved";
+                }
                 applicationSettings.set();
                 switchForm("screen03_MainMenu");
             } else {
@@ -225,8 +240,10 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             b[i].BackgroundColor(Component.COLOR_BLACK);
             b[i].FontBold(true);
             b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
-            b[i].TextColor(Component.COLOR_LTGRAY);
+            b[i].TextColor(Component.COLOR_WHITE);
             b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
+            b[i].FontSize(12);
+            b[i].Height(40);
             i++;
         }
     }

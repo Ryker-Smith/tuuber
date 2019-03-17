@@ -22,6 +22,8 @@ public class tuuber_Settings {
     public String notificationSoundFileName="";
     public Integer intListViewsize=0;
     public boolean IsDebugSession=false;
+    public boolean SavePassword=true;
+    public String string_SavedPassword="";
 
     public final String default_baseURL="https://fachtnaroe.net/tuuber";
     public final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
@@ -34,6 +36,7 @@ public class tuuber_Settings {
     public Integer default_intListViewsize=40;
     public Integer minimimum_intListViewsize=5;
     public boolean default_IsDebugSession=false;
+    public boolean default_SavePassword=true;
 
     TinyDB localDB;
 
@@ -48,6 +51,7 @@ public class tuuber_Settings {
         notificationSoundFileName=default_notificationSoundFileName;
         intListViewsize=default_intListViewsize;
         IsDebugSession=default_IsDebugSession;
+        SavePassword=default_SavePassword;
     }
 
     public String get () {
@@ -60,9 +64,12 @@ public class tuuber_Settings {
         notificationSoundFileName=(String) localDB.GetValue("notificationSoundFileName",default_notificationSoundFileName);
         intListViewsize=(Integer) localDB.GetValue("intListViewsize",default_intListViewsize);
         IsDebugSession=(boolean) localDB.GetValue("IsDebugSession",default_IsDebugSession);
-//        dbg("Backend: " + baseURL);
+        SavePassword=(boolean) localDB.GetValue("SavePassword",default_SavePassword);
         if (IsDebugSession) {
             baseURL=debug_baseURL;
+        }
+        if (SavePassword) {
+            string_SavedPassword=(String) localDB.GetValue("string_SavedPassword",string_SavedPassword);
         }
         return "OK";
     }
@@ -77,6 +84,10 @@ public class tuuber_Settings {
         localDB.StoreValue("notificationSoundFileName", notificationSoundFileName);
         localDB.StoreValue("intListViewsize", intListViewsize);
         localDB.StoreValue("IsDebugSession", IsDebugSession);
+        localDB.StoreValue("SavePassword", SavePassword);
+        if (SavePassword) {
+            localDB.StoreValue("string_SavedPassword", string_SavedPassword);
+        }
         return "OK";
     }
 

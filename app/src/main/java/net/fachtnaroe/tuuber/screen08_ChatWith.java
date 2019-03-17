@@ -192,6 +192,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_Refresh)) {
+                webview_Chat.GoHome();
                 callBackend();
             }
             else if (component.equals(button_MakePool)) {

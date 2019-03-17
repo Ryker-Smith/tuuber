@@ -227,21 +227,21 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                getContact1List(status, textOfResponse);
+                fn_GotText_OpenConversations(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Inbound)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                getInboundList(status, textOfResponse);
+                fn_GotText_InboundConversations(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Outbound)) {
                 dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                getOutboundList(status, textOfResponse);
+                fn_GotText_OutboundConversations(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
@@ -296,7 +296,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         web_Outbound.Get();
     }
 
-    public void getContact1List (String status, String textOfResponse) {
+    public void fn_GotText_OpenConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
         dbg(textOfResponse);
@@ -335,7 +335,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_OpenChatScreen.Enabled(false);
     }
 
-    public void getInboundList (String status, String textOfResponse) {
+    public void fn_GotText_InboundConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
         dbg("INBOUND: " + textOfResponse);
@@ -373,7 +373,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_DeclineInbound.Enabled(false);
     }
 
-    public void getOutboundList (String status, String textOfResponse) {
+    public void fn_GotText_OutboundConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         dbg(status);
         dbg("OUTBOUND: " + textOfResponse);
