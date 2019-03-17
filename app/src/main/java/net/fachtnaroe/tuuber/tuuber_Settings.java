@@ -28,7 +28,7 @@ public class tuuber_Settings {
     public final String default_sessionID="a1b2c3d4";
     public String default_pID="-1";
     public String default_otherpIDforChat ="-1";
-    public String default_backgroundImageName="tuuberBackdrop-06.png";
+    public String default_backgroundImageName="tuuberBackdrop-07.png";
     public String default_lastLogin="";
     public String default_notificationSoundFileName="";
     public Integer default_intListViewsize=40;

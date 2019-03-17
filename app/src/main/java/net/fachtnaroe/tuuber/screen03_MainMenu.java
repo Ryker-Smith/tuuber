@@ -158,7 +158,13 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_LogOut)) {
-                System.exit(1);
+                screen05_Conversations.finishApplication();
+
+                screen07_Routes.finishApplication();
+                screen06_Register.finishApplication();
+                this.finishApplication();
+                switchForm("screen02_Login");
+                System.exit(0);
                 return true;
             }
         }

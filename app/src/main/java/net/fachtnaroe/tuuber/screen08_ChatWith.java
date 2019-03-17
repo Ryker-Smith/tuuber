@@ -58,7 +58,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         MainMenu.Image("buttonHome.png");
 
         pID = new Label(hz_toolbar);
-        pID.Text("I am user: #" + applicationSettings.pID);
+        pID.HTMLFormat(true);
+        pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Chat</small></small>");
         pID.Height(40);
         pID.FontSize(20);
         pID.WidthPercent(70);
@@ -95,12 +96,14 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         text_ChatLine.Text("");
         text_ChatLine.WidthPercent(85);
         button_SendText = new Button(hz_ChatLine);
-        button_SendText.Text("but");
-        button_SendText.WidthPercent(15);
+        button_SendText.Image("buttonSend.png");
+        button_SendText.Width(40);
+        button_SendText.Height(40);
+//        button_SendText.WidthPercent(15);
 
         hz_PoolLine = new HorizontalArrangement(ChatWith);
         button_MakePool = new Button(hz_PoolLine);
-        button_MakePool.Text("Make button_MakePool");
+        button_MakePool.Text("Make Pool");
 
         D_OR_N_ChoiceNotifier = new Notifier(ChatWith);
         MessageError_Notifier = new Notifier(ChatWith);
@@ -116,8 +119,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend.TimerEnabled(true);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
-        EventDispatcher.registerEventForDelegation(this, formName, "Changed");
-        EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
+//        EventDispatcher.registerEventForDelegation(this, formName, "Changed");
+//        EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
