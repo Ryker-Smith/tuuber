@@ -83,29 +83,36 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         customisationVt = new VerticalArrangement(screen09_Settings);
         customisationVt.BackgroundColor(Component.COLOR_NONE);
         customisationVt.WidthPercent(100);
-        backgroundImageTextBox = new TextBox(customisationVt);
-        backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
 
-        myImagePicker = new ImagePicker(customisationVt);
-        myImagePicker.Text("Crash Program");
+        HorizontalArrangement hz_ImageTextBox=new HorizontalArrangement(customisationVt);
+        backgroundImageTextBox = new TextBox(hz_ImageTextBox);
+        backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
+        backgroundImageTextBox.WidthPercent(80);
+
+        myImagePicker = new ImagePicker(hz_ImageTextBox);
+        myImagePicker.Text("Chooser");
         myImagePicker.FontSize(8);
+        myImagePicker.WidthPercent(20);
+
         listViewSizeHz=new HorizontalArrangement(customisationVt);
         listViewSizeLabel=new Label(listViewSizeHz);
-        listViewSizeLabel.Text("List<br>font size:");
         listViewSizeLabel.HTMLFormat(true);
+        listViewSizeLabel.Text("<small>List font size:</small>");
+        listViewSizeLabel.WidthPercent(15);
+
         listViewSizeBox = new TextBox(listViewSizeHz);
         listViewSizeBox.NumbersOnly(true);
         listViewSizeBox.Text(applicationSettings.intListViewsize.toString());
-        listViewSizeBox.Width(50);
+        listViewSizeBox.WidthPercent(15);
         listViewSizeBox.TextAlignment(Component.ALIGNMENT_CENTER);
-        slider_FontSize= new fachtnaSlider(customisationVt);
+
+        slider_FontSize= new fachtnaSlider(listViewSizeHz);
+        slider_FontSize.WidthPercent(70);
         slider_FontSize.MinValue(1);
         slider_FontSize.MaxValue(100);
         slider_FontSize.ColorLeft(Component.COLOR_RED);
         slider_FontSize.ColorRight(Component.COLOR_RED);
         slider_FontSize.ThumbEnabled(true);
-        slider_FontSize.WidthPercent(100);
-        slider_FontSize.Height(10);
         slider_FontSize.ThumbPosition(Integer.valueOf(listViewSizeBox.Text()));
 
         submitCustomisation = new Button(customisationVt);

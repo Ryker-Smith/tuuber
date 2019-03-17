@@ -76,7 +76,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         hz_ChatsViewer.AlignHorizontal(ALIGNMENT_CENTER);
         hz_ChatsViewer.WidthPercent(100);
         webview_Chat = new WebViewer(hz_ChatsViewer);
-        webview_Chat.HeightPercent(40);
+        webview_Chat.HeightPercent(60);
         webview_Chat.WidthPercent(100);
 
         webview_Chat.HomeUrl(
@@ -97,9 +97,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         text_ChatLine.WidthPercent(85);
         button_SendText = new Button(hz_ChatLine);
         button_SendText.Image("buttonSend.png");
-        button_SendText.Width(40);
-        button_SendText.Height(40);
-//        button_SendText.WidthPercent(15);
+        button_SendText.Width(35);
+        button_SendText.Height(35);
 
         hz_PoolLine = new HorizontalArrangement(ChatWith);
         button_MakePool = new Button(hz_PoolLine);

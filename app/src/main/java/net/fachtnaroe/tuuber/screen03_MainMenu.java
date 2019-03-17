@@ -5,6 +5,8 @@ import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
+import com.google.appinventor.components.runtime.HorizontalArrangement;
+import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
@@ -36,7 +38,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MessagesPopup = new Notifier(MainMenu);
 
         TableArrangement menu=new TableArrangement(MainMenu);
-
         int_ColWidth = (this.Width()/3);
 
         menu.Columns(3);
@@ -44,10 +45,19 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         menu.WidthPercent(100);
         menu.HeightPercent(100);
 
+        Image img_logo = new Image(menu);
+        img_logo.Picture(applicationSettings.ourLogo);
+        img_logo.Width(100);
+        img_logo.Height(100);
+        img_logo.Visible(true);
+        img_logo.ScalePictureToFit(false);
+        img_logo.Row(0);
+        img_logo.Column(1);
+
         Integer int_SideOffset=15;
         Button button_PadLeft=new Button(menu);
         button_PadLeft.Column(0);
-        button_PadLeft.Row(0);
+        button_PadLeft.Row(1);
         button_PadLeft.Text("");
         button_PadLeft.Visible(true);
         button_PadLeft.BackgroundColor(Component.COLOR_NONE);
@@ -55,7 +65,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         Button button_PadRight=new Button(menu);
         button_PadRight.Column(2);
-        button_PadRight.Row(0);
+        button_PadRight.Row(1);
         button_PadRight.Text("");
         button_PadRight.Visible(true);
         button_PadRight.BackgroundColor(Component.COLOR_NONE);
@@ -115,6 +125,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 button_TsAndCs, button_Experimental,
                 button_LogOut);
 
+
+        MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
+
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
@@ -133,6 +146,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
         }
         else if (eventName.equals("Click")) {
+            // component.toString()
             if (component.equals(button_Matches)) {
                 switchFormWithStartValue("screen04_Matches",null   );
                 return true;
@@ -158,10 +172,15 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_LogOut)) {
+                screen01_Splash.finishApplication();
+                screen02_Login.finishApplication();
+                screen03_MainMenu.finishApplication();
+                screen04_Matches.finishApplication();
                 screen05_Conversations.finishApplication();
-
-                screen07_Routes.finishApplication();
                 screen06_Register.finishApplication();
+                screen07_Routes.finishApplication();
+                screen08_ChatWith.finishApplication();
+                screen09_Settings.finishApplication();
                 this.finishApplication();
                 switchForm("screen02_Login");
                 System.exit(0);

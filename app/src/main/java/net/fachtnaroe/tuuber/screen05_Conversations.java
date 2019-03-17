@@ -332,6 +332,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
+        button_OpenChatScreen.Enabled(false);
     }
 
     public void getInboundList (String status, String textOfResponse) {

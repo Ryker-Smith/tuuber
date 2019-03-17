@@ -12,6 +12,7 @@ import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
+import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
@@ -40,6 +41,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private PasswordTextBox inputPassword;
     private Image ourLogo;
     private CheckBox IsDebugSession;
+    Integer int_ColWidth;
 
     protected void $define() {
 
@@ -59,30 +61,77 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         web_Login = new Web(Login);
         usernameHz = new HorizontalArrangement(Login);
+        usernameHz.WidthPercent(100);
         UserNameLabel= new Label (usernameHz);
         UserNameLabel.Text("Username:");
         UserNameLabel.FontBold(true);
+        UserNameLabel.WidthPercent(25);
+        UserNameLabel.TextAlignment(Component.ALIGNMENT_OPPOSITE);
 
         inputUsername = new TextBox (usernameHz);
         inputUsername.BackgroundColor(Component.COLOR_NONE);
+        inputUsername.WidthPercent(75);
         if (applicationSettings.lastLogin == applicationSettings.default_lastLogin) {
             inputUsername.Text("testing.this@tcfe.ie");
         }
         else {
             inputUsername.Text(applicationSettings.lastLogin);
         }
+
         passwordHz = new HorizontalArrangement(Login);
+        passwordHz.WidthPercent(100);
         PasswordLabel = new Label(passwordHz);
-        PasswordLabel.Text("Password");
+        PasswordLabel.Text("Password:");
         PasswordLabel.FontBold(true);
+        PasswordLabel.WidthPercent(25);
+        PasswordLabel.TextAlignment(Component.ALIGNMENT_OPPOSITE);
         inputPassword = new PasswordTextBox(passwordHz);
         inputPassword.Text("tcfetcfe");
+        inputPassword.WidthPercent(70);
 
-        loginHz = new HorizontalArrangement(Login);
-        button_Login = new Button (loginHz);
+        TableArrangement menu=new TableArrangement(Login);
+        int_ColWidth = 200;
+
+        menu.Columns(3);
+        menu.Rows(3);
+        menu.WidthPercent(100);
+//        menu.HeightPercent(100);
+
+        Integer int_SideOffset=15;
+        Button button_PadLeft=new Button(menu);
+        button_PadLeft.Column(0);
+        button_PadLeft.Row(0);
+        button_PadLeft.Text("");
+        button_PadLeft.Visible(true);
+        button_PadLeft.BackgroundColor(Component.COLOR_NONE);
+        button_PadLeft.WidthPercent(10);
+
+        Button button_PadRight=new Button(menu);
+        button_PadRight.Column(2);
+        button_PadRight.Row(0);
+        button_PadRight.Text("");
+        button_PadRight.Visible(true);
+        button_PadRight.BackgroundColor(Component.COLOR_NONE);
+        button_PadRight.WidthPercent(10);
+
+//        loginHz = new HorizontalArrangement(Login);
+        button_Login = new Button (menu);
         button_Login.Text("Login");
-        button_Register = new Button(Login);
+        button_Login.Column(1);
+        button_Login.Row(0);
+
+        Button button_Pad = new Button(menu);
+        button_Pad.BackgroundColor(Component.COLOR_NONE);
+        button_Pad.Text("");
+        button_Pad.Height(5);
+        button_Pad.Column(1);
+        button_Pad.Row(1);
+
+        button_Register = new Button(menu);
         button_Register.Text("Register");
+        button_Register.Column(1);
+        button_Register.Row(2);
+
         button_CommonFormatting(button_Login, button_Register);
         ourLogo=new Image(Login);
         ourLogo.Picture(applicationSettings.ourLogo);
@@ -172,13 +221,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         int i=0;
         int len = b.length;
         while ((i < len) && (b[i] != null)) {
-            b[i].WidthPercent(100);
+            b[i].WidthPercent(80);
             b[i].BackgroundColor(Component.COLOR_BLACK);
             b[i].FontBold(true);
             b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
             b[i].TextColor(Component.COLOR_LTGRAY);
             b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
-            EventDispatcher.registerEventForDelegation(this, b[i].toString(), "Click");
             i++;
         }
     }
