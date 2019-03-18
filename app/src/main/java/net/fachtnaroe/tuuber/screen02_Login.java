@@ -1,6 +1,8 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
+import android.graphics.Color;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -40,7 +42,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private TextBox inputUsername;
     private PasswordTextBox inputPassword;
     private Image ourLogo;
-    private CheckBox IsDebugSession, checkbox_SavePassword;
+    private CheckBox checkbox_IsDebugSession, checkbox_SavePassword;
     Integer int_ColWidth;
 
     protected void $define() {
@@ -143,12 +145,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         ourLogo.ScalePictureToFit(false);
         ourLogo.Height(320);
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
+
         checkbox_SavePassword = new CheckBox(Login);
         checkbox_SavePassword.Text("Save password");
         checkbox_SavePassword.Checked(applicationSettings.SavePassword);
-        IsDebugSession = new CheckBox(Login);
-        IsDebugSession.Text("This is a debugging session");
-        IsDebugSession.Checked(applicationSettings.IsDebugSession);
+
+        checkbox_IsDebugSession = new CheckBox(Login);
+        checkbox_IsDebugSession.Text("This is a developer session");
+        checkbox_IsDebugSession.Checked(applicationSettings.IsDebugSession);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -163,7 +167,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Changed")) {
             // for debugging session
-            applicationSettings.IsDebugSession= IsDebugSession.Checked();
+            applicationSettings.IsDebugSession= checkbox_IsDebugSession.Checked();
             return true;
         }
         else if (eventName.equals("Click")) {
@@ -204,7 +208,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.pID= parser.getString("pID");
                 applicationSettings.lastLogin= inputUsername.Text();
                 applicationSettings.sessionID=parser.getString("sessionID");
-                applicationSettings.IsDebugSession=IsDebugSession.Checked();
+                applicationSettings.IsDebugSession= checkbox_IsDebugSession.Checked();
                 applicationSettings.SavePassword=checkbox_SavePassword.Checked();
                 if (applicationSettings.SavePassword) {
                     applicationSettings.string_SavedPassword=inputPassword.Text();
@@ -237,7 +241,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         int len = b.length;
         while ((i < len) && (b[i] != null)) {
             b[i].WidthPercent(80);
-            b[i].BackgroundColor(Component.COLOR_BLACK);
+            b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+//            b[i].BackgroundColor(Component.COLOR_BLACK);
             b[i].FontBold(true);
             b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
             b[i].TextColor(Component.COLOR_WHITE);

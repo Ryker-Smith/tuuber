@@ -151,7 +151,7 @@ public class Xscreen07_Routes_OldVersion extends Form implements HandlesEventDis
         GetRouteWeb = new Web(Routes);
         Web3 = new Web(Routes);
 
-        EventDispatcher.registerEventForDelegation( this, "buttonMainMenu", "Click");
+        EventDispatcher.registerEventForDelegation( this, "button_MainMenu", "Click");
 
     }
 

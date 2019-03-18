@@ -17,13 +17,14 @@ public class tuuber_Settings {
     public String otherpIDforChat ="";
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin="";
-    public String TermsAndConditions = "You must use the app only in the manner intended, but even then there is no guarantee or warranty of any kind.\nUse this at your own risk.";
+    public String TermsAndConditions = "<h2>Use this <u>at your own risk</u></h2><p>You must use this App only in the manner intended.</p><p>Even then there is no guarantee  the App will work as expected, if at all. In fact, no guarantee or warranty of <u>any</u> kind is provided. Neither will any liability be accepted for any result of the use of the App, even if used as intended.</p><p>This is <b>experimental software</b>; use this <u>at your own risk</u>.<p>Please be <i>very</i> cautious about your physical safety, including &mdash; but not limited to &mdash; whether any travel is safe or is required to be undertaken.</p><p>There is no guarantee that any other user of this App is reliable or trustworthy; neither should their use of this App be seen as implying that they are.</p><h2>Use this <u>at your own risk</u></h2>";
     public String ourLogo="MultiLayerLogo-002.png";
     public String notificationSoundFileName="";
     public Integer intListViewsize=0;
     public boolean IsDebugSession=false;
     public boolean SavePassword=true;
     public String string_SavedPassword="";
+    public String string_ButtonColor="#113508";
 
     public final String default_baseURL="https://fachtnaroe.net/tuuber";
     public final String debug_baseURL="https://fachtnaroe.net/tuuber-test";

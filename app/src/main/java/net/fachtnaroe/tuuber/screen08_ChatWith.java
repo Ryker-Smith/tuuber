@@ -170,7 +170,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_SendText)) {
                 if (text_ChatLine.Text().equals("")) {
-                    MessageError_Notifier.ShowMessageDialog("Fill in Textbox", "Error", "Ok");
+//                    MessageError_Notifier.ShowMessageDialog("Fill in Textbox", "Error", "Ok");
+
                     callBackend();
                     return true;
                 }

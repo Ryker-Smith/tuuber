@@ -1,5 +1,7 @@
 package net.fachtnaroe.tuuber;
 
+import android.graphics.Color;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -7,6 +9,7 @@ import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
+import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
@@ -59,6 +62,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_PadLeft.Column(0);
         button_PadLeft.Row(1);
         button_PadLeft.Text("");
+        button_PadLeft.Height(10);
         button_PadLeft.Visible(true);
         button_PadLeft.BackgroundColor(Component.COLOR_NONE);
         button_PadLeft.WidthPercent(25);
@@ -67,6 +71,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_PadRight.Column(2);
         button_PadRight.Row(1);
         button_PadRight.Text("");
+        button_PadRight.Height(10);
         button_PadRight.Visible(true);
         button_PadRight.BackgroundColor(Component.COLOR_NONE);
         button_PadRight.WidthPercent(25);
@@ -76,9 +81,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Routes.Row(1);
 
         int int_NumButtonsToPad=6;
-//        if (applicationSettings.IsDebugSession) {
-//            int_NumButtonsToPad--;
-//        }
         Button[] button_Pad=new Button[int_NumButtonsToPad];
         for (int i=0;i< int_NumButtonsToPad; i++) {
             button_Pad[i] = new Button(menu);
@@ -202,8 +204,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 //        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         while ((i < len) && (b[i] != null)) {
             b[i].WidthPercent(50);
-            b[i].BackgroundColor(Component.COLOR_BLACK);
-            b[i].FontBold(false);
+            b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+            b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
             b[i].FontSize(12);
