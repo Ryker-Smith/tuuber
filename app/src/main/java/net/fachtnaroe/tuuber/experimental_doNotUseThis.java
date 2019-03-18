@@ -33,16 +33,18 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
     //https://developer.android.com/guide/webapps/webview#java
 
     tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
+
     HorizontalArrangement toolbarHz;
     Map<String, String> hm = new HashMap<String, String>();
     Clock ticker;
     ListView myList;
     Web testFancyList_Web;
-    Label debug_FancyList, head1, debug, label_pID;
+    Label debug_FancyList, debug, label_pID;
     fachtnaWebViewer aiWebViewer;
-    String stringTestURL_1="https://fachtnaroe.net/test_list1.html";
+//    String stringTestURL_1="https://fachtnaroe.net/test_list1.html";
     Integer count=0;
-    Button buttonMainMenu, buttonRefresh;
+    Button button_MainMenu, buttonRefresh;
     VerticalArrangement screenArrangement;
 
     Notifier messagesPopUp;
@@ -58,22 +60,17 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         catch (Exception e) {
             dbg(e.toString());
         }
-
+        tools=new tuuberCommonSubroutines(this);
         screenArrangement = new VerticalArrangement(this);
         screenArrangement.WidthPercent(100);
         screenArrangement.HeightPercent(100);
         // The 'toolbar'
         toolbarHz = new HorizontalArrangement(screenArrangement);
-        buttonMainMenu = new Button(toolbarHz);
-        buttonMainMenu.Width(40);
-        buttonMainMenu.Height(40);
-        buttonMainMenu.Image("buttonHome.png");
-        label_pID = new Label(toolbarHz);
-        label_pID.Text("I am user: #" + applicationSettings.pID);
-        label_pID.Height(40);
-        label_pID.FontSize(20);
-        label_pID.WidthPercent(70);
-        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        button_MainMenu = new Button(toolbarHz);
+        button_MainMenu.Width(40);
+        button_MainMenu.Height(40);
+        button_MainMenu.Image(applicationSettings.ourLogo);
+        label_pID = tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Experimental Screen");
         buttonRefresh = new Button(toolbarHz);
         buttonRefresh.Width(40);
         buttonRefresh.Height(40);
@@ -87,7 +84,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
 
         aiWebViewer = new fachtnaWebViewer(screenArrangement);
         aiWebViewer.HomeUrl(
-                applicationSettings.default_baseURL +
+                applicationSettings.baseURL +
                 "?action=LIST&entity=chat&sessionID=" +
                 applicationSettings.sessionID +
                 "&initiator_pID=" +
@@ -153,7 +150,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
             return true;
         }
         else if (eventName.equals("Click")) {
-            if (component.equals(buttonMainMenu)) {
+            if (component.equals(button_MainMenu)) {
                 finish();
                 return true;
             }

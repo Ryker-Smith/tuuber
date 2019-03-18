@@ -122,7 +122,7 @@ public class dd_aPerson {
         Family=(String) localDB.GetValue("Family",default_Family);
         eMail=(String) localDB.GetValue("eMail", default_eMail);
         phone=(String) localDB.GetValue("phone", default_phone);
-        password=(String) localDB.GetValue("pID",default_password);
+        password=(String) localDB.GetValue("label_pID",default_password);
         return "OK";
     }
     //stores the values

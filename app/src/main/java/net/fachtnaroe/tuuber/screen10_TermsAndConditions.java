@@ -16,10 +16,14 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 
 
 public class screen10_TermsAndConditions extends Form implements HandlesEventDispatching {
-    private tuuber_Settings applicationSettings;
+
+    tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
+
     private VerticalArrangement TermsAndConditions;
-    private Button button_Accept, button_Decline, buttonMainMenu;
-    private Label section_TextOfTermsAndConditions;
+    private Button button_Accept, button_Decline, button_MainMenu, button_Refresh;
+    private Label label_pID;
+    private fachtnaWebViewer webviewer_TextOfTermsAndConditions;
 
 
     protected void $define() {
@@ -29,36 +33,32 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
+        tools= new tuuberCommonSubroutines(this);
+
         TermsAndConditions = new VerticalArrangement(this);
         TermsAndConditions.WidthPercent(100);
         TermsAndConditions.HeightPercent(100);
 
         HorizontalArrangement toolbarHz = new HorizontalArrangement(TermsAndConditions);
-        buttonMainMenu = new Button(toolbarHz);
-        buttonMainMenu.Width(40);
-        buttonMainMenu.Height(40);
-        buttonMainMenu.Image("buttonHome.png");
-        Label label_pID = new Label(toolbarHz);
-        label_pID.HTMLFormat(true);
-        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Settings</small></small>");
-        label_pID.Height(40);
-        label_pID.FontSize(20);
-        label_pID.WidthPercent(70);
-        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
-        Button buttonRefresh = new Button(toolbarHz);
-        buttonRefresh.Width(40);
-        buttonRefresh.Height(40);
-        buttonRefresh.FontSize(8);
-        buttonRefresh.Image("buttonRefresh.png");
+        button_MainMenu = new Button(toolbarHz);
+        button_MainMenu.Width(40);
+        button_MainMenu.Height(40);
+        button_MainMenu.Image(applicationSettings.ourLogo);
 
-        section_TextOfTermsAndConditions = new Label(TermsAndConditions);
-        section_TextOfTermsAndConditions.Text(applicationSettings.TermsAndConditions);
-        section_TextOfTermsAndConditions.TextColor(Component.COLOR_WHITE);
-        section_TextOfTermsAndConditions.HTMLFormat(true);
-        section_TextOfTermsAndConditions.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        section_TextOfTermsAndConditions.HeightPercent(70);
+        label_pID=tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Terms & Conditions");
+
+        button_Refresh = new Button(toolbarHz);
+        button_Refresh.Width(40);
+        button_Refresh.Height(40);
+        button_Refresh.FontSize(8);
+        button_Refresh.Image("buttonRefresh.png");
+
+        webviewer_TextOfTermsAndConditions = new fachtnaWebViewer(TermsAndConditions);
+        webviewer_TextOfTermsAndConditions.HomeUrl(applicationSettings.TermsAndConditions_URL);
+        webviewer_TextOfTermsAndConditions.HeightPercent(70);
+
         HorizontalArrangement hz_AcceptDecline = new HorizontalArrangement(TermsAndConditions);
         button_Accept = new Button(hz_AcceptDecline);
         button_Accept.Text("Accept");
@@ -72,32 +72,34 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        tools.dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
             finishActivityWithTextResult("Bad");
             return true;
         }
         else if(eventName.equals("Click")){
-            if (component.equals(buttonMainMenu)) {
+            if (component.equals(button_MainMenu)) {
                 finish();
                 return true;
             }
             else if (component.equals(button_Accept)){
                 finishActivityWithTextResult("Good");
-                dbg("Good");
+                tools.dbg("Good");
                 return true;
             }
             else if(component.equals(button_Decline)){
-                dbg("Bad");
+                tools.dbg("Bad");
                 finishActivityWithTextResult("Bad");
+                return true;
+            }
+            if (component.equals(button_Refresh)) {
+                webviewer_TextOfTermsAndConditions.GoToUrl(applicationSettings.TermsAndConditions_URL);
                 return true;
             }
         }
         return false;
     }
-    void dbg(String debugMsg) {
-        System.err.print("~~~> " + debugMsg + " <~~~\n");
-    }
+
     void button_CommonFormatting(Button... b) {
         // This function takes a list of TextBox'es and sets them to 100% width
         // Other common applicationSettings may be applied this way.
@@ -110,9 +112,8 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
             b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
-            b[i].FontSize(12);
+            b[i].FontSize(applicationSettings.int_ButtonTextSize);
             b[i].Column(1);
-//            b[i].Width(int_ColWidth);
             i++;
         }
     }

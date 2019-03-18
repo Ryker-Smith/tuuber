@@ -26,16 +26,20 @@ import org.json.JSONObject;
 public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
+    private tuuberCommonSubroutines tools;
+
     Clock timer_RefreshBackend;
     TextBox text_ChatLine;
     VerticalArrangement ChatWith;
     HorizontalArrangement hz_ChatLine, hz_PoolLine, hz_ChatsViewer, hz_toolbar;
-    Button button_SendText, button_Refresh, button_MakePool, MainMenu;
-    Label pID, DriverOrNavigatorLabel, PoolID;
+    Button button_SendText, button_Refresh, button_MakePool, button_MainMenu;
+    Label label_pID, DriverOrNavigatorLabel, PoolID;
     Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
     Web web_ChatLine, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
+    String string_URLOfConversation;
+    Integer int_ClockCount=0;
 
     protected void $define() {
 
@@ -45,32 +49,27 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
+        tools = new tuuberCommonSubroutines(this);
+
         ChatWith=new VerticalArrangement(this);
         ChatWith.WidthPercent(100);
         ChatWith.HeightPercent(100);
 
         hz_toolbar = new HorizontalArrangement(ChatWith);
-        MainMenu = new Button(hz_toolbar);
-        MainMenu.Width(40);
-        MainMenu.Height(40);
-        MainMenu.Image("buttonHome.png");
+        button_MainMenu = new Button(hz_toolbar);
+        button_MainMenu.Width(40);
+        button_MainMenu.Height(40);
+        button_MainMenu.Image(applicationSettings.ourLogo);
 
-        pID = new Label(hz_toolbar);
-        pID.HTMLFormat(true);
-        pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Chat</small></small>");
-        pID.Height(40);
-        pID.FontSize(20);
-        pID.WidthPercent(70);
-        pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        label_pID =tools.fn_HeadingLabel(hz_toolbar, label_pID, applicationSettings.pID,"Chat");
 
         button_Refresh = new Button(hz_toolbar);
         button_Refresh.Width(40);
         button_Refresh.Height(40);
         button_Refresh.FontSize(8);
         button_Refresh.Image("buttonRefresh.png");
-
 
         hz_ChatsViewer = new HorizontalArrangement(ChatWith);
         hz_ChatsViewer.AlignHorizontal(ALIGNMENT_CENTER);
@@ -79,26 +78,27 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         webview_Chat.HeightPercent(60);
         webview_Chat.WidthPercent(100);
 
-        webview_Chat.HomeUrl(
+        string_URLOfConversation =
                 applicationSettings.baseURL +
-                "?action=LIST&entity=DISC&sessionID=" +
-                applicationSettings.sessionID +
-                "&showHtml=1" +
-                "&iam=" + applicationSettings.pID +
-                "&link_ID=" +
-                applicationSettings.otherpIDforChat // <~~ this must change
-                + "#bottom"
-        );
-        dbg(webview_Chat.HomeUrl());
+                        "?action=LIST&entity=DISC&sessionID=" +
+                        applicationSettings.sessionID +
+                        "&showHtml=1" +
+                        "&iam=" + applicationSettings.pID +
+                        "&link_ID=" +
+                        applicationSettings.otherpIDforChat; // <~~ this must change
+
+        webview_Chat.HomeUrl(string_URLOfConversation);
+        tools.dbg(webview_Chat.HomeUrl());
         hz_ChatLine = new HorizontalArrangement(ChatWith);
         hz_ChatLine.WidthPercent(100);
         text_ChatLine = new TextBox(hz_ChatLine);
         text_ChatLine.Text("");
-        text_ChatLine.WidthPercent(85);
+
         button_SendText = new Button(hz_ChatLine);
         button_SendText.Image("buttonSend.png");
         button_SendText.Width(35);
         button_SendText.Height(35);
+        text_ChatLine.Width((this.Width() - button_SendText.getSetWidth() -1));
 
         hz_PoolLine = new HorizontalArrangement(ChatWith);
         button_MakePool = new Button(hz_PoolLine);
@@ -118,15 +118,14 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend.TimerEnabled(true);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
-//        EventDispatcher.registerEventForDelegation(this, formName, "Changed");
-//        EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
+        tools.dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("Timer")) {
+            int_ClockCount++;
             callBackend();
         }
         else if (eventName.equals("AfterChoosing")) {
@@ -164,7 +163,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             }
         }
         else if (eventName.equals("Click")) {
-            if (component.equals(MainMenu)) {
+            if (component.equals(button_MainMenu)) {
                 switchForm("screen03_MainMenu");
                 return true;
             }
@@ -193,7 +192,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_Refresh)) {
-                webview_Chat.GoHome();
+                webview_Chat.GoToUrl( webview_Chat.CurrentUrl());
                 callBackend();
             }
             else if (component.equals(button_MakePool)) {
@@ -204,8 +203,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         else if (eventName.equals("GotText")) {
             if (component.equals(web_ChatLine)) {
                 if (web_ResultGotText(params[1].toString(), params[3].toString())) {
+                    text_ChatLine.BackgroundColor(Component.COLOR_NONE);
                     text_ChatLine.Text("");
 //                    MessageSent_Notifier.ShowMessageDialog("Message Successfully Sent", "Message Sent", "Ok");
+                    callBackend();
                 } else {
                     text_ChatLine.BackgroundColor(Component.COLOR_RED);
                     MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
@@ -213,7 +214,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(web_PoolDriver)) {
-                dbg((String) params[0]);
+                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolDriverList (status, textOfResponse);
@@ -251,7 +252,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(web_PoolNavigator)) {
-                dbg((String) params[0]);
+                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolNavigatorList (status, textOfResponse);
@@ -294,9 +295,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     }
 
     void callBackend() {
-        webview_Chat.ClearLocations();
-        webview_Chat.ClearCaches();
-        webview_Chat.GoHome();
+        webview_Chat.GoToUrl(string_URLOfConversation + "&clock=" + int_ClockCount);
+        tools.dbg(string_URLOfConversation + "&clock=" + int_ClockCount);
     }
 
     public boolean web_ResultGotText(String status, String textOfResponse) {
@@ -318,8 +318,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     public void getPoolDriverList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        dbg(status);
-        dbg("PoolID: " + textOfResponse);
+        tools.dbg(status);
+        tools.dbg("PoolID: " + textOfResponse);
         /*
           Request pool info, here prcess reply:
           if no pool, send POST to make pool
@@ -338,8 +338,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
     public void getPoolNavigatorList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        dbg(status);
-        dbg("PoolID: " + textOfResponse);
+        tools.dbg(status);
+        tools.dbg("PoolID: " + textOfResponse);
         /*
           Request pool info, here process reply:
           if no pool, send POST to make pool
@@ -356,7 +356,4 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
     }
 
-    void dbg (String debugMsg) {
-        System.err.print( "~~~> " + debugMsg + " <~~~\n");
-    }
 }

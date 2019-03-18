@@ -31,6 +31,7 @@ import org.json.JSONObject;
 public class screen02_Login extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
     private Button button_Login, button_Register;
 //    private Image Header;
 
@@ -49,11 +50,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        tools=new tuuberCommonSubroutines(this);
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
 
         Login = new VerticalScrollArrangement(this);
@@ -223,15 +225,11 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            ErrorNotifier.ShowMessageDialog("JSON Exception (check password)" + temp, "Information", "OK");
+            ErrorNotifier.ShowMessageDialog("JSON Exception (check password) " + temp, "Information", "OK");
         }
         else {
             ErrorNotifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-    }
-
-    void dbg (String debugMsg) {
-        System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 
     void button_CommonFormatting (Button... b) {
@@ -247,7 +245,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
             b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
-            b[i].FontSize(12);
+            b[i].FontSize(applicationSettings.int_ButtonTextSize);
             b[i].Height(40);
             i++;
         }

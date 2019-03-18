@@ -21,7 +21,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
-    Integer int_ColWidth;
+    Integer int_ColWidth, int_MenuStartRow=1;
 
     protected void $define() {
 
@@ -42,11 +42,32 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         TableArrangement menu=new TableArrangement(MainMenu);
         int_ColWidth = (this.Width()/3);
+        int_MenuStartRow=3;
 
         menu.Columns(3);
-        menu.Rows(14);
+        menu.Rows(14 + (int_MenuStartRow-1) );
+
         menu.WidthPercent(100);
         menu.HeightPercent(100);
+
+        //
+        Label label_ScreenName = new Label(menu);
+        label_ScreenName.Text("Main Menu");
+        label_ScreenName.TextAlignment(Component.ALIGNMENT_CENTER);
+        label_ScreenName.TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        label_ScreenName.FontSize(applicationSettings.int_ButtonTextSize);
+        label_ScreenName.Column(1);
+        label_ScreenName.Row(int_MenuStartRow-2);
+
+        Button button_PadTop=new Button(menu);
+        button_PadTop.Column(1);
+        button_PadTop.Row(int_MenuStartRow-1);
+        button_PadTop.Text("");
+        button_PadTop.Height(10);
+        button_PadTop.Visible(true);
+        button_PadTop.BackgroundColor(Component.COLOR_NONE);
+        button_PadTop.WidthPercent(25);
+        //
 
         Image img_logo = new Image(menu);
         img_logo.Picture(applicationSettings.ourLogo);
@@ -60,7 +81,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         Integer int_SideOffset=15;
         Button button_PadLeft=new Button(menu);
         button_PadLeft.Column(0);
-        button_PadLeft.Row(1);
+        button_PadLeft.Row(int_MenuStartRow);
         button_PadLeft.Text("");
         button_PadLeft.Height(10);
         button_PadLeft.Visible(true);
@@ -69,7 +90,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         Button button_PadRight=new Button(menu);
         button_PadRight.Column(2);
-        button_PadRight.Row(1);
+        button_PadRight.Row(int_MenuStartRow);
         button_PadRight.Text("");
         button_PadRight.Height(10);
         button_PadRight.Visible(true);
@@ -78,7 +99,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         button_Routes = new Button(menu);
         button_Routes.Text("Routes");
-        button_Routes.Row(1);
+        button_Routes.Row(int_MenuStartRow);
 
         int int_NumButtonsToPad=6;
         Button[] button_Pad=new Button[int_NumButtonsToPad];
@@ -90,28 +111,28 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             button_Pad[i].Height(10);
             button_Pad[i].Width(20);
             button_Pad[i].Column(1);
-            button_Pad[i].Row(2 + (i*2) );
+            button_Pad[i].Row(( int_MenuStartRow+1) + (i*2) );
         }
 
         button_Matches = new Button(menu);
         button_Matches.Text("Matches");
-        button_Matches.Row(3);
+        button_Matches.Row(int_MenuStartRow+2);
 
         button_Conversations = new Button(menu);
         button_Conversations.Text("Conversations");
-        button_Conversations.Row(5);
+        button_Conversations.Row(int_MenuStartRow+4);
 
         button_Settings = new Button(menu);
         button_Settings.Text("Settings");
-        button_Settings.Row(7);
+        button_Settings.Row(int_MenuStartRow+6);
 
         button_TsAndCs = new Button(menu);
         button_TsAndCs.Text("Terms & Conditions");
-        button_TsAndCs.Row(9);
+        button_TsAndCs.Row(int_MenuStartRow+8);
 
         button_Experimental = new Button(menu);
         button_Experimental.Text("Experimental Stuff");
-        button_Experimental.Row(11);
+        button_Experimental.Row(int_MenuStartRow+10);
 
         if (!applicationSettings.IsDebugSession) {
             button_Experimental.Visible(false);
@@ -119,7 +140,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         button_LogOut = new Button(menu);
         button_LogOut.Text("Log Out");
-        button_LogOut.Row(13);
+        button_LogOut.Row(int_MenuStartRow+12);
 
         button_CommonFormatting(
                 button_Routes, button_Matches,
@@ -208,7 +229,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
-            b[i].FontSize(12);
+            b[i].FontSize(applicationSettings.int_ButtonTextSize);
+            b[i].Height(40);
             b[i].Column(1);
             b[i].Width(int_ColWidth);
             i++;

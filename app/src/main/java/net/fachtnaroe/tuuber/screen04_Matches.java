@@ -28,13 +28,14 @@ import java.util.List;
 public class screen04_Matches extends Form implements HandlesEventDispatching {
 
     private tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
     private Web web_MyRoutes, Routes, web_MatchesFound, web_InitiateChat;
     private Notifier messagesPopUp;
     private Button button_InitiateChat, MainMenu, Refresh, button_FindMatches;
-    private VerticalArrangement Matches, VerticalArrangment1, VerticalArrangment2;
+    private VerticalArrangement Matches;
     private HorizontalArrangement MatchesButtons, MenuButtons, hz_Arrangement3;
     private ListView list_MyRoutes, list_MatchesFound;
-    private Label User_ID, DriverYNLabel;
+    private Label User_ID;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
 
     private Integer int_SelectedRoute = -1;
@@ -42,11 +43,12 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     protected void $define() {
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        tools=new tuuberCommonSubroutines(this);
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
 
         Matches = new VerticalArrangement(this);
@@ -70,6 +72,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MyRoutes = new ListView(Matches);
         list_MyRoutes.HeightPercent(35);
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
+        list_MyRoutes.SelectionColor(Component.COLOR_DKGRAY);
         MatchesButtons = new HorizontalArrangement(Matches);
         button_FindMatches = new Button(MatchesButtons);
         button_FindMatches.Text("Click to see Matches");
@@ -79,22 +82,23 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
         list_MatchesFound.TextSize(applicationSettings.intListViewsize);
+        list_MatchesFound.SelectionColor(COLOR_DKGRAY);
         hz_Arrangement3 = new HorizontalArrangement(Matches);
         web_MatchesFound = new Web(Matches);
         button_InitiateChat = new Button(hz_Arrangement3);
-        button_InitiateChat.Text("Send Chat");
+        button_InitiateChat.Text("Initiate Chat");
         button_InitiateChat.Enabled(false);
         messagesPopUp = new Notifier(Matches);
-        DriverYNLabel = new Label(hz_Arrangement3);
+
         web_InitiateChat = new Web(Matches);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         Routes.Url(
-                applicationSettings.baseURL + "?entity=town&action=LIST"
-                        + "&"
-                        + "sessionID="
+                applicationSettings.baseURL
+                        + "?entity=town&action=LIST"
+                        + "&sessionID="
                         + applicationSettings.sessionID
         );
         Routes.Get();
@@ -102,7 +106,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        tools.dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
             closeForm(new Intent());
 
@@ -149,7 +153,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                 + applicationSettings.pID
                 );
                 web_InitiateChat.Get();
-                dbg(web_InitiateChat.Url());
+                tools.dbg(web_InitiateChat.Url());
                 return true;
             } else if (component.equals(button_FindMatches)) {
                 if (component.equals(button_FindMatches)) {
@@ -164,7 +168,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                     + "&rID="
                                     + int_SelectedRoute.toString()
                     );
-                    dbg(web_MatchesFound.Url());
+                    tools.dbg(web_MatchesFound.Url());
                     web_MatchesFound.Get();
                     return true;
                 }
@@ -174,7 +178,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 String[] temp = list_MyRoutes.Selection().split("=");
                 temp[1] = temp[1].replace(")", "");
                 int_SelectedRoute = Integer.valueOf(temp[1]);
-                dbg(int_SelectedRoute.toString());
+                tools.dbg(int_SelectedRoute.toString());
                 button_FindMatches.Enabled(true);
                 return true;
             } else if (component.equals(list_MatchesFound)) {
@@ -182,15 +186,15 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 return true;
             }
         } else if (eventName.equals("GotText")) {
-            dbg("RAW: " + (String) params[3]);
+            tools.dbg("RAW: " + (String) params[3]);
             if (component.equals(web_MyRoutes)) {
-                dbg((String) params[0]);
+                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_MyRoutes(status, textOfResponse);
                 return true;
             } else if (component.equals(web_MatchesFound)) {
-                dbg((String) params[0]);
+                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String TextOfResponse = (String) params[3];
                 fn_GotText_MatchesFound(status, TextOfResponse);
@@ -240,7 +244,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                     + " on "
                                     + temp
                                     + " (rID=" + routesArray.getJSONObject(i).getString("rID") + ")"
-
                     );
                 }
                 YailList tempData = YailList.makeList(ListOfRoutesFromWeb);
@@ -331,8 +334,5 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         web_MyRoutes.Get();
     }
 
-    void dbg(String debugMsg) {
-        System.err.print("~~~> " + debugMsg + " <~~~\n");
-    }
 }
 

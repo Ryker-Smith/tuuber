@@ -51,7 +51,7 @@ public class Xscreen07_Routes_OldVersion extends Form implements HandlesEventDis
         Routes = new VerticalArrangement(this);
         TuberH = new Image(Routes);
         localDB = new TinyDB(Routes);
-        String tempString= (String) localDB.GetValue("pID",-1);
+        String tempString= (String) localDB.GetValue("label_pID",-1);
         pID = Integer.valueOf(tempString);
         MainMenuHArrangement = new HorizontalArrangement(Routes);
         MainMenu = new Button(MainMenuHArrangement);

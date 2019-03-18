@@ -12,7 +12,6 @@ import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
-import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
 import com.google.appinventor.components.runtime.TableArrangement;
@@ -20,13 +19,9 @@ import com.google.appinventor.components.runtime.TextBox;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
-import com.google.appinventor.components.runtime.WebViewer;
-import com.google.appinventor.components.runtime.util.YailList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 // Research:  http://loopj.com/android-async-http/
 // Research: https://hc.apache.org/httpcomponents-client-ga/
@@ -35,6 +30,7 @@ import java.util.ArrayList;
 public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
     fr_aPerson thisPersonsDetails = new fr_aPerson();
     Web web_GetMyDetails, web_SaveMyDetails, passwordWeb, passwordWebSave;
     Notifier messages;
@@ -42,11 +38,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     PasswordTextBox textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword;
     Button button_SaveMyDetails, button_SubmitPassword, button_MainMenu, button_Refresh, button_SubmitCustomisation;
     Label listViewSizeLabel, label_PhoneNumber, label_eMail, label_UserFirstName, label_UserFamilyName, label_OldPassword, label_NewPassword, label_ConfirmPassword, label_pID;
-    HorizontalArrangement listViewSizeHz, oldPassHz, newPassHz, confirmHz, hz_Toolbar;
+    HorizontalArrangement listViewSizeHz, oldPassHz, newPassHz, confirmHz, hz_toolbar;
     VerticalArrangement detailsVt, vt_Password, vt_Customisation;
     ImagePicker myImagePicker;
     fachtnaSlider slider_FontSize;
-    CheckBox check_GA, check_EN, check_PO;
+    CheckBox checkbox_GA, checkbox_EN, checkbox_PO;
 
     protected void $define() {
 
@@ -58,21 +54,22 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         catch (Exception e) {
             dbg(e.toString());
         }
-
+        tools = new tuuberCommonSubroutines(this);
         // The 'toolbar'
-        hz_Toolbar = new HorizontalArrangement(this);
-        button_MainMenu = new Button(hz_Toolbar);
+        hz_toolbar = new HorizontalArrangement(this);
+        button_MainMenu = new Button(hz_toolbar);
         button_MainMenu.Width(40);
         button_MainMenu.Height(40);
-        button_MainMenu.Image("buttonHome.png");
-        label_pID = new Label(hz_Toolbar);
-        label_pID.HTMLFormat(true);
-        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Settings</small></small>");
-        label_pID.Height(40);
-        label_pID.FontSize(20);
-        label_pID.WidthPercent(70);
-        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
-        button_Refresh = new Button(hz_Toolbar);
+        button_MainMenu.Image(applicationSettings.ourLogo);
+//        label_pID = new Label(hz_toolbar);
+//        label_pID.HTMLFormat(true);
+//        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Settings</small></small>");
+//        label_pID.Height(40);
+//        label_pID.FontSize(20);
+//        label_pID.WidthPercent(70);
+//        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        label_pID =tools.fn_HeadingLabel(hz_toolbar, label_pID, applicationSettings.pID,"Settings");
+        button_Refresh = new Button(hz_toolbar);
         button_Refresh.Width(40);
         button_Refresh.Height(40);
         button_Refresh.FontSize(8);
@@ -88,10 +85,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         HorizontalArrangement hz_ImageTextBox=new HorizontalArrangement(vt_Customisation);
 
         myImagePicker = new ImagePicker(hz_ImageTextBox);
-        myImagePicker.Text("Chooser");
+        myImagePicker.Text("Picker");
         myImagePicker.FontBold(true);
-        myImagePicker.FontSize(11);
-        myImagePicker.Height(35);
+        myImagePicker.FontSize(12);
+        myImagePicker.Height(40);
         myImagePicker.WidthPercent(20);
         backgroundImageTextBox = new TextBox(hz_ImageTextBox);
         backgroundImageTextBox.WidthPercent(80);
@@ -116,12 +113,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         slider_FontSize.ThumbEnabled(true);
 
         HorizontalArrangement hz_Languages = new HorizontalArrangement(vt_Customisation);
-        check_GA = new CheckBox(hz_Languages);
-        check_GA.Text("Gaeilge");
-        check_EN = new CheckBox(hz_Languages);
-        check_EN.Text("English");
-        check_PO = new CheckBox(hz_Languages);
-        check_PO.Text("Polski");
+        checkbox_GA = new CheckBox(hz_Languages);
+        checkbox_GA.Text("Gaeilge");
+        checkbox_EN = new CheckBox(hz_Languages);
+        checkbox_EN.Text("English");
+        checkbox_PO = new CheckBox(hz_Languages);
+        checkbox_PO.Text("Polski");
 
         button_SubmitCustomisation = new Button(vt_Customisation);
         button_SubmitCustomisation.Text("Save program settings");
@@ -215,7 +212,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         textbox_CommonFormatting(textbox_eMail, textbox_PhoneNumber, textbox_UserFamilyName, textbox_UserFirstName);
         label_CommonFormatting(label_eMail, label_PhoneNumber, label_UserFamilyName, label_UserFirstName);
         button_CommonFormatting(button_SubmitCustomisation, button_SaveMyDetails, button_SubmitPassword);
-        checkbox_CommonFormatting(check_GA, check_EN, check_PO);
+        checkbox_CommonFormatting(checkbox_GA, checkbox_EN, checkbox_PO);
 
         myImagePicker.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         myImagePicker.TextColor(Component.COLOR_WHITE);
@@ -248,24 +245,24 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             return false;
         }
         else if (eventName.equals("Changed")) {  // 'radio' buttons
-            if (component.equals(check_GA)) {
-                if (check_GA.Checked() == true) {
-                    check_EN.Checked(false);
-                    check_PO.Checked(false);
+            if (component.equals(checkbox_GA)) {
+                if (checkbox_GA.Checked() == true) {
+                    checkbox_EN.Checked(false);
+                    checkbox_PO.Checked(false);
                 }
                 return true;
             }
-            else if (component.equals(check_EN)) {
-                if (check_EN.Checked() == true) {
-                    check_GA.Checked(false);
-                    check_PO.Checked(false);
+            else if (component.equals(checkbox_EN)) {
+                if (checkbox_EN.Checked() == true) {
+                    checkbox_GA.Checked(false);
+                    checkbox_PO.Checked(false);
                 }
                 return true;
             }
-            else if (component.equals(check_PO)) {
-                if (check_PO.Checked() == true) {
-                    check_GA.Checked(false);
-                    check_EN.Checked(false);
+            else if (component.equals(checkbox_PO)) {
+                if (checkbox_PO.Checked() == true) {
+                    checkbox_GA.Checked(false);
+                    checkbox_EN.Checked(false);
                 }
                 return true;
             }
@@ -392,16 +389,18 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
         textbox_ListViewSize.Text(applicationSettings.intListViewsize.toString());
         slider_FontSize.ThumbPosition(Integer.valueOf(textbox_ListViewSize.Text()));
+        fn_preferredLanguage(applicationSettings.string_PreferredLanguage, checkbox_GA, checkbox_EN, checkbox_PO);
     }
 
+    void fn_preferredLanguage (String lang, CheckBox... cb){
+
+    }
 
     public void detailsGotText(String status, String textOfResponse) {
-        String temp2 = "";
         if (status.equals("200")) try {
             JSONObject parser = new JSONObject(textOfResponse);
-            temp2 = parser.getString("pID");
             if (parser.getString("pID").equals(applicationSettings.pID)) {
-                //using matching pID to check success
+                //using matching label_pID to check success
                 // do something
                 thisPersonsDetails.email = parser.getString("email");
                 thisPersonsDetails.first = parser.getString("first");
@@ -417,7 +416,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog(textOfResponse + "JSON Exception [pID=" + applicationSettings.pID + "/" + temp2 + "]", "Information", "OK");
+            messages.ShowMessageDialog(textOfResponse + "JSON Exception [pID=" + applicationSettings.pID + "]", "Information", "OK");
         }
         else {
             messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
@@ -508,14 +507,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         int len = b.length;
 //        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         while ((i < len) && (b[i] != null)) {
-            b[i].WidthPercent(50);
+            b[i].WidthPercent(55);
             b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
             b[i].FontBold(true);
             b[i].TextColor(Component.COLOR_WHITE);
             b[i].Shape(BUTTON_SHAPE_ROUNDED);
             b[i].TextAlignment(Component.ALIGNMENT_CENTER);
-            b[i].FontSize(11);
-            b[i].Height(35);
+            b[i].FontSize(12);
+            b[i].Height(40);
             i++;
         }
 

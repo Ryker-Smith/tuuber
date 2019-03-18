@@ -36,6 +36,7 @@ import java.util.List;
 public class screen07_Routes extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
     private Web web_SaveRoute, web_GetMyRoutes, web_GetTowns, web_DeleteRoute, web_GetOneRoute;
     private Notifier messagesPopUp;
     private ImagePicker img_DirectionArrow;
@@ -51,12 +52,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
     private Button button_To, button_From, button_Save, button_Delete;
-    private Button buttonMainMenu, buttonRefresh;
+    private Button button_MainMenu, buttonRefresh;
     private ListView list_MyRoutes;
     private CheckBox checkbox_Mon, checkbox_Tues, checkbox_Weds, checkbox_Thurs, checkbox_Fri, checkbox_IsDriver;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
     String Specify = new String("to");
-//    String rID;
     Integer day = -1;// used to store the day selection of the user
     Integer saveNewIs0_saveEditIs1 = 0;
     String driver, destination, origin, action, string_listpicker_Towns_InitialText;
@@ -66,20 +66,22 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        tools=new tuuberCommonSubroutines(this);
         RoutesScreen = new VerticalArrangement(this);
 
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
         // The 'toolbar'
         toolbarHz = new HorizontalArrangement(RoutesScreen);
-        buttonMainMenu = new Button(toolbarHz);
-        buttonMainMenu.Width(40);
-        buttonMainMenu.Height(40);
-        buttonMainMenu.Image("buttonHome.png");
+        button_MainMenu = new Button(toolbarHz);
+        button_MainMenu.Width(40);
+        button_MainMenu.Height(40);
+        button_MainMenu.Image("buttonHome.png");
+
         label_pID = new Label(toolbarHz);
         label_pID.HTMLFormat(true);
         label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Routes</small></small>");
@@ -137,6 +139,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         button_Save.Text("Save");
         button_Delete = new Button(ButtonHolder);
         button_Delete.Text("Delete");
+        button_Delete.Enabled(false);
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         list_MyRoutes.TextColor(Component.COLOR_WHITE);
@@ -160,7 +163,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        tools.dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
             this.finish();
             return true;
@@ -251,6 +254,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "&sessionID=" + applicationSettings.sessionID
                 );
                 saveNewIs0_saveEditIs1 = 1;
+                button_Delete.Enabled(true);
                 web_GetOneRoute.Get();
                 return true;
             }
@@ -260,19 +264,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
         else if (eventName.equals("Click")) {
-            if (component.equals(buttonMainMenu)) {
+            if (component.equals(button_MainMenu)) {
                 switchForm("screen03_MainMenu");
                 return true;
             }
             else if (component.equals(listpicker_Towns)) {
-//                GetTowns.Url(
-//                        applicationSettings.baseURL
-//                                + "?action=LIST"
-//                                + "&entity=TOWN"
-//                                + "&sessionID=" + applicationSettings.sessionID
-//                );
-//                dbg(GetTowns.Url());
-//                GetTowns.Get();
                 fn_GetTownsFromBackEnd();
             }
             else if (component.equals(buttonRefresh)) {
@@ -283,6 +279,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 checkbox_Thurs.Checked(false);
                 checkbox_Fri.Checked(false);
                 button_Save.Enabled(false);
+                button_Delete.Enabled(false);
                 checkbox_IsDriver.Checked(false);
                 fn_GetTownsFromBackEnd();
                 fn_GetMyRoutesFromBackEnd();
@@ -304,7 +301,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 fn_GetMyRoutesFromBackEnd();
             }
             else if (component.equals(button_Save)) {
-                dbg("Saving");
+                tools.dbg("Saving");
                 String my_rID="";
                 if(saveNewIs0_saveEditIs1.equals(0)){
                     action="POST";
@@ -317,36 +314,36 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 if ((!checkbox_Mon.Checked()) && (!checkbox_Tues.Checked()) && (!checkbox_Weds.Checked()) && (!checkbox_Thurs.Checked()) && (!checkbox_Fri.Checked()) && (!checkbox_IsDriver.Checked())) {
                     return true;
                 }
-                String temp = new String("");
-                temp = temp + "day=" + day;
-                temp = temp + "&";
+                String string_DayAndIfDriver = new String("");
+                string_DayAndIfDriver = string_DayAndIfDriver + "day=" + day;
+                string_DayAndIfDriver = string_DayAndIfDriver + "&";
                 if (checkbox_IsDriver.Checked()) {
-                    temp = temp + "driver=Y";
+                    string_DayAndIfDriver = string_DayAndIfDriver + "driver=Y";
                 }
                 else {
-                    temp = temp + "driver=N";
+                    string_DayAndIfDriver = string_DayAndIfDriver + "driver=N";
                 }
-                String Directions = new String();
+                String string_DirectionOfTravel = new String();
                 if (Specify.equals("to")) {
-                    Directions = "&destination=Templemore&origin=" + listpicker_Towns.Text();
+                    string_DirectionOfTravel = "&destination=Templemore&origin=" + listpicker_Towns.Text();
                 }
                 else {
-                    Directions = "&origin=Templemore&destination=" + listpicker_Towns.Text();
+                    string_DirectionOfTravel = "&origin=Templemore&destination=" + listpicker_Towns.Text();
                 }
                 web_SaveRoute.Url(
                         applicationSettings.baseURL
                                 + "?action="
                                 + action
                                 + "&entity=ROUTE"
-                                + Directions + "&"
-                                + temp + "&"
-                                + "pID=" + applicationSettings.pID + "&"
+                                + string_DirectionOfTravel + "&"
+                                + string_DayAndIfDriver + "&"
+                                + "label_pID=" + applicationSettings.pID + "&"
                                 + "sessionID=" + applicationSettings.sessionID
                                 + "&rID=" + my_rID
                 );
                 web_SaveRoute.Get();
                 buttonRefresh.Click();
-                dbg(web_SaveRoute.Url());
+                tools.dbg(web_SaveRoute.Url());
                 return true;
             }
             else if (component.equals(button_To)) {
@@ -360,14 +357,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_GetMyRoutes)) {
-                dbg((String) params[0]);
+                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_GetRoute(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_GetTowns)) {
-                dbg((String) params[0]);
+                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_GetTowns(status, textOfResponse);
@@ -490,7 +487,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         web_GetMyRoutes.Url(applicationSettings.baseURL
                 + "?action=LIST"
                 + "&entity=ROUTE"
-                + "&pID=" + applicationSettings.pID
+                + "&label_pID=" + applicationSettings.pID
                 + "&sessionID=" + applicationSettings.sessionID
         );
         web_GetMyRoutes.Get();
@@ -502,10 +499,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         } else {
             return false;
         }
-    }
-
-    void dbg(String debugMsg) {
-        System.err.print("~~~> " + debugMsg + " <~~~\n");
     }
 
     public void fn_GotText_SaveRoute(String status, String textOfResponse) {
