@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 public class screen06_Register extends Form implements HandlesEventDispatching {
 
+    tuuberCommonSubroutines tools;
+
     private Button Create, TermsConditions;
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Register;
@@ -42,6 +44,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        tools = new tuuberCommonSubroutines(this);
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
@@ -134,13 +137,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Create = new Button(CreateHZ);
         Create.Text ("Create");
 
-        button_CommonFormatting(Create, TermsConditions);
-
         Creation = new Web(Register);
         Creation_Notifier = new Notifier(Register);
         Universal_Notifier = new Notifier(Register);
         Web_Notifier = new Notifier(Register);
         User = new dd_aPerson(Register);
+        tools.button_CommonFormatting(45, Create, TermsConditions);
 
         EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
 //        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );
@@ -312,23 +314,5 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 //        TCLabel.Text(result.toString());
         TCLabel.Text(otherScreenName+" EEEEE " + result);
 
-    }
-    void button_CommonFormatting (Button... b) {
-        // This function takes a list of TextBox'es and sets them to 100% width
-        // Other common applicationSettings may be applied this way.
-        int i=0;
-        int len = b.length;
-        while ((i < len) && (b[i] != null)) {
-            b[i].WidthPercent(40);
-            b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-//            b[i].BackgroundColor(Component.COLOR_BLACK);
-            b[i].FontBold(true);
-            b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
-            b[i].TextColor(Component.COLOR_WHITE);
-            b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
-            b[i].FontSize(applicationSettings.int_ButtonTextSize);
-            b[i].Height(40);
-            i++;
-        }
     }
 }

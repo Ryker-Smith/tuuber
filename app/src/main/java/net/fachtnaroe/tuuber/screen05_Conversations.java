@@ -12,6 +12,7 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
 
@@ -29,8 +30,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     
-    private VerticalArrangement Conversations;
-    private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz;
+    private VerticalScrollArrangement Conversations;
+    private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz, PaddingHZOpenConversations,PaddingHZInvConversations;
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
@@ -53,7 +54,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         catch (Exception e) {
             tools.dbg(e.toString());
         }
-        Conversations = new VerticalArrangement(this);
+        Conversations = new VerticalScrollArrangement(this);
 
         toolbarHz = new HorizontalArrangement(Conversations);
         MainMenu = new Button(toolbarHz);
@@ -81,6 +82,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
         listview_Open.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
+        PaddingHZOpenConversations = new HorizontalArrangement(Conversations);
+        Button button_Pad_OpenConversations = new Button(PaddingHZOpenConversations);
+        button_Pad_OpenConversations.BackgroundColor(Component.COLOR_NONE);
+        button_Pad_OpenConversations.Text("");
+        button_Pad_OpenConversations.Height(5);
+
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
         button_OpenChatScreen.Text("Chat");
@@ -97,10 +104,23 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
         listview_In.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
+        PaddingHZInvConversations = new HorizontalArrangement(Conversations);
+        Button button_Pad_InvitationsToChat = new Button(PaddingHZInvConversations);
+        button_Pad_InvitationsToChat.BackgroundColor(Component.COLOR_NONE);
+        button_Pad_InvitationsToChat.Text("");
+        button_Pad_InvitationsToChat.Height(5);
+
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
         button_AcceptInbound.Text("Accept inbound");
         button_AcceptInbound.Enabled(false);
+
+        Button button_Pad_Separate_Accept_Decline = new Button (InboundButtonsHZ);
+        button_Pad_Separate_Accept_Decline.BackgroundColor(Component.COLOR_NONE);
+        button_Pad_Separate_Accept_Decline.Text("");
+        button_Pad_Separate_Accept_Decline.Height(5);
+        button_Pad_Separate_Accept_Decline.Width(5);
+
         button_DeclineInbound = new Button(InboundButtonsHZ);
         button_DeclineInbound.Text("Decline inbound");
         button_DeclineInbound.Enabled(false);
@@ -120,6 +140,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
         button_CancelOutbound.Enabled(false);
+
+        tools.button_CommonFormatting(40, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
 
         web_Open = new Web(this);
         web_Inbound = new Web(this);
