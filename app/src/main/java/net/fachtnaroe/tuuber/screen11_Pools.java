@@ -1,5 +1,7 @@
 package net.fachtnaroe.tuuber;
 
+import android.graphics.Color;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -32,7 +34,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
-    private Label label_Open, label_Out, label_In, pID;
+    private Label label_Open, label_Out, label_In, label_pID;
     private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
     private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb;
     private Notifier notifier_Messages;
@@ -57,14 +59,8 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         MainMenu = new Button(toolbarHz);
         MainMenu.Width(40);
         MainMenu.Height(40);
-        MainMenu.Image("buttonHome.png");
-        pID = new Label(toolbarHz);
-        pID.HTMLFormat(true);
-        pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Pools</small></small>");
-        pID.Height(40);
-        pID.FontSize(20);
-        pID.WidthPercent(70);
-        pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        MainMenu.Image(applicationSettings.ourLogo);
+        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Pools");
         Refresh = new Button(toolbarHz);
         Refresh.Width(40);
         Refresh.Height(40);
@@ -80,6 +76,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_Open.HeightPercent(100);
         listview_Open.WidthPercent(100);
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
+        listview_Open.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
@@ -95,6 +92,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_In.Height(100);
         listview_In.WidthPercent(100);
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
+        listview_In.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
@@ -113,6 +111,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_Out.Height(100);
         listview_Out.WidthPercent(100);
         listview_Out.SelectionColor(Component.COLOR_DKGRAY);
+        listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
@@ -146,15 +145,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_AcceptInbound)) {
                 String[] temp=listview_In.Selection().split("=");
-                String link_ID=temp[1].replace(")","");
+                String pool_ID=temp[1].replace(")","");
                 web_AcceptInbound.Url(
                         applicationSettings.baseURL +
                                 "?action=PUT&entity=POOL&sessionID=" +
                                 applicationSettings.sessionID +
                                 "&iam=" +
                                 applicationSettings.pID +
-                                "&link_ID=" +
-                                link_ID +
+                                "&pool_ID=" +
+                                pool_ID +
                                 "&status=open"
                 );
                 web_AcceptInbound.Get();
@@ -163,15 +162,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_DeclineInbound)) {
                 String[] temp=listview_In.Selection().split("=");
-                String link_ID=temp[1].replace(")","");
+                String pool_ID=temp[1].replace(")","");
                 web_DeclineInbound.Url(
                         applicationSettings.baseURL +
                                 "?action=DELETE&entity=POOL&sessionID=" +
                                 applicationSettings.sessionID +
                                 "&iam=" +
                                 applicationSettings.pID +
-                                "&link_ID=" +
-                                link_ID
+                                "&pool_ID=" +
+                                pool_ID
                 );
                 web_DeclineInbound.Get();
                 tools.dbg(web_DeclineInbound.Url());
@@ -179,15 +178,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_CancelOutbound)) {
                 String[] temp=listview_Out.Selection().split("=");
-                String link_ID=temp[1].replace(")","");
+                String pool_ID=temp[1].replace(")","");
                 web_OutboundCancel.Url(
                         applicationSettings.baseURL +
                                 "?action=DELETE&entity=POOL&sessionID=" +
                                 applicationSettings.sessionID +
                                 "&iam=" +
                                 applicationSettings.pID +
-                                "&link_ID=" +
-                                link_ID
+                                "&pool_ID=" +
+                                pool_ID
                 );
                 tools.dbg(web_OutboundCancel.Url());
                 web_OutboundCancel.Get();
@@ -308,15 +307,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
             ListofContactWeb1 = new ArrayList<String>();
 
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("link" ).equals("" )) {
-                JSONArray contacts1Array = parser.getJSONArray("link" );
+            if (!parser.getString("pool" ).equals("" )) {
+                JSONArray contacts1Array = parser.getJSONArray("pool" );
                 for (int i = 0; i < contacts1Array.length(); i++) {
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
-                            "Chatting with " +
-                                    contacts1Array.getJSONObject(i).getString("realName" ) +
-                                    " (link_ID=" +
-                                    contacts1Array.getJSONObject(i).getString("link_ID" )
+                            "Currently pooling with " +
+//                                    contacts1Array.getJSONObject(i).getString("realName" ) +
+                                    " (pool_ID=" +
+                                    contacts1Array.getJSONObject(i).getString("pool_ID" )
                                     + ")"
                     );
                 }
@@ -347,15 +346,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
             ListofInboundWeb = new ArrayList<String>();
 
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("link").equals("")) {
+            if (!parser.getString("pool").equals("")) {
 
-                JSONArray Inbound = parser.getJSONArray("link");
+                JSONArray Inbound = parser.getJSONArray("pool");
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     if (Inbound.getJSONObject(i).toString().equals("{}")) break;
-                    String anItem = "Contact request from " +
-                            Inbound.getJSONObject(i).getString("realName") +
-                            " (link_ID=" +
-                            Inbound.getJSONObject(i).getString("link_ID")
+                    String anItem = "Connection from " +
+//                            Inbound.getJSONObject(i).getString("realName") +
+                            " (pool_ID=" +
+                            Inbound.getJSONObject(i).getString("pool_ID")
                             + ")";
                     ListofInboundWeb.add( anItem );
                 }
@@ -384,14 +383,14 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
 
             ListofOutboundWeb = new ArrayList<String>();
             JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("link").equals("")) {
-                JSONArray Outbound = parser.getJSONArray("link");
+            if (!parser.getString("pool").equals("")) {
+                JSONArray Outbound = parser.getJSONArray("pool");
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     if (Outbound.getJSONObject(i).toString().equals("{}")) break;
-                    String anItem = "Connecting to " +
+                    String anItem = "Connecting with " +
                             Outbound.getJSONObject(i).getString("realName") +
-                            " (link_ID=" +
-                            Outbound.getJSONObject(i).getString("link_ID")
+                            " (pool_ID=" +
+                            Outbound.getJSONObject(i).getString("pool_ID")
                             +")";
                     ListofOutboundWeb.add( anItem );
                     tools.dbg(anItem);

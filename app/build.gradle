@@ -28,4 +28,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/AppInventor-JavaLibrary.jar')
     implementation files('libs/kawa-1.7.jar')
+    implementation files('libs/android-async-http-1.4.9.jar')
 }

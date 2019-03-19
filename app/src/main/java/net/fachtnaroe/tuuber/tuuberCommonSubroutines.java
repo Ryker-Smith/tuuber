@@ -42,7 +42,7 @@ public class tuuberCommonSubroutines {
 //        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
         while ((i < len) && (b[i] != null)) {
             if (int_ColWidthPercent != null) {
-                b[i].WidthPercent(50);
+                b[i].WidthPercent(int_ColWidthPercent);
             }
             b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
             b[i].FontBold(true);
@@ -51,7 +51,6 @@ public class tuuberCommonSubroutines {
             b[i].FontSize(applicationSettings.int_ButtonTextSize);
             b[i].Height(40);
             b[i].Column(1);
-//            b[i].Width(int_ColWidth);
             i++;
         }
     }

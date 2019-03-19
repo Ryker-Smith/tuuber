@@ -44,7 +44,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
     fachtnaWebViewer aiWebViewer;
 //    String stringTestURL_1="https://fachtnaroe.net/test_list1.html";
     Integer count=0;
-    Button button_MainMenu, buttonRefresh;
+    Button button_MainMenu, button_Refresh, button_TestRegister;
     VerticalArrangement screenArrangement;
 
     Notifier messagesPopUp;
@@ -71,11 +71,11 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         button_MainMenu.Height(40);
         button_MainMenu.Image(applicationSettings.ourLogo);
         label_pID = tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Experimental Screen");
-        buttonRefresh = new Button(toolbarHz);
-        buttonRefresh.Width(40);
-        buttonRefresh.Height(40);
-        buttonRefresh.FontSize(8);
-        buttonRefresh.Image("buttonRefresh.png");
+        button_Refresh = new Button(toolbarHz);
+        button_Refresh.Width(40);
+        button_Refresh.Height(40);
+        button_Refresh.FontSize(8);
+        button_Refresh.Image("buttonRefresh.png");
 
         debug_FancyList=new Label(screenArrangement);
         debug_FancyList.Text("Debug");
@@ -101,7 +101,8 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         ticker = new Clock(screenArrangement);
         ticker.TimerEnabled(false);
         ticker.TimerInterval(1000);
-
+        button_TestRegister= new Button(screenArrangement);
+        button_TestRegister.Text("Test Register screen");
         messagesPopUp = new Notifier(screenArrangement);
         fancyListView(screenArrangement, myList, "pick one to see 2-question dialog", "one", "two", "three");
         debug=new Label(screenArrangement);
@@ -154,8 +155,12 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
                 finish();
                 return true;
             }
-            else if (component.equals(buttonRefresh)) {
-                aiWebViewer.GoHome();
+            else if (component.equals(button_Refresh)) {
+                aiWebViewer.GoToUrl( aiWebViewer.HomeUrl() );
+                return true;
+            }
+            else if (component.equals(button_TestRegister)) {
+                switchForm("screen06_Register");
                 return true;
             }
         }
