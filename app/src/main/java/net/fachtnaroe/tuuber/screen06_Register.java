@@ -270,7 +270,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             }
             if (component.equals(TermsConditions)) {
                 dbg("error");
-                startNewForm("screen10_TermsAndConditions","none");
+                switchFormWithStartValue("screen10_TermsAndConditions","none");
                 return true;
             }
 
