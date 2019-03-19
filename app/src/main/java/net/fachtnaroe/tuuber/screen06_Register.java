@@ -44,6 +44,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
+        tools = new tuuberCommonSubroutines(this);
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
@@ -136,13 +137,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Create = new Button(CreateHZ);
         Create.Text ("Create");
 
-        tools.button_CommonFormatting(45, Create, TermsConditions);
-
         Creation = new Web(Register);
         Creation_Notifier = new Notifier(Register);
         Universal_Notifier = new Notifier(Register);
         Web_Notifier = new Notifier(Register);
         User = new dd_aPerson(Register);
+        tools.button_CommonFormatting(45, Create, TermsConditions);
 
         EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
 //        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );

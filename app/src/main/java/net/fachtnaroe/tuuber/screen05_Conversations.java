@@ -12,6 +12,7 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
 
@@ -29,7 +30,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     
-    private VerticalArrangement Conversations;
+    private VerticalScrollArrangement Conversations;
     private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz;
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
@@ -53,7 +54,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         catch (Exception e) {
             tools.dbg(e.toString());
         }
-        Conversations = new VerticalArrangement(this);
+        Conversations = new VerticalScrollArrangement(this);
 
         toolbarHz = new HorizontalArrangement(Conversations);
         MainMenu = new Button(toolbarHz);
@@ -120,6 +121,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
         button_CancelOutbound.Enabled(false);
+
+        tools.button_CommonFormatting(30, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
 
         web_Open = new Web(this);
         web_Inbound = new Web(this);
