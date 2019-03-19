@@ -82,13 +82,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         button_MainMenu.Height(40);
         button_MainMenu.Image("buttonHome.png");
 
-        label_pID = new Label(toolbarHz);
-        label_pID.HTMLFormat(true);
-        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Routes</small></small>");
-        label_pID.Height(40);
-        label_pID.FontSize(20);
-        label_pID.WidthPercent(70);
-        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Routes");
 //        test = new Label(RoutesScreen);
         buttonRefresh = new Button(toolbarHz);
         buttonRefresh.Width(40);
@@ -100,21 +94,21 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         myRoutes.Text("My Routes:");
         list_MyRoutes = new ListView(RoutesScreen);
         list_MyRoutes.HeightPercent(30);
+        list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         routesDescription = new Label(RoutesScreen);
         routesDescription.Text("Route description area:");
-        web_SaveRoute = new Web(RoutesScreen);
-        messagesPopUp = new Notifier(RoutesScreen);
-        web_GetMyRoutes = new Web(RoutesScreen);
-        web_GetTowns = new Web(RoutesScreen);
+
         ListofDDT = new VerticalArrangement(RoutesScreen);
         ListofDDT.BackgroundColor(Component.COLOR_WHITE);
         Direction = new HorizontalArrangement(ListofDDT);
         Days = new HorizontalArrangement(RoutesScreen);
+
         checkbox_Mon = new CheckBox(Days);
         checkbox_Tues = new CheckBox(Days);
         checkbox_Weds = new CheckBox(Days);
         checkbox_Thurs = new CheckBox(Days);
         checkbox_Fri = new CheckBox(Days);
+
         checkbox_IsDriver = new CheckBox(Days);
         button_To = new Button(Direction);
         img_DirectionArrow = new ImagePicker(Direction);
@@ -128,29 +122,39 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         checkbox_Thurs.Text("Th");
         checkbox_Fri.Text("F");
         checkbox_IsDriver.Text("Press Yes if Driver");
+
         listpicker_Towns = new ListPicker(RoutesScreen);
         string_listpicker_Towns_InitialText="Press for list of towns";
         listpicker_Towns.Text(string_listpicker_Towns_InitialText);
         listpicker_Towns.Selection();
+        listpicker_Towns.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+
         routesAction = new Label(RoutesScreen);
         routesAction.Text("Route actions:");
         ButtonHolder = new HorizontalArrangement(RoutesScreen);
+
         button_Save = new Button(ButtonHolder);
         button_Save.Text("Save");
         button_Delete = new Button(ButtonHolder);
         button_Delete.Text("Delete");
         button_Delete.Enabled(false);
+
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         list_MyRoutes.TextColor(Component.COLOR_WHITE);
         list_MyRoutes.SelectionColor(COLOR_DKGRAY);
+
         img_DirectionArrow.Image("Arrow_Right_Templemore.png");
         img_DirectionArrow.Width(50);
         img_DirectionArrow.Height(50);
+
+        web_SaveRoute = new Web(RoutesScreen);
+        web_GetMyRoutes = new Web(RoutesScreen);
+        web_GetTowns = new Web(RoutesScreen);
         web_DeleteRoute = new Web(RoutesScreen);
-//        GetTowns = new Web(RoutesScreen);
         web_GetOneRoute = new Web(RoutesScreen);
         button_Save.Enabled(false);
+        messagesPopUp = new Notifier(RoutesScreen);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
