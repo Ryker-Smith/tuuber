@@ -189,6 +189,19 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 int_SelectedRoute = Integer.valueOf(temp[1]);
                 tools.dbg(int_SelectedRoute.toString());
                 button_FindMatches.Enabled(true);
+                web_MatchesFound.Url(
+                        applicationSettings.baseURL
+                                + "?action=GET"
+                                + "&entity=Match"
+                                + "&sessionID="
+                                + applicationSettings.sessionID
+                                + "&iam="
+                                + applicationSettings.pID
+                                + "&rID="
+                                + int_SelectedRoute.toString()
+                );
+                tools.dbg(web_MatchesFound.Url());
+                web_MatchesFound.Get();
                 return true;
             } else if (component.equals(list_MatchesFound)) {
                 button_InitiateChat.Enabled(true);
