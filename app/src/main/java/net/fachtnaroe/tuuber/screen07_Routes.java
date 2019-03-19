@@ -80,7 +80,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         button_MainMenu = new Button(toolbarHz);
         button_MainMenu.Width(40);
         button_MainMenu.Height(40);
-        button_MainMenu.Image("buttonHome.png");
+        button_MainMenu.Image(applicationSettings.ourLogo);
 
         label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Routes");
 //        test = new Label(RoutesScreen);

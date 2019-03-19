@@ -95,6 +95,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         messagesPopUp = new Notifier(Matches);
         Routes = new Web(Matches);
         web_InitiateChat = new Web(Matches);
+        tools.button_CommonFormatting(50, button_FindMatches,button_InitiateChat );
+
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
