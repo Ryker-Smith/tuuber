@@ -72,13 +72,13 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MyRoutes.SelectionColor(Component.COLOR_DKGRAY);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
+        Label pad=(Label)tools.fn_pad(Matches,5,1);
+
         MatchesButtons = new HorizontalArrangement(Matches);
         button_FindMatches = new Button(MatchesButtons);
         button_FindMatches.Text("Click to see Matches");
         button_FindMatches.Enabled(false);
-
-        web_MyRoutes = new Web(Matches);
-        web_MatchesFound = new Web(Matches);
+        Label padalso=(Label)tools.fn_pad(Matches,5,1);
 
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
@@ -87,7 +87,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MatchesFound.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         hz_Arrangement3 = new HorizontalArrangement(Matches);
-        web_MatchesFound = new Web(Matches);
+        Label flogginpadalso=(Label)tools.fn_pad(hz_Arrangement3,5,5);
         button_InitiateChat = new Button(hz_Arrangement3);
         button_InitiateChat.Text("Initiate Chat");
         button_InitiateChat.Enabled(false);
@@ -95,6 +95,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         messagesPopUp = new Notifier(Matches);
         Routes = new Web(Matches);
         web_InitiateChat = new Web(Matches);
+        web_MyRoutes = new Web(Matches);
+        web_MatchesFound = new Web(Matches);
+//        web_MatchesFound = new Web(Matches);
         tools.button_CommonFormatting(50, button_FindMatches,button_InitiateChat );
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");

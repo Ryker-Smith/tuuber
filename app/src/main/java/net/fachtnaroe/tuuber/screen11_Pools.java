@@ -29,7 +29,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
 
-    private VerticalArrangement Conversations;
+    private VerticalArrangement Pools;
     private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz;
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
@@ -53,9 +53,9 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         catch (Exception e) {
             tools.dbg(e.toString());
         }
-        Conversations = new VerticalArrangement(this);
+        Pools = new VerticalArrangement(this);
 
-        toolbarHz = new HorizontalArrangement(Conversations);
+        toolbarHz = new HorizontalArrangement(Pools);
         MainMenu = new Button(toolbarHz);
         MainMenu.Width(40);
         MainMenu.Height(40);
@@ -67,7 +67,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         Refresh.FontSize(8);
         Refresh.Image("buttonRefresh.png");
 
-        vt_Open = new VerticalArrangement(Conversations);
+        vt_Open = new VerticalArrangement(Pools);
         vt_Open.HeightPercent(20);
         label_Open = new Label(vt_Open);
         label_Open.Text("Pools I'm in");
@@ -77,13 +77,16 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_Open.WidthPercent(100);
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
         listview_Open.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        Label dghv=(Label)tools.fn_pad(Pools,1,1);
+        ChatsScreenHZ = new HorizontalArrangement(Pools);
+        ChatsScreenHZ.WidthPercent(100);
 
-        ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
         button_OpenChatScreen.Text("Chat");
         button_OpenChatScreen.Enabled(false);
+        ChatsScreenHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
-        vt_In = new VerticalArrangement(Conversations);
+        vt_In = new VerticalArrangement(Pools);
         vt_In.HeightPercent(20);
         label_In = new Label(vt_In);
         label_In.Text("Pools suggested (Inbound)");
@@ -94,15 +97,20 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
         listview_In.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
-        InboundButtonsHZ = new HorizontalArrangement(Conversations);
+        Label dgh=(Label)tools.fn_pad(Pools,1,1);
+        InboundButtonsHZ = new HorizontalArrangement(Pools);
+
         button_AcceptInbound = new Button(InboundButtonsHZ);
         button_AcceptInbound.Text("Accept inbound");
         button_AcceptInbound.Enabled(false);
+        Label deggh=(Label)tools.fn_pad(InboundButtonsHZ,1,1);
         button_DeclineInbound = new Button(InboundButtonsHZ);
         button_DeclineInbound.Text("Decline inbound");
         button_DeclineInbound.Enabled(false);
+        InboundButtonsHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        InboundButtonsHZ.WidthPercent(100);
 
-        vt_Out = new VerticalArrangement(Conversations);
+        vt_Out = new VerticalArrangement(Pools);
         vt_Out.HeightPercent(20);
         label_Out = new Label(vt_Out);
         label_Out.Text("Pools I'm making (Outbound)");
@@ -113,7 +121,11 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_Out.SelectionColor(Component.COLOR_DKGRAY);
         listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
-        OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
+        Label dggh=(Label)tools.fn_pad(Pools,1,1);
+        OutboundInitiationButtonHZ = new HorizontalArrangement(Pools);
+        OutboundInitiationButtonHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        OutboundInitiationButtonHZ.WidthPercent(100);
+
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
         button_CancelOutbound.Enabled(false);
@@ -124,7 +136,10 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         web_DeclineInbound = new Web(this);
         web_Outbound = new Web(this);
         web_OutboundCancel = new Web(this);
-        notifier_Messages = new Notifier(Conversations);
+        notifier_Messages = new Notifier(Pools);
+
+        tools.button_CommonFormatting(50,button_OpenChatScreen, button_CancelOutbound);
+        tools.button_CommonFormatting(40,button_AcceptInbound, button_DeclineInbound);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -388,7 +403,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 for(int i = 0 ; i < Outbound.length() ; i++){
                     if (Outbound.getJSONObject(i).toString().equals("{}")) break;
                     String anItem = "Connecting with " +
-                            Outbound.getJSONObject(i).getString("realName") +
+//                            Outbound.getJSONObject(i).getString("realName") +
                             " (pool_ID=" +
                             Outbound.getJSONObject(i).getString("pool_ID")
                             +")";
