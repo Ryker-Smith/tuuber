@@ -91,7 +91,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
         button_OpenChatScreen.Text("Chat");
-        button_OpenChatScreen.Enabled(false);
+        tools.buttonOnOff(button_OpenChatScreen,false);
 
         vt_In = new VerticalArrangement(Conversations);
         vt_In.HeightPercent(20);
@@ -113,7 +113,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
         button_AcceptInbound.Text("Accept inbound");
-        button_AcceptInbound.Enabled(false);
+        tools.buttonOnOff(button_AcceptInbound,false);
 
         Button button_Pad_Separate_Accept_Decline = new Button (InboundButtonsHZ);
         button_Pad_Separate_Accept_Decline.BackgroundColor(Component.COLOR_NONE);
@@ -123,7 +123,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         button_DeclineInbound = new Button(InboundButtonsHZ);
         button_DeclineInbound.Text("Decline inbound");
-        button_DeclineInbound.Enabled(false);
+        tools.buttonOnOff(button_DeclineInbound,false);
 
         vt_Out = new VerticalArrangement(Conversations);
         vt_Out.HeightPercent(20);
@@ -145,9 +145,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
-        button_CancelOutbound.Enabled(false);
+        tools.buttonOnOff(button_CancelOutbound,false);
 
         tools.button_CommonFormatting(40, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
+        tools.buttonOnOff(button_OpenChatScreen, false);
+        tools.buttonOnOff(button_AcceptInbound, false);
+        tools.buttonOnOff(button_DeclineInbound, false);
+        tools.buttonOnOff(button_CancelOutbound,false);
 
         web_Open = new Web(this);
         web_Inbound = new Web(this);
@@ -171,7 +175,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 return true;
             }
             else if (component.equals(button_OpenChatScreen)) {
-                startNewForm("screen08_ChatWith",null);
+                switchForm("screen08_ChatWith");
                 return true;
             }
             else if (component.equals(button_AcceptInbound)) {
@@ -204,7 +208,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 link_ID
                 );
                 web_DeclineInbound.Get();
-                tools.dbg(web_DeclineInbound.Url());
+//                tools.dbg(web_DeclineInbound.Url());
                 return true;
             }
             else if (component.equals(button_CancelOutbound)) {
@@ -219,7 +223,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                                 "&link_ID=" +
                                 link_ID
                 );
-                tools.dbg(web_OutboundCancel.Url());
+//                tools.dbg(web_OutboundCancel.Url());
                 web_OutboundCancel.Get();
                 return true;
             }
@@ -234,37 +238,37 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 separated[1]=separated[1].replace(")","");
                 applicationSettings.CurrentLinkId =separated[1];
                 applicationSettings.set();
-                button_OpenChatScreen.Enabled(true);
+                tools.buttonOnOff(button_OpenChatScreen,true);
                 return true;
             }
             else if (component.equals(listview_In)) {
                 String currentString = listview_In.Selection();
                 String[] separated = currentString.split(":");
                 string_InboundpID=separated[0];
-                button_AcceptInbound.Enabled(true);
-                button_DeclineInbound.Enabled(true);
-                tools.dbg("Inbound selection");
+                tools.buttonOnOff(button_AcceptInbound,true);
+                tools.buttonOnOff(button_DeclineInbound,true);
+//                tools.dbg("Inbound selection");
                 return true;
             }
             else if (component.equals(listview_Out)) {
                 String nextString = listview_Out.Selection();
                 String[] separated = nextString.split(":");
                 string_OutboundpID=separated[0];
-                button_CancelOutbound.Enabled(true);
-                tools.dbg("Outbound selection");
+                tools.buttonOnOff(button_CancelOutbound,true);
+//                tools.dbg("Outbound selection");
                 return true;
             }
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_Open)) {
-                tools.dbg((String) params[0]);
+//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_OpenConversations(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Inbound)) {
-                tools.dbg((String) params[0]);
+//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_InboundConversations(status, textOfResponse);
@@ -280,16 +284,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             else if (component.equals(web_DeclineInbound)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                tools.dbg(status);
-                tools.dbg(textOfResponse);
+//                tools.dbg(status);
+//                tools.dbg(textOfResponse);
                 callBackEnd();
                 return true;
             }
             else if (component.equals(web_OutboundCancel)) {
                     String status = params[1].toString();
                     String textOfResponse = (String) params[3];
-                    tools.dbg(status);
-                    tools.dbg(textOfResponse);
+//                    tools.dbg(status);
+//                    tools.dbg(textOfResponse);
                     callBackEnd();
                     return true;
             }
@@ -331,8 +335,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
     public void fn_GotText_OpenConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        tools.dbg(status);
-        tools.dbg(textOfResponse);
+//        tools.dbg(status);
+//        tools.dbg(textOfResponse);
         if (status.equals("200" )) try {
 
             ListofContactWeb1 = new ArrayList<String>();
@@ -365,13 +369,13 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
-        button_OpenChatScreen.Enabled(false);
+        tools.buttonOnOff(button_OpenChatScreen,false);
     }
 
     public void fn_GotText_InboundConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        tools.dbg(status);
-        tools.dbg("INBOUND: " + textOfResponse);
+//        tools.dbg(status);
+//        tools.dbg("INBOUND: " + textOfResponse);
         if (status.equals("200") ) try {
 
             ListofInboundWeb = new ArrayList<String>();
@@ -402,14 +406,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-        button_AcceptInbound.Enabled(false);
-        button_DeclineInbound.Enabled(false);
+        tools.buttonOnOff(button_AcceptInbound,false);
+        tools.buttonOnOff(button_DeclineInbound,false);
     }
 
     public void fn_GotText_OutboundConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        tools.dbg(status);
-        tools.dbg("OUTBOUND: " + textOfResponse);
+//        tools.dbg(status);
+//        tools.dbg("OUTBOUND: " + textOfResponse);
         if (status.equals("200") ) try {
 
             ListofOutboundWeb = new ArrayList<String>();
@@ -441,6 +445,6 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-        button_CancelOutbound.Enabled(false);
+        tools.buttonOnOff(button_CancelOutbound,false);
     }
 }

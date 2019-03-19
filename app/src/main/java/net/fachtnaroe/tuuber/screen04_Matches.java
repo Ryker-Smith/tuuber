@@ -72,13 +72,13 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MyRoutes.SelectionColor(Component.COLOR_DKGRAY);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
-        Label pad=(Label)tools.fn_pad(Matches,5,1);
+        Label pad=(Label)tools.padding(Matches,5,1);
 
         MatchesButtons = new HorizontalArrangement(Matches);
         button_FindMatches = new Button(MatchesButtons);
         button_FindMatches.Text("Click to see Matches");
-        button_FindMatches.Enabled(false);
-        Label padalso=(Label)tools.fn_pad(Matches,5,1);
+        tools.buttonOnOff(button_FindMatches,false);
+        Label padalso=(Label)tools.padding(Matches,5,1);
 
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
@@ -87,10 +87,10 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MatchesFound.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         hz_Arrangement3 = new HorizontalArrangement(Matches);
-        Label flogginpadalso=(Label)tools.fn_pad(hz_Arrangement3,5,5);
+        Label flogginpadalso=(Label)tools.padding(hz_Arrangement3,5,5);
         button_InitiateChat = new Button(hz_Arrangement3);
         button_InitiateChat.Text("Initiate Chat");
-        button_InitiateChat.Enabled(false);
+        tools.buttonOnOff(button_InitiateChat,false);
 
         messagesPopUp = new Notifier(Matches);
         Routes = new Web(Matches);
@@ -99,7 +99,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         web_MatchesFound = new Web(Matches);
 //        web_MatchesFound = new Web(Matches);
         tools.button_CommonFormatting(50, button_FindMatches,button_InitiateChat );
-
+        tools.buttonOnOff(button_FindMatches, false);
+        tools.buttonOnOff(button_InitiateChat, false);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -124,8 +125,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 switchForm("screen03_MainMenu");
                 return true;
             } else if (component.equals(Refresh)) {
-                button_FindMatches.Enabled(false);
-                button_InitiateChat.Enabled(false);
+                tools.buttonOnOff(button_FindMatches, false);
+                tools.buttonOnOff(button_InitiateChat,false);
                 YailList temp = new YailList();
                 list_MatchesFound.Elements(temp);
                 getRoutesFromBackEnd();
@@ -187,8 +188,8 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 String[] temp = list_MyRoutes.Selection().split("=");
                 temp[1] = temp[1].replace(")", "");
                 int_SelectedRoute = Integer.valueOf(temp[1]);
-                tools.dbg(int_SelectedRoute.toString());
-                button_FindMatches.Enabled(true);
+//                tools.dbg(int_SelectedRoute.toString());
+                tools.buttonOnOff(button_FindMatches,true);
                 web_MatchesFound.Url(
                         applicationSettings.baseURL
                                 + "?action=GET"
@@ -200,23 +201,23 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                                 + "&rID="
                                 + int_SelectedRoute.toString()
                 );
-                tools.dbg(web_MatchesFound.Url());
+//                tools.dbg(web_MatchesFound.Url());
                 web_MatchesFound.Get();
                 return true;
             } else if (component.equals(list_MatchesFound)) {
-                button_InitiateChat.Enabled(true);
+                tools.buttonOnOff(button_InitiateChat,true);
                 return true;
             }
         } else if (eventName.equals("GotText")) {
-            tools.dbg("RAW: " + (String) params[3]);
+//            tools.dbg("RAW: " + (String) params[3]);
             if (component.equals(web_MyRoutes)) {
-                tools.dbg((String) params[0]);
+//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_MyRoutes(status, textOfResponse);
                 return true;
             } else if (component.equals(web_MatchesFound)) {
-                tools.dbg((String) params[0]);
+//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String TextOfResponse = (String) params[3];
                 fn_GotText_MatchesFound(status, TextOfResponse);

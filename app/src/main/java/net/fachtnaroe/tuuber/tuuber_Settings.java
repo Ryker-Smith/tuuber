@@ -27,6 +27,7 @@ public class tuuber_Settings {
     public String string_SavedPassword="";
     public String string_PreferredLanguage;
     public String string_ButtonColor="#113508";
+    public String string_TextColor="#FFFFFF";
     public Integer int_ButtonTextSize=12;
     public Integer minimimum_intListViewsize=5;
 
