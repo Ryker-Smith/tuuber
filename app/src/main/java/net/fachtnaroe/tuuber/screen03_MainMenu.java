@@ -16,9 +16,10 @@ import com.google.appinventor.components.runtime.VerticalArrangement;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button button_Routes, button_Matches, button_Conversations, button_Settings, button_TsAndCs, button_Experimental, button_LogOut;
+    private Button button_Routes, button_Matches, button_Pools, button_Conversations, button_Settings, button_TsAndCs, button_Experimental, button_LogOut;
 
     tuuber_Settings applicationSettings;
+    tuuberCommonSubroutines tools;
     VerticalArrangement MainMenu;
     Notifier MessagesPopup;
     Integer int_ColWidth, int_MenuStartRow=1;
@@ -27,12 +28,13 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
-        dbg("Debug session: " + applicationSettings.IsDebugSession);
+        tools=new tuuberCommonSubroutines(this);
+        tools.dbg("Debug session: " + applicationSettings.IsDebugSession);
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
 
         MainMenu = new VerticalArrangement(this);
@@ -45,7 +47,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         int_MenuStartRow=3;
 
         menu.Columns(3);
-        menu.Rows(14 + (int_MenuStartRow-1) );
+        menu.Rows(16 + (int_MenuStartRow-1) );
+        int int_NumButtonsToPad=7;
 
         menu.WidthPercent(100);
         menu.HeightPercent(100);
@@ -101,7 +104,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Routes.Text("Routes");
         button_Routes.Row(int_MenuStartRow);
 
-        int int_NumButtonsToPad=6;
         Button[] button_Pad=new Button[int_NumButtonsToPad];
         for (int i=0;i< int_NumButtonsToPad; i++) {
             button_Pad[i] = new Button(menu);
@@ -122,17 +124,21 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Conversations.Text("Conversations");
         button_Conversations.Row(int_MenuStartRow+4);
 
+        button_Pools= new Button(menu);
+        button_Pools.Text("Pools");
+        button_Pools.Row(int_MenuStartRow+6);
+
         button_Settings = new Button(menu);
         button_Settings.Text("Settings");
-        button_Settings.Row(int_MenuStartRow+6);
+        button_Settings.Row(int_MenuStartRow+8);
 
         button_TsAndCs = new Button(menu);
         button_TsAndCs.Text("Terms & Conditions");
-        button_TsAndCs.Row(int_MenuStartRow+8);
+        button_TsAndCs.Row(int_MenuStartRow+10);
 
         button_Experimental = new Button(menu);
         button_Experimental.Text("Experimental Stuff");
-        button_Experimental.Row(int_MenuStartRow+10);
+        button_Experimental.Row(int_MenuStartRow+12);
 
         if (!applicationSettings.IsDebugSession) {
             button_Experimental.Visible(false);
@@ -140,11 +146,12 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         button_LogOut = new Button(menu);
         button_LogOut.Text("Log Out");
-        button_LogOut.Row(int_MenuStartRow+12);
+        button_LogOut.Row(int_MenuStartRow+14);
 
-        button_CommonFormatting(
+        tools.button_CommonFormatting(50,
                 button_Routes, button_Matches,
                 button_Conversations, button_Settings,
+                button_Pools,
                 button_TsAndCs, button_Experimental,
                 button_LogOut);
 
@@ -158,7 +165,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
 
-        dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
+        tools.dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("BackPressed")) {
             return true;
         }
@@ -180,6 +187,10 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_Routes)) {
                 switchFormWithStartValue("screen07_Routes",null);
+                return true;
+            }
+            else if (component.equals(button_Pools)) {
+                switchFormWithStartValue("screen11_Pools",null);
                 return true;
             }
             else if (component.equals(button_Settings)) {
@@ -213,28 +224,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         return false;
     }
 
-    void dbg (String debugMsg) {
-        System.err.print( "~~~> " + debugMsg + " <~~~\n");
-    }
 
-    void button_CommonFormatting(Button... b) {
-        // This function takes a list of TextBox'es and sets them to 100% width
-        // Other common applicationSettings may be applied this way.
-        int i=0;
-        int len = b.length;
-//        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
-        while ((i < len) && (b[i] != null)) {
-            b[i].WidthPercent(50);
-            b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-            b[i].FontBold(true);
-            b[i].TextColor(Component.COLOR_WHITE);
-            b[i].Shape(BUTTON_SHAPE_ROUNDED);
-            b[i].FontSize(applicationSettings.int_ButtonTextSize);
-            b[i].Height(40);
-            b[i].Column(1);
-            b[i].Width(int_ColWidth);
-            i++;
-        }
-    }
 
 }

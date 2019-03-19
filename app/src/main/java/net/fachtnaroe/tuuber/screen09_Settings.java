@@ -43,6 +43,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     ImagePicker myImagePicker;
     fachtnaSlider slider_FontSize;
     CheckBox checkbox_GA, checkbox_EN, checkbox_PO;
+    VerticalScrollArrangement Settings;
 
     protected void $define() {
 
@@ -61,24 +62,18 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         button_MainMenu.Width(40);
         button_MainMenu.Height(40);
         button_MainMenu.Image(applicationSettings.ourLogo);
-//        label_pID = new Label(hz_toolbar);
-//        label_pID.HTMLFormat(true);
-//        label_pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Settings</small></small>");
-//        label_pID.Height(40);
-//        label_pID.FontSize(20);
-//        label_pID.WidthPercent(70);
-//        label_pID.TextAlignment(Component.ALIGNMENT_CENTER);
         label_pID =tools.fn_HeadingLabel(hz_toolbar, label_pID, applicationSettings.pID,"Settings");
         button_Refresh = new Button(hz_toolbar);
         button_Refresh.Width(40);
         button_Refresh.Height(40);
         button_Refresh.FontSize(8);
         button_Refresh.Image("buttonRefresh.png");
-        VerticalScrollArrangement screen09_Settings = new VerticalScrollArrangement(this);
-        screen09_Settings.WidthPercent(100);
-        screen09_Settings.HeightPercent(100);
 
-        vt_Customisation = new VerticalArrangement(screen09_Settings);
+        Settings = new VerticalScrollArrangement(this);
+        Settings.WidthPercent(100);
+        Settings.HeightPercent(100);
+
+        vt_Customisation = new VerticalArrangement(Settings);
         vt_Customisation.BackgroundColor(Component.COLOR_NONE);
         vt_Customisation.WidthPercent(100);
 
@@ -123,7 +118,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         button_SubmitCustomisation = new Button(vt_Customisation);
         button_SubmitCustomisation.Text("Save program settings");
 
-        detailsVt = new VerticalArrangement(screen09_Settings);
+        detailsVt = new VerticalArrangement(Settings);
         detailsVt.BackgroundColor(Component.COLOR_NONE);
 
         TableArrangement tabla_Sonraí = new TableArrangement(detailsVt);
@@ -169,7 +164,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         button_SaveMyDetails = new Button(detailsVt);
         button_SaveMyDetails.Text("Save detail changes");
 
-        vt_Password = new VerticalArrangement(screen09_Settings);
+        vt_Password = new VerticalArrangement(Settings);
         vt_Password.BackgroundColor(Component.COLOR_NONE);
         oldPassHz = new HorizontalArrangement(vt_Password);
         label_OldPassword = new Label(oldPassHz);
@@ -186,12 +181,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         button_SubmitPassword = new Button(vt_Password);
         button_SubmitPassword.Text("Change password now");
-        Label pad_Bottom = new Label(screen09_Settings);
+        Label pad_Bottom = new Label(Settings);
         pad_Bottom.Height(50);
         pad_Bottom.Text("");
         pad_Bottom.BackgroundColor(Component.COLOR_NONE);
 
-        messages = new Notifier(screen09_Settings);
+        messages = new Notifier(Settings);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
