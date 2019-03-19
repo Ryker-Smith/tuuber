@@ -117,6 +117,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend.TimerInterval(int_RefreshBackendTimeInterval);
         timer_RefreshBackend.TimerEnabled(true);
 
+        tools.button_CommonFormatting(40, button_MakePool);
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -227,7 +228,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&rID=22"
+                                    "&rID=22" +
+                                    "&pool_Status=init"
                     );
                     web_NoPoolCreated.Get();
                     return true;
@@ -244,7 +246,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&rID=22" +
                                     "&pool_ID=" +
                                     PoolID.Text() +
-                                    "&pool_Status=1"
+                                    "&pool_Status=open"
                     );
                     web_PoolCreated.Get();
                     return true;
@@ -265,7 +267,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     applicationSettings.pID +
                                     "&driver_pID=" +
                                     applicationSettings.otherpIDforChat +
-                                    "&rID=22"
+                                    "&rID=22" +
+                                    "&pool_Status=init"
                     );
                     web_NoPoolCreated.Get();
                     return true;
@@ -282,7 +285,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&rID=22" +
                                     "&pool_ID=" +
                                     PoolID.Text() +
-                                    "&pool_Status=1"
+                                    "&pool_Status=open"
                     );
                     web_PoolCreated.Get();
                     return true;
