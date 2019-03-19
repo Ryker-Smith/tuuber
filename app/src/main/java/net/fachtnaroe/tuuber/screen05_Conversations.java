@@ -1,5 +1,7 @@
 package net.fachtnaroe.tuuber;
 
+import android.graphics.Color;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
@@ -32,7 +34,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
-    private Label label_Open, label_Out, label_In, pID;
+    private Label label_Open, label_Out, label_In, label_pID;
     private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
     private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb;
     private Notifier notifier_Messages;
@@ -57,14 +59,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         MainMenu = new Button(toolbarHz);
         MainMenu.Width(40);
         MainMenu.Height(40);
-        MainMenu.Image("buttonHome.png");
-        pID = new Label(toolbarHz);
-        pID.HTMLFormat(true);
-        pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Conversations</small></small>");
-        pID.Height(40);
-        pID.FontSize(20);
-        pID.WidthPercent(70);
-        pID.TextAlignment(Component.ALIGNMENT_CENTER);
+        MainMenu.Image(applicationSettings.ourLogo);
+
+
+        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID, "Conversations");
+
         Refresh = new Button(toolbarHz);
         Refresh.Width(40);
         Refresh.Height(40);
@@ -80,6 +79,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_Open.HeightPercent(100);
         listview_Open.WidthPercent(100);
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
+        listview_Open.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
@@ -95,6 +95,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_In.Height(100);
         listview_In.WidthPercent(100);
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
+        listview_In.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
@@ -113,6 +114,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_Out.Height(100);
         listview_Out.WidthPercent(100);
         listview_Out.SelectionColor(Component.COLOR_DKGRAY);
+        listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
