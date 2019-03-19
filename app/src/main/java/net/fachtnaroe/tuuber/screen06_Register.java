@@ -27,7 +27,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
     private Button Create, TermsConditions;
     private tuuber_Settings applicationSettings;
-    private Image Image1, Image2, Image3, Image4, Image5, Image6;
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
     private CheckBox TCAgree;
@@ -61,63 +60,78 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         menu.WidthPercent(100);
         menu.HeightPercent(100);
 
-        Image1 = new Image (Register);
-        PhoneHZ = new HorizontalArrangement (Register);
-        eMailHZ = new HorizontalArrangement (Register);
-        FirstNameHZ = new HorizontalArrangement (Register);
-        LastNameHZ = new HorizontalArrangement (Register);
-        PasswordHZ = new HorizontalArrangement (Register);
-        ConfirmPasswordHZ = new HorizontalArrangement (Register);
-
         TelephoneLabel = new Label(menu);
         TelephoneLabel.Text ("Phone Number");
-        TelephoneLabel.Column(1);
-        TelephoneLabel.Row(1);
+        TelephoneLabel.Column(0);
+        TelephoneLabel.Row(0);
         Telephone = new TextBox(menu);
         Telephone.Text ("");
-        Telephone.Column(2);
-        Telephone.Row(1);
+        Telephone.Column(1);
+        Telephone.Row(0);
 
-        eMailLabel = new Label(eMailHZ);
+        eMailLabel = new Label(menu);
         eMailLabel.Text ("Email");
-        eMail = new TextBox(eMailHZ);
+        eMailLabel.Column(0);
+        eMailLabel.Row(1);
+        eMail = new TextBox(menu);
         eMail.Text ("");
-        FirstNameLabel = new Label (FirstNameHZ);
+        eMail.Column(1);
+        eMail.Row(1);
+
+        FirstNameLabel = new Label (menu);
         FirstNameLabel.Text ("FirstName");
-        FirstName = new TextBox (FirstNameHZ);
+        FirstNameLabel.Column(0);
+        FirstNameLabel.Row(2);
+        FirstName = new TextBox (menu);
         FirstName.Text ("");
-        LastNameLabel = new Label(LastNameHZ);
+        FirstName.Column(1);
+        FirstName.Row(2);
+
+        LastNameLabel = new Label(menu);
         LastNameLabel.Text ("LastName");
-        LastName = new TextBox (LastNameHZ);
+        LastNameLabel.Column(0);
+        LastNameLabel.Row(3);
+        LastName = new TextBox (menu);
         LastName.Text ("");
-        Image2 = new Image (Register);
-        PasswordLabel = new Label (PasswordHZ);
+        LastName.Column(1);
+        LastName.Row(3);
+
+        PasswordLabel = new Label (menu);
         PasswordLabel.Text ("CreatePassword");
+        PasswordLabel.Column(0);
+        PasswordLabel.Row(4);
         Password = new PasswordTextBox (PasswordHZ);
         Password.Text ("");
+        Password.Column(1);
+        Password.Row(4);
+
         ConfirmPasswordLabel = new Label (ConfirmPasswordHZ);
         ConfirmPasswordLabel.Text ("ConfirmPassword");
+        ConfirmPasswordLabel.Column(0);
+        ConfirmPasswordLabel.Row(5);
         ConfirmPassword = new PasswordTextBox (ConfirmPasswordHZ);
         ConfirmPassword.Text ("");
-        Image3 = new Image (Register);
+        ConfirmPassword.Column(1);
+        ConfirmPassword.Row(5);
 
-        TermsConditionsHZ = new HorizontalArrangement(Register);
-        TermsConditions = new Button(TermsConditionsHZ);
+        TermsConditions = new Button(menu);
         TermsConditions.Text ("Terms & Conditions");
-        TCAgree = new CheckBox(TermsConditionsHZ);
+        TermsConditions.Column(0);
+        TermsConditions.Row(6);
+        TCAgree = new CheckBox(menu);
         TCAgree.Text ("Agree?");
         TCAgree.Enabled(false);
-        TCLabel = new Label(TermsConditionsHZ);
+        TCAgree.Column(1);
+        TCAgree.Row(6);
+        TCLabel = new Label(menu);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
         TCLabel.Visible(false);
-
-        Image4 = new Image (Register);
-
-        CreateHZ = new HorizontalArrangement(Register);
-        Image5 = new Image (CreateHZ);
-        Create = new Button(CreateHZ);
+        
+        Create = new Button(menu);
         Create.Text ("Create");
-        Image6 = new Image (CreateHZ);
+        Create.Column(0);
+        Create.Row(7);
+
 
         Creation = new Web(Register);
         Creation_Notifier = new Notifier(Register);
