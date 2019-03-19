@@ -6,8 +6,10 @@ import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.Label;
+import com.google.appinventor.components.runtime.TextBox;
 
 import static com.google.appinventor.components.runtime.Component.BUTTON_SHAPE_ROUNDED;
+import static com.google.appinventor.components.runtime.Component.COLOR_NONE;
 
 public class tuuberCommonSubroutines {
 
@@ -53,6 +55,16 @@ public class tuuberCommonSubroutines {
             b[i].Column(1);
             i++;
         }
+    }
+
+    Object fn_pad(ComponentContainer c, Integer w, Integer h) {
+        TextBox tmp=new TextBox(c);
+        tmp.Width(w);
+        tmp.Height(h);
+        tmp.BackgroundColor(COLOR_NONE);
+        tmp.FontSize(1);
+        tmp.Text("");
+        return tmp;
     }
 
 }
