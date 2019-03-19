@@ -4,6 +4,7 @@ package net.fachtnaroe.tuuber;
 //import android.os.Bundle;
 
 import android.content.Intent;
+import android.graphics.Color;
 
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Component;
@@ -58,38 +59,41 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MainMenu = new Button(MenuButtons);
         MainMenu.Height(40);
         MainMenu.Width(40);
-        MainMenu.Image("buttonHome.png");
-        User_ID = new Label(MenuButtons);
-        User_ID.HTMLFormat(true);
-        User_ID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Matches</small></small>");
-        User_ID.FontSize(20);
-        Routes = new Web(Matches);
-        User_ID.Height(40);
-        User_ID.WidthPercent(70);
-        User_ID.TextAlignment(Component.ALIGNMENT_CENTER);
+        MainMenu.Image(applicationSettings.ourLogo);
+
+        User_ID =tools.fn_HeadingLabel(MenuButtons, User_ID, applicationSettings.pID,"Matches");
+
         Refresh = new Button(MenuButtons);
         Refresh.Image("buttonRefresh.png");
+
         list_MyRoutes = new ListView(Matches);
         list_MyRoutes.HeightPercent(35);
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.SelectionColor(Component.COLOR_DKGRAY);
+        list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+
         MatchesButtons = new HorizontalArrangement(Matches);
         button_FindMatches = new Button(MatchesButtons);
         button_FindMatches.Text("Click to see Matches");
         button_FindMatches.Enabled(false);
+
         web_MyRoutes = new Web(Matches);
         web_MatchesFound = new Web(Matches);
+
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
         list_MatchesFound.TextSize(applicationSettings.intListViewsize);
         list_MatchesFound.SelectionColor(COLOR_DKGRAY);
+        list_MatchesFound.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+
         hz_Arrangement3 = new HorizontalArrangement(Matches);
         web_MatchesFound = new Web(Matches);
         button_InitiateChat = new Button(hz_Arrangement3);
         button_InitiateChat.Text("Initiate Chat");
         button_InitiateChat.Enabled(false);
-        messagesPopUp = new Notifier(Matches);
 
+        messagesPopUp = new Notifier(Matches);
+        Routes = new Web(Matches);
         web_InitiateChat = new Web(Matches);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
