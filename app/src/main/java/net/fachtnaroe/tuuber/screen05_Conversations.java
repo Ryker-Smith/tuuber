@@ -31,7 +31,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     tuuberCommonSubroutines tools;
     
     private VerticalScrollArrangement Conversations;
-    private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz, PaddingHZOpenConversations,PaddingHZInvConversations;
+    private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz, PaddingHZOpenConversations,PaddingHZInConversations, PaddingHZOutConversations;
     private VerticalArrangement vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
@@ -104,8 +104,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
         listview_In.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
-        PaddingHZInvConversations = new HorizontalArrangement(Conversations);
-        Button button_Pad_InvitationsToChat = new Button(PaddingHZInvConversations);
+        PaddingHZInConversations = new HorizontalArrangement(Conversations);
+        Button button_Pad_InvitationsToChat = new Button(PaddingHZInConversations);
         button_Pad_InvitationsToChat.BackgroundColor(Component.COLOR_NONE);
         button_Pad_InvitationsToChat.Text("");
         button_Pad_InvitationsToChat.Height(5);
@@ -135,6 +135,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         listview_Out.WidthPercent(100);
         listview_Out.SelectionColor(Component.COLOR_DKGRAY);
         listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+
+        PaddingHZOutConversations = new HorizontalArrangement(Conversations);
+        Button button_Pad_SentInvitationsToChat = new Button(PaddingHZOutConversations);
+        button_Pad_SentInvitationsToChat.BackgroundColor(Component.COLOR_NONE);
+        button_Pad_SentInvitationsToChat.Text("");
+        button_Pad_SentInvitationsToChat.Height(5);
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
