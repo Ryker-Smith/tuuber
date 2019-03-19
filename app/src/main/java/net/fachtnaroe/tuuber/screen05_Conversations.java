@@ -57,7 +57,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         MainMenu = new Button(toolbarHz);
         MainMenu.Width(40);
         MainMenu.Height(40);
-        MainMenu.Image("buttonHome.png");
+        MainMenu.Image(applicationSettings.ourLogo);
         pID = new Label(toolbarHz);
         pID.HTMLFormat(true);
         pID.Text("I am user: #" + applicationSettings.pID + "<br><small><small>Conversations</small></small>");
