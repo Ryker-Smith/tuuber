@@ -79,6 +79,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         button_FindMatches.Text("Click to see Matches");
         tools.buttonOnOff(button_FindMatches,false);
         Label padalso=(Label)tools.padding(Matches,5,1);
+//        button_FindMatches.Visible(false);
 
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
@@ -290,7 +291,10 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             if (!parser.getString("matches").equals("")) {
                 JSONArray matchArray = parser.getJSONArray("matches");
                 if (matchArray.length() == 0) {
-                    messagesPopUp.ShowMessageDialog("No Matches Available", "Information", "OK");
+                    messagesPopUp.BackgroundColor(Component.COLOR_RED);
+                    messagesPopUp.TextColor(Component.COLOR_WHITE);
+                    messagesPopUp.ShowAlert("No Matches Available");//, "Information", "OK");
+
                     YailList temp = new YailList();
                     list_MatchesFound.Elements(temp);
                 } else {
