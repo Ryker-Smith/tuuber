@@ -58,6 +58,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         menu.Columns(2);
         menu.Rows(8);
 
+        menu.WidthPercent(100);
+        menu.HeightPercent(100);
+
         Image1 = new Image (Register);
         PhoneHZ = new HorizontalArrangement (Register);
         eMailHZ = new HorizontalArrangement (Register);
@@ -65,6 +68,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         LastNameHZ = new HorizontalArrangement (Register);
         PasswordHZ = new HorizontalArrangement (Register);
         ConfirmPasswordHZ = new HorizontalArrangement (Register);
+
         TelephoneLabel = new Label(menu);
         TelephoneLabel.Text ("Phone Number");
         TelephoneLabel.Column(1);
@@ -73,6 +77,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Telephone.Text ("");
         Telephone.Column(2);
         Telephone.Row(1);
+
         eMailLabel = new Label(eMailHZ);
         eMailLabel.Text ("Email");
         eMail = new TextBox(eMailHZ);
