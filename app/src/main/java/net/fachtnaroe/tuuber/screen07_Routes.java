@@ -83,7 +83,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         button_MainMenu.Image(applicationSettings.ourLogo);
 
         label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Routes");
-//        test = new Label(RoutesScreen);
+
         buttonRefresh = new Button(toolbarHz);
         buttonRefresh.Width(40);
         buttonRefresh.Height(40);
@@ -92,9 +92,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         myRoutes = new Label(RoutesScreen);
         myRoutes.Text("My Routes:");
+
         list_MyRoutes = new ListView(RoutesScreen);
         list_MyRoutes.HeightPercent(30);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+
         routesDescription = new Label(RoutesScreen);
         routesDescription.Text("Route description area:");
 
@@ -113,7 +115,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         button_To = new Button(Direction);
         img_DirectionArrow = new ImagePicker(Direction);
         button_From = new Button(Direction);
-        web_SaveRoute = new Web(RoutesScreen);
         button_To.Text("To");
         button_From.Text("Templemore");
         checkbox_Mon.Text("M");
@@ -128,6 +129,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         listpicker_Towns.Text(string_listpicker_Towns_InitialText);
         listpicker_Towns.Selection();
         listpicker_Towns.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        listpicker_Towns.TextColor(Component.COLOR_WHITE);
 
         routesAction = new Label(RoutesScreen);
         routesAction.Text("Route actions:");
@@ -138,6 +140,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         button_Delete = new Button(ButtonHolder);
         button_Delete.Text("Delete");
         button_Delete.Enabled(false);
+        button_Save.Enabled(false);
 
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
@@ -153,8 +156,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         web_GetTowns = new Web(RoutesScreen);
         web_DeleteRoute = new Web(RoutesScreen);
         web_GetOneRoute = new Web(RoutesScreen);
-        button_Save.Enabled(false);
+        web_SaveRoute = new Web(RoutesScreen);
+
         messagesPopUp = new Notifier(RoutesScreen);
+        tools.button_CommonFormatting(40,button_Delete,button_Save,button_To,button_From );
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
