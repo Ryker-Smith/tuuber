@@ -58,11 +58,10 @@ public class tuuberCommonSubroutines {
     }
 
     Object fn_pad(ComponentContainer c, Integer w, Integer h) {
-        TextBox tmp=new TextBox(c);
+        Label tmp=new Label(c);
         tmp.Width(w);
         tmp.Height(h);
-        tmp.BackgroundColor(COLOR_NONE);
-        tmp.FontSize(1);
+        tmp.BackgroundColor(Component.COLOR_NONE);
         tmp.Text("");
         return tmp;
     }
