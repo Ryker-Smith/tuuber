@@ -58,7 +58,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         menu.Rows(8);
 
         menu.WidthPercent(100);
-        menu.HeightPercent(100);
+        menu.HeightPercent(50);
 
         TelephoneLabel = new Label(menu);
         TelephoneLabel.Text ("Phone Number");
@@ -100,38 +100,35 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         PasswordLabel.Text ("CreatePassword");
         PasswordLabel.Column(0);
         PasswordLabel.Row(4);
-        Password = new PasswordTextBox (PasswordHZ);
+        Password = new PasswordTextBox (menu);
         Password.Text ("");
         Password.Column(1);
         Password.Row(4);
 
-        ConfirmPasswordLabel = new Label (ConfirmPasswordHZ);
+        ConfirmPasswordLabel = new Label (menu);
         ConfirmPasswordLabel.Text ("ConfirmPassword");
         ConfirmPasswordLabel.Column(0);
         ConfirmPasswordLabel.Row(5);
-        ConfirmPassword = new PasswordTextBox (ConfirmPasswordHZ);
+        ConfirmPassword = new PasswordTextBox (menu);
         ConfirmPassword.Text ("");
         ConfirmPassword.Column(1);
         ConfirmPassword.Row(5);
 
-        TermsConditions = new Button(menu);
+        TermsConditionsHZ = new HorizontalArrangement(Register);
+        TermsConditions = new Button(TermsConditionsHZ);
         TermsConditions.Text ("Terms & Conditions");
-        TermsConditions.Column(0);
-        TermsConditions.Row(6);
-        TCAgree = new CheckBox(menu);
+        TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
         TCAgree.Enabled(false);
-        TCAgree.Column(1);
-        TCAgree.Row(6);
-        TCLabel = new Label(menu);
+        TCLabel = new Label(TermsConditionsHZ);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
         TCLabel.Visible(false);
-        
-        Create = new Button(menu);
-        Create.Text ("Create");
-        Create.Column(0);
-        Create.Row(7);
 
+        CreateHZ = new HorizontalArrangement(Register);
+        Create = new Button(CreateHZ);
+        Create.Text ("Create");
+
+        button_CommonFormatting(Create, TermsConditions);
 
         Creation = new Web(Register);
         Creation_Notifier = new Notifier(Register);
@@ -309,5 +306,23 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 //        TCLabel.Text(result.toString());
         TCLabel.Text(otherScreenName+" EEEEE " + result);
 
+    }
+    void button_CommonFormatting (Button... b) {
+        // This function takes a list of TextBox'es and sets them to 100% width
+        // Other common applicationSettings may be applied this way.
+        int i=0;
+        int len = b.length;
+        while ((i < len) && (b[i] != null)) {
+            b[i].WidthPercent(40);
+            b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+//            b[i].BackgroundColor(Component.COLOR_BLACK);
+            b[i].FontBold(true);
+            b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
+            b[i].TextColor(Component.COLOR_WHITE);
+            b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
+            b[i].FontSize(applicationSettings.int_ButtonTextSize);
+            b[i].Height(40);
+            i++;
+        }
     }
 }
