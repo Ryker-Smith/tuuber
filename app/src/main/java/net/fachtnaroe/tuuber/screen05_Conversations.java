@@ -232,7 +232,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             if (component.equals(listview_Open)) {
                 String[] separated = listview_Open.Selection().split("=");
                 separated[1]=separated[1].replace(")","");
-                applicationSettings.otherpIDforChat =separated[1];
+                applicationSettings.CurrentLinkId =separated[1];
                 applicationSettings.set();
                 button_OpenChatScreen.Enabled(true);
                 return true;

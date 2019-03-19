@@ -35,10 +35,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     Button button_SendText, button_Refresh, button_MakePool, button_MainMenu;
     Label label_pID, DriverOrNavigatorLabel, PoolID;
     Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
-    Web web_ChatLine, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated;
+    Web web_ChatLine, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
-    String string_URLOfConversation;
+    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId;
     Integer int_ClockCount=0;
 
     protected void $define() {
@@ -85,7 +85,16 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                         "&showHtml=1" +
                         "&iam=" + applicationSettings.pID +
                         "&link_ID=" +
-                        applicationSettings.otherpIDforChat; // <~~ this must change
+                        applicationSettings.CurrentLinkId;
+
+        string_URLOfLink =
+                applicationSettings.baseURL +
+                        "?action=GET&entity=LINK&sessionID=" +
+                        applicationSettings.sessionID +
+                        "&showHtml=1" +
+                        "&iam=" + applicationSettings.pID +
+                        "&link_ID=" +
+                        applicationSettings.CurrentLinkId;
 
         webview_Chat.HomeUrl(string_URLOfConversation);
         tools.dbg(webview_Chat.HomeUrl());
@@ -117,6 +126,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend.TimerInterval(int_RefreshBackendTimeInterval);
         timer_RefreshBackend.TimerEnabled(true);
 
+        web_GetTheRouteId = new Web(this);
+        web_GetTheRouteId.Url( string_URLOfLink );
+        web_GetTheRouteId.Get();
+
         tools.button_CommonFormatting(40, button_MakePool);
         EventDispatcher.registerEventForDelegation(this, formName, "Timer");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -141,7 +154,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&driver_pID=" +
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
-                                    applicationSettings.otherpIDforChat +
+                                    applicationSettings.CurrentLinkId +
                                     "&rID=22"
                     );
                     web_PoolDriver.Get();
@@ -155,7 +168,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&navigator_pID=" +
                                     applicationSettings.pID +
                                     "&driver_pID=" +
-                                    applicationSettings.otherpIDforChat +
+                                    applicationSettings.CurrentLinkId +
                                     "&rID=22"
                     );
                     web_PoolNavigator.Get();
@@ -183,7 +196,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&iam=" +
                                     applicationSettings.pID +
                                     "&link_ID=" +
-                                    applicationSettings.otherpIDforChat +
+                                    applicationSettings.CurrentLinkId +
                                     "&text=" +
                                     text_ChatLine.Text()
                     );
@@ -214,6 +227,13 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 return true;
             }
+            if (component.equals(web_GetTheRouteId)) {
+                tools.dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                fn_GotText_GetTheRouteId(status, textOfResponse);
+                return true;
+            }
             else if (component.equals(web_PoolDriver)) {
                 tools.dbg((String) params[0]);
                 String status = params[1].toString();
@@ -227,7 +247,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&driver_pID=" +
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
-                                    applicationSettings.otherpIDforChat +
+                                    applicationSettings.CurrentLinkId +
                                     "&rID=22" +
                                     "&pool_Status=init"
                     );
@@ -242,7 +262,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&driver_pID=" +
                                     applicationSettings.pID +
                                     "&navigator_pID=" +
-                                    applicationSettings.otherpIDforChat +
+                                    applicationSettings.CurrentLinkId +
                                     "&rID=22" +
                                     "&pool_ID=" +
                                     PoolID.Text() +
@@ -266,8 +286,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&navigator_pID=" +
                                     applicationSettings.pID +
                                     "&driver_pID=" +
-                                    applicationSettings.otherpIDforChat +
-                                    "&rID=22" +
+                                    applicationSettings.CurrentLinkId +
+                                    "&rID=" + string_ThisRouteId +
                                     "&pool_Status=init"
                     );
                     web_NoPoolCreated.Get();
@@ -281,7 +301,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&navigator_pID=" +
                                     applicationSettings.pID +
                                     "&driver_pID=" +
-                                    applicationSettings.otherpIDforChat +
+                                    applicationSettings.CurrentLinkId +
                                     "&rID=22" +
                                     "&pool_ID=" +
                                     PoolID.Text() +
@@ -300,6 +320,20 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     void callBackend() {
         webview_Chat.GoToUrl(string_URLOfConversation + "&clock=" + int_ClockCount);
         tools.dbg(string_URLOfConversation + "&clock=" + int_ClockCount);
+    }
+
+    void fn_GotText_GetTheRouteId(String status, String textOfResponse) {
+        tools.dbg(textOfResponse);
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            if (parser.getInt("rID") > 0) {
+                string_ThisRouteId = parser.getString("rID");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+        }
+        else {
+        }
     }
 
     public boolean web_ResultGotText(String status, String textOfResponse) {

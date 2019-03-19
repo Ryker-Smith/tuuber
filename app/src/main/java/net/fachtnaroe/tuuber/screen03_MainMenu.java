@@ -198,7 +198,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_TsAndCs)) {
-                switchFormWithStartValue("screen10_TermsAndConditions",null);
+                switchFormWithStartValue("screen10_TermsAndConditions","1");
                 return true;
             }
             else if (component.equals(button_Experimental)) {

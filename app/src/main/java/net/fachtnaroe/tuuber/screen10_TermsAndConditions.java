@@ -14,7 +14,6 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 //import com.google.appinventor.components.runtime.util;
 
-
 public class screen10_TermsAndConditions extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
@@ -62,8 +61,11 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         HorizontalArrangement hz_AcceptDecline = new HorizontalArrangement(TermsAndConditions);
         button_Accept = new Button(hz_AcceptDecline);
         button_Accept.Text("Accept");
-        button_Decline = new Button(hz_AcceptDecline);
-        button_Decline.Text("Decline");
+        if (!this.startupValue.toString().equals("\"1\"")){ // apparently the quotes are part of what's passed!
+            button_Decline = new Button(hz_AcceptDecline);
+            button_Decline.Text("Decline");
+        }
+        tools.dbg("Start Value ["+this.startupValue.toString()+"]");
 
         button_CommonFormatting(button_Accept, button_Decline);
         TermsAndConditions.AlignHorizontal(Component.ALIGNMENT_CENTER);

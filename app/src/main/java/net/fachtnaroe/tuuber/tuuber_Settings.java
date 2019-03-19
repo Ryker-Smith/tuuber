@@ -6,9 +6,7 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 
 */
 
-import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.ComponentContainer;
-import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.TinyDB;
 
 public class tuuber_Settings {
@@ -16,7 +14,7 @@ public class tuuber_Settings {
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
-    public String otherpIDforChat ="";
+    public String CurrentLinkId ="";
     public String backgroundImageName="img_splashcanvas.png";
     public String lastLogin="";
     public String TermsAndConditions = "<h2>Use this <u>at your own risk</u></h2><p>You must use this App only in the manner intended.</p><p>Even then there is no guarantee  the App will work as expected, if at all. In fact, no guarantee or warranty of <u>any</u> kind is provided. Neither will any liability be accepted for any result of the use of the App, even if used as intended.</p><p>This is <b>experimental software</b>; use this <u>at your own risk</u>.<p>Please be <i>very</i> cautious about your physical safety, including &mdash; but not limited to &mdash; whether any travel is safe or is required to be undertaken.</p><p>There is no guarantee that any other user of this App is reliable or trustworthy; neither should their use of this App be seen as implying that they are.</p><h2>Use this <u>at your own risk</u></h2>";
@@ -56,7 +54,7 @@ public class tuuber_Settings {
         sessionID=default_sessionID;
         backgroundImageName=default_backgroundImageName;
         pID=default_pID;
-        otherpIDforChat = default_otherpIDforChat;
+        CurrentLinkId = default_otherpIDforChat;
         lastLogin=default_lastLogin;
         notificationSoundFileName=default_notificationSoundFileName;
         intListViewsize=default_intListViewsize;
@@ -72,7 +70,7 @@ public class tuuber_Settings {
         backgroundImageName=(String) localDB.GetValue("backgroundImageName", default_backgroundImageName);
         lastLogin=(String) localDB.GetValue("lastLogin", default_lastLogin);
         pID=(String) localDB.GetValue("label_pID",default_pID);
-        otherpIDforChat =(String) localDB.GetValue("otherpIDforChat", otherpIDforChat);
+        CurrentLinkId =(String) localDB.GetValue("CurrentLinkId", CurrentLinkId);
         notificationSoundFileName=(String) localDB.GetValue("notificationSoundFileName",default_notificationSoundFileName);
         intListViewsize=(Integer) localDB.GetValue("intListViewsize",default_intListViewsize);
         IsDebugSession=(boolean) localDB.GetValue("IsDebugSession",default_IsDebugSession);
@@ -97,7 +95,7 @@ public class tuuber_Settings {
         localDB.StoreValue("sessionID",baseURL);
         localDB.StoreValue("backgroundImageName", backgroundImageName);
         localDB.StoreValue("label_pID", pID);
-        localDB.StoreValue("otherpIDforChat", otherpIDforChat);
+        localDB.StoreValue("CurrentLinkId", CurrentLinkId);
         localDB.StoreValue("notificationSoundFileName", notificationSoundFileName);
         localDB.StoreValue("intListViewsize", intListViewsize);
         localDB.StoreValue("IsDebugSession", IsDebugSession);
