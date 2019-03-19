@@ -54,6 +54,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen10_TermsAndConditions"
             android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".screen11_Pools"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.google.appinventor.components.runtime.ListPickerActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"/>
         <activity android:name=".experimental_doNotUseThis"
