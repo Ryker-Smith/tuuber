@@ -28,7 +28,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private Button Create, TermsConditions;
     private tuuber_Settings applicationSettings;
     private VerticalArrangement Register;
-    private HorizontalArrangement TermsConditionsHZ, CreateHZ, PhoneHZ, eMailHZ, LastNameHZ, FirstNameHZ, PasswordHZ, ConfirmPasswordHZ;
+    private HorizontalArrangement TermsConditionsHZ, CreateHZ, PaddingHZ;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
@@ -79,7 +79,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         eMail.Row(1);
 
         FirstNameLabel = new Label (menu);
-        FirstNameLabel.Text ("FirstName");
+        FirstNameLabel.Text ("First Name");
         FirstNameLabel.Column(0);
         FirstNameLabel.Row(2);
         FirstName = new TextBox (menu);
@@ -88,7 +88,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         FirstName.Row(2);
 
         LastNameLabel = new Label(menu);
-        LastNameLabel.Text ("LastName");
+        LastNameLabel.Text ("Last Name");
         LastNameLabel.Column(0);
         LastNameLabel.Row(3);
         LastName = new TextBox (menu);
@@ -97,7 +97,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         LastName.Row(3);
 
         PasswordLabel = new Label (menu);
-        PasswordLabel.Text ("CreatePassword");
+        PasswordLabel.Text ("Password");
         PasswordLabel.Column(0);
         PasswordLabel.Row(4);
         Password = new PasswordTextBox (menu);
@@ -106,7 +106,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Password.Row(4);
 
         ConfirmPasswordLabel = new Label (menu);
-        ConfirmPasswordLabel.Text ("ConfirmPassword");
+        ConfirmPasswordLabel.Text ("Confirm Password");
         ConfirmPasswordLabel.Column(0);
         ConfirmPasswordLabel.Row(5);
         ConfirmPassword = new PasswordTextBox (menu);
@@ -123,6 +123,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TCLabel = new Label(TermsConditionsHZ);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
         TCLabel.Visible(false);
+
+        PaddingHZ = new HorizontalArrangement(Register);
+        Button button_Pad = new Button(PaddingHZ);
+        button_Pad.BackgroundColor(Component.COLOR_NONE);
+        button_Pad.Text("");
+        button_Pad.HeightPercent(3);
 
         CreateHZ = new HorizontalArrangement(Register);
         Create = new Button(CreateHZ);
