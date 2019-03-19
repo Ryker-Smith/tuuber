@@ -266,7 +266,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(Town_Via)){
-                Town_Via.Text(Town_Via.Selection());
+                Town_Via.Text (Town_Via.Selection());
                 return true;
             }
 
