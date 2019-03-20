@@ -48,7 +48,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //    private Label test;
     private Label routesDescription;
     private Label routesAction;
-    ListPicker listpicker_Towns;
+//    ListPicker listpicker_Towns;
 //    ListPicker listpicker_TravelVia;
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
@@ -129,13 +129,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         checkbox_Fri.Text("F");
         checkbox_IsDriver.Text("Press Yes if Driver");
 
-        listpicker_Towns = new ListPicker(RoutesScreen);
         string_listpicker_Towns_InitialText="Press for list of towns";
-        listpicker_Towns.Text(string_listpicker_Towns_InitialText);
-        listpicker_Towns.Selection();
-        listpicker_Towns.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        listpicker_Towns.TextColor(Component.COLOR_WHITE);
+//        listpicker_Towns = new ListPicker(RoutesScreen);
+//        listpicker_Towns.Text(string_listpicker_Towns_InitialText);
+//        listpicker_Towns.Selection();
+//        listpicker_Towns.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+//        listpicker_Towns.TextColor(Component.COLOR_WHITE);
 
+        button_To.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        button_To.TextColor(Component.COLOR_WHITE);
+        button_From.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        button_From.TextColor(Component.COLOR_WHITE);
 //        listpicker_TravelVia = new ListPicker(RoutesScreen);
 //        listpicker_TravelVia.Text("Via");
 //        listpicker_TravelVia.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
@@ -277,11 +281,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 web_GetOneRoute.Get();
                 return true;
             }
-            else if (component.equals(listpicker_Towns)) {
-                listpicker_Towns.Text(listpicker_Towns.Selection());
-                button_To.Text(listpicker_Towns.Selection());
-                return true;
-            }
+//            else if (component.equals(listpicker_Towns)) {
+//                listpicker_Towns.Text(listpicker_Towns.Selection());
+//                button_To.Text(listpicker_Towns.Selection());
+//                return true;
+//            }
 //            else if (component.equals(listpicker_TravelVia)){
 //                listpicker_TravelVia.Text (listpicker_TravelVia.Selection());
 //                return true;
@@ -294,9 +298,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 switchForm("screen03_MainMenu");
                 return true;
             }
-            else if (component.equals(listpicker_Towns)) {
-                fn_GetTowns();
-            }
+//            else if (component.equals(listpicker_Towns)) {
+//                fn_GetTowns();
+//            }
 //            else if (component.equals(listpicker_TravelVia)) {
 //                fn_GetTowns();
 //            }
@@ -354,10 +358,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 }
                 String string_DirectionOfTravel = new String();
                 if (Specify.equals("to")) {
-                    string_DirectionOfTravel = "&destination=Templemore&origin=" + listpicker_Towns.Text();
+                    string_DirectionOfTravel = "&destination=Templemore&origin=" + button_To.Text();
                 }
                 else {
-                    string_DirectionOfTravel = "&origin=Templemore&destination=" + listpicker_Towns.Text();
+                    string_DirectionOfTravel = "&origin=Templemore&destination=" + button_From.Text();
                 }
                 web_SaveRoute.Url(
                         applicationSettings.baseURL
@@ -490,7 +494,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 YailList tempData = YailList.makeList(ListOfTownsFromWeb);
                 button_To.Elements(tempData);
                 button_From.Elements(tempData);
-                listpicker_Towns.Elements(tempData);
+//                listpicker_Towns.Elements(tempData);
 //                listpicker_TravelVia.Elements(tempData);
 
             } else {
