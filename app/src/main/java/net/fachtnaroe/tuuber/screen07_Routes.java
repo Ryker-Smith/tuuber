@@ -51,7 +51,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private ListPicker listpicker_Towns, Town_Via;
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
-    private Button button_To, button_From, button_Save, button_Delete;
+    private Button button_Save, button_Delete;
+    ListPicker button_To, button_From;
     private Button button_MainMenu, buttonRefresh;
     private ListView list_MyRoutes;
     private CheckBox checkbox_Mon, checkbox_Tues, checkbox_Weds, checkbox_Thurs, checkbox_Fri, checkbox_IsDriver;
@@ -106,9 +107,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         Direction.WidthPercent(100);
         Direction.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
-        button_From = new Button(Direction);
+        button_From = new ListPicker(Direction);
         img_DirectionArrow = new ImagePicker(Direction);
-        button_To = new Button(Direction);
+        button_To = new ListPicker(Direction);
         button_To.Text("destination");
         button_From.Text("origin");
 
@@ -167,7 +168,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         messagesPopUp = new Notifier(RoutesScreen);
         tools.button_CommonFormatting(40,button_Delete,button_Save );
-        tools.button_CommonFormatting(40, button_To, button_From);
+//        tools.button_CommonFormatting(40, button_To, button_From);
 
         tools.buttonOnOff(button_Delete,false);
         tools.buttonOnOff(button_Save,false);
@@ -631,28 +632,28 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             checkbox_IsDriver.Checked(false);
         }
     }
-
-    public void setdestination(String destination) {
-        if (destination.equals("Templemore")) {
-            img_DirectionArrow.Image("Arrow_Left_Templemore.png");
-            button_To.Text("Templemore");
-            button_From.Text(origin);
+//
+//    public void setdestination(String destination) {
+//        if (destination.equals("Templemore")) {
+//            img_DirectionArrow.Image("Arrow_Left_Templemore.png");
+//            button_To.Text("Templemore");
+//            button_From.Text(origin);
+////            listpicker_Towns.Text(origin);
+//        }
+//        else {
+//            img_DirectionArrow.Image("Arrow_Right_Templemore.png");
+//            button_To.Text(origin);
+//            button_From.Text("Templemore");
+//        }
+//    }
+//
+//    public void settown(String origin) {
+//        if (destination.equals("Templemore")) {
 //            listpicker_Towns.Text(origin);
-        }
-        else {
-            img_DirectionArrow.Image("Arrow_Right_Templemore.png");
-            button_To.Text(origin);
-            button_From.Text("Templemore");
-        }
-    }
-
-    public void settown(String origin) {
-        if (destination.equals("Templemore")) {
-            listpicker_Towns.Text(origin);
-        }
-        else{
-            listpicker_Towns.Text(destination);
-        }
-    }
+//        }
+//        else{
+//            listpicker_Towns.Text(destination);
+//        }
+//    }
 
 }

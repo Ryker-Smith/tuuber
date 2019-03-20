@@ -1,6 +1,5 @@
 package net.fachtnaroe.tuuber;
 
-import android.content.Intent;
 import android.graphics.Color;
 
 import com.google.appinventor.components.runtime.Button;
@@ -10,7 +9,6 @@ import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
-import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
@@ -25,18 +23,17 @@ import org.json.JSONObject;
 
 public class screen06_Register extends Form implements HandlesEventDispatching {
 
+    tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
 
-    private Button Create, TermsConditions;
-    private tuuber_Settings applicationSettings;
+    private Button button_Create, button_TermsConditions;
     private VerticalArrangement Register;
     private HorizontalArrangement TermsConditionsHZ, CreateHZ, PaddingHZ;
     private CheckBox TCAgree;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
-//    private String baseURL ="https://fachtnaroe.net/tuuber-2019";
-    private Web Creation;
-    private Notifier Creation_Notifier, Universal_Notifier, Web_Notifier;
+    private Web web_CreateUser;
+    private Notifier notifier_MessagesPopUp;
     private PasswordTextBox Password, ConfirmPassword;
     private dd_aPerson User;
 
@@ -64,43 +61,43 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         menu.HeightPercent(50);
 
         TelephoneLabel = new Label(menu);
-        TelephoneLabel.Text ("Phone Number");
+        TelephoneLabel.Text ("Phone number: ");
         TelephoneLabel.Column(0);
-        TelephoneLabel.Row(0);
+        TelephoneLabel.Row(2);
         Telephone = new TextBox(menu);
         Telephone.Text ("");
         Telephone.Column(1);
-        Telephone.Row(0);
+        Telephone.Row(2);
 
         eMailLabel = new Label(menu);
-        eMailLabel.Text ("Email");
+        eMailLabel.Text ("Email: ");
         eMailLabel.Column(0);
-        eMailLabel.Row(1);
+        eMailLabel.Row(3);
         eMail = new TextBox(menu);
         eMail.Text ("");
         eMail.Column(1);
-        eMail.Row(1);
+        eMail.Row(3);
 
         FirstNameLabel = new Label (menu);
-        FirstNameLabel.Text ("First Name");
+        FirstNameLabel.Text ("First name: ");
         FirstNameLabel.Column(0);
-        FirstNameLabel.Row(2);
+        FirstNameLabel.Row(0);
         FirstName = new TextBox (menu);
         FirstName.Text ("");
         FirstName.Column(1);
-        FirstName.Row(2);
+        FirstName.Row(0);
 
         LastNameLabel = new Label(menu);
-        LastNameLabel.Text ("Last Name");
+        LastNameLabel.Text ("Family name: ");
         LastNameLabel.Column(0);
-        LastNameLabel.Row(3);
+        LastNameLabel.Row(1);
         LastName = new TextBox (menu);
         LastName.Text ("");
         LastName.Column(1);
-        LastName.Row(3);
+        LastName.Row(1);
 
         PasswordLabel = new Label (menu);
-        PasswordLabel.Text ("Password");
+        PasswordLabel.Text ("Password: ");
         PasswordLabel.Column(0);
         PasswordLabel.Row(4);
         Password = new PasswordTextBox (menu);
@@ -109,7 +106,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Password.Row(4);
 
         ConfirmPasswordLabel = new Label (menu);
-        ConfirmPasswordLabel.Text ("Confirm Password");
+        ConfirmPasswordLabel.Text ("Confirm password: ");
         ConfirmPasswordLabel.Column(0);
         ConfirmPasswordLabel.Row(5);
         ConfirmPassword = new PasswordTextBox (menu);
@@ -118,8 +115,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         ConfirmPassword.Row(5);
 
         TermsConditionsHZ = new HorizontalArrangement(Register);
-        TermsConditions = new Button(TermsConditionsHZ);
-        TermsConditions.Text ("Terms & Conditions");
+        button_TermsConditions = new Button(TermsConditionsHZ);
+        button_TermsConditions.Text ("Terms & Conditions");
         TCAgree = new CheckBox(TermsConditionsHZ);
         TCAgree.Text ("Agree?");
         TCAgree.Enabled(false);
@@ -134,37 +131,30 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         button_Pad.HeightPercent(3);
 
         CreateHZ = new HorizontalArrangement(Register);
-        Create = new Button(CreateHZ);
-        Create.Text ("Create");
+        button_Create = new Button(CreateHZ);
+        button_Create.Text ("Create");
 
-        Creation = new Web(Register);
-        Creation_Notifier = new Notifier(Register);
-        Universal_Notifier = new Notifier(Register);
-        Web_Notifier = new Notifier(Register);
+        web_CreateUser = new Web(Register);
+        notifier_MessagesPopUp = new Notifier(Register);
         User = new dd_aPerson(Register);
-        tools.button_CommonFormatting(45, Create, TermsConditions);
+        tools.button_CommonFormatting(45, button_Create, button_TermsConditions);
 
-        EventDispatcher.registerEventForDelegation(this, "notImportant", "GotText");
-//        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosedEvent" );
-        EventDispatcher.registerEventForDelegation(this, "notImportant", "OtherScreenClosed" );
-        EventDispatcher.registerEventForDelegation(this, "notImportant", "Click");
+        EventDispatcher.registerEventForDelegation(this, formName,"GotText");
+        EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
+        EventDispatcher.registerEventForDelegation(this, formName, "Click");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("events");
-
-        dbg("GOT: "+formName+" "+eventName);
+        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if ((component.equals(this)) && (eventName.equals("OtherScreenClosed"))) {
             thisOtherScreenClosed((String) params[0], (Object) params[1]);
             if (TCLabel.Text().equals("screen10_TermsAndConditions EEEEE Good")) {
                 TCAgree.Checked(true);
                 return true;
             }
-            return true;
         }
         else if (eventName.equals("Click")) {
-            dbg("fail");
-            if (component.equals(Create)){
+            if (component.equals(button_Create)){
                 User.phone = Telephone.Text();
                 User.eMail = eMail.Text();
                 User.First = FirstName.Text();
@@ -179,7 +169,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid Phone Number", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Invalid Phone Number", "Error", "OK");
                     return true;
                 }
                 if (!User.valid_eMail()) {
@@ -190,7 +180,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid Email", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Invalid Email", "Error", "OK");
                     return true;
                 }
 
@@ -202,7 +192,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid FirstName", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Invalid FirstName", "Error", "OK");
                     return true;
                 }
                 if (!User.valid_family()) {
@@ -213,7 +203,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid LastName", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Invalid LastName", "Error", "OK");
                     return true;
                 }
                 if (!User.valid_password()) {
@@ -224,7 +214,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     FirstNameLabel.TextColor(Color.BLACK);
                     LastNameLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Invalid Password", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Invalid Password", "Error", "OK");
                     return true;
                 }
                 if (!Password.Text().equals(ConfirmPassword.Text())) {
@@ -235,10 +225,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     FirstNameLabel.TextColor(Color.BLACK);
                     LastNameLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Passwords Don't Match", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Passwords Don't Match", "Error", "OK");
                     return true;
                 }
-
                 if (!TCAgree.Checked()) {
                     TCAgree.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
@@ -247,11 +236,10 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     LastNameLabel.TextColor(Color.BLACK);
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
-                    Universal_Notifier.ShowMessageDialog("Agree to Terms and Conditions", "Error", "OK");
+                    notifier_MessagesPopUp.ShowMessageDialog("Please agree to the Terms and Conditions, or cease using this App", "Error", "OK");
                     return true;
                 }
-
-                Creation.Url(
+                web_CreateUser.Url(
                         applicationSettings.baseURL +
                                 "?entity=person&action=POST&first=" +
                                 FirstName.Text() +
@@ -264,25 +252,20 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                                 "&pw=" +
                                 ConfirmPassword.Text()
                 );
-                Creation.Get();
+                web_CreateUser.Get();
 
                 return true;
             }
-            if (component.equals(TermsConditions)) {
+            if (component.equals(button_TermsConditions)) {
                 dbg("error");
-                switchFormWithStartValue("screen10_TermsAndConditions","none");
+                switchForm("screen10_TermsAndConditions");
                 return true;
             }
-
         }
-        else if (component.equals(Creation) && eventName.equals("GotText")){
-
-            String stringSent =  (String) params[0];
+        else if (component.equals(web_CreateUser) && eventName.equals("GotText")){
             Integer status = (Integer) params[1];
-            String encoding = (String) params[2];
             String textOfResponse = (String) params[3];
-
-            webGotText(status.toString(), textOfResponse);
+            fn_GotText_CreateUser(status.toString(), textOfResponse);
             return true;
         }
         return true;
@@ -291,23 +274,22 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 
-    public void webGotText(String status, String textOfResponse) {
-
+    public void fn_GotText_CreateUser(String status, String textOfResponse) {
         String temp=new String();
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
-                Creation_Notifier.ShowMessageDialog("User created", "Success!", "Grand");
+                notifier_MessagesPopUp.ShowMessageDialog("User created", "Success!", "Grand");
                 screen06_Register.finishActivity();
             } else {
-                Web_Notifier.ShowMessageDialog("Creation failed, check details (1)(" + textOfResponse +")", "Information", "OK");
+                notifier_MessagesPopUp.ShowMessageDialog("Create failed, check details (1)(" + textOfResponse +")", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            Web_Notifier.ShowMessageDialog("Creation failed, check details (2)(" + textOfResponse +")", "Information", "OK");
+            notifier_MessagesPopUp.ShowMessageDialog("Create failed, check details (2)(" + textOfResponse +")", "Information", "OK");
         }
         else {
-            Web_Notifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            notifier_MessagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
     public void thisOtherScreenClosed(String otherScreenName, Object result) {
