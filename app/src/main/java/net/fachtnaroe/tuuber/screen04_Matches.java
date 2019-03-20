@@ -87,11 +87,13 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         list_MatchesFound.SelectionColor(COLOR_DKGRAY);
         list_MatchesFound.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
+        Label flogginpadalso=(Label)tools.padding(Matches,1,1);
+
         hz_Arrangement3 = new HorizontalArrangement(Matches);
-        Label flogginpadalso=(Label)tools.padding(hz_Arrangement3,5,5);
         button_InitiateChat = new Button(hz_Arrangement3);
         button_InitiateChat.Text("Initiate Chat");
         tools.buttonOnOff(button_InitiateChat,false);
+        hz_Arrangement3.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
         messagesPopUp = new Notifier(Matches);
         Routes = new Web(Matches);

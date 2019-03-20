@@ -32,7 +32,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     fr_aPerson thisPersonsDetails = new fr_aPerson();
-    Web web_GetMyDetails, web_SaveMyDetails, passwordWeb, passwordWebSave;
+    Web web_GetMyDetails, web_SaveMyDetails,  web_PasswordSave;
     Notifier messages;
     TextBox textbox_ListViewSize, textbox_PhoneNumber, textbox_eMail, textbox_UserFirstName, textbox_UserFamilyName, backgroundImageTextBox;
     PasswordTextBox textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword;
@@ -200,8 +200,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         web_GetMyDetails = new Web(this);
         web_SaveMyDetails = new Web(this);
-        passwordWeb = new Web(this);
-        passwordWebSave = new Web(this);
+
+        web_PasswordSave = new Web(this);
 
         password_CommonFormatting(textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword);
         textbox_CommonFormatting(textbox_eMail, textbox_PhoneNumber, textbox_UserFamilyName, textbox_UserFirstName);
@@ -306,7 +306,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_SubmitPassword) ) {
                 // prepare to pass to back end
-                passwordWebSave.Url(applicationSettings.baseURL
+                web_PasswordSave.Url(applicationSettings.baseURL
                         + "?cmd=CHPWD"
                         + "&pID=" + applicationSettings.pID
                         + "&sessionID=" + applicationSettings.sessionID
@@ -314,7 +314,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                         + "&np=" + textbox_NewPassword.Text()
                         + "&cp=" + textbox_ConfirmPassword.Text()
                 );
-                passwordWebSave.Get();
+                web_PasswordSave.Get();
                 return true;
             }
             else if (component.equals(button_Refresh)) {
@@ -357,9 +357,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsSaveGotText(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(passwordWebSave)) {
+            else if (component.equals(web_PasswordSave)) {
                 dbg((String) params[0]);
-                dbg(this.formName + " passwordWebSave");
+                dbg(this.formName + " web_PasswordSave");
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 passwordSaveGotText(status, textOfResponse);
