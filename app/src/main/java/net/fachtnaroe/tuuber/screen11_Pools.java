@@ -38,8 +38,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
     private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
     private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb;
     private Notifier notifier_Messages;
-    String string_InboundLineID, string_InboundpID, string_OutboundpID, string_OutboundLineID;
-    HashMap<Integer, String> conversationsOpen = new HashMap<Integer, String>();
+    String string_InboundpID, string_OutboundpID;
 
     protected void $define() {
 
@@ -245,39 +244,32 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_Open)) {
-//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_OpenConversations(status, textOfResponse);
+                fn_GotText_ExistingPools(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Inbound)) {
-//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_InboundConversations(status, textOfResponse);
+                fn_GotText_PendingPool_Inbound(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Outbound)) {
-//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_OutboundConversations(status, textOfResponse);
+                fn_GotText_PendingPool_Outbound(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-//                tools.dbg(status);
-//                tools.dbg(textOfResponse);
                 callBackEnd();
                 return true;
             }
             else if (component.equals(web_OutboundCancel)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-//                tools.dbg(status);
-//                tools.dbg(textOfResponse);
                 callBackEnd();
                 return true;
             }
@@ -317,14 +309,12 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         web_Outbound.Get();
     }
 
-    public void fn_GotText_OpenConversations(String status, String textOfResponse) {
+    public void fn_GotText_ExistingPools(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
 //        tools.dbg(status);
 //        tools.dbg(textOfResponse);
         if (status.equals("200" )) try {
-
             ListofContactWeb1 = new ArrayList<String>();
-
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("pool" ).equals("" )) {
                 JSONArray contacts1Array = parser.getJSONArray("pool" );
@@ -356,7 +346,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         tools.buttonOnOff(button_OpenChatScreen,false);
     }
 
-    public void fn_GotText_InboundConversations(String status, String textOfResponse) {
+    public void fn_GotText_PendingPool_Inbound(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
 //        tools.dbg(status);
 //        tools.dbg("INBOUND: " + textOfResponse);
@@ -394,7 +384,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         tools.buttonOnOff(button_DeclineInbound,false);
     }
 
-    public void fn_GotText_OutboundConversations(String status, String textOfResponse) {
+    public void fn_GotText_PendingPool_Outbound(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
 //        tools.dbg(status);
 //        tools.dbg("OUTBOUND: " + textOfResponse);
