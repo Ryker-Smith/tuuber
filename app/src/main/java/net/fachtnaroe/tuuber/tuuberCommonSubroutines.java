@@ -83,4 +83,10 @@ public class tuuberCommonSubroutines {
             b.Enabled(false);
         }
     }
+
+    void fn_SwapStrings (String first, String second) {
+        String temp=first;
+        first=second;
+        second=temp;
+    }
 }

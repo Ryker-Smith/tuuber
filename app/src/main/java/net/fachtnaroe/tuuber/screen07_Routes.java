@@ -48,7 +48,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //    private Label test;
     private Label routesDescription;
     private Label routesAction;
-    private ListPicker listpicker_Towns, Town_Via;
+    ListPicker listpicker_Towns;
+//    ListPicker listpicker_TravelVia;
     private VerticalArrangement ListofDDT, RoutesScreen;
     private HorizontalArrangement ButtonHolder;
     private Button button_Save, button_Delete;
@@ -135,10 +136,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         listpicker_Towns.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         listpicker_Towns.TextColor(Component.COLOR_WHITE);
 
-        Town_Via = new ListPicker(RoutesScreen);
-        Town_Via.Text("Via");
-        Town_Via.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        Town_Via.TextColor(Component.COLOR_WHITE);
+//        listpicker_TravelVia = new ListPicker(RoutesScreen);
+//        listpicker_TravelVia.Text("Via");
+//        listpicker_TravelVia.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+//        listpicker_TravelVia.TextColor(Component.COLOR_WHITE);
 
         routesAction = new Label(RoutesScreen);
         routesAction.Text("Route actions:");
@@ -179,7 +180,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
 
-        fn_GetTownsFromBackEnd();
+        fn_GetTowns();
         fn_GetMyRoutesFromBackEnd();
     }
 
@@ -252,8 +253,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
         } else if (eventName.equals("AfterPicking")) {
-
-            if (component.equals(list_MyRoutes)) {
+            if (component.equals(button_To)) {
+                img_DirectionArrow.Image("Arrow_Right_Templemore.png");
+                tools.fn_SwapStrings(button_To.Text(),button_From.Text());
+            }
+            else if (component.equals(button_From)) {
+                img_DirectionArrow.Image("Arrow_Left_Templemore.png");
+                tools.fn_SwapStrings(button_To.Text(),button_From.Text());
+            }
+            else if (component.equals(list_MyRoutes)) {
                 String[] temp = list_MyRoutes.Selection().split("=");
                 temp[1] = temp[1].replace(")", "");
                 int_SelectedRoute = Integer.valueOf(temp[1]);
@@ -268,15 +276,16 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 tools.buttonOnOff(button_Delete,true);
                 web_GetOneRoute.Get();
                 return true;
-            } else if (component.equals(listpicker_Towns)) {
+            }
+            else if (component.equals(listpicker_Towns)) {
                 listpicker_Towns.Text(listpicker_Towns.Selection());
                 button_To.Text(listpicker_Towns.Selection());
                 return true;
             }
-            else if (component.equals(Town_Via)){
-                Town_Via.Text (Town_Via.Selection());
-                return true;
-            }
+//            else if (component.equals(listpicker_TravelVia)){
+//                listpicker_TravelVia.Text (listpicker_TravelVia.Selection());
+//                return true;
+//            }
 
         }
 
@@ -286,11 +295,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(listpicker_Towns)) {
-                fn_GetTownsFromBackEnd();
+                fn_GetTowns();
             }
-            else if (component.equals(Town_Via)) {
-                fn_GetTownsFromBackEnd();
-            }
+//            else if (component.equals(listpicker_TravelVia)) {
+//                fn_GetTowns();
+//            }
             else if (component.equals(buttonRefresh)) {
                 saveNewIs0_saveEditIs1 =0;
                 checkbox_Mon.Checked(false);
@@ -301,7 +310,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 tools.buttonOnOff(button_Save,false);
                 tools.buttonOnOff(button_Delete,false);
                 checkbox_IsDriver.Checked(false);
-                fn_GetTownsFromBackEnd();
+                fn_GetTowns();
                 fn_GetMyRoutesFromBackEnd();
                 return true;
             }
@@ -366,29 +375,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 tools.dbg(web_SaveRoute.Url());
                 return true;
             }
-            else if (component.equals(button_To)) {
-                img_DirectionArrow.Image("Arrow_Right_Templemore.png");
-                String temp=button_From.Text();
-                button_From.Text( button_To.Text() );
-                button_To.Text(temp);
-            }
-            else if (component.equals(button_From)) {
-                img_DirectionArrow.Image("Arrow_Left_Templemore.png");
-                String temp=button_From.Text();
-                button_From.Text( button_To.Text() );
-                button_To.Text(temp);
-            }
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_GetMyRoutes)) {
-//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_GetRoute(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_GetTowns)) {
-//                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_GetTowns(status, textOfResponse);
@@ -417,7 +412,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         return true;
     }
 
-    public void fn_GetTownsFromBackEnd () {
+    public void fn_GetTowns() {
         web_GetTowns.Url(
                 applicationSettings.baseURL + "?entity=town&action=LIST"
                         + "&sessionID=" + applicationSettings.sessionID
@@ -493,8 +488,10 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     );
                 }
                 YailList tempData = YailList.makeList(ListOfTownsFromWeb);
+                button_To.Elements(tempData);
+                button_From.Elements(tempData);
                 listpicker_Towns.Elements(tempData);
-                Town_Via.Elements(tempData);
+//                listpicker_TravelVia.Elements(tempData);
 
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting town details", "Information", "OK");
@@ -655,5 +652,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //            listpicker_Towns.Text(destination);
 //        }
 //    }
+
 
 }
