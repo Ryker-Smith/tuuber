@@ -10,6 +10,7 @@ import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.ListView;
+import com.google.appinventor.components.runtime.ListPicker;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
@@ -36,6 +37,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
     private Label label_Open, label_Out, label_In, label_pID;
+    private ListPicker ListPicker_SendInvitation;
     private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
     private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb;
     private Notifier notifier_Messages;
@@ -146,6 +148,9 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
         button_CancelOutbound.Enabled(false);
+        ListPicker_SendInvitation = new ListPicker(OutboundInitiationButtonHZ);
+        ListPicker_SendInvitation.Text("List Of Users");
+        ListPicker_SendInvitation.Selection();
 
         tools.button_CommonFormatting(40, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
 
