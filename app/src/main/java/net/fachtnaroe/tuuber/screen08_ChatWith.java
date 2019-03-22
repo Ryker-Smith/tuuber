@@ -127,8 +127,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend.TimerEnabled(true);
 
         web_GetTheRouteId = new Web(this);
-//        web_GetTheRouteId.Url( string_URLOfLink );
-//        web_GetTheRouteId.Get();
+        web_GetTheRouteId.Url( string_URLOfLink );
+        web_GetTheRouteId.Get();
 
         tools.button_CommonFormatting(40, button_MakePool);
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
@@ -230,10 +230,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 callBackend();
             }
             else if (component.equals(button_MakePool)) {
-                web_GetTheRouteId.Url( string_URLOfLink );
-                web_GetTheRouteId.Get();
                 D_OR_N_ChoiceNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
-                return true;
             }
             return true;
         }
