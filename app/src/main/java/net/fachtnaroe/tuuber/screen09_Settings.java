@@ -34,7 +34,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
-    fr_aPerson thisPersonsDetails = new fr_aPerson();
+    dd_aPerson thisPersonsDetails = new dd_aPerson(this);
     Web web_GetMyDetails, web_SaveMyDetails,  web_PasswordSave;
     Notifier messages;
     TextBox textbox_ListViewSize, textbox_PhoneNumber, textbox_eMail, textbox_UserFirstName, textbox_UserFamilyName, backgroundImageTextBox;
