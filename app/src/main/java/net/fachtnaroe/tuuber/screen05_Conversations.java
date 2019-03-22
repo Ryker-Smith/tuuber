@@ -152,6 +152,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ListPicker_SendInvitation = new ListPicker(OutboundInitiationButtonHZ);
         ListPicker_SendInvitation.Text("List Of Users");
         ListPicker_SendInvitation.Selection();
+        ListPicker_SendInvitation.Shape(BUTTON_SHAPE_ROUNDED);
+        ListPicker_SendInvitation.TextColor(Component.COLOR_WHITE);
+        ListPicker_SendInvitation.FontSize(applicationSettings.int_ButtonTextSize);
+        ListPicker_SendInvitation.Height(40);
+        ListPicker_SendInvitation.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        ListPicker_SendInvitation.Enabled(false);
 
         tools.button_CommonFormatting(40, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
         tools.buttonOnOff(button_OpenChatScreen, false);
@@ -294,6 +300,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GetUsers(status, textOfResponse);
+                ListPicker_SendInvitation.Enabled(true);
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
