@@ -38,13 +38,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     private Web web_Login;
     private VerticalScrollArrangement Login;
     private Notifier ErrorNotifier;
-    private HorizontalArrangement usernameHz, loginHz, passwordHz;
+    private HorizontalArrangement usernameHz, passwordHz;
     private Label UserNameLabel, PasswordLabel;
     private TextBox inputUsername;
     private PasswordTextBox inputPassword;
     private Image ourLogo;
     private CheckBox checkbox_IsDebugSession, checkbox_SavePassword;
     Integer int_ColWidth;
+    Integer int_ImageSize=250;
 
     protected void $define() {
 
@@ -61,6 +62,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login = new VerticalScrollArrangement(this);
         Login.WidthPercent(100);
         Login.HeightPercent(100);
+        Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
         ErrorNotifier = new Notifier(Login);
 
         web_Login = new Web(Login);
@@ -145,8 +147,9 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         ourLogo=new Image(Login);
         ourLogo.Picture(applicationSettings.ourLogo);
         ourLogo.ScalePictureToFit(false);
-        ourLogo.Height(320);
+//        ourLogo.Height(int_ImageSize);
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        ourLogo.WidthPercent(100);
 
         checkbox_SavePassword = new CheckBox(Login);
         checkbox_SavePassword.Text("Save password");

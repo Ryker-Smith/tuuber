@@ -41,15 +41,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Notifier messagesPopUp;
     private ImagePicker img_DirectionArrow;
     //    private ArrayList RoutsList ;
-    private HorizontalArrangement Direction, Days, toolbarHz;
+    private HorizontalArrangement hz_JourneyDetails, Days, toolbarHz;
     private Label myRoutes;
     private Label label_pID;
 //    private Label test;
     private Label routesDescription;
     private Label routesAction;
 //    ListPicker listpicker_TravelVia;
-    private VerticalArrangement ListofDDT, RoutesScreen;
-    private HorizontalArrangement ButtonHolder;
+    private VerticalArrangement  RoutesScreen;
+    private HorizontalArrangement hz_SaveDelete_ButtonHolder;
     private Button button_Save, button_Delete;
     ListPicker button_To, button_From;
     private Button button_MainMenu, buttonRefresh;
@@ -99,17 +99,19 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         routesDescription = new Label(RoutesScreen);
         routesDescription.Text("Route description area:");
 
-        ListofDDT = new VerticalArrangement(RoutesScreen);
-        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
-        Direction = new HorizontalArrangement(ListofDDT);
-        Direction.WidthPercent(100);
-        Direction.AlignHorizontal(Component.ALIGNMENT_CENTER);
+//        ListofDDT = new VerticalArrangement(RoutesScreen);
+//        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
+        hz_JourneyDetails = new HorizontalArrangement(RoutesScreen);
+        hz_JourneyDetails.WidthPercent(100);
+        hz_JourneyDetails.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        hz_JourneyDetails.BackgroundColor(Component.COLOR_WHITE);
+        Button paddy5=(Button)tools.padding(hz_JourneyDetails,2,1);
 
-        button_From = new ListPicker(Direction);
-        img_DirectionArrow = new ImagePicker(Direction);
-        button_To = new ListPicker(Direction);
-        button_To.Text("destination");
+        button_From = new ListPicker(hz_JourneyDetails);
+        img_DirectionArrow = new ImagePicker(hz_JourneyDetails);
+        button_To = new ListPicker(hz_JourneyDetails);
         button_From.Text("origin");
+        button_To.Text("destination");
 
         Days = new HorizontalArrangement(RoutesScreen);
         checkbox_Mon = new CheckBox(Days);
@@ -141,13 +143,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 
         routesAction = new Label(RoutesScreen);
         routesAction.Text("Route actions:");
-        ButtonHolder = new HorizontalArrangement(RoutesScreen);
-        ButtonHolder.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        hz_SaveDelete_ButtonHolder = new HorizontalArrangement(RoutesScreen);
+//        hz_SaveDelete_ButtonHolder.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        hz_SaveDelete_ButtonHolder.WidthPercent(100);
 
-        button_Save = new Button(ButtonHolder);
+        Button paddy1=(Button)tools.padding(hz_SaveDelete_ButtonHolder,2,1);
+        button_Save = new Button(hz_SaveDelete_ButtonHolder);
         button_Save.Text("Save");
-        button_Delete = new Button(ButtonHolder);
+        Button paddy2=(Button)tools.padding(hz_SaveDelete_ButtonHolder,6,1);
+        button_Delete = new Button(hz_SaveDelete_ButtonHolder);
         button_Delete.Text("Delete");
+        Button paddy3=(Button)tools.padding(hz_SaveDelete_ButtonHolder,1,1);
 
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
@@ -166,7 +172,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         web_SaveRoute = new Web(RoutesScreen);
 
         messagesPopUp = new Notifier(RoutesScreen);
-        tools.button_CommonFormatting(40,button_Delete,button_Save );
+        tools.button_CommonFormatting(46,button_Delete,button_Save );
 
         tools.buttonOnOff(button_Delete,false);
         tools.buttonOnOff(button_Save,false);

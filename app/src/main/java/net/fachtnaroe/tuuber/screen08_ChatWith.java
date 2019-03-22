@@ -35,7 +35,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     Button button_SendText, button_Refresh, button_MakePool, button_MainMenu;
     Label label_pID, DriverOrNavigatorLabel, PoolID;
     Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
-    Web web_ChatLine, web_PoolDriver, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
+    Web web_ChatLine, web_PoolMakeNew, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
     String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolID;
@@ -117,7 +117,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         MessageError_Notifier = new Notifier(ChatWith);
         MessageSent_Notifier = new Notifier(ChatWith);
         web_ChatLine = new Web(ChatWith);
-        web_PoolDriver = new Web(ChatWith);
+        web_PoolMakeNew = new Web(ChatWith);
         web_PoolNavigator = new Web(ChatWith);
         web_NoPoolCreated = new Web(ChatWith);
         web_PoolCreated = new Web(ChatWith);
@@ -146,8 +146,25 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         else if (eventName.equals("AfterChoosing")) {
             if (component.equals(D_OR_N_ChoiceNotifier)) {
                 D_OR_N_ChoiceNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
+                String WhoIsDriving;
                 if (params[0].equals("Driver")) {
-                    web_PoolDriver.Url(
+                    WhoIsDriving = applicationSettings.pID;
+                }
+                else {
+                    WhoIsDriving="other";
+                }
+                web_PoolMakeNew.Url(
+                            applicationSettings.baseURL +
+                                    "?action=POST&entity=pool&sessionID=" +
+                                    applicationSettings.sessionID +
+                                    "&link_ID=" +
+                                    applicationSettings.CurrentLinkId +
+                                    "&driver=" +
+                                    WhoIsDriving
+                    );
+
+                if (params[0].equals("Driver")) {
+                    web_PoolMakeNew.Url(
                             applicationSettings.baseURL +
                                     "?action=GET&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -158,7 +175,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&rID=" +
                                     string_ThisRouteId
                     );
-                    web_PoolDriver.Get();
+                    web_PoolMakeNew.Get();
                     return true;
                 }
                 if (params[0].equals("Navigator")) {
@@ -236,7 +253,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 fn_GotText_GetTheRouteId(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(web_PoolDriver)) {
+            else if (component.equals(web_PoolMakeNew)) {
                 tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];

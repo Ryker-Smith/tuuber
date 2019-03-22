@@ -1,7 +1,10 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Environment;
+import android.provider.ContactsContract;
 
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -40,7 +43,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Label listViewSizeLabel, label_PhoneNumber, label_eMail, label_UserFirstName, label_UserFamilyName, label_OldPassword, label_NewPassword, label_ConfirmPassword, label_pID;
     HorizontalArrangement listViewSizeHz, oldPassHz, newPassHz, confirmHz, hz_toolbar;
     VerticalArrangement detailsVt, vt_Password, vt_Customisation;
-    ImagePicker myImagePicker;
+    fachtnaImagePicker myImagePicker;
     fachtnaSlider slider_FontSize;
     CheckBox checkbox_GA, checkbox_EN, checkbox_PO;
     VerticalScrollArrangement Settings;
@@ -79,7 +82,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         HorizontalArrangement hz_ImageTextBox=new HorizontalArrangement(vt_Customisation);
 
-        myImagePicker = new ImagePicker(hz_ImageTextBox);
+        myImagePicker = new fachtnaImagePicker(hz_ImageTextBox);
         myImagePicker.Text("Picker");
         myImagePicker.FontBold(true);
         myImagePicker.FontSize(12);
@@ -233,7 +236,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("BeforePicking")) {
+            dbg(Environment.getExternalStorageDirectory().toString());
+            myImagePicker.Image( backgroundImageTextBox.Text() );
             if (component.equals(myImagePicker)) {
+//                myImagePicker.
                 this.BackgroundImage(myImagePicker.Selection());
                 return true;
             }
@@ -265,7 +271,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         else if (eventName.equals("AfterPicking")) {
             if (component.equals(myImagePicker)) {
                 this.BackgroundImage(myImagePicker.Selection());
-//                backgroundImageTextBox.Text( myImagePicker.Selection() );
+                backgroundImageTextBox.Text( myImagePicker.Selection() );
+                Integer request=0,result=0;
+                Intent i;
+                i=this.getIntent();
+                myImagePicker.resultReturned(request,result,i);
+//                myImagePicker.r;
                 return true;
             }
             return false;
