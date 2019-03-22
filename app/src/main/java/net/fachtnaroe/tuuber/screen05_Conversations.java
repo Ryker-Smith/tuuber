@@ -38,8 +38,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
     private Label label_Open, label_Out, label_In, label_pID;
     private ListPicker ListPicker_SendInvitation;
-    private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
-    private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb;
+    private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundUsers, web_OutboundCancel;
+    private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb, ListofUsersWeb;
     private Notifier notifier_Messages;
     String string_InboundLineID, string_InboundpID, string_OutboundpID, string_OutboundLineID;
     HashMap<Integer, String> conversationsOpen = new HashMap<Integer, String>();
@@ -152,6 +152,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         ListPicker_SendInvitation = new ListPicker(OutboundInitiationButtonHZ);
         ListPicker_SendInvitation.Text("List Of Users");
         ListPicker_SendInvitation.Selection();
+        ListPicker_SendInvitation.Shape(BUTTON_SHAPE_ROUNDED);
+        ListPicker_SendInvitation.TextColor(Component.COLOR_WHITE);
+        ListPicker_SendInvitation.FontSize(applicationSettings.int_ButtonTextSize);
+        ListPicker_SendInvitation.Height(40);
+        ListPicker_SendInvitation.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        ListPicker_SendInvitation.Enabled(false);
 
         tools.button_CommonFormatting(40, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
         tools.buttonOnOff(button_OpenChatScreen, false);
@@ -164,6 +170,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         web_AcceptInbound = new Web(this);
         web_DeclineInbound = new Web(this);
         web_Outbound = new Web(this);
+        web_OutboundUsers = new Web(this);
         web_OutboundCancel = new Web(this);
         notifier_Messages = new Notifier(Conversations);
 
@@ -171,6 +178,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         callBackEnd();
+        fn_GetUsers();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -287,6 +295,14 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 fn_GotText_OutboundConversations(status, textOfResponse);
                 return true;
             }
+            else if (component.equals(web_OutboundUsers)) {
+                tools.dbg((String) params[0]);
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                fn_GetUsers(status, textOfResponse);
+                ListPicker_SendInvitation.Enabled(true);
+                return true;
+            }
             else if (component.equals(web_DeclineInbound)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
@@ -339,6 +355,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         web_Outbound.Get();
     }
 
+    void fn_GetUsers() {
+        web_OutboundUsers.Url(
+                applicationSettings.baseURL +
+                        "?action=LIST&entity=directory&sessionID=" +
+                        applicationSettings.sessionID +
+                        "&pID=" +
+                        applicationSettings.pID
+        );
+        web_OutboundUsers.Get();
+    }
     public void fn_GotText_OpenConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
 //        tools.dbg(status);
@@ -447,6 +473,46 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         catch (JSONException e) {
             // if an exception occurs, code for it in here
             notifier_Messages.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
+        }
+        else {
+            notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
+        }
+        tools.buttonOnOff(button_CancelOutbound,false);
+    }
+    public void fn_GetUsers(String status, String textOfResponse) {
+        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+//        tools.dbg(status);
+//        tools.dbg("OUTBOUND: " + textOfResponse);
+        if (status.equals("200") ) try {
+
+            ListofUsersWeb = new ArrayList<String>();
+            JSONObject parser = new JSONObject(textOfResponse);
+            if (!parser.getString("directory").equals("")) {
+                JSONArray User = parser.getJSONArray("directory");
+                for(int i = 0 ; i < User.length() ; i++){
+                    if (User.getJSONObject(i).toString().equals("{}")) break;
+                    String anItem =
+                            User.getJSONObject(i).getString("realName") +
+                                    "," +
+                                    User.getJSONObject(i).getString("nickname") +
+                                    "(" +
+                                    User.getJSONObject(i).getString("pID") +
+                                    ")";
+
+                    ListofUsersWeb.add( anItem );
+                    tools.dbg(anItem);
+                }
+                YailList tempData=YailList.makeList(ListofUsersWeb);
+                ListPicker_SendInvitation.Elements(YailList.makeList(ListofUsersWeb));
+                tools.dbg(tempData.toString());
+            }
+            else {
+                notifier_Messages.ShowMessageDialog("Error getting other user details", "Information", "OK");
+            }
+        }
+        catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            notifier_Messages.ShowMessageDialog("JSON Exception (5)", "Information", "OK");
         }
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
