@@ -38,7 +38,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     Web web_ChatLine, web_PoolMakeNew, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
-    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolID;
+    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolDriverID, string_ThisPoolNavigatorID;
     Integer int_ClockCount=0;
 
     protected void $define() {
@@ -127,8 +127,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         timer_RefreshBackend.TimerEnabled(true);
 
         web_GetTheRouteId = new Web(this);
-        web_GetTheRouteId.Url( string_URLOfLink );
-        web_GetTheRouteId.Get();
+//        web_GetTheRouteId.Url( string_URLOfLink );
+//        web_GetTheRouteId.Get();
 
         tools.button_CommonFormatting(40, button_MakePool);
         EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
@@ -143,6 +143,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             int_ClockCount++;
             callBackend();
         }
+
         else if (eventName.equals("AfterChoosing")) {
             if (component.equals(D_OR_N_ChoiceNotifier)) {
                 D_OR_N_ChoiceNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
@@ -229,7 +230,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 callBackend();
             }
             else if (component.equals(button_MakePool)) {
+                web_GetTheRouteId.Url( string_URLOfLink );
+                web_GetTheRouteId.Get();
                 D_OR_N_ChoiceNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
+                return true;
             }
             return true;
         }
@@ -258,7 +262,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolDriverList (status, textOfResponse);
-                if (string_ThisPoolID.equals("")) {
+                if (string_ThisPoolDriverID.equals("")) {
                     web_NoPoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
@@ -274,7 +278,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                     web_NoPoolCreated.Get();
                     return true;
                 }
-                else if (!string_ThisPoolID.equals("")) {
+                else if (!string_ThisPoolDriverID.equals("")) {
                     web_PoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=PUT&entity=pool&sessionID=" +
@@ -286,7 +290,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&rID=" +
                                     string_ThisRouteId +
                                     "&pool_ID=" +
-                                    PoolID.Text() +
+                                    string_ThisPoolDriverID +
                                     "&pool_Status=open"
                     );
                     web_PoolCreated.Get();
@@ -299,7 +303,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolNavigatorList (status, textOfResponse);
-                if (string_ThisPoolID.equals("")) {
+                if (string_ThisPoolNavigatorID.equals("")) {
                     web_NoPoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
@@ -315,7 +319,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                     web_NoPoolCreated.Get();
                     return true;
                 }
-                else if (!string_ThisPoolID.equals("")) {
+                else if (!string_ThisPoolNavigatorID.equals("")) {
                     web_PoolCreated.Url(
                             applicationSettings.baseURL +
                                     "?action=PUT&entity=pool&sessionID=" +
@@ -327,7 +331,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&rID=" +
                                     string_ThisRouteId +
                                     "&pool_ID=" +
-                                    PoolID.Text() +
+                                    string_ThisPoolNavigatorID +
                                     "&pool_Status=open"
                     );
                     web_PoolCreated.Get();
@@ -376,6 +380,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
     }
 
+    void dbg(String debugMsg) { System.err.print("~~~> " + debugMsg + " <~~~\n");  }
+
     public void getPoolDriverList (String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
         tools.dbg(status);
@@ -385,10 +391,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
           if no pool, send POST to make pool
           else get pool_ID, send PUT to amend status
            */
+        dbg("Error at DriverID");
+
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("pool_ID").equals("")) {
-                string_ThisPoolID = parser.getString("pool_ID");
+                string_ThisPoolDriverID = parser.getString("pool_ID");
             }
         }
         catch (JSONException e) {
@@ -405,10 +413,11 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
           else get pool_ID, send PUT to amend status
 
            */
+        dbg("Error at NavigatorID");
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("pool_ID").equals("")) {
-                string_ThisPoolID = parser.getString("pool_ID");
+                string_ThisPoolNavigatorID = parser.getString("pool_ID");
             }
         }
         catch (JSONException e) {
