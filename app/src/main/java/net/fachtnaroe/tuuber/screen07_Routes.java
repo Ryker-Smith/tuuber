@@ -40,26 +40,25 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Web web_SaveRoute, web_GetMyRoutes, web_GetTowns, web_DeleteRoute, web_GetOneRoute;
     private Notifier messagesPopUp;
     private ImagePicker img_DirectionArrow;
-//    private String baseURL = "https://fachtnaroe.net/tuuber-2019";
     //    private ArrayList RoutsList ;
-    private HorizontalArrangement Direction, Days, toolbarHz;
+    private HorizontalArrangement hz_JourneyDetails, Days, toolbarHz;
     private Label myRoutes;
     private Label label_pID;
 //    private Label test;
     private Label routesDescription;
     private Label routesAction;
-    private ListPicker listpicker_Towns, Town_Via;
-    private VerticalArrangement ListofDDT, RoutesScreen;
-    private HorizontalArrangement ButtonHolder;
-    private Button button_To, button_From, button_Save, button_Delete;
+//    ListPicker listpicker_TravelVia;
+    private VerticalArrangement  RoutesScreen;
+    private HorizontalArrangement hz_SaveDelete_ButtonHolder;
+    private Button button_Save, button_Delete;
+    ListPicker button_To, button_From;
     private Button button_MainMenu, buttonRefresh;
     private ListView list_MyRoutes;
     private CheckBox checkbox_Mon, checkbox_Tues, checkbox_Weds, checkbox_Thurs, checkbox_Fri, checkbox_IsDriver;
     private List<String> ListOfRoutesFromWeb, ListOfTownsFromWeb;
-    String Specify = new String("to");
     Integer day = -1;// used to store the day selection of the user
     Integer saveNewIs0_saveEditIs1 = 0;
-    String driver, destination, origin, action, string_listpicker_Towns_InitialText;
+    String driver, destination, origin, action;
     Integer int_SelectedRoute;
 
     protected void $define() {
@@ -100,23 +99,28 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         routesDescription = new Label(RoutesScreen);
         routesDescription.Text("Route description area:");
 
-        ListofDDT = new VerticalArrangement(RoutesScreen);
-        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
-        Direction = new HorizontalArrangement(ListofDDT);
-        Days = new HorizontalArrangement(RoutesScreen);
+//        ListofDDT = new VerticalArrangement(RoutesScreen);
+//        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
+        hz_JourneyDetails = new HorizontalArrangement(RoutesScreen);
+        hz_JourneyDetails.WidthPercent(100);
+        hz_JourneyDetails.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        hz_JourneyDetails.BackgroundColor(Component.COLOR_WHITE);
+        Button paddy5=(Button)tools.padding(hz_JourneyDetails,2,1);
 
+        button_From = new ListPicker(hz_JourneyDetails);
+        img_DirectionArrow = new ImagePicker(hz_JourneyDetails);
+        button_To = new ListPicker(hz_JourneyDetails);
+        button_From.Text("origin");
+        button_To.Text("destination");
+
+        Days = new HorizontalArrangement(RoutesScreen);
         checkbox_Mon = new CheckBox(Days);
         checkbox_Tues = new CheckBox(Days);
         checkbox_Weds = new CheckBox(Days);
         checkbox_Thurs = new CheckBox(Days);
         checkbox_Fri = new CheckBox(Days);
-
         checkbox_IsDriver = new CheckBox(Days);
-        button_To = new Button(Direction);
-        img_DirectionArrow = new ImagePicker(Direction);
-        button_From = new Button(Direction);
-        button_To.Text("");
-        button_From.Text("Templemore");
+
         checkbox_Mon.Text("M");
         checkbox_Tues.Text("T");
         checkbox_Weds.Text("W");
@@ -124,27 +128,32 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         checkbox_Fri.Text("F");
         checkbox_IsDriver.Text("Press Yes if Driver");
 
-        listpicker_Towns = new ListPicker(RoutesScreen);
-        string_listpicker_Towns_InitialText="Press for list of towns";
-        listpicker_Towns.Text(string_listpicker_Towns_InitialText);
-        listpicker_Towns.Selection();
-        listpicker_Towns.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        listpicker_Towns.TextColor(Component.COLOR_WHITE);
-        Town_Via = new ListPicker(RoutesScreen);
-        Town_Via.Text("Via");
-        Town_Via.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        Town_Via.TextColor(Component.COLOR_WHITE);
+        button_From.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        button_From.TextColor(Component.COLOR_WHITE);
+        button_From.WidthPercent(40);
+        button_From.Height(40);
+        button_To.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        button_To.TextColor(Component.COLOR_WHITE);
+        button_To.WidthPercent(40);
+        button_To.Height(40);
+//        listpicker_TravelVia = new ListPicker(RoutesScreen);
+//        listpicker_TravelVia.Text("Via");
+//        listpicker_TravelVia.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+//        listpicker_TravelVia.TextColor(Component.COLOR_WHITE);
 
         routesAction = new Label(RoutesScreen);
         routesAction.Text("Route actions:");
-        ButtonHolder = new HorizontalArrangement(RoutesScreen);
+        hz_SaveDelete_ButtonHolder = new HorizontalArrangement(RoutesScreen);
+//        hz_SaveDelete_ButtonHolder.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        hz_SaveDelete_ButtonHolder.WidthPercent(100);
 
-        button_Save = new Button(ButtonHolder);
+        Button paddy1=(Button)tools.padding(hz_SaveDelete_ButtonHolder,2,1);
+        button_Save = new Button(hz_SaveDelete_ButtonHolder);
         button_Save.Text("Save");
-        button_Delete = new Button(ButtonHolder);
+        Button paddy2=(Button)tools.padding(hz_SaveDelete_ButtonHolder,6,1);
+        button_Delete = new Button(hz_SaveDelete_ButtonHolder);
         button_Delete.Text("Delete");
-        button_Delete.Enabled(false);
-        button_Save.Enabled(false);
+        Button paddy3=(Button)tools.padding(hz_SaveDelete_ButtonHolder,1,1);
 
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
@@ -163,15 +172,18 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         web_SaveRoute = new Web(RoutesScreen);
 
         messagesPopUp = new Notifier(RoutesScreen);
-        tools.button_CommonFormatting(40,button_Delete,button_Save );
-        tools.button_CommonFormatting(40, button_To, button_From);
+        tools.button_CommonFormatting(46,button_Delete,button_Save );
+
+        tools.buttonOnOff(button_Delete,false);
+        tools.buttonOnOff(button_Save,false);
+
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "Changed");
 
-        fn_GetTownsFromBackEnd();
+        fn_GetTowns();
         fn_GetMyRoutesFromBackEnd();
     }
 
@@ -188,9 +200,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     checkbox_Weds.Checked(false);
                     checkbox_Thurs.Checked(false);
                     checkbox_Fri.Checked(false);
-                    button_Save.Enabled(true);
+                    tools.buttonOnOff(button_Save,true);
                 } else {
-                    button_Save.Enabled(false);
+                    tools.buttonOnOff(button_Save,false);
                 }
                 return true;
             } else if (component.equals(checkbox_Tues)) {
@@ -200,9 +212,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     checkbox_Weds.Checked(false);
                     checkbox_Thurs.Checked(false);
                     checkbox_Fri.Checked(false);
-                    button_Save.Enabled(true);
+                    tools.buttonOnOff(button_Save,true);
                 } else {
-                    button_Save.Enabled(false);
+                    tools.buttonOnOff(button_Save,false);
                 }
                 return true;
             } else if (component.equals(checkbox_Weds)) {
@@ -212,9 +224,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     checkbox_Mon.Checked(false);
                     checkbox_Thurs.Checked(false);
                     checkbox_Fri.Checked(false);
-                    button_Save.Enabled(true);
+                    tools.buttonOnOff(button_Save,true);
                 } else {
-                    button_Save.Enabled(false);
+                    tools.buttonOnOff(button_Save,false);
                 }
                 return true;
             } else if (component.equals(checkbox_Thurs)) {
@@ -224,10 +236,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     checkbox_Weds.Checked(false);
                     checkbox_Mon.Checked(false);
                     checkbox_Fri.Checked(false);
-                    button_Delete.Enabled(false);
-                    button_Save.Enabled(true);
+                    tools.buttonOnOff(button_Save,true);
                 } else {
-                    button_Save.Enabled(false);
+                    tools.buttonOnOff(button_Save,false);
                 }
                 return true;
             } else if (component.equals(checkbox_Fri)) {
@@ -237,15 +248,28 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     checkbox_Weds.Checked(false);
                     checkbox_Thurs.Checked(false);
                     checkbox_Mon.Checked(false);
-                    button_Save.Enabled(true);
+                    tools.buttonOnOff(button_Save,true);
                 } else {
-                    button_Save.Enabled(false);
+                    tools.buttonOnOff(button_Save,false);
                 }
                 return true;
             }
         } else if (eventName.equals("AfterPicking")) {
-
-            if (component.equals(list_MyRoutes)) {
+            if (component.equals(button_To)) {
+                img_DirectionArrow.Image("Arrow_Right_Templemore.png");
+                button_To.Text( button_To.Selection() );
+                if (!button_To.Text().equals("Templemore") && (!button_From.Text().equals("Templemore"))) {
+                    button_From.Text("Templemore");
+                }
+            }
+            else if (component.equals(button_From)) {
+                img_DirectionArrow.Image("Arrow_Left_Templemore.png");
+                button_From.Text( button_From.Selection() );
+                if (!button_To.Text().equals("Templemore") && (!button_From.Text().equals("Templemore"))) {
+                    button_To.Text("Templemore");
+                }
+            }
+            else if (component.equals(list_MyRoutes)) {
                 String[] temp = list_MyRoutes.Selection().split("=");
                 temp[1] = temp[1].replace(")", "");
                 int_SelectedRoute = Integer.valueOf(temp[1]);
@@ -257,18 +281,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                                 + "&sessionID=" + applicationSettings.sessionID
                 );
                 saveNewIs0_saveEditIs1 = 1;
-                button_Delete.Enabled(true);
+                tools.buttonOnOff(button_Delete,true);
                 web_GetOneRoute.Get();
                 return true;
-            } else if (component.equals(listpicker_Towns)) {
-                listpicker_Towns.Text(listpicker_Towns.Selection());
-                button_To.Text(listpicker_Towns.Selection());
-                return true;
             }
-            else if (component.equals(Town_Via)){
-                Town_Via.Text (Town_Via.Selection());
-                return true;
-            }
+//            else if (component.equals(listpicker_TravelVia)){
+//                listpicker_TravelVia.Text (listpicker_TravelVia.Selection());
+//                return true;
+//            }
 
         }
 
@@ -277,12 +297,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 switchForm("screen03_MainMenu");
                 return true;
             }
-            else if (component.equals(listpicker_Towns)) {
-                fn_GetTownsFromBackEnd();
-            }
-            else if (component.equals(Town_Via)) {
-                fn_GetTownsFromBackEnd();
-            }
             else if (component.equals(buttonRefresh)) {
                 saveNewIs0_saveEditIs1 =0;
                 checkbox_Mon.Checked(false);
@@ -290,10 +304,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 checkbox_Weds.Checked(false);
                 checkbox_Thurs.Checked(false);
                 checkbox_Fri.Checked(false);
-                button_Save.Enabled(false);
-                button_Delete.Enabled(false);
+                tools.buttonOnOff(button_Save,false);
+                tools.buttonOnOff(button_Delete,false);
                 checkbox_IsDriver.Checked(false);
-                fn_GetTownsFromBackEnd();
+                button_To.Text("destination");
+                button_From.Text("origin");
+                fn_GetTowns();
                 fn_GetMyRoutesFromBackEnd();
                 return true;
             }
@@ -311,9 +327,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 buttonRefresh.Click();
                 saveNewIs0_saveEditIs1=0;
                 fn_GetMyRoutesFromBackEnd();
+                return true;
             }
             else if (component.equals(button_Save)) {
-                tools.dbg("Saving");
+                if (button_To.Text().equals("origin") || button_To.Text().equals("destination")
+                    || button_From.Text().equals("origin") || button_From.Text().equals("destination")
+                ) {
+                    // if for any reason the town names aren't properly populated, don't try to save them
+                    return true;
+                }
                 String my_rID="";
                 if(saveNewIs0_saveEditIs1.equals(0)){
                     action="POST";
@@ -336,12 +358,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     string_DayAndIfDriver = string_DayAndIfDriver + "driver=N";
                 }
                 String string_DirectionOfTravel = new String();
-                if (Specify.equals("to")) {
-                    string_DirectionOfTravel = "&destination=Templemore&origin=" + listpicker_Towns.Text();
-                }
-                else {
-                    string_DirectionOfTravel = "&origin=Templemore&destination=" + listpicker_Towns.Text();
-                }
+                string_DirectionOfTravel = "&destination="+button_To.Text()+"&origin=" + button_From.Text();
                 web_SaveRoute.Url(
                         applicationSettings.baseURL
                                 + "?action="
@@ -358,25 +375,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 tools.dbg(web_SaveRoute.Url());
                 return true;
             }
-            else if (component.equals(button_To)) {
-                img_DirectionArrow.Image("Arrow_Right_Templemore.png");
-                Specify = "to";
-            }
-            else if (component.equals(button_From)) {
-                img_DirectionArrow.Image("Arrow_Left_Templemore.png");
-                Specify = "from";
-            }
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_GetMyRoutes)) {
-                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_GetRoute(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_GetTowns)) {
-                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_GetTowns(status, textOfResponse);
@@ -386,26 +393,27 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_SaveRoute(status, textOfResponse);
+                return true;
             }
             else if (component.equals(web_DeleteRoute)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 fn_GotText_DeleteRoute(status, textOfResponse);
+                return true;
             }
             else if (component.equals(web_GetOneRoute)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getDayFromResponse(status, textOfResponse);
-                getDirectionFromResponse(status, textOfResponse);
                 getDriver(status, textOfResponse);
-                getTownFromResponse(status, textOfResponse);
+                getTownsFromResponse(status, textOfResponse);
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public void fn_GetTownsFromBackEnd () {
+    public void fn_GetTowns() {
         web_GetTowns.Url(
                 applicationSettings.baseURL + "?entity=town&action=LIST"
                         + "&sessionID=" + applicationSettings.sessionID
@@ -481,8 +489,9 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     );
                 }
                 YailList tempData = YailList.makeList(ListOfTownsFromWeb);
-                listpicker_Towns.Elements(tempData);
-                Town_Via.Elements(tempData);
+                button_To.Elements(tempData);
+                button_From.Elements(tempData);
+//                listpicker_TravelVia.Elements(tempData);
 
             } else {
                 messagesPopUp.ShowMessageDialog("Error getting town details", "Information", "OK");
@@ -496,12 +505,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         }
     }
 
-
-    void fn_GetMyRoutesFromBackEnd() {
+    public void fn_GetMyRoutesFromBackEnd() {
         web_GetMyRoutes.Url(applicationSettings.baseURL
                 + "?action=LIST"
                 + "&entity=ROUTE"
-                + "&label_pID=" + applicationSettings.pID
+                + "&pID=" + applicationSettings.pID
                 + "&sessionID=" + applicationSettings.sessionID
         );
         web_GetMyRoutes.Get();
@@ -532,6 +540,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
     }
+
     public void fn_GotText_DeleteRoute(String status, String textOfResponse) {
         if (status.equals("200") ) {
             try {
@@ -549,6 +558,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
     }
+
     public void getDayFromResponse(String status, String textOfResponse) {
         if (status.equals("200") ) {
             try {
@@ -561,6 +571,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
     }
+
     public void getDriver(String status, String textOfResponse) {
         if (status.equals("200") ) {
             try {
@@ -573,27 +584,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
         }
     }
-    public void getDirectionFromResponse(String status, String textOfResponse) {
-        if (status.equals("200") ) {
-            try {
-                JSONObject parser = new JSONObject(textOfResponse);
-                destination=(parser.getString("destination"));
-                setdestination(destination);
-                settown(destination);
-            }
-            catch (JSONException e) {
-                // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
-            }
-        }
-    }
-    public void getTownFromResponse(String status, String textOfResponse) {
+
+    public void getTownsFromResponse(String status, String textOfResponse) {
         if (status.equals("200") ) {
             try {
                 JSONObject parser = new JSONObject(textOfResponse);
                 origin=(parser.getString("origin"));
-                setdestination(origin);
-                settown(origin);
+                destination=(parser.getString("destination"));
+                button_From.Text(origin);
+                button_To.Text(destination);
             }
             catch (JSONException e) {
                 // if an exception occurs, code for it in here
@@ -627,27 +626,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         else {
             checkbox_IsDriver.Checked(false);
         }
-
-    }
-    public void setdestination(String destination) {
-        if (destination.equals("Templemore")) {
-            img_DirectionArrow.Image("Arrow_Left_Templemore.png");
-            listpicker_Towns.Text(origin);
-        }
-        else {
-            img_DirectionArrow.Image("Arrow_Right_Templemore.png");
-        }
-
-    }
-    public void settown(String origin) {
-        if (origin.equals("Templemore")) {
-            listpicker_Towns.Text(destination);
-        }
-        else{
-            listpicker_Towns.Text(origin);
-        }
-
-
     }
 
 }

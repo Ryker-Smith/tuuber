@@ -1,7 +1,10 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Environment;
+import android.provider.ContactsContract;
 
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -32,7 +35,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     fr_aPerson thisPersonsDetails = new fr_aPerson();
-    Web web_GetMyDetails, web_SaveMyDetails, passwordWeb, passwordWebSave;
+    Web web_GetMyDetails, web_SaveMyDetails,  web_PasswordSave;
     Notifier messages;
     TextBox textbox_ListViewSize, textbox_PhoneNumber, textbox_eMail, textbox_UserFirstName, textbox_UserFamilyName, backgroundImageTextBox;
     PasswordTextBox textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword;
@@ -40,7 +43,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     Label listViewSizeLabel, label_PhoneNumber, label_eMail, label_UserFirstName, label_UserFamilyName, label_OldPassword, label_NewPassword, label_ConfirmPassword, label_pID;
     HorizontalArrangement listViewSizeHz, oldPassHz, newPassHz, confirmHz, hz_toolbar;
     VerticalArrangement detailsVt, vt_Password, vt_Customisation;
-    ImagePicker myImagePicker;
+    fachtnaImagePicker myImagePicker;
     fachtnaSlider slider_FontSize;
     CheckBox checkbox_GA, checkbox_EN, checkbox_PO;
     VerticalScrollArrangement Settings;
@@ -79,7 +82,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         HorizontalArrangement hz_ImageTextBox=new HorizontalArrangement(vt_Customisation);
 
-        myImagePicker = new ImagePicker(hz_ImageTextBox);
+        myImagePicker = new fachtnaImagePicker(hz_ImageTextBox);
         myImagePicker.Text("Picker");
         myImagePicker.FontBold(true);
         myImagePicker.FontSize(12);
@@ -200,8 +203,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         web_GetMyDetails = new Web(this);
         web_SaveMyDetails = new Web(this);
-        passwordWeb = new Web(this);
-        passwordWebSave = new Web(this);
+
+        web_PasswordSave = new Web(this);
 
         password_CommonFormatting(textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword);
         textbox_CommonFormatting(textbox_eMail, textbox_PhoneNumber, textbox_UserFamilyName, textbox_UserFirstName);
@@ -233,7 +236,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("BeforePicking")) {
+            dbg(Environment.getExternalStorageDirectory().toString());
+            myImagePicker.Image( backgroundImageTextBox.Text() );
             if (component.equals(myImagePicker)) {
+//                myImagePicker.
                 this.BackgroundImage(myImagePicker.Selection());
                 return true;
             }
@@ -265,7 +271,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         else if (eventName.equals("AfterPicking")) {
             if (component.equals(myImagePicker)) {
                 this.BackgroundImage(myImagePicker.Selection());
-//                backgroundImageTextBox.Text( myImagePicker.Selection() );
+                backgroundImageTextBox.Text( myImagePicker.Selection() );
+                Integer request=0,result=0;
+                Intent i;
+                i=this.getIntent();
+                myImagePicker.resultReturned(request,result,i);
+//                myImagePicker.r;
                 return true;
             }
             return false;
@@ -306,7 +317,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_SubmitPassword) ) {
                 // prepare to pass to back end
-                passwordWebSave.Url(applicationSettings.baseURL
+                web_PasswordSave.Url(applicationSettings.baseURL
                         + "?cmd=CHPWD"
                         + "&pID=" + applicationSettings.pID
                         + "&sessionID=" + applicationSettings.sessionID
@@ -314,7 +325,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                         + "&np=" + textbox_NewPassword.Text()
                         + "&cp=" + textbox_ConfirmPassword.Text()
                 );
-                passwordWebSave.Get();
+                web_PasswordSave.Get();
                 return true;
             }
             else if (component.equals(button_Refresh)) {
@@ -357,9 +368,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 detailsSaveGotText(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(passwordWebSave)) {
+            else if (component.equals(web_PasswordSave)) {
                 dbg((String) params[0]);
-                dbg(this.formName + " passwordWebSave");
+                dbg(this.formName + " web_PasswordSave");
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 passwordSaveGotText(status, textOfResponse);

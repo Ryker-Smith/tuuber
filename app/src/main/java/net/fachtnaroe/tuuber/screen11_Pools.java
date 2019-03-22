@@ -38,8 +38,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
     private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundCancel;
     private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb;
     private Notifier notifier_Messages;
-    String string_InboundLineID, string_InboundpID, string_OutboundpID, string_OutboundLineID;
-    HashMap<Integer, String> conversationsOpen = new HashMap<Integer, String>();
+    String string_InboundpID, string_OutboundpID;
 
     protected void $define() {
 
@@ -77,13 +76,13 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_Open.WidthPercent(100);
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
         listview_Open.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        Label dghv=(Label)tools.fn_pad(Pools,1,1);
+        Label dghv=(Label)tools.padding(Pools,1,1);
         ChatsScreenHZ = new HorizontalArrangement(Pools);
         ChatsScreenHZ.WidthPercent(100);
 
         button_OpenChatScreen = new Button(ChatsScreenHZ);
         button_OpenChatScreen.Text("Chat");
-        button_OpenChatScreen.Enabled(false);
+        tools.buttonOnOff(button_OpenChatScreen,false);
         ChatsScreenHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
         vt_In = new VerticalArrangement(Pools);
@@ -97,16 +96,16 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_In.SelectionColor(Component.COLOR_DKGRAY);
         listview_In.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
-        Label dgh=(Label)tools.fn_pad(Pools,1,1);
+        Label dgh=(Label)tools.padding(Pools,1,1);
         InboundButtonsHZ = new HorizontalArrangement(Pools);
 
         button_AcceptInbound = new Button(InboundButtonsHZ);
         button_AcceptInbound.Text("Accept inbound");
-        button_AcceptInbound.Enabled(false);
-        Label deggh=(Label)tools.fn_pad(InboundButtonsHZ,1,1);
+        tools.buttonOnOff(button_AcceptInbound,false);
+        Label deggh=(Label)tools.padding(InboundButtonsHZ,1,1);
         button_DeclineInbound = new Button(InboundButtonsHZ);
         button_DeclineInbound.Text("Decline inbound");
-        button_DeclineInbound.Enabled(false);
+        tools.buttonOnOff(button_DeclineInbound,false);
         InboundButtonsHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
         InboundButtonsHZ.WidthPercent(100);
 
@@ -121,14 +120,14 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         listview_Out.SelectionColor(Component.COLOR_DKGRAY);
         listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
-        Label dggh=(Label)tools.fn_pad(Pools,1,1);
+        Label dggh=(Label)tools.padding(Pools,1,1);
         OutboundInitiationButtonHZ = new HorizontalArrangement(Pools);
         OutboundInitiationButtonHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
         OutboundInitiationButtonHZ.WidthPercent(100);
 
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
         button_CancelOutbound.Text("Cancel Outbound");
-        button_CancelOutbound.Enabled(false);
+        tools.buttonOnOff(button_CancelOutbound,false);
 
         web_Open = new Web(this);
         web_Inbound = new Web(this);
@@ -140,7 +139,11 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
 
         tools.button_CommonFormatting(50,button_OpenChatScreen, button_CancelOutbound);
         tools.button_CommonFormatting(40,button_AcceptInbound, button_DeclineInbound);
-
+        tools.buttonOnOff(button_OpenChatScreen, false);
+        tools.buttonOnOff(button_AcceptInbound, false);
+        tools.buttonOnOff(button_DeclineInbound, false);
+        tools.buttonOnOff(button_CancelOutbound,false);
+        
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
@@ -155,7 +158,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_OpenChatScreen)) {
-                startNewForm("screen08_ChatWith",null);
+                switchForm("screen08_ChatWith");
                 return true;
             }
             else if (component.equals(button_AcceptInbound)) {
@@ -218,15 +221,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 separated[1]=separated[1].replace(")","");
                 applicationSettings.CurrentLinkId =separated[1];
                 applicationSettings.set();
-                button_OpenChatScreen.Enabled(true);
+                tools.buttonOnOff(button_OpenChatScreen,true);
                 return true;
             }
             else if (component.equals(listview_In)) {
                 String currentString = listview_In.Selection();
                 String[] separated = currentString.split(":");
                 string_InboundpID=separated[0];
-                button_AcceptInbound.Enabled(true);
-                button_DeclineInbound.Enabled(true);
+                tools.buttonOnOff(button_AcceptInbound,true);
+                tools.buttonOnOff(button_DeclineInbound,true);
                 tools.dbg("Inbound selection");
                 return true;
             }
@@ -234,46 +237,39 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 String nextString = listview_Out.Selection();
                 String[] separated = nextString.split(":");
                 string_OutboundpID=separated[0];
-                button_CancelOutbound.Enabled(true);
+                tools.buttonOnOff(button_CancelOutbound,true);
                 tools.dbg("Outbound selection");
                 return true;
             }
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_Open)) {
-                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_OpenConversations(status, textOfResponse);
+                fn_GotText_ExistingPools(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Inbound)) {
-                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_InboundConversations(status, textOfResponse);
+                fn_GotText_PendingPool_Inbound(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_Outbound)) {
-                tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_OutboundConversations(status, textOfResponse);
+                fn_GotText_PendingPool_Outbound(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                tools.dbg(status);
-                tools.dbg(textOfResponse);
                 callBackEnd();
                 return true;
             }
             else if (component.equals(web_OutboundCancel)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                tools.dbg(status);
-                tools.dbg(textOfResponse);
                 callBackEnd();
                 return true;
             }
@@ -313,14 +309,12 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         web_Outbound.Get();
     }
 
-    public void fn_GotText_OpenConversations(String status, String textOfResponse) {
+    public void fn_GotText_ExistingPools(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        tools.dbg(status);
-        tools.dbg(textOfResponse);
+//        tools.dbg(status);
+//        tools.dbg(textOfResponse);
         if (status.equals("200" )) try {
-
             ListofContactWeb1 = new ArrayList<String>();
-
             JSONObject parser = new JSONObject(textOfResponse);
             if (!parser.getString("pool" ).equals("" )) {
                 JSONArray contacts1Array = parser.getJSONArray("pool" );
@@ -349,13 +343,13 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK" );
         }
-        button_OpenChatScreen.Enabled(false);
+        tools.buttonOnOff(button_OpenChatScreen,false);
     }
 
-    public void fn_GotText_InboundConversations(String status, String textOfResponse) {
+    public void fn_GotText_PendingPool_Inbound(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        tools.dbg(status);
-        tools.dbg("INBOUND: " + textOfResponse);
+//        tools.dbg(status);
+//        tools.dbg("INBOUND: " + textOfResponse);
         if (status.equals("200") ) try {
 
             ListofInboundWeb = new ArrayList<String>();
@@ -386,14 +380,14 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-        button_AcceptInbound.Enabled(false);
-        button_DeclineInbound.Enabled(false);
+        tools.buttonOnOff(button_AcceptInbound,false);
+        tools.buttonOnOff(button_DeclineInbound,false);
     }
 
-    public void fn_GotText_OutboundConversations(String status, String textOfResponse) {
+    public void fn_GotText_PendingPool_Outbound(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-        tools.dbg(status);
-        tools.dbg("OUTBOUND: " + textOfResponse);
+//        tools.dbg(status);
+//        tools.dbg("OUTBOUND: " + textOfResponse);
         if (status.equals("200") ) try {
 
             ListofOutboundWeb = new ArrayList<String>();
@@ -425,6 +419,6 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         else {
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
-        button_CancelOutbound.Enabled(false);
+        tools.buttonOnOff(button_CancelOutbound,false);
     }
 }

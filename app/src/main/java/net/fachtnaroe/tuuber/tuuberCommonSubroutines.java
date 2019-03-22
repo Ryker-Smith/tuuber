@@ -10,6 +10,7 @@ import com.google.appinventor.components.runtime.TextBox;
 
 import static com.google.appinventor.components.runtime.Component.BUTTON_SHAPE_ROUNDED;
 import static com.google.appinventor.components.runtime.Component.COLOR_NONE;
+import static com.google.appinventor.components.runtime.Component.DEFAULT_VALUE_COLOR_NONE;
 
 public class tuuberCommonSubroutines {
 
@@ -57,7 +58,7 @@ public class tuuberCommonSubroutines {
         }
     }
 
-    Object fn_pad(ComponentContainer c, Integer w, Integer h) {
+    Object padding(ComponentContainer c, Integer w, Integer h) {
         Label tmp=new Label(c);
         tmp.Width(w);
         tmp.Height(h);
@@ -66,4 +67,26 @@ public class tuuberCommonSubroutines {
         return tmp;
     }
 
+    void buttonOnOff(Button b, boolean On) {
+        if (On) {
+            //trurn button on
+            b.TextColor(Color.parseColor(applicationSettings.string_TextColor));
+            b.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+            b.FontBold(true);
+            b.Enabled(true);
+        }
+        else {
+            // turn button off
+            b.TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
+            b.BackgroundColor(Component.COLOR_NONE);
+            b.FontBold(false);
+            b.Enabled(false);
+        }
+    }
+
+    void fn_SwapStrings (String first, String second) {
+        String temp=first;
+        first=second;
+        second=temp;
+    }
 }
