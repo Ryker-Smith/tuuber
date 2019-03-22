@@ -5,9 +5,9 @@ import com.google.appinventor.components.runtime.TinyDB;
 
 public class dd_aPerson {
 
-    public String First = "";
-    public String Family = "";
-    public String eMail = "";
+    public String first = "";
+    public String family = "";
+    public String email = "";
     public String phone = "";
     public String password = "";
 
@@ -19,12 +19,12 @@ public class dd_aPerson {
 
     TinyDB localDB;
 
-    public boolean valid_eMail() {
+    public boolean validEmail() {
         int atSymbolCount = 0;
         int dotCount = 0;
 
         String theEmailAddressToTest= new String();
-        theEmailAddressToTest=this.eMail;
+        theEmailAddressToTest=this.email;
         String currentString = theEmailAddressToTest;
         //string is split
         String[] separated = currentString.split("@");
@@ -65,7 +65,7 @@ public class dd_aPerson {
         return true;
     }
 
-    public boolean valid_phone() {
+    public boolean validPhone() {
         // checked if too short
         if (phone.length() <= 8) {
             return false;
@@ -90,13 +90,13 @@ public class dd_aPerson {
     }
     public boolean valid_first() {
         // checks length
-        if (First.length() <= 1) {
+        if (first.length() <= 1) {
             return false;
         }
         return true;
     }
     public boolean valid_family() {
-        if (Family.length() <= 1) {
+        if (family.length() <= 1) {
             return false;
         }
         return true;
@@ -110,26 +110,26 @@ public class dd_aPerson {
 
     public dd_aPerson(ComponentContainer screenName) {
         localDB= new TinyDB(screenName);
-        First=default_First;
-        Family=default_Family;
-        eMail=default_eMail;
+        first =default_First;
+        family =default_Family;
+        email =default_eMail;
         phone=default_phone;
         password=default_password;
     }
     
     public String get () {
-        First=(String) localDB.GetValue("First",default_First);
-        Family=(String) localDB.GetValue("Family",default_Family);
-        eMail=(String) localDB.GetValue("eMail", default_eMail);
+        first =(String) localDB.GetValue("first",default_First);
+        family =(String) localDB.GetValue("family",default_Family);
+        email =(String) localDB.GetValue("email", default_eMail);
         phone=(String) localDB.GetValue("phone", default_phone);
         password=(String) localDB.GetValue("label_pID",default_password);
         return "OK";
     }
     //stores the values
     public String set () {
-        localDB.StoreValue("First", First);
-        localDB.StoreValue("Family",Family);
-        localDB.StoreValue("eMail",eMail);
+        localDB.StoreValue("first", first);
+        localDB.StoreValue("family", family);
+        localDB.StoreValue("email", email);
         localDB.StoreValue("phone", phone);
         localDB.StoreValue("password", password);
         return "OK";

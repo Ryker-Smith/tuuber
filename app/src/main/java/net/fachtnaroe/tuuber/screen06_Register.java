@@ -156,12 +156,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         else if (eventName.equals("Click")) {
             if (component.equals(button_Create)){
                 User.phone = Telephone.Text();
-                User.eMail = eMail.Text();
-                User.First = FirstName.Text();
-                User.Family = LastName.Text();
+                User.email = eMail.Text();
+                User.first = FirstName.Text();
+                User.family = LastName.Text();
                 User.password = Password.Text();
                 User.set();
-                if (!User.valid_phone()) {
+                if (!User.validPhone()) {
                     TelephoneLabel.TextColor(Color.RED);
                     eMailLabel.TextColor(Color.BLACK);
                     FirstNameLabel.TextColor(Color.BLACK);
@@ -172,7 +172,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     notifier_MessagesPopUp.ShowMessageDialog("Invalid Phone Number", "Error", "OK");
                     return true;
                 }
-                if (!User.valid_eMail()) {
+                if (!User.validEmail()) {
                     eMailLabel.TextColor(Color.RED);
                     TelephoneLabel.TextColor(Color.BLACK);
                     FirstNameLabel.TextColor(Color.BLACK);

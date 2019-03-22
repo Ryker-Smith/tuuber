@@ -131,7 +131,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         label_UserFirstName = new Label(tabla_Sonraí);
         label_UserFirstName.HTMLFormat(true);
-        label_UserFirstName.Text("First name:");
+        label_UserFirstName.Text("first name:");
         label_UserFirstName.Row(0);
         label_UserFirstName.Column(0);
         textbox_UserFirstName = new TextBox(tabla_Sonraí);
@@ -139,7 +139,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         textbox_UserFirstName.Column(1);
 
         label_UserFamilyName = new Label(tabla_Sonraí);
-        label_UserFamilyName.Text("Family name:");
+        label_UserFamilyName.Text("family name:");
         label_UserFamilyName.HTMLFormat(true);
         label_UserFamilyName.Row(1);
         label_UserFamilyName.Column(0);
@@ -157,7 +157,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         textbox_PhoneNumber.Column(1);
 
         label_eMail = new Label(tabla_Sonraí);
-        label_eMail.Text("eMail:");
+        label_eMail.Text("email:");
         label_eMail.Row(3);
         label_eMail.Column(0);
         textbox_eMail = new TextBox(tabla_Sonraí);
@@ -335,7 +335,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("LostFocus")) {
             if (component.equals(textbox_eMail)) {
-                fr_aPerson tempPerson = new fr_aPerson();
+                dd_aPerson tempPerson = new dd_aPerson(this);
                 tempPerson.email = textbox_eMail.Text();
                 if (!tempPerson.validEmail()) {
                     button_SaveMyDetails.Enabled(false);
@@ -343,7 +343,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 return true;
             }
             if (component.equals(textbox_PhoneNumber) ) {
-                fr_aPerson tempPerson = new fr_aPerson();
+                dd_aPerson tempPerson = new dd_aPerson(this);
                 tempPerson.phone = textbox_PhoneNumber.Text();
                 if (!tempPerson.validPhone()) {
                     button_SaveMyDetails.Enabled(false);
