@@ -143,10 +143,9 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             int_ClockCount++;
             callBackend();
         }
-
         else if (eventName.equals("AfterChoosing")) {
             if (component.equals(D_OR_N_ChoiceNotifier)) {
-                D_OR_N_ChoiceNotifier.ShowMessageDialog("You have chosen " + params[0], "Chosen", "Ok");
+                D_OR_N_ChoiceNotifier.ShowAlert("You're the " + params[0]);
                 String WhoIsDriving;
                 if (params[0].equals("Driver")) {
                     WhoIsDriving = applicationSettings.pID;
@@ -161,39 +160,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     "&link_ID=" +
                                     applicationSettings.CurrentLinkId +
                                     "&driver=" +
-                                    WhoIsDriving
+                                    WhoIsDriving +
+                                    "&pID=" + applicationSettings.pID
                     );
-
-                if (params[0].equals("Driver")) {
-                    web_PoolMakeNew.Url(
-                            applicationSettings.baseURL +
-                                    "?action=GET&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&driver_pID=" +
-                                    applicationSettings.pID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.CurrentLinkId +
-                                    "&rID=" +
-                                    string_ThisRouteId
-                    );
-                    web_PoolMakeNew.Get();
-                    return true;
-                }
-                if (params[0].equals("Navigator")) {
-                    web_PoolNavigator.Url(
-                            applicationSettings.baseURL +
-                                    "?action=GET&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.pID +
-                                    "&driver_pID=" +
-                                    applicationSettings.CurrentLinkId +
-                                    "&rID=" +
-                                    string_ThisRouteId
-                    );
-                    web_PoolNavigator.Get();
-                    return true;
-                }
+                web_PoolMakeNew.Get();
             }
         }
         else if (eventName.equals("Click")) {
@@ -239,7 +209,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 if (web_ResultGotText(params[1].toString(), params[3].toString())) {
                     text_ChatLine.BackgroundColor(Component.COLOR_NONE);
                     text_ChatLine.Text("");
-//                    MessageSent_Notifier.ShowMessageDialog("Message Successfully Sent", "Message Sent", "Ok");
                     callBackend();
                 } else {
                     text_ChatLine.BackgroundColor(Component.COLOR_RED);
@@ -247,7 +216,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 }
                 return true;
             }
-            if (component.equals(web_GetTheRouteId)) {
+            else if (component.equals(web_GetTheRouteId)) {
                 tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
@@ -259,81 +228,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 getPoolDriverList (status, textOfResponse);
-                if (string_ThisPoolDriverID.equals("")) {
-                    web_NoPoolCreated.Url(
-                            applicationSettings.baseURL +
-                                    "?action=POST&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&driver_pID=" +
-                                    applicationSettings.pID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.CurrentLinkId +
-                                    "&rID=" +
-                                    string_ThisRouteId +
-                                    "&pool_Status=init"
-                    );
-                    web_NoPoolCreated.Get();
-                    return true;
-                }
-                else if (!string_ThisPoolDriverID.equals("")) {
-                    web_PoolCreated.Url(
-                            applicationSettings.baseURL +
-                                    "?action=PUT&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&driver_pID=" +
-                                    applicationSettings.pID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.CurrentLinkId +
-                                    "&rID=" +
-                                    string_ThisRouteId +
-                                    "&pool_ID=" +
-                                    string_ThisPoolDriverID +
-                                    "&pool_Status=open"
-                    );
-                    web_PoolCreated.Get();
-                    return true;
-                }
-                return true;
-            }
-            else if (component.equals(web_PoolNavigator)) {
-                tools.dbg((String) params[0]);
-                String status = params[1].toString();
-                String textOfResponse = (String) params[3];
-                getPoolNavigatorList (status, textOfResponse);
-                if (string_ThisPoolNavigatorID.equals("")) {
-                    web_NoPoolCreated.Url(
-                            applicationSettings.baseURL +
-                                    "?action=POST&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.pID +
-                                    "&driver_pID=" +
-                                    applicationSettings.CurrentLinkId +
-                                    "&rID=" +
-                                    string_ThisRouteId +
-                                    "&pool_Status=init"
-                    );
-                    web_NoPoolCreated.Get();
-                    return true;
-                }
-                else if (!string_ThisPoolNavigatorID.equals("")) {
-                    web_PoolCreated.Url(
-                            applicationSettings.baseURL +
-                                    "?action=PUT&entity=pool&sessionID=" +
-                                    applicationSettings.sessionID +
-                                    "&navigator_pID=" +
-                                    applicationSettings.pID +
-                                    "&driver_pID=" +
-                                    applicationSettings.CurrentLinkId +
-                                    "&rID=" +
-                                    string_ThisRouteId +
-                                    "&pool_ID=" +
-                                    string_ThisPoolNavigatorID +
-                                    "&pool_Status=open"
-                    );
-                    web_PoolCreated.Get();
-                    return true;
-                }
                 return true;
             }
             return true;
