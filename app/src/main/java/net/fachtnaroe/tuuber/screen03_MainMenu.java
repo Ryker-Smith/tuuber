@@ -12,6 +12,7 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
 
@@ -24,7 +25,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
-    VerticalArrangement MainMenu;
+    VerticalScrollArrangement MainMenu;
     Notifier notifier_Messages;
     Integer int_ColWidth, int_MenuStartRow=1;
     Web web_VersionCheck, web_MessageCheck;
@@ -45,7 +46,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             tools.dbg(e.toString());
         }
 
-        MainMenu = new VerticalArrangement(this);
+        MainMenu = new VerticalScrollArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
         notifier_Messages = new Notifier(MainMenu);
@@ -269,12 +270,8 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 if (c.equals(web_MessageCheck)) {
                     // there's a message so
                     // add another row to the table,
+
                     menu.Rows( menu.Rows()  + 1);
-//                    for(Integer i= menu.Rows(); i >=1; i--) {
-//                        for(Integer j=0; j<menu.Columns(); j++) {
-//
-//                        }
-//                    }
                     webview_Message = new WebViewer(menu);
                     webview_Message.HomeUrl(
                             applicationSettings.baseURL
@@ -288,7 +285,18 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                     webview_Message.Row(button_LogOut.Row() - 1);
                     webview_Message.Row(int_MenuStartRow-2);
                     webview_Message.Column(button_LogOut.Column());
-                    webview_Message.GoHome();
+                    webview_Message.Height( button_LogOut.Height() );
+                    webview_Message.Width( button_LogOut.Width() );
+                    webview_Message.FollowLinks(true);
+
+                    webview_Message.GoToUrl(
+                            applicationSettings.baseURL
+                            +"?cmd=msg"
+                            + "&ver="   + applicationSettings.versionCode
+                            + "&viewH=" + Integer.valueOf(button_LogOut.Height())
+                            + "&viewW=" + Integer.valueOf(button_LogOut.Width())
+                    );
+
 
                 }
             }
