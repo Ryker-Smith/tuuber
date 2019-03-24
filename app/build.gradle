@@ -2,12 +2,28 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
+
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+
+    if (versionPropsFile.canRead()) {
+        versionProps.load(new FileInputStream(versionPropsFile))
+    }
+    else {
+        versionProps['VERSION_CODE']='0'
+    }
+
+    def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+    versionProps['VERSION_CODE']=code.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
+
     defaultConfig {
         applicationId "net.fachtnaroe.tuuber"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode code
+        versionName "0." + code
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,3 +46,4 @@ dependencies {
     implementation files('libs/kawa-1.7.jar')
     implementation files('libs/android-async-http-1.4.9.jar')
 }
+

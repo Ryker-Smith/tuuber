@@ -7,12 +7,16 @@ import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
-import com.google.appinventor.components.runtime.HorizontalArrangement;
 import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.VerticalArrangement;
+import com.google.appinventor.components.runtime.Web;
+import com.google.appinventor.components.runtime.WebViewer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
@@ -21,8 +25,12 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     VerticalArrangement MainMenu;
-    Notifier MessagesPopup;
+    Notifier notifier_Messages;
     Integer int_ColWidth, int_MenuStartRow=1;
+    Web web_VersionCheck, web_MessageCheck;
+    TableArrangement menu;
+    Button[] button_Pad;
+    WebViewer webview_Message;
 
     protected void $define() {
 
@@ -40,9 +48,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         MainMenu = new VerticalArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
-        MessagesPopup = new Notifier(MainMenu);
+        notifier_Messages = new Notifier(MainMenu);
 
-        TableArrangement menu=new TableArrangement(MainMenu);
+        menu=new TableArrangement(MainMenu);
         int_ColWidth = (this.Width()/3);
         int_MenuStartRow=3;
 
@@ -104,7 +112,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Routes.Text("Routes");
         button_Routes.Row(int_MenuStartRow);
 
-        Button[] button_Pad=new Button[int_NumButtonsToPad];
+        button_Pad=new Button[int_NumButtonsToPad];
         for (int i=0;i< int_NumButtonsToPad; i++) {
             button_Pad[i] = new Button(menu);
             button_Pad[i].BackgroundColor(Component.COLOR_NONE);
@@ -157,10 +165,31 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
 
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        web_VersionCheck=new Web(this);
+        web_MessageCheck=new Web(this);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
+        EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
+        fn_VersionCheck();
+    }
+
+    void fn_VersionCheck() {
+//        web_VersionCheck.Url(
+//                applicationSettings.baseURL
+//                        +"&cmd=vercheck"
+//                        + "&ver="
+//                        + applicationSettings.versionCode
+//                );
+//        web_VersionCheck.Get();
+        web_MessageCheck.Url(
+                applicationSettings.baseURL
+                        +"?cmd=msgchk"
+                        + "&ver="
+                        + applicationSettings.versionCode
+        );
+        web_MessageCheck.Get();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -221,9 +250,53 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 return true;
             }
         }
+        else if (eventName.equals("GotText")) {
+            if (component.equals(web_VersionCheck) || (component.equals(web_MessageCheck))) {
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                fn_GotText_VersionOrMessage (component, status, textOfResponse);
+            }
+        }
         return false;
     }
 
+    void fn_GotText_VersionOrMessage(Component c, String status, String textOfResponse){
+        tools.dbg(status);
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            tools.dbg(textOfResponse);
+            if (!parser.getString("result").equals("OK")) {
+                if (c.equals(web_MessageCheck)) {
+                    // there's a message so
+                    // add another row to the table,
+                    menu.Rows( menu.Rows()  + 1);
+//                    for(Integer i= menu.Rows(); i >=1; i--) {
+//                        for(Integer j=0; j<menu.Columns(); j++) {
+//
+//                        }
+//                    }
+                    webview_Message = new WebViewer(menu);
+                    webview_Message.HomeUrl(
+                            applicationSettings.baseURL
+                                    +"?cmd=msg"
+                                    + "&ver="
+                                    + applicationSettings.versionCode
+                    );
+
+                    button_LogOut.Row( button_LogOut.Row() + 1);
+
+                    webview_Message.Row(button_LogOut.Row() - 1);
+                    webview_Message.Row(int_MenuStartRow-2);
+                    webview_Message.Column(button_LogOut.Column());
+                    webview_Message.GoHome();
+
+                }
+            }
+        }
+        catch (JSONException e) {
+            notifier_Messages.ShowAlert("JSON exception (" + textOfResponse + ")");
+        }
+    }
 
 
 }

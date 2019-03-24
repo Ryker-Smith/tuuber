@@ -8,9 +8,12 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.TinyDB;
+import net.fachtnaroe.tuuber.BuildConfig;
 
 public class tuuber_Settings {
 
+    public final String versionCode=Integer.toString(BuildConfig.VERSION_CODE);
+    public final String versionName=BuildConfig.VERSION_NAME;
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
