@@ -109,7 +109,7 @@ public class dd_aPerson {
     }
 
     public dd_aPerson(ComponentContainer screenName) {
-        localDB= new TinyDB(screenName);
+//        localDB= new TinyDB(screenName);
         first =default_First;
         family =default_Family;
         email =default_eMail;

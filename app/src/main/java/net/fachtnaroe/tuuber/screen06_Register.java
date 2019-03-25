@@ -160,7 +160,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 User.first = FirstName.Text();
                 User.family = LastName.Text();
                 User.password = Password.Text();
-                User.set();
+
                 if (!User.validPhone()) {
                     TelephoneLabel.TextColor(Color.RED);
                     eMailLabel.TextColor(Color.BLACK);
