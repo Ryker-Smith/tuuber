@@ -31,9 +31,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     
-    private VerticalScrollArrangement Conversations;
     private HorizontalArrangement OutboundInitiationButtonHZ, InboundButtonsHZ, ChatsScreenHZ, toolbarHz, PaddingHZOpenConversations,PaddingHZInConversations, PaddingHZOutConversations;
-    private VerticalArrangement vt_Open, vt_In, vt_Out;
+    private VerticalArrangement Conversations, vt_Open, vt_In, vt_Out;
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
     private Label label_Open, label_Out, label_In, label_pID;
@@ -56,7 +55,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         catch (Exception e) {
             tools.dbg(e.toString());
         }
-        Conversations = new VerticalScrollArrangement(this);
+        Conversations = new VerticalArrangement(this);
 
         toolbarHz = new HorizontalArrangement(Conversations);
         MainMenu = new Button(toolbarHz);
