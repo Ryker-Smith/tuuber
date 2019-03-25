@@ -88,7 +88,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         vt_In = new VerticalArrangement(Pools);
         vt_In.HeightPercent(20);
         label_In = new Label(vt_In);
-        label_In.Text("Pools suggested (Inbound)");
+        label_In.Text("Pools pending");
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Height(100);
@@ -109,25 +109,25 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         InboundButtonsHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
         InboundButtonsHZ.WidthPercent(100);
 
-        vt_Out = new VerticalArrangement(Pools);
-        vt_Out.HeightPercent(20);
-        label_Out = new Label(vt_Out);
-        label_Out.Text("Pools I'm making (Outbound)");
-        listview_Out = new ListView(vt_Out);
-        listview_Out.TextSize(applicationSettings.intListViewsize);
-        listview_Out.Height(100);
-        listview_Out.WidthPercent(100);
-        listview_Out.SelectionColor(Component.COLOR_DKGRAY);
-        listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-
-        Label dggh=(Label)tools.padding(Pools,1,1);
-        OutboundInitiationButtonHZ = new HorizontalArrangement(Pools);
-        OutboundInitiationButtonHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
-        OutboundInitiationButtonHZ.WidthPercent(100);
-
-        button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
-        button_CancelOutbound.Text("Cancel Outbound");
-        tools.buttonOnOff(button_CancelOutbound,false);
+//        vt_Out = new VerticalArrangement(Pools);
+//        vt_Out.HeightPercent(20);
+//        label_Out = new Label(vt_Out);
+//        label_Out.Text("Pools I'm making (Outbound)");
+//        listview_Out = new ListView(vt_Out);
+//        listview_Out.TextSize(applicationSettings.intListViewsize);
+//        listview_Out.Height(100);
+//        listview_Out.WidthPercent(100);
+//        listview_Out.SelectionColor(Component.COLOR_DKGRAY);
+//        listview_Out.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+//
+//        Label dggh=(Label)tools.padding(Pools,1,1);
+//        OutboundInitiationButtonHZ = new HorizontalArrangement(Pools);
+//        OutboundInitiationButtonHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
+//        OutboundInitiationButtonHZ.WidthPercent(100);
+//
+//        button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
+//        button_CancelOutbound.Text("Cancel Outbound");
+//        tools.buttonOnOff(button_CancelOutbound,false);
 
         web_Open = new Web(this);
         web_Inbound = new Web(this);
@@ -297,16 +297,16 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                         "&direction=in"
         );
         web_Inbound.Get();
-        web_Outbound.Url(
-                applicationSettings.baseURL +
-                        "?action=LIST&entity=POOL&sessionID=" +
-                        applicationSettings.sessionID +
-                        "&iam=" +
-                        applicationSettings.pID +
-                        "&status=init" +
-                        "&direction=out"
-        );
-        web_Outbound.Get();
+//        web_Outbound.Url(
+//                applicationSettings.baseURL +
+//                        "?action=LIST&entity=POOL&sessionID=" +
+//                        applicationSettings.sessionID +
+//                        "&iam=" +
+//                        applicationSettings.pID +
+//                        "&status=init" +
+//                        "&direction=out"
+//        );
+//        web_Outbound.Get();
     }
 
     public void fn_GotText_ExistingPools(String status, String textOfResponse) {
