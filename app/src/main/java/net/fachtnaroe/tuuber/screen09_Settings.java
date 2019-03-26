@@ -75,7 +75,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         Settings = new VerticalScrollArrangement(this);
         Settings.WidthPercent(100);
         Settings.HeightPercent(100);
-
+        Label versionCode=new Label(Settings);
+        versionCode.FontSize(8);
+        versionCode.TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        versionCode.BackgroundColor(Component.COLOR_NONE);
+        versionCode.Text("Version: " + applicationSettings.versionCode);
         vt_Customisation = new VerticalArrangement(Settings);
         vt_Customisation.BackgroundColor(Component.COLOR_NONE);
         vt_Customisation.WidthPercent(100);

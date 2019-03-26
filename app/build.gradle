@@ -10,28 +10,20 @@ android {
         versionProps.load(new FileInputStream(versionPropsFile))
     }
     else {
-        // if file not already there, populate the variables manually
-//        versionProps['VERSION_CODE']='0.0.0'
-        versionProps['BUILD_NUMBER']='0'
-//        versionProps['VERSION_MAIN']='0'
-//        versionProps['VERSION_MINOR']='0'
+        versionProps['VERSION_CODE']='0'
     }
 
-    def thisname = versionProps['VERSION_NAME']
-    def thisbuild = versionProps['BUILD_NUMBER'].toInteger() + 1
-    def code=versionProps['VERSION_CODE'].toString()
-    //+"."+versionProps['VERSION_MINOR'].toString()+"."+thisbuild.toString()
+    def code = versionProps['VERSION_CODE'].toInteger() + 1
 
     versionProps['VERSION_CODE']=code.toString()
-    versionProps['BUILD_NUMBER']=thisbuild.toString()
     versionProps.store(versionPropsFile.newWriter(), null)
 
     defaultConfig {
         applicationId "net.fachtnaroe.tuuber"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode thisbuild
-        versionName thisname
+        versionCode code
+        versionName "0." + code
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
