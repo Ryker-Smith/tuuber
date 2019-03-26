@@ -14,6 +14,7 @@ public class tuuber_Settings {
 
     public final String versionCode=Integer.toString(BuildConfig.VERSION_CODE);
     public final String versionName=BuildConfig.VERSION_NAME;
+    public final String Endpoint="Templemore";
     public String baseURL = "";
     public String sessionID="";
     public String pID="";

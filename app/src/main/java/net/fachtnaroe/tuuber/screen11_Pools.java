@@ -67,7 +67,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         Refresh.Image("buttonRefresh.png");
 
         vt_Open = new VerticalArrangement(Pools);
-        vt_Open.HeightPercent(20);
+        vt_Open.HeightPercent(40);
         label_Open = new Label(vt_Open);
         label_Open.Text("Pools I'm in");
         listview_Open = new ListView(vt_Open);
@@ -86,7 +86,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         ChatsScreenHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
         vt_In = new VerticalArrangement(Pools);
-        vt_In.HeightPercent(20);
+        vt_In.HeightPercent(30);
         label_In = new Label(vt_In);
         label_In.Text("Pools pending");
         listview_In = new ListView(vt_In);
@@ -100,11 +100,11 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         InboundButtonsHZ = new HorizontalArrangement(Pools);
 
         button_AcceptInbound = new Button(InboundButtonsHZ);
-        button_AcceptInbound.Text("Accept inbound");
+        button_AcceptInbound.Text("Accept");
         tools.buttonOnOff(button_AcceptInbound,false);
         Label deggh=(Label)tools.padding(InboundButtonsHZ,1,1);
         button_DeclineInbound = new Button(InboundButtonsHZ);
-        button_DeclineInbound.Text("Decline inbound");
+        button_DeclineInbound.Text("Decline");
         tools.buttonOnOff(button_DeclineInbound,false);
         InboundButtonsHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
         InboundButtonsHZ.WidthPercent(100);
@@ -142,7 +142,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         tools.buttonOnOff(button_OpenChatScreen, false);
         tools.buttonOnOff(button_AcceptInbound, false);
         tools.buttonOnOff(button_DeclineInbound, false);
-        tools.buttonOnOff(button_CancelOutbound,false);
+//        tools.buttonOnOff(button_CancelOutbound,false);
         
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -258,7 +258,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
             else if (component.equals(web_Outbound)) {
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GotText_PendingPool_Outbound(status, textOfResponse);
+//                fn_GotText_PendingPool_Outbound(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
@@ -282,7 +282,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 applicationSettings.baseURL +
                         "?action=LIST&entity=POOL&sessionID=" +
                         applicationSettings.sessionID +
-                        "&iam=" +
+                        "&pID=" +
                         applicationSettings.pID +
                         "&status=open"
         );
@@ -291,10 +291,9 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 applicationSettings.baseURL +
                         "?action=LIST&entity=POOL&sessionID=" +
                         applicationSettings.sessionID +
-                        "&iam=" +
+                        "&pID=" +
                         applicationSettings.pID +
-                        "&status=init" +
-                        "&direction=in"
+                        "&status=init"
         );
         web_Inbound.Get();
 //        web_Outbound.Url(
@@ -322,7 +321,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                     if (contacts1Array.getJSONObject(i).toString().equals("{}")) break;
                     ListofContactWeb1.add(
                             "Currently pooling with " +
-//                                    contacts1Array.getJSONObject(i).getString("realName" ) +
+                                    contacts1Array.getJSONObject(i).getString("realName" ) +
                                     " (pool_ID=" +
                                     contacts1Array.getJSONObject(i).getString("pool_ID" )
                                     + ")"
@@ -360,8 +359,8 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                 JSONArray Inbound = parser.getJSONArray("pool");
                 for(int i = 0 ; i < Inbound.length() ; i++){
                     if (Inbound.getJSONObject(i).toString().equals("{}")) break;
-                    String anItem = "Connection from " +
-//                            Inbound.getJSONObject(i).getString("realName") +
+                    String anItem = "Connection pending with " +
+                            Inbound.getJSONObject(i).getString("realName") +
                             " (pool_ID=" +
                             Inbound.getJSONObject(i).getString("pool_ID")
                             + ")";
@@ -384,41 +383,41 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         tools.buttonOnOff(button_DeclineInbound,false);
     }
 
-    public void fn_GotText_PendingPool_Outbound(String status, String textOfResponse) {
-        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
-//        tools.dbg(status);
-//        tools.dbg("OUTBOUND: " + textOfResponse);
-        if (status.equals("200") ) try {
-
-            ListofOutboundWeb = new ArrayList<String>();
-            JSONObject parser = new JSONObject(textOfResponse);
-            if (!parser.getString("pool").equals("")) {
-                JSONArray Outbound = parser.getJSONArray("pool");
-                for(int i = 0 ; i < Outbound.length() ; i++){
-                    if (Outbound.getJSONObject(i).toString().equals("{}")) break;
-                    String anItem = "Connecting with " +
-//                            Outbound.getJSONObject(i).getString("realName") +
-                            " (pool_ID=" +
-                            Outbound.getJSONObject(i).getString("pool_ID")
-                            +")";
-                    ListofOutboundWeb.add( anItem );
-                    tools.dbg(anItem);
-                }
-                YailList tempData=YailList.makeList( ListofOutboundWeb );
-                listview_Out.Elements(YailList.makeList(ListofOutboundWeb));
-                tools.dbg(tempData.toString());
-            }
-            else {
-                notifier_Messages.ShowMessageDialog("Error getting Outbound details", "Information", "OK");
-            }
-        }
-        catch (JSONException e) {
-            // if an exception occurs, code for it in here
-            notifier_Messages.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
-        }
-        else {
-            notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
-        }
-        tools.buttonOnOff(button_CancelOutbound,false);
-    }
+//    public void fn_GotText_PendingPool_Outbound(String status, String textOfResponse) {
+//        // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
+////        tools.dbg(status);
+////        tools.dbg("OUTBOUND: " + textOfResponse);
+//        if (status.equals("200") ) try {
+//
+//            ListofOutboundWeb = new ArrayList<String>();
+//            JSONObject parser = new JSONObject(textOfResponse);
+//            if (!parser.getString("pool").equals("")) {
+//                JSONArray Outbound = parser.getJSONArray("pool");
+//                for(int i = 0 ; i < Outbound.length() ; i++){
+//                    if (Outbound.getJSONObject(i).toString().equals("{}")) break;
+//                    String anItem = "Connecting with " +
+////                            Outbound.getJSONObject(i).getString("realName") +
+//                            " (pool_ID=" +
+//                            Outbound.getJSONObject(i).getString("pool_ID")
+//                            +")";
+//                    ListofOutboundWeb.add( anItem );
+//                    tools.dbg(anItem);
+//                }
+//                YailList tempData=YailList.makeList( ListofOutboundWeb );
+//                listview_Out.Elements(YailList.makeList(ListofOutboundWeb));
+//                tools.dbg(tempData.toString());
+//            }
+//            else {
+//                notifier_Messages.ShowMessageDialog("Error getting Outbound details", "Information", "OK");
+//            }
+//        }
+//        catch (JSONException e) {
+//            // if an exception occurs, code for it in here
+//            notifier_Messages.ShowMessageDialog("JSON Exception (4)", "Information", "OK");
+//        }
+//        else {
+//            notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
+//        }
+//        tools.buttonOnOff(button_CancelOutbound,false);
+//    }
 }

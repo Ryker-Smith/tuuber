@@ -3,6 +3,7 @@ package net.fachtnaroe.tuuber;
 import android.graphics.Color;
 
 import com.google.appinventor.components.runtime.Button;
+import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.Component;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
@@ -32,6 +33,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     TableArrangement menu;
     Button[] button_Pad;
     WebViewer webview_Message;
+    Clock clock_Main;
 
     protected void $define() {
 
@@ -45,7 +47,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         catch (Exception e) {
             tools.dbg(e.toString());
         }
-
+        clock_Main = new Clock(this);
         MainMenu = new VerticalScrollArrangement(this);
         MainMenu.WidthPercent(100);
         MainMenu.HeightPercent(100);
@@ -163,7 +165,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 button_Pools,
                 button_TsAndCs, button_Experimental,
                 button_LogOut);
-
 
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
         web_VersionCheck=new Web(this);

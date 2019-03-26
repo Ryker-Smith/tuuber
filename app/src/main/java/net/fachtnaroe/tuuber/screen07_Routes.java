@@ -258,15 +258,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             if (component.equals(button_To)) {
                 img_DirectionArrow.Image("Arrow_Right_Templemore.png");
                 button_To.Text( button_To.Selection() );
-                if (!button_To.Text().equals("Templemore") && (!button_From.Text().equals("Templemore"))) {
-                    button_From.Text("Templemore");
+                if (!button_To.Text().equals(applicationSettings.Endpoint) && (!button_From.Text().equals(applicationSettings.Endpoint))) {
+                    button_From.Text(applicationSettings.Endpoint);
                 }
             }
             else if (component.equals(button_From)) {
                 img_DirectionArrow.Image("Arrow_Left_Templemore.png");
                 button_From.Text( button_From.Selection() );
-                if (!button_To.Text().equals("Templemore") && (!button_From.Text().equals("Templemore"))) {
-                    button_To.Text("Templemore");
+                if (!button_To.Text().equals(applicationSettings.Endpoint) && (!button_From.Text().equals(applicationSettings.Endpoint))) {
+                    button_To.Text(applicationSettings.Endpoint);
                 }
             }
             else if (component.equals(list_MyRoutes)) {

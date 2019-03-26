@@ -12,23 +12,7 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
-
-//    compileSdkVersion 18
-//    buildToolsVersion "18.1.0"
-
-    def versionPropsFile = file('version.properties')
-
-    if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
-
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        def code = versionProps['VERSION_CODE'].toInteger() + 1
-
-        versionProps['VERSION_CODE']=code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-    }
- }
+}
 
 allprojects {
     repositories {
