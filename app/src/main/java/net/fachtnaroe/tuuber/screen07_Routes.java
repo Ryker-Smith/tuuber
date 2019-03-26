@@ -41,7 +41,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private Notifier messagesPopUp;
     private ImagePicker img_DirectionArrow;
     //    private ArrayList RoutsList ;
-    private HorizontalArrangement hz_JourneyDetails, Days, toolbarHz;
+    private HorizontalArrangement hz_JourneyDetails, hz_Days, toolbarHz;
     private Label myRoutes;
     private Label label_pID;
 //    private Label test;
@@ -51,7 +51,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     private VerticalArrangement  RoutesScreen;
     private HorizontalArrangement hz_SaveDelete_ButtonHolder;
     private Button button_Save, button_Delete;
-    ListPicker button_To, button_From;
+    ListPicker listpicker_To, listpicker_From;
     private Button button_MainMenu, buttonRefresh;
     private ListView list_MyRoutes;
     private CheckBox checkbox_Mon, checkbox_Tues, checkbox_Weds, checkbox_Thurs, checkbox_Fri, checkbox_IsDriver;
@@ -107,19 +107,19 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         hz_JourneyDetails.BackgroundColor(Component.COLOR_WHITE);
         Button paddy5=(Button)tools.padding(hz_JourneyDetails,2,1);
 
-        button_From = new ListPicker(hz_JourneyDetails);
+        listpicker_From = new ListPicker(hz_JourneyDetails);
         img_DirectionArrow = new ImagePicker(hz_JourneyDetails);
-        button_To = new ListPicker(hz_JourneyDetails);
-        button_From.Text("origin");
-        button_To.Text("destination");
+        listpicker_To = new ListPicker(hz_JourneyDetails);
+        listpicker_From.Text("origin");
+        listpicker_To.Text("destination");
 
-        Days = new HorizontalArrangement(RoutesScreen);
-        checkbox_Mon = new CheckBox(Days);
-        checkbox_Tues = new CheckBox(Days);
-        checkbox_Weds = new CheckBox(Days);
-        checkbox_Thurs = new CheckBox(Days);
-        checkbox_Fri = new CheckBox(Days);
-        checkbox_IsDriver = new CheckBox(Days);
+        hz_Days = new HorizontalArrangement(RoutesScreen);
+        checkbox_Mon = new CheckBox(hz_Days);
+        checkbox_Tues = new CheckBox(hz_Days);
+        checkbox_Weds = new CheckBox(hz_Days);
+        checkbox_Thurs = new CheckBox(hz_Days);
+        checkbox_Fri = new CheckBox(hz_Days);
+        checkbox_IsDriver = new CheckBox(hz_Days);
 
         checkbox_Mon.Text("M");
         checkbox_Tues.Text("T");
@@ -128,14 +128,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         checkbox_Fri.Text("F");
         checkbox_IsDriver.Text("Press Yes if Driver");
 
-        button_From.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        button_From.TextColor(Component.COLOR_WHITE);
-        button_From.WidthPercent(40);
-        button_From.Height(40);
-        button_To.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        button_To.TextColor(Component.COLOR_WHITE);
-        button_To.WidthPercent(40);
-        button_To.Height(40);
+        listpicker_From.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        listpicker_From.TextColor(Component.COLOR_WHITE);
+        listpicker_From.WidthPercent(40);
+        listpicker_From.Height(40);
+        listpicker_To.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        listpicker_To.TextColor(Component.COLOR_WHITE);
+        listpicker_To.WidthPercent(40);
+        listpicker_To.Height(40);
 //        listpicker_TravelVia = new ListPicker(RoutesScreen);
 //        listpicker_TravelVia.Text("Via");
 //        listpicker_TravelVia.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
@@ -255,18 +255,18 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
         } else if (eventName.equals("AfterPicking")) {
-            if (component.equals(button_To)) {
+            if (component.equals(listpicker_To)) {
                 img_DirectionArrow.Image("Arrow_Right_Templemore.png");
-                button_To.Text( button_To.Selection() );
-                if (!button_To.Text().equals(applicationSettings.Endpoint) && (!button_From.Text().equals(applicationSettings.Endpoint))) {
-                    button_From.Text(applicationSettings.Endpoint);
+                listpicker_To.Text( listpicker_To.Selection() );
+                if (!listpicker_To.Text().equals(applicationSettings.Endpoint) && (!listpicker_From.Text().equals(applicationSettings.Endpoint))) {
+                    listpicker_From.Text(applicationSettings.Endpoint);
                 }
             }
-            else if (component.equals(button_From)) {
+            else if (component.equals(listpicker_From)) {
                 img_DirectionArrow.Image("Arrow_Left_Templemore.png");
-                button_From.Text( button_From.Selection() );
-                if (!button_To.Text().equals(applicationSettings.Endpoint) && (!button_From.Text().equals(applicationSettings.Endpoint))) {
-                    button_To.Text(applicationSettings.Endpoint);
+                listpicker_From.Text( listpicker_From.Selection() );
+                if (!listpicker_To.Text().equals(applicationSettings.Endpoint) && (!listpicker_From.Text().equals(applicationSettings.Endpoint))) {
+                    listpicker_To.Text(applicationSettings.Endpoint);
                 }
             }
             else if (component.equals(list_MyRoutes)) {
@@ -307,8 +307,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 tools.buttonOnOff(button_Save,false);
                 tools.buttonOnOff(button_Delete,false);
                 checkbox_IsDriver.Checked(false);
-                button_To.Text("destination");
-                button_From.Text("origin");
+                listpicker_To.Text("destination");
+                listpicker_From.Text("origin");
                 fn_GetTowns();
                 fn_GetMyRoutesFromBackEnd();
                 return true;
@@ -330,8 +330,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_Save)) {
-                if (button_To.Text().equals("origin") || button_To.Text().equals("destination")
-                    || button_From.Text().equals("origin") || button_From.Text().equals("destination")
+                if (listpicker_To.Text().equals("origin") || listpicker_To.Text().equals("destination")
+                    || listpicker_From.Text().equals("origin") || listpicker_From.Text().equals("destination")
                 ) {
                     // if for any reason the town names aren't properly populated, don't try to save them
                     return true;
@@ -358,7 +358,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     string_DayAndIfDriver = string_DayAndIfDriver + "driver=N";
                 }
                 String string_DirectionOfTravel = new String();
-                string_DirectionOfTravel = "&destination="+button_To.Text()+"&origin=" + button_From.Text();
+                string_DirectionOfTravel = "&destination="+ listpicker_To.Text()+"&origin=" + listpicker_From.Text();
                 web_SaveRoute.Url(
                         applicationSettings.baseURL
                                 + "?action="
@@ -489,8 +489,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     );
                 }
                 YailList tempData = YailList.makeList(ListOfTownsFromWeb);
-                button_To.Elements(tempData);
-                button_From.Elements(tempData);
+                listpicker_To.Elements(tempData);
+                listpicker_From.Elements(tempData);
 //                listpicker_TravelVia.Elements(tempData);
 
             } else {
@@ -591,8 +591,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 JSONObject parser = new JSONObject(textOfResponse);
                 origin=(parser.getString("origin"));
                 destination=(parser.getString("destination"));
-                button_From.Text(origin);
-                button_To.Text(destination);
+                listpicker_From.Text(origin);
+                listpicker_To.Text(destination);
             }
             catch (JSONException e) {
                 // if an exception occurs, code for it in here

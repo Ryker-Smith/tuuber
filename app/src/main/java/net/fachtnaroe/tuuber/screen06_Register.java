@@ -33,7 +33,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
     private Web web_CreateUser;
-    private Notifier notifier_MessagesPopUp;
+    private Notifier notifier_MessagesPopUp, notifier_EmailActivationPopUp;
     private PasswordTextBox Password, ConfirmPassword;
     private dd_aPerson User;
 
@@ -136,12 +136,14 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         web_CreateUser = new Web(Register);
         notifier_MessagesPopUp = new Notifier(Register);
+        notifier_EmailActivationPopUp = new Notifier(Register);
         User = new dd_aPerson(Register);
         tools.button_CommonFormatting(45, button_Create, button_TermsConditions);
 
         EventDispatcher.registerEventForDelegation(this, formName,"GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
+        EventDispatcher.registerEventForDelegation(this, formName, "AfterChoosing");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -151,6 +153,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             if (TCLabel.Text().equals("screen10_TermsAndConditions EEEEE Good")) {
                 TCAgree.Checked(true);
                 return true;
+            }
+        }
+        else if (eventName.equals("AfterChoosing")) {
+            if (component.equals(notifier_EmailActivationPopUp)) {
+                screen06_Register.finishActivity();
             }
         }
         else if (eventName.equals("Click")) {
@@ -256,7 +263,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
                 return true;
             }
-            if (component.equals(button_TermsConditions)) {
+            else if (component.equals(button_TermsConditions)) {
                 dbg("error");
                 switchForm("screen10_TermsAndConditions");
                 return true;
@@ -279,8 +286,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
-                notifier_MessagesPopUp.ShowMessageDialog("User created", "Success!", "Grand");
-                screen06_Register.finishActivity();
+//                notifier_EmailActivationPopUp.ShowMessageDialog("User created. Please check your email for an activation message *before* you can use " + applicationSettings.appName, "Success!", "Grand");
+                notifier_EmailActivationPopUp.ShowChooseDialog("User created. Please check your email for an activation message *before* you can use " + applicationSettings.appName, "Success!", "Grand","",false);
             } else {
                 notifier_MessagesPopUp.ShowMessageDialog("Create failed, check details (1)(" + textOfResponse +")", "Information", "OK");
             }
@@ -293,7 +300,6 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         }
     }
     public void thisOtherScreenClosed(String otherScreenName, Object result) {
-//        TCLabel.Text(result.toString());
         TCLabel.Text(otherScreenName+" EEEEE " + result);
 
     }

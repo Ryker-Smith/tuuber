@@ -13,7 +13,6 @@ import com.google.appinventor.components.runtime.ListView;
 import com.google.appinventor.components.runtime.ListPicker;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.VerticalArrangement;
-import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.util.YailList;
 
@@ -36,12 +35,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
     private ListView listview_Open, listview_Out, listview_In;
     private Button button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound, Refresh, MainMenu;
     private Label label_Open, label_Out, label_In, label_pID;
-    private ListPicker ListPicker_SendInvitation;
-    private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_OutboundUsers, web_OutboundCancel;
+    private ListPicker listpicker_UserDirectory;
+    private Web web_Open, web_Inbound, web_AcceptInbound, web_DeclineInbound, web_Outbound, web_UserDirectory, web_OutboundCancel, web_InitiateChat;
     private List<String> ListofContactWeb1, ListofInboundWeb, ListofOutboundWeb, ListofUsersWeb;
     private Notifier notifier_Messages;
-    String string_InboundLineID, string_InboundpID, string_OutboundpID, string_OutboundLineID;
-    HashMap<Integer, String> conversationsOpen = new HashMap<Integer, String>();
+    String string_InboundpID, string_OutboundpID, string_UserDirectory_pID;
+//    HashMap<Integer, String> conversationsOpen = new HashMap<Integer, String>();
 
     protected void $define() {
 
@@ -148,15 +147,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_CancelOutbound.Text("Cancel Outbound");
         tools.buttonOnOff(button_CancelOutbound,false);
         button_CancelOutbound.Enabled(false);
-        ListPicker_SendInvitation = new ListPicker(OutboundInitiationButtonHZ);
-        ListPicker_SendInvitation.Text("List Of Users");
-        ListPicker_SendInvitation.Selection();
-        ListPicker_SendInvitation.Shape(BUTTON_SHAPE_ROUNDED);
-        ListPicker_SendInvitation.TextColor(Component.COLOR_WHITE);
-        ListPicker_SendInvitation.FontSize(applicationSettings.int_ButtonTextSize);
-        ListPicker_SendInvitation.Height(40);
-        ListPicker_SendInvitation.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-        ListPicker_SendInvitation.Enabled(false);
+        listpicker_UserDirectory = new ListPicker(OutboundInitiationButtonHZ);
+        listpicker_UserDirectory.Text("User Directory");
+        listpicker_UserDirectory.Selection();
+        listpicker_UserDirectory.Shape(BUTTON_SHAPE_ROUNDED);
+        listpicker_UserDirectory.TextColor(Component.COLOR_WHITE);
+        listpicker_UserDirectory.FontSize(applicationSettings.int_ButtonTextSize);
+        listpicker_UserDirectory.Height(40);
+        listpicker_UserDirectory.WidthPercent(40);
+        listpicker_UserDirectory.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
+        listpicker_UserDirectory.Enabled(false);
 
         tools.button_CommonFormatting(40, button_OpenChatScreen, button_AcceptInbound, button_DeclineInbound, button_CancelOutbound);
         tools.buttonOnOff(button_OpenChatScreen, false);
@@ -169,15 +169,16 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         web_AcceptInbound = new Web(this);
         web_DeclineInbound = new Web(this);
         web_Outbound = new Web(this);
-        web_OutboundUsers = new Web(this);
+        web_UserDirectory = new Web(this);
         web_OutboundCancel = new Web(this);
+        web_InitiateChat = new Web(this);
         notifier_Messages = new Notifier(Conversations);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
         callBackEnd();
-        fn_GetUsers();
+        fn_GotText_UserDirectory();
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -271,6 +272,39 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 //                tools.dbg("Outbound selection");
                 return true;
             }
+            else if (component.equals(listpicker_UserDirectory)) {
+                String[] separated = listpicker_UserDirectory.Selection().split("=");
+                separated[1]=separated[1].replace(")","");
+                Integer temp_pID = Integer.valueOf(separated[1]);
+                Integer temp_rID = -1;//Integer.valueOf(bitsOfData[1].split("=")[1]);
+                applicationSettings.set();
+                Integer int_First = -1, int_Second = -1;
+                if (Integer.valueOf(applicationSettings.pID) < temp_pID) {
+                    int_First = Integer.valueOf(applicationSettings.pID);
+                    int_Second = temp_pID;
+                } else {
+                    int_First = temp_pID;
+                    int_Second = Integer.valueOf(applicationSettings.pID);
+                }
+                web_InitiateChat.Url(
+                        applicationSettings.baseURL
+                                + "?action=POST"
+                                + "&entity=link"
+                                + "&sessionID="
+                                + applicationSettings.sessionID
+                                + "&first="
+                                + int_First
+                                + "&second="
+                                + int_Second
+                                + "&status=init"
+                                + "&rID="
+                                + temp_rID
+                                + "&openedBy="
+                                + applicationSettings.pID
+                );
+                web_InitiateChat.Get();
+                return true;
+            }
         }
         else if (eventName.equals("GotText")) {
             if (component.equals(web_Open)) {
@@ -294,12 +328,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                 fn_GotText_OutboundConversations(status, textOfResponse);
                 return true;
             }
-            else if (component.equals(web_OutboundUsers)) {
+            else if (component.equals(web_UserDirectory)) {
                 tools.dbg((String) params[0]);
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
-                fn_GetUsers(status, textOfResponse);
-                ListPicker_SendInvitation.Enabled(true);
+                fn_GotText_UserDirectory(status, textOfResponse);
+                listpicker_UserDirectory.Enabled(true);
                 return true;
             }
             else if (component.equals(web_DeclineInbound)) {
@@ -317,6 +351,12 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 //                    tools.dbg(textOfResponse);
                     callBackEnd();
                     return true;
+            }
+            else if (component.equals(web_InitiateChat)) {
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                fn_GotText_InitiateChate(status, textOfResponse);
+                return true;
             }
         }
         return false;
@@ -354,15 +394,15 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         web_Outbound.Get();
     }
 
-    void fn_GetUsers() {
-        web_OutboundUsers.Url(
+    void fn_GotText_UserDirectory() {
+        web_UserDirectory.Url(
                 applicationSettings.baseURL +
                         "?action=LIST&entity=directory&sessionID=" +
                         applicationSettings.sessionID +
                         "&pID=" +
                         applicationSettings.pID
         );
-        web_OutboundUsers.Get();
+        web_UserDirectory.Get();
     }
     public void fn_GotText_OpenConversations(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
@@ -478,7 +518,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         }
         tools.buttonOnOff(button_CancelOutbound,false);
     }
-    public void fn_GetUsers(String status, String textOfResponse) {
+    public void fn_GotText_UserDirectory(String status, String textOfResponse) {
         // See:  https://stackoverflow.com/questions/5015844/parsing-json-object-in-java
 //        tools.dbg(status);
 //        tools.dbg("OUTBOUND: " + textOfResponse);
@@ -494,7 +534,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                             User.getJSONObject(i).getString("realName") +
                                     "," +
                                     User.getJSONObject(i).getString("nickname") +
-                                    "(" +
+                                    "(pID=" +
                                     User.getJSONObject(i).getString("pID") +
                                     ")";
 
@@ -502,11 +542,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     tools.dbg(anItem);
                 }
                 YailList tempData=YailList.makeList(ListofUsersWeb);
-                ListPicker_SendInvitation.Elements(YailList.makeList(ListofUsersWeb));
+                listpicker_UserDirectory.Elements(YailList.makeList(ListofUsersWeb));
                 tools.dbg(tempData.toString());
             }
             else {
-                notifier_Messages.ShowMessageDialog("Error getting other user details", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error getting User Directory", "Information", "OK");
             }
         }
         catch (JSONException e) {
@@ -517,5 +557,24 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
             notifier_Messages.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
         tools.buttonOnOff(button_CancelOutbound,false);
+    }
+
+    public void fn_GotText_InitiateChate(String status, String textOfResponse) {
+        String temp=new String();
+        if (status.equals("200") ) try {
+            JSONObject parser = new JSONObject(textOfResponse);
+            temp = parser.getString("result");
+            if (parser.getString("result").equals("OK")) {
+                notifier_Messages.ShowAlert("An invitation to chat has been sent");
+            } else {
+                notifier_Messages.ShowAlert("Could not initiate chat");
+            }
+        } catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            notifier_Messages.ShowAlert("JSON Exception");
+        }
+        else {
+            notifier_Messages.ShowAlert("Problem connecting with server");
+        }
     }
 }

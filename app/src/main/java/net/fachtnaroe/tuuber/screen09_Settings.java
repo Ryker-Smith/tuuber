@@ -117,11 +117,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         HorizontalArrangement hz_Languages = new HorizontalArrangement(vt_Customisation);
         checkbox_GA = new CheckBox(hz_Languages);
-        checkbox_GA.Text("Gaeilge");
+        checkbox_GA.Text("Gaeilge (Níl)");
         checkbox_EN = new CheckBox(hz_Languages);
-        checkbox_EN.Text("English");
+        checkbox_EN.Text("English (No)");
         checkbox_PO = new CheckBox(hz_Languages);
-        checkbox_PO.Text("Polski");
+        checkbox_PO.Text("Polski (Nie)");
 
         button_SubmitCustomisation = new Button(vt_Customisation);
         button_SubmitCustomisation.Text("Save program settings");
@@ -545,6 +545,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             c[i].Height(40);
             c[i].WidthPercent(33);
             c[i].Checked(false);
+            c[i].Enabled(false);
             i++;
         }
 
