@@ -1,0 +1,74 @@
+package org.appinventor;
+import com.google.appinventor.components.runtime.HandlesEventDispatching;
+import com.google.appinventor.components.runtime.EventDispatcher;
+import com.google.appinventor.components.runtime.Form;
+import com.google.appinventor.components.runtime.Component;
+import com.google.appinventor.components.runtime.Button;
+import android.content.Intent;
+class Screen2 extends Form implements HandlesEventDispatching {
+  private Button Routes;
+  private Button Matches;
+  private Button Conversations;
+  private Button Settings;
+  private Button Terms;
+  protected void $define() {
+    this.AppName("OneButton");
+    this.Title("Screen2");
+    Routes = new Button(this);
+    Routes.Text("Text for Button1");
+    Matches = new Button(this);
+    Matches.Text("Text for Button2");
+    Conversations = new Button(this);
+    Conversations.Text("Text for Button3");
+    Settings = new Button(this);
+    Settings.Text("Text for Button4");
+    Terms = new Button(this);
+    Terms.Text("Text for Button5");
+    EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click" );
+    EventDispatcher.registerEventForDelegation(this, "BackPressedEvent", "BackPressed" );
+  }
+  public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
+    if( component.equals(Routes) && eventName.equals("Click") ){
+      RoutesClick();
+      return true;
+    }
+    if( component.equals(Matches) && eventName.equals("Click") ){
+      MatchesClick();
+      return true;
+    }
+    if( component.equals(Terms) && eventName.equals("Click") ){
+      TermsClick();
+      return true;
+    }
+    if( component.equals(Conversations) && eventName.equals("Click") ){
+      ConversationsClick();
+      return true;
+    }
+    if( component.equals(Settings) && eventName.equals("Click") ){
+      SettingsClick();
+      return true;
+    }
+    if( component.equals(this) && eventName.equals("BackPressed") ){
+      thisBackPressed();
+      return true;
+    }
+    return false;
+  }
+  public void RoutesClick(){
+    startActivity(new Intent().setClass(this, Screen1.class));
+  }
+  public void MatchesClick(){
+    finish();
+  }
+  public void TermsClick(){
+    startActivity(new Intent().setClass(this, Screen1.class).putExtra("startValue", "2"));
+  }
+  public void ConversationsClick(){
+  }
+  public void SettingsClick(){
+    System.exit(1);
+  }
+  public void thisBackPressed(){
+    finish();
+  }
+}

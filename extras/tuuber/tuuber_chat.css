@@ -1,0 +1,45 @@
+* {
+              margin: 0;
+              padding: 0;
+              color: white;
+              background-color: black;
+            }
+            ul {
+            
+            }
+            li {
+              margin-bottom: 10px;
+              list-style-type: none;
+              padding: 5px;
+              font-family: 'Raleway', sans-serif;
+              line-height: normal;
+            }
+            .mine {
+              background-color: #bfb5ff;
+              color: #09380d;
+              margin-left: 50px;
+              margin-right: 100px;
+              border-radius: 5px;
+              list-style: inside url(\"https://fachtnaroe.net/images/iconMouth_bk.png\");
+            }
+            .theirs {
+              background-color: #dce29c;
+              color: #353941;
+              margin-left: 100px;
+              margin-right: 50px;
+              border-radius: 5px;
+              list-style: inside url(\"https://fachtnaroe.net/images/iconEar_bk.png\");
+            }
+            \@media screen and (max-width: 600px) {
+              .mine {
+                margin-left: 2px;
+                margin-right: 20px;
+                border-radius: 5px;
+              }
+              .theirs {
+                
+                margin-left: 20px;
+                margin-right: 2px;
+                border-radius: 5px;
+              }
+            } 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:gravity="center_vertical|center"
+    tools:context=".screen02_Login">
+
+    <TextView
+        android:id="@+id/labelHelloWorld"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="@string/message" />
+
+    <EditText
+        android:id="@+id/textMine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelHelloWorld"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Type a value here" />
+
+    <Button
+        android:id="@+id/buttonMine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textMine"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:capitalize="none"
+        android:text="Save to web" />
+
+    <TextView
+        android:id="@+id/baseURL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelHelloWorld"
+        android:gravity="center_horizontal"
+        android:text="https://fachtnaroe.net/" />
+
+</RelativeLayout>

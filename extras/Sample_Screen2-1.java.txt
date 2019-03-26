@@ -1,0 +1,27 @@
+package org.appinventor;
+import com.google.appinventor.components.runtime.HandlesEventDispatching;
+import com.google.appinventor.components.runtime.EventDispatcher;
+import com.google.appinventor.components.runtime.Form;
+import com.google.appinventor.components.runtime.Component;
+import com.google.appinventor.components.runtime.Button;
+import android.content.Intent;
+class Screen2 extends Form implements HandlesEventDispatching {
+  private Button Button1;
+  protected void $define() {
+    this.AppName("OneButton");
+    this.Title("Screen2");
+    Button1 = new Button(this);
+    Button1.Text("Text for Button1");
+    EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click" );
+  }
+  public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
+    if( component.equals(Button1) && eventName.equals("Click") ){
+      Button1Click();
+      return true;
+    }
+    return false;
+  }
+  public void Button1Click(){
+    startActivity(new Intent().setClass(this, Screen1.class));
+  }
+}

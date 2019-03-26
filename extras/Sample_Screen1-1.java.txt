@@ -1,0 +1,43 @@
+package org.appinventor;
+import com.google.appinventor.components.runtime.HandlesEventDispatching;
+import com.google.appinventor.components.runtime.EventDispatcher;
+import com.google.appinventor.components.runtime.Form;
+import com.google.appinventor.components.runtime.Component;
+import com.google.appinventor.components.runtime.TextBox;
+import com.google.appinventor.components.runtime.Button;
+import android.content.Intent;
+class Screen1 extends Form implements HandlesEventDispatching {
+  private TextBox MyTextBox;
+  private Button MyButton;
+  protected void $define() {
+    this.AppName("OneButton");
+    this.Title("Screen1");
+    MyTextBox = new TextBox(this);
+    MyTextBox.Width(LENGTH_FILL_PARENT);
+    MyTextBox.Hint("Hint for TextBox1");
+    MyButton = new Button(this);
+    MyButton.Width(LENGTH_FILL_PARENT);
+    MyButton.Text("Text for Button1");
+    EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click" );
+    EventDispatcher.registerEventForDelegation(this, "OtherScreenClosedEvent", "OtherScreenClosed" );
+  }
+  public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
+    if( component.equals(MyButton) && eventName.equals("Click") ){
+      MyButtonClick();
+      return true;
+    }
+    if( component.equals(this) && eventName.equals("OtherScreenClosed") ){
+      thisOtherScreenClosed((String)params[0], (Object)params[1]);
+      return true;
+    }
+    return false;
+  }
+  public void MyButtonClick(){
+    MyTextBox.Text("Hello World");
+    startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", 77));
+  }
+  public void thisOtherScreenClosed(String otherScreenName, Object result){
+    MyButton.Text(result);
+    MyButton.Text(otherScreenName);
+  }
+}

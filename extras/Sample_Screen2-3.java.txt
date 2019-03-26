@@ -1,0 +1,74 @@
+package org.appinventor;
+import com.google.appinventor.components.runtime.HandlesEventDispatching;
+import com.google.appinventor.components.runtime.EventDispatcher;
+import com.google.appinventor.components.runtime.Form;
+import com.google.appinventor.components.runtime.Component;
+import com.google.appinventor.components.runtime.Button;
+import android.content.Intent;
+class Screen2 extends Form implements HandlesEventDispatching {
+  private Button Button1;
+  private Button Button2;
+  private Button Button3;
+  private Button Button4;
+  private Button Button5;
+  protected void $define() {
+    this.AppName("OneButton");
+    this.Title("Screen2");
+    Button1 = new Button(this);
+    Button1.Text("Text for Button1");
+    Button2 = new Button(this);
+    Button2.Text("Text for Button2");
+    Button3 = new Button(this);
+    Button3.Text("Text for Button3");
+    Button4 = new Button(this);
+    Button4.Text("Text for Button4");
+    Button5 = new Button(this);
+    Button5.Text("Text for Button5");
+    EventDispatcher.registerEventForDelegation(this, "ClickEvent", "Click" );
+    EventDispatcher.registerEventForDelegation(this, "BackPressedEvent", "BackPressed" );
+  }
+  public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params){
+    if( component.equals(Button1) && eventName.equals("Click") ){
+      Button1Click();
+      return true;
+    }
+    if( component.equals(Button2) && eventName.equals("Click") ){
+      Button2Click();
+      return true;
+    }
+    if( component.equals(Button5) && eventName.equals("Click") ){
+      Button5Click();
+      return true;
+    }
+    if( component.equals(Button3) && eventName.equals("Click") ){
+      Button3Click();
+      return true;
+    }
+    if( component.equals(Button4) && eventName.equals("Click") ){
+      Button4Click();
+      return true;
+    }
+    if( component.equals(this) && eventName.equals("BackPressed") ){
+      thisBackPressed();
+      return true;
+    }
+    return false;
+  }
+  public void Button1Click(){
+    startActivity(new Intent().setClass(this, Screen1.class));
+  }
+  public void Button2Click(){
+    finish();
+  }
+  public void Button5Click(){
+    startActivity(new Intent().setClass(this, Screen2.class).putExtra("startValue", "2"));
+  }
+  public void Button3Click(){
+  }
+  public void Button4Click(){
+    System.exit(1);
+  }
+  public void thisBackPressed(){
+    finish();
+  }
+}
