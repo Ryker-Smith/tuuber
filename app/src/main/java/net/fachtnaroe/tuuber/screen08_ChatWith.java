@@ -2,6 +2,8 @@ package net.fachtnaroe.tuuber;
 
 //import android.support.v7.app.AppCompatActivity;
 
+import android.graphics.Color;
+
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Clock;
 import com.google.appinventor.components.runtime.Component;
@@ -38,7 +40,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     Web web_ChatLine, web_PoolMakeNew, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
-    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolDriverID, string_ThisPoolNavigatorID;
+    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolDriverID, string_ThisPoolNavigatorID, string_DriverOrNavigator, WhoIsDriving;;
     Integer int_ClockCount=0;
 
     protected void $define() {
@@ -146,15 +148,27 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("AfterChoosing")) {
             if (component.equals(notifier_Drive_OR_Navigate_Choice)) {
-                notifier_Drive_OR_Navigate_Choice.ShowAlert("You're the " + params[0]);
-                String WhoIsDriving;
-                if (params[0].equals("Driver")) {
+                String string_Precautions;
+                string_DriverOrNavigator=(String)params[0];
+                if (string_DriverOrNavigator.equals("Driver")) {
+                    string_Precautions= "I am a licenced driver; the vehicle I will use is fully insured and is roadworthy.";
+                    string_Precautions=tools.fn_téacs_aistriú(string_Precautions);
                     WhoIsDriving = applicationSettings.pID;
                 }
                 else {
+                    string_Precautions="I acknowledge that it is my responsibility to verify the identity of the driver, and that it is my responsibility to confirm that the vehicle is insured and roadworthy.";
                     WhoIsDriving="other";
                 }
-                web_PoolMakeNew.Url(
+                notifier_PrecautionsTaken.ShowChooseDialog(string_Precautions, "Question:", "I accept", "Cancel", false);
+
+            }
+            else if (component.equals(notifier_PrecautionsTaken)) {
+                String string_PrecautionsTaken=(String)params[0];
+                // better handling of responses to questions is required, esp re localization
+                if (string_PrecautionsTaken.equals("I accept")) {
+                    notifier_MessageError.BackgroundColor(Color.parseColor(applicationSettings.string_ColorGood));
+                    notifier_MessageError.ShowAlert("You're the " + string_DriverOrNavigator + "\nSaving your preference now.");
+                    web_PoolMakeNew.Url(
                             applicationSettings.baseURL +
                                     "?action=POST&entity=pool&sessionID=" +
                                     applicationSettings.sessionID +
@@ -164,20 +178,12 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                                     WhoIsDriving +
                                     "&pID=" + applicationSettings.pID
                     );
-                web_PoolMakeNew.Get();
-            }
-            else if (component.equals(notifier_PrecautionsTaken)) {
-                // this block will swap with notifier_Drive_OR_Navigate_Choice to enable
-                // different precautionary messages for each party to the pool
-                String string_Precautions;
-                if (params[0].equals("Driver")) {
-                    string_Precautions= "I am a licenced driver; the vehicle I will use is insured and is roadworthy.";
-                    string_Precautions=tools.fn_téacs_aistriú(string_Precautions);
+                    web_PoolMakeNew.Get();
                 }
                 else {
-                    string_Precautions="I acknowledge that it is my responsibility to verify the identity of the driver, and that it is my responsibility to confirm that the vehicle is insured and roadworthy.";
+                    notifier_MessageError.BackgroundColor(Color.parseColor(applicationSettings.string_ColorBad));
+                    notifier_MessageError.ShowAlert("Pooling abandoned");
                 }
-                notifier_PrecautionsTaken.ShowChooseDialog(string_Precautions, "Question:", "OK", "Cancel", false);
             }
         }
         else if (eventName.equals("Click")) {

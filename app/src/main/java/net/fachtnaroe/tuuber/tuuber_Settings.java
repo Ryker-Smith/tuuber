@@ -8,7 +8,6 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.TinyDB;
-import net.fachtnaroe.tuuber.BuildConfig;
 
 public class tuuber_Settings {
 
@@ -27,11 +26,14 @@ public class tuuber_Settings {
     public String ourLogo="MultiLayerLogo-002.png";
     public String notificationSoundFileName="";
     public Integer intListViewsize=0;
-    public boolean IsDebugSession=false;
+    public boolean IsDeveloperSession =false;
+    public boolean IsAdminSession=false;
     public boolean SavePassword=true;
     public String string_SavedPassword="";
     public String string_PreferredLanguage;
     public String string_ButtonColor="#113508";
+    public String string_ColorGood="#30b102";
+    public String string_ColorBad="#dd103a";
     public String string_TextColor="#FFFFFF";
     public Integer int_ButtonTextSize=12;
     public Integer minimimum_intListViewsize=5;
@@ -46,7 +48,8 @@ public class tuuber_Settings {
     private String default_notificationSoundFileName="";
     private Integer default_intListViewsize=40;
 
-    private boolean default_IsDebugSession=false;
+    private boolean default_IsDeveloperSession =false;
+    private boolean default_IsAdminSession =false;
     private boolean default_SavePassword=true;
     private String default_PreferredLanguage="ga";
     private String default_ButtonColor="#113508";
@@ -64,7 +67,7 @@ public class tuuber_Settings {
         lastLogin=default_lastLogin;
         notificationSoundFileName=default_notificationSoundFileName;
         intListViewsize=default_intListViewsize;
-        IsDebugSession=default_IsDebugSession;
+        IsDeveloperSession = default_IsDeveloperSession;
         SavePassword=default_SavePassword;
         string_PreferredLanguage=default_PreferredLanguage;
         TermsAndConditions_URL=baseURL + "?cmd=TERMS";
@@ -79,13 +82,14 @@ public class tuuber_Settings {
         CurrentLinkId =(String) localDB.GetValue("CurrentLinkId", CurrentLinkId);
         notificationSoundFileName=(String) localDB.GetValue("notificationSoundFileName",default_notificationSoundFileName);
         intListViewsize=(Integer) localDB.GetValue("intListViewsize",default_intListViewsize);
-        IsDebugSession=(boolean) localDB.GetValue("IsDebugSession",default_IsDebugSession);
+        IsDeveloperSession=(boolean) localDB.GetValue("IsDeveloperSession", default_IsDeveloperSession);
+        IsAdminSession=(boolean) localDB.GetValue("IsAdminSession",default_IsAdminSession);
         SavePassword=(boolean) localDB.GetValue("SavePassword",default_SavePassword);
         string_PreferredLanguage =(String) localDB.GetValue("string_PreferredLanguage", default_PreferredLanguage);
         string_ButtonColor=(String) localDB.GetValue("string_ButtonColor", default_ButtonColor);
         int_ButtonTextSize=(Integer) localDB.GetValue("int_ButtonTextSize", default_ButtonTextSize);
 
-        if (IsDebugSession) {
+        if (IsDeveloperSession) {
             baseURL=debug_baseURL;
         }
         if (SavePassword) {
@@ -104,7 +108,8 @@ public class tuuber_Settings {
         localDB.StoreValue("CurrentLinkId", CurrentLinkId);
         localDB.StoreValue("notificationSoundFileName", notificationSoundFileName);
         localDB.StoreValue("intListViewsize", intListViewsize);
-        localDB.StoreValue("IsDebugSession", IsDebugSession);
+        localDB.StoreValue("IsDeveloperSession", IsDeveloperSession);
+        localDB.StoreValue("IsAdminSession", IsAdminSession);
         localDB.StoreValue("SavePassword", SavePassword);
         localDB.StoreValue("string_PreferredLanguage", string_PreferredLanguage);
         localDB.StoreValue("string_ButtonColor", string_ButtonColor);

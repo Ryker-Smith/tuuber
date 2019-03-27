@@ -85,14 +85,8 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         aiWebViewer = new fachtnaWebViewer(screenArrangement);
         aiWebViewer.HomeUrl(
                 applicationSettings.baseURL +
-                "?action=LIST&entity=chat&sessionID=" +
-                applicationSettings.sessionID +
-                "&initiator_pID=" +
-                applicationSettings.pID +
-                "&respondent_pID=" +
-                applicationSettings.CurrentLinkId +
-                "&showHtml=1" +
-                "&iam=" + applicationSettings.pID
+                "?cmd=debug&sessionID=" +
+                applicationSettings.sessionID
         );
         aiWebViewer.GoHome();
         aiWebViewer.HeightPercent(40);
@@ -102,7 +96,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         ticker.TimerEnabled(false);
         ticker.TimerInterval(1000);
         button_TestRegister= new Button(screenArrangement);
-        button_TestRegister.Text("Test Register screen");
+        button_TestRegister.Text("Show the Register screen");
         messagesPopUp = new Notifier(screenArrangement);
         fancyListView(screenArrangement, myList, "pick one to see 2-question dialog", "one", "two", "three");
         debug=new Label(screenArrangement);

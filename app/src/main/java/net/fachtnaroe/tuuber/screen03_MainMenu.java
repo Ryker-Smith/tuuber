@@ -12,7 +12,6 @@ import com.google.appinventor.components.runtime.Image;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TableArrangement;
-import com.google.appinventor.components.runtime.VerticalArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
@@ -40,7 +39,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         applicationSettings = new tuuber_Settings(this);
         applicationSettings.get();
         tools=new tuuberCommonSubroutines(this);
-        tools.dbg("Debug session: " + applicationSettings.IsDebugSession);
+        tools.dbg("Debug session: " + applicationSettings.IsDeveloperSession);
         try {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
@@ -66,7 +65,15 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
         //
         Label label_ScreenName = new Label(menu);
-        label_ScreenName.Text("Main Menu");
+        if (applicationSettings.IsAdminSession) {
+            label_ScreenName.Text("__Administrator__");
+        }
+        else if (applicationSettings.IsDeveloperSession) {
+            label_ScreenName.Text("__Developer__");
+        }
+        else {
+            label_ScreenName.Text("Main Menu");
+        }
         label_ScreenName.TextAlignment(Component.ALIGNMENT_CENTER);
         label_ScreenName.TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
         label_ScreenName.FontSize(applicationSettings.int_ButtonTextSize);
@@ -151,7 +158,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Experimental.Text("Experimental Stuff");
         button_Experimental.Row(int_MenuStartRow+12);
 
-        if (!applicationSettings.IsDebugSession) {
+        if (!(applicationSettings.IsDeveloperSession || applicationSettings.IsAdminSession)) {
             button_Experimental.Visible(false);
         }
 

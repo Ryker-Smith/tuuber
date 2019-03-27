@@ -15,6 +15,9 @@ import static com.google.appinventor.components.runtime.Component.DEFAULT_VALUE_
 public class tuuberCommonSubroutines {
 
     tuuber_Settings applicationSettings;
+    public final Integer role_Tester=2;
+    public final Integer role_Developer=4;
+    public final Integer role_Administrator=128;
 
 
     public tuuberCommonSubroutines(ComponentContainer screenName){
@@ -97,5 +100,15 @@ public class tuuberCommonSubroutines {
             case "po": ;
         }
         return t;
+    }
+
+    boolean binary_same_as(Integer first, Integer second) {
+//        dbg("Compare: "+first.toString() + " " + second.toString());
+        if ((first & second) == second) {
+            return true;
+        } else {
+            //dbg("false" + Integer.toString(first & second));
+            return false;
+        }
     }
 }

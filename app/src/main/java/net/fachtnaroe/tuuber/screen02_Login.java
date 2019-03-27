@@ -1,8 +1,6 @@
 package net.fachtnaroe.tuuber;
 // http://thunkableblocks.blogspot.ie/2017/07/java-code-snippets-for-app-inventor.html
 
-import android.graphics.Color;
-
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -37,13 +35,13 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     private Web web_Login;
     private VerticalScrollArrangement Login;
-    private Notifier ErrorNotifier;
+    private Notifier notifier_MessagesPopUp;
     private HorizontalArrangement usernameHz, passwordHz;
     private Label UserNameLabel, PasswordLabel;
     private TextBox inputUsername;
     private PasswordTextBox inputPassword;
     private Image ourLogo;
-    private CheckBox checkbox_IsDebugSession, checkbox_SavePassword;
+    private CheckBox checkbox_IsDeveloperSession, checkbox_SavePassword, checkbox_IsAdminSession;
     Integer int_ColWidth;
     Integer int_ImageSize=250;
 
@@ -63,7 +61,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         Login.WidthPercent(100);
         Login.HeightPercent(100);
         Login.AlignHorizontal(Component.ALIGNMENT_CENTER);
-        ErrorNotifier = new Notifier(Login);
+        notifier_MessagesPopUp = new Notifier(Login);
 
         web_Login = new Web(Login);
         usernameHz = new HorizontalArrangement(Login);
@@ -143,7 +141,8 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         button_Register.Column(1);
         button_Register.Row(2);
 
-        button_CommonFormatting(button_Login, button_Register);
+        tools.button_CommonFormatting(80, button_Login);
+        tools.button_CommonFormatting(80, button_Register);
         ourLogo=new Image(Login);
         ourLogo.Picture(applicationSettings.ourLogo);
         ourLogo.ScalePictureToFit(false);
@@ -155,9 +154,15 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         checkbox_SavePassword.Text("Save password");
         checkbox_SavePassword.Checked(applicationSettings.SavePassword);
 
-        checkbox_IsDebugSession = new CheckBox(Login);
-        checkbox_IsDebugSession.Text("This is a developer session");
-        checkbox_IsDebugSession.Checked(applicationSettings.IsDebugSession);
+        checkbox_IsDeveloperSession = new CheckBox(Login);
+        checkbox_IsDeveloperSession.Text("Developer session");
+        checkbox_IsDeveloperSession.Checked(applicationSettings.IsDeveloperSession);
+
+        checkbox_IsAdminSession = new CheckBox(Login);
+        checkbox_IsAdminSession.Text("Administrative session (if permitted)");
+        checkbox_IsAdminSession.Checked(applicationSettings.IsAdminSession);
+
+        Button pdp=(Button)tools.padding(Login,10,15);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -166,13 +171,16 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
+        tools.dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
         if (eventName.equals("BackPressed")) {
             // prevents return to splash screen
+            this.moveTaskToBack(true);
             return true;
         }
         else if (eventName.equals("Changed")) {
             // for debugging session
-            applicationSettings.IsDebugSession= checkbox_IsDebugSession.Checked();
+            applicationSettings.IsDeveloperSession = checkbox_IsDeveloperSession.Checked();
+            applicationSettings.IsAdminSession= checkbox_IsAdminSession.Checked();
             return true;
         }
         else if (eventName.equals("Click")) {
@@ -206,6 +214,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
     public void webGotText(String status, String textOfResponse) {
         String temp=new String();
+        tools.dbg(textOfResponse);
         if (status.equals("200") ) try {
             JSONObject parser = new JSONObject(textOfResponse);
             temp = parser.getString("result");
@@ -213,7 +222,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.pID= parser.getString("pID");
                 applicationSettings.lastLogin= inputUsername.Text();
                 applicationSettings.sessionID=parser.getString("sessionID");
-                applicationSettings.IsDebugSession= checkbox_IsDebugSession.Checked();
+                applicationSettings.IsDeveloperSession =
+                        (checkbox_IsDeveloperSession.Checked() &&
+                                tools.binary_same_as(parser.getInt("role"),tools.role_Developer)
+                        );
+                applicationSettings.IsAdminSession=
+                        (checkbox_IsAdminSession.Checked() &&
+                                tools.binary_same_as(parser.getInt("role"),tools.role_Administrator)
+                        );
                 applicationSettings.SavePassword=checkbox_SavePassword.Checked();
                 if (applicationSettings.SavePassword) {
                     applicationSettings.string_SavedPassword=inputPassword.Text();
@@ -224,33 +240,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.set();
                 switchForm("screen03_MainMenu");
             } else {
-                ErrorNotifier.ShowMessageDialog("Login failed, check details", "Information", "OK");
+                notifier_MessagesPopUp.ShowMessageDialog("Login failed, check details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            ErrorNotifier.ShowMessageDialog("JSON Exception (check password) " + temp, "Information", "OK");
+            notifier_MessagesPopUp.ShowMessageDialog("JSON Exception (check password) " + temp, "Information", "OK");
         }
         else {
-            ErrorNotifier.ShowMessageDialog("Problem connecting with server","Information", "OK");
-        }
-    }
-
-    void button_CommonFormatting (Button... b) {
-        // This function takes a list of TextBox'es and sets them to 100% width
-        // Other common applicationSettings may be applied this way.
-        int i=0;
-        int len = b.length;
-        while ((i < len) && (b[i] != null)) {
-            b[i].WidthPercent(80);
-            b[i].BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
-//            b[i].BackgroundColor(Component.COLOR_BLACK);
-            b[i].FontBold(true);
-            b[i].Shape(Component.BUTTON_SHAPE_ROUNDED);
-            b[i].TextColor(Component.COLOR_WHITE);
-            b[i].FontTypeface(Component.TYPEFACE_SANSSERIF);
-            b[i].FontSize(applicationSettings.int_ButtonTextSize);
-            b[i].Height(40);
-            i++;
+            notifier_MessagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
         }
     }
 

@@ -430,15 +430,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 JSONArray routesArray = parser.getJSONArray("routes");
                 for (int i = 0; i < routesArray.length(); i++) {
                     String temp = "";
-                    if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2)) {
+                    if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2)) {
                         temp = "Monday";
-                    } else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4)) {
+                    } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4)) {
                         temp = "Tuesday";
-                    } else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8)) {
+                    } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8)) {
                         temp = "Wednesday";
-                    } else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16)) {
+                    } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16)) {
                         temp = "Thursday";
-                    } else if (binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32)) {
+                    } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32)) {
                         temp = "Friday";
                     }
                     String string_driverStatus;
@@ -513,14 +513,6 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 + "&sessionID=" + applicationSettings.sessionID
         );
         web_GetMyRoutes.Get();
-    }
-
-    boolean binary_same_as(Integer first, Integer second) {
-        if ((first & second) == second) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void fn_GotText_SaveRoute(String status, String textOfResponse) {
@@ -602,19 +594,19 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
     }
 
     public void setday(Integer days){
-        if (binary_same_as(days, 2)) {
+        if (tools.binary_same_as(days, 2)) {
             checkbox_Mon.Checked(true);
         }
-        else if (binary_same_as(days, 4)){
+        else if (tools.binary_same_as(days, 4)){
             checkbox_Tues.Checked(true);
         }
-        else if (binary_same_as(days, 8)){
+        else if (tools.binary_same_as(days, 8)){
             checkbox_Weds.Checked(true);
         }
-        else if (binary_same_as(days, 16)){
+        else if (tools.binary_same_as(days, 16)){
             checkbox_Thurs.Checked(true);
         }
-        else if (binary_same_as(days, 32)){
+        else if (tools.binary_same_as(days, 32)){
             checkbox_Fri.Checked(true);
         }
     }
