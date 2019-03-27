@@ -73,7 +73,7 @@ public class tuuber_Settings {
     public String get () {
         baseURL=(String) localDB.GetValue("baseURL",default_baseURL);
         sessionID=(String) localDB.GetValue("sessionId",default_sessionID);
-        backgroundImageName=(String) localDB.GetValue("backgroundImageName", default_backgroundImageName);
+        backgroundImageName=default_backgroundImageName;//(String) localDB.GetValue("backgroundImageName", default_backgroundImageName);
         lastLogin=(String) localDB.GetValue("lastLogin", default_lastLogin);
         pID=(String) localDB.GetValue("label_pID",default_pID);
         CurrentLinkId =(String) localDB.GetValue("CurrentLinkId", CurrentLinkId);

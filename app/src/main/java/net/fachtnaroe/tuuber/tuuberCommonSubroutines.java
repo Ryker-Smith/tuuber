@@ -89,4 +89,8 @@ public class tuuberCommonSubroutines {
         first=second;
         second=temp;
     }
+
+    String fn_téacs_aistriú(String t){
+        return t;
+    }
 }

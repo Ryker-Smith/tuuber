@@ -34,7 +34,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     HorizontalArrangement hz_ChatLine, hz_PoolLine, hz_ChatsViewer, hz_toolbar;
     Button button_SendText, button_Refresh, button_MakePool, button_MainMenu;
     Label label_pID, DriverOrNavigatorLabel, PoolID;
-    Notifier D_OR_N_ChoiceNotifier, MessageError_Notifier, MessageSent_Notifier;
+    Notifier notifier_Drive_OR_Navigate_Choice, notifier_MessageError, notifier_MessageSent, notifier_PrecautionsTaken;
     Web web_ChatLine, web_PoolMakeNew, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
@@ -113,9 +113,10 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
         button_MakePool = new Button(hz_PoolLine);
         button_MakePool.Text("Make Pool");
 
-        D_OR_N_ChoiceNotifier = new Notifier(ChatWith);
-        MessageError_Notifier = new Notifier(ChatWith);
-        MessageSent_Notifier = new Notifier(ChatWith);
+        notifier_Drive_OR_Navigate_Choice = new Notifier(ChatWith);
+        notifier_MessageError = new Notifier(ChatWith);
+        notifier_MessageSent = new Notifier(ChatWith);
+        notifier_PrecautionsTaken=new Notifier(ChatWith);
         web_ChatLine = new Web(ChatWith);
         web_PoolMakeNew = new Web(ChatWith);
         web_PoolNavigator = new Web(ChatWith);
@@ -144,8 +145,8 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             callBackend();
         }
         else if (eventName.equals("AfterChoosing")) {
-            if (component.equals(D_OR_N_ChoiceNotifier)) {
-                D_OR_N_ChoiceNotifier.ShowAlert("You're the " + params[0]);
+            if (component.equals(notifier_Drive_OR_Navigate_Choice)) {
+                notifier_Drive_OR_Navigate_Choice.ShowAlert("You're the " + params[0]);
                 String WhoIsDriving;
                 if (params[0].equals("Driver")) {
                     WhoIsDriving = applicationSettings.pID;
@@ -165,6 +166,20 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                     );
                 web_PoolMakeNew.Get();
             }
+            else if (component.equals(notifier_PrecautionsTaken)) {
+                // this block will swap with notifier_Drive_OR_Navigate_Choice to enable
+                // different precautionary messages for each party to the pool
+                String string_Precautions;
+                if (params[0].equals("Driver")) {
+                    string_Precautions= "I am a licenced driver; the vehicle I will use is insured and is roadworthy.";
+                    string_Precautions=tools.fn_téacs_aistriú(string_Precautions);
+
+                }
+                else {
+                    string_Precautions="I acknowledge that it is my responsibility to verify the identity of the driver, and that it is my responsibility to confirm that the vehicle is insured and roadworthy.";
+                }
+                notifier_PrecautionsTaken.ShowChooseDialog(string_Precautions, "Question:", "OK", "Cancel", false);
+            }
         }
         else if (eventName.equals("Click")) {
             if (component.equals(button_MainMenu)) {
@@ -173,7 +188,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_SendText)) {
                 if (text_ChatLine.Text().equals("")) {
-//                    MessageError_Notifier.ShowMessageDialog("Fill in Textbox", "Error", "Ok");
+//                    notifier_MessageError.ShowMessageDialog("Fill in Textbox", "Error", "Ok");
 
                     callBackend();
                     return true;
@@ -200,7 +215,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 callBackend();
             }
             else if (component.equals(button_MakePool)) {
-                D_OR_N_ChoiceNotifier.ShowChooseDialog("Are you a driver, or a navigator?", "Question:", "Navigator", "Driver", false);
+                notifier_Drive_OR_Navigate_Choice.ShowChooseDialog("Are you the driver, or the navigator?", "Question:", "Navigator", "Driver", false);
             }
             return true;
         }
@@ -212,7 +227,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                     callBackend();
                 } else {
                     text_ChatLine.BackgroundColor(Component.COLOR_RED);
-                    MessageError_Notifier.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
+                    notifier_MessageError.ShowMessageDialog("Error sending message, try again later", "Error", "Ok");
                 }
                 return true;
             }
