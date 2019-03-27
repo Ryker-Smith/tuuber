@@ -532,8 +532,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
                     if (User.getJSONObject(i).toString().equals("{}")) break;
                     String anItem =
                             User.getJSONObject(i).getString("realName") +
-                                    "," +
-                                    User.getJSONObject(i).getString("nickname") +
+                                    " " +
+//                                    User.getJSONObject(i).getString("nickname") +
                                     "(pID=" +
                                     User.getJSONObject(i).getString("pID") +
                                     ")";
