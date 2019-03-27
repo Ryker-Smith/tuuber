@@ -217,9 +217,12 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("AfterPicking")) {
             if (component.equals(listview_Open)) {
-                String[] separated = listview_Open.Selection().split("=");
-                separated[1]=separated[1].replace(")","");
-                applicationSettings.CurrentLinkId =separated[1];
+                String selection = listview_Open.Selection();
+                String[] separated = selection.split("[(]"); // using [] to escape ( without )
+                separated[1] = separated[1].replace(")", "");
+                String[] bitsOfData = separated[1].split(";");
+                String link_ID = bitsOfData[1].split("=")[1];
+                applicationSettings.CurrentLinkId = link_ID;
                 applicationSettings.set();
                 tools.buttonOnOff(button_OpenChatScreen,true);
                 return true;
@@ -323,7 +326,9 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
                             "Currently pooling with " +
                                     contacts1Array.getJSONObject(i).getString("realName" ) +
                                     " (pool_ID=" +
-                                    contacts1Array.getJSONObject(i).getString("pool_ID" )
+                                    contacts1Array.getJSONObject(i).getString("pool_ID" ) +
+                                    ";link_ID=" +
+                                    contacts1Array.getJSONObject(i).getString("link_ID" )
                                     + ")"
                     );
                 }
