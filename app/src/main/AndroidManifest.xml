@@ -17,7 +17,6 @@
         <activity android:name=".screen01_Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,10 +29,6 @@
         android:windowSoftInputMode="stateVisible|adjustPan" -->
         <activity android:name=".screen02_Login"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".screen03_MainMenu"
