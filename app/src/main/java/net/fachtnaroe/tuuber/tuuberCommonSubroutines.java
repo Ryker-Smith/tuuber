@@ -91,6 +91,11 @@ public class tuuberCommonSubroutines {
     }
 
     String fn_téacs_aistriú(String t){
+        switch (applicationSettings.string_PreferredLanguage) {
+            case "ga": ;
+            case "en": ;
+            case "po": ;
+        }
         return t;
     }
 }

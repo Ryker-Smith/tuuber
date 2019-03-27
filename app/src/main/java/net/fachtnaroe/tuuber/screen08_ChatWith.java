@@ -173,7 +173,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 if (params[0].equals("Driver")) {
                     string_Precautions= "I am a licenced driver; the vehicle I will use is insured and is roadworthy.";
                     string_Precautions=tools.fn_téacs_aistriú(string_Precautions);
-
                 }
                 else {
                     string_Precautions="I acknowledge that it is my responsibility to verify the identity of the driver, and that it is my responsibility to confirm that the vehicle is insured and roadworthy.";

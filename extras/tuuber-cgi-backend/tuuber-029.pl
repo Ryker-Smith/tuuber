@@ -46,6 +46,7 @@ use constant chat   => 'CHAT';
 use constant alink   => 'LINK';
 use constant disc   => 'DISC';
 use constant match   => 'MATCH';
+use constant directory   => 'DIRECTORY';
 
 # the actions to take with things/entities
 use constant POST   => 'POST';
@@ -135,6 +136,9 @@ elsif ( uc $entity eq town ) {
 }
 elsif ( uc $entity eq chat ) {
     chats();
+}
+elsif ( uc $entity eq directory ) {
+    directory_list();
 }
 elsif ( uc $entity eq alink ) {
     links();
@@ -579,12 +583,17 @@ sub pools {
     my $driver_pID    = $cgi->param('driver_pID');
     my $navigator_pID = $cgi->param('navigator_pID');
     my $rID           = $cgi->param('rID');
-    my $pool_Status   = $cgi->param('pool_Status');
+    my $status        = $cgi->param('status');
+    my $link_ID       = $cgi->param('link_ID');
 
     if ( uc $action eq POST ) {
-        $q =
-"INSERT INTO pools (driver_pID, navigator_pID, rID) VALUES (?, ?, ?);";
+    $q =
+        "SELECT rID FROM links WHERE link_ID=?;";
         my $qh = $dbh->prepare($q);
+        $result = $qh->execute( $link_ID);
+        $q =
+        "INSERT INTO pools (driver_pID, navigator_pID, rID, status) VALUES (?, ?, ?, 'init');";
+        $qh = $dbh->prepare($q);
         $result = $qh->execute( $driver_pID, $navigator_pID, $rID );
         my $pool_ID = $dbh->{mysql_insertid};
         dbg("Created pool with ID: $pool_ID");
@@ -593,9 +602,9 @@ sub pools {
     elsif ( uc $action eq PUT ) {
       # driver_pID=?, navigator_pID=?, rID=?, 
         $q =
-"UPDATE pools SET pool_Status=? WHERE pool_ID=?;";
+        "UPDATE pools SET status=? WHERE pool_ID=?;";
         my $qh = $dbh->prepare($q);
-        $result = $qh->execute( $pool_Status, $pool_ID );
+        $result = $qh->execute( $status, $pool_ID );
         $result = "OK" if ( $result == 1 );
         my $json = "{${quoteJSON}result${quoteJSON}:${quoteJSON}" . $result . "${quoteJSON}}";
         print $json;
@@ -648,7 +657,7 @@ sub pools {
 
         if ( !$showHtml ) {    # if not showing html, do the JSON dump
             my @list = pools_ID_list();
-            print "{${quoteJSON}pools${quoteJSON}:[";
+            print "{${quoteJSON}pool${quoteJSON}:[";
             foreach (@list) {
                 my $text = pool_GET(@$_);
                 print $text;
@@ -1459,11 +1468,12 @@ sub links {
     elsif ( uc $action eq GET ) {
         $q =
           "SELECT * FROM links WHERE link_ID=?;";
+          
         my $qh = $dbh->prepare($q);
         $qh->execute($link_ID);
         $result = $qh->fetchrow_hashref();
 
-        my $json = "{";
+        $json = "{";
         foreach ( keys %$result ) {
             $$result{$_} = deApostrophisise( $$result{$_} );
             $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
@@ -1472,7 +1482,7 @@ sub links {
         $json .= "}";
     }
     elsif ( uc $action eq DELETE ) {
-        my ($qh, $json);
+        my ($qh);
         # can I make this so that:
         # if status=init we're deleting an inbound/outboud request
         # DELETE FROM chats WHERE (initiator_pID=XX) AND (respondent_pID=YY) AND (status='init')
@@ -1548,6 +1558,8 @@ sub discline_ID_list {
 }
 
 sub discussions {
+
+
     my ( $q, $result, $json );
     my $discline_ID   = $cgi->param('discline_ID');
     my $link_ID   = $cgi->param('link_ID');
@@ -1706,37 +1718,75 @@ sub discussions {
     print FILE $json;
 }
 
+sub directory_GET {
+
+    # usage:   
+    # purpose: get details of one person, based on pID
+
+    my ( $q, $param );
+    
+    $q = "SELECT pID, CONCAT(first, family) AS realName, nickname FROM persons WHERE pID=?;";
+    my $pID=shift;
+    my $qh = $dbh->prepare($q);
+    $qh->execute($pID);
+    my $result = $qh->fetchrow_hashref();
+    my $json   = "{";
+    foreach ( keys %$result ) {
+#         $$result{$_} = deApostrophisise( $$result{$_} );
+        $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
+    }
+    $json =~ s/,$//;    #remove final comma
+    $json .= "}";
+    return $json;
+}
+
+sub directory_ID_list {
+
+    # purpose: get list of pID's
+    # usage:   persons_ID_list()
+    my $pID = shift;
+    my $q   = "SELECT pID FROM persons WHERE (listInDirectory='Y') AND (pID != ?);";
+    my $qh  = $dbh->prepare($q);
+    $qh->execute($pID);
+    my $result = $qh->fetchall_arrayref();
+
+    # Cast address as array
+    return @{$result};
+}
+
+sub directory_list () {
+    my ( $q, $result );
+#     print "A";
+#     print directory_GET();
+#     print "B";
+#     return;
+
+    # read the CGI input from the browser request
+    my $pID    = $cgi->param('pID');
+    if ( uc $action eq LIST ) {
+        
+            my @list = directory_ID_list($pID);
+#             print "[A]",@list,"[B]";
+            print " { ${quoteJSON}directory${quoteJSON}:[";
+            foreach (@list) {
+                my $text= directory_GET(@$_);
+                print $text;
+                if ( \$_ != \$list[-1] ) {
+                    # if not at end of list
+                    if ($text ne '') {
+                        print ",";
+                    }
+                }
+            }
+            print "]} ";      # end the JSON array
+            return;            # end of JSON dump, return;    
+    }
+    
+}
+
 sub termsAndConditions {
   my $html=<<__TNCS_END;
-<!DOCTYPE html><html>
-<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"><link href="https://fachtnaroe.net/node/style_4567.css" rel="stylesheet"><script src='https://fachtnaroe.net/node/jquery-3.3.1.js'></script>
-<style>
-*, .terms, h2, p, .middlin{
- color: white;
- background-color:#113508;
- font-family: 'Raleway', sans-serif;
-}
-h2 {
-font-size: 20px;
-margin-bottom: 15px;
-text-align: center;
-}
-p {
-font-size: 14px;
-line-height: 18px;
-margin-bottom: 10px;
-text-align: justify;
-padding-left: 5px;
-padding-right: 5px;
-}
-.middlin{
-text-align: center;
-color: inherit;
-}
-</style>
-<span class="terms"><h2>Use this <u>at your own risk</u></h2><p>You must use this App only in the manner intended.</p><p>Even then there is no guarantee  the App will work as expected, if at all. In fact, no guarantee or warranty of <u>any</u> kind is provided. Neither will any liability be accepted for any result of the use of the App, even if used as intended.</p><p>This is <b>experimental software</b>; use this <u>at your own risk</u>.<p>Please be <i>very</i> cautious about your physical safety, including &mdash; but not limited to &mdash; whether any travel is safe or is required to be undertaken.</p><p>There is no guarantee that any other user of this App is reliable or trustworthy; neither should their use of this App be seen as implying that they are.</p><p>As anyone may use this App, there is no vetting of users. Please ensure that a trusted friend is aware of where you are, and that you have a charged mobile phone with you at all times.<h2>Use this <u>at your own risk</u></h2>
-<p class="middlin">Backend program version is $progamVersion.</p>
-</span></html>
+<!DOCTYPE html><html><link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"><link href="https://fachtnaroe.net/node/style_4567.css" rel="stylesheet"><script src='https://fachtnaroe.net/node/jquery-3.3.1.js'></script><style>*, .terms, h2, p, .middlin{color: white; background-color:#113508; font-family: 'Raleway', sans-serif;} h2 {font-size: 20px; margin-bottom: 15px; text-align: center; } p { font-size: 14px; line-height: 18px; margin-bottom: 10px; text-align: justify;padding-left: 5px;padding-right: 5px; } .middlin{text-align: center; color: inherit;}</style><span class="terms"><h2>Use this <u>at your own risk</u></h2><p>You must use this App only in the manner intended.</p><p>Even then there is no guarantee  the App will work as expected, if at all. In fact, no guarantee or warranty of <u>any</u> kind is provided. Neither will any liability be accepted for any result of the use of the App, even if used as intended.</p><p>This is <b>experimental software</b>; use this <u>at your own risk</u>.<p>Please be <i>very</i> cautious about your physical safety, including &mdash; but not limited to &mdash; whether any travel is safe or is required to be undertaken.</p><p>There is no guarantee that any other user of this App is reliable or trustworthy; neither should their use of this App be seen as implying that they are.</p><p>As anyone may use this App, there is no vetting of users. Please ensure that a trusted friend is aware of where you are, and that you have a charged mobile phone with you at all times.<h2>Use this <u>at your own risk</u></h2><p class="middlin">Backend program version is $progamVersion.</p></span></html>
 __TNCS_END
   return $html;
 }

@@ -46,6 +46,7 @@ use constant chat   => 'CHAT';
 use constant alink   => 'LINK';
 use constant disc   => 'DISC';
 use constant match   => 'MATCH';
+use constant directory   => 'DIRECTORY';
 
 # the actions to take with things/entities
 use constant POST   => 'POST';
@@ -60,6 +61,8 @@ use constant register => 'REGISTER';
 use constant debug    => 'DEBUG';
 use constant terms    => 'TERMS';
 use constant version  => 'VER';
+use constant msgchk  => 'MSGCHK';
+use constant msg  => 'MSG';
 use constant passwordChange => 'CHPWD';
 
 my $logfile = "/home/public/tuber.dat";
@@ -92,7 +95,15 @@ if ( uc $cmd eq version ) {
     exit;
 }
 elsif ( uc $cmd eq login ) {
-    print loginCheck();
+    print loginCheck( $cgi->param('ver') );
+    exit;
+}
+elsif ( uc $cmd eq msgchk ) {
+    print messageCheck();
+    exit;
+}
+elsif ( uc $cmd eq msg ) {
+    print messageForAndroid($cgi->param('ver'), $cgi->param('viewW'), $cgi->param('viewH'));
     exit;
 }
 elsif (uc $cmd eq terms) {
@@ -135,6 +146,9 @@ elsif ( uc $entity eq town ) {
 }
 elsif ( uc $entity eq chat ) {
     chats();
+}
+elsif ( uc $entity eq directory ) {
+    directory_list();
 }
 elsif ( uc $entity eq alink ) {
     links();
@@ -575,20 +589,59 @@ sub pools_ID_list {
 
 sub pools {
     my ( $q, $result );
-    my $pool_ID       = $cgi->param('pool_ID');
-    my $driver_pID    = $cgi->param('driver_pID');
-    my $navigator_pID = $cgi->param('navigator_pID');
+    my $pool_ID       = $cgi->param('link_ID');
+    my $WhoIsDriving  = $cgi->param('driver');
+    my $pID           = $cgi->param('pID');
     my $rID           = $cgi->param('rID');
     my $status        = $cgi->param('status');
+    my $link_ID       = $cgi->param('link_ID');
 
+    my ($driver, $navigator);
+    
     if ( uc $action eq POST ) {
-        $q =
-        "INSERT INTO pools (driver_pID, navigator_pID, rID) VALUES (?, ?, ?);";
+    $q =
+        "SELECT rID, first, second FROM links WHERE link_ID=?;";
         my $qh = $dbh->prepare($q);
-        $result = $qh->execute( $driver_pID, $navigator_pID, $rID );
+        my $result = $qh->execute( $link_ID);
+        my ($route, $first, $second)=$qh->fetchrow_array();
+#         print "($route, $first, $second) ";
+        if ($WhoIsDriving == $pID) {  # I'm the driver
+            $driver = $pID;
+#             print "C";
+            if ($driver == $first) {
+              $navigator = $second;
+            }
+            else {
+              $navigator=$first;
+            }
+        }
+        else {
+#         print "D";
+            $navigator=$pID;
+            if ($navigator == $first) {
+              $driver = $second;
+            }
+            else {
+              $driver=$first;
+            }
+        }
+#         print "[$driver] [$navigator]";
+        $q =
+        "INSERT INTO pools (driver_pID, navigator_pID, rID, status, link_ID) VALUES (?, ?, ?, 'init', ?);";
+        $qh = $dbh->prepare($q);
+        $result = $qh->execute( $driver, $navigator, $route, $link_ID );
         my $pool_ID = $dbh->{mysql_insertid};
-        dbg("Created pool with ID: $pool_ID");
-        print "{${quoteJSON}pool_ID${quoteJSON}:${quoteJSON}$pool_ID${quoteJSON}}";
+        $q="UPDATE links SET status='pool', pool_ID=? WHERE link_ID=?";
+        $qh = $dbh->prepare($q);
+        $result = $qh->execute($pool_ID, $link_ID );
+        
+        if  (($result > 0) && ($pool_ID > 0)) {
+          $result = "OK";
+        }
+        else {
+          $result="error";
+        }
+        print "{${quoteJSON}result${quoteJSON}:${quoteJSON}$result${quoteJSON},${quoteJSON}pool_ID${quoteJSON}:${quoteJSON}$pool_ID${quoteJSON}}";
     }
     elsif ( uc $action eq PUT ) {
       # driver_pID=?, navigator_pID=?, rID=?, 
@@ -600,50 +653,50 @@ sub pools {
         my $json = "{${quoteJSON}result${quoteJSON}:${quoteJSON}" . $result . "${quoteJSON}}";
         print $json;
     }
-    elsif ( uc $action eq GET ) {
-        
-        if ( ($driver_pID ne "") && ($navigator_pID ne "") && ($rID ne "") ) {
-          $q =
-            "SELECT pool_ID FROM pools WHERE (driver_pID=?) AND (navigator_pID=?) AND (rID=?);";
-            my $qh = $dbh->prepare($q);
-          $qh->execute($driver_pID, $navigator_pID, $rID);
-          $result = $qh->fetchrow_hashref();
-
-          my $json = "{";
-          foreach ( keys %$result ) {
-  #             $$result{$_} = deApostrophisise( $$result{$_} );
-              $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
-          }
-          $json =~ s/,$//;    #remove final comma
-          $json .= "}";
-          print $json;
-          print FILE $json;
-        }
-        else {
-          $q =
-            "SELECT driver_pID, navigator_pID, rID FROM pools WHERE pool_ID=?;";my $qh = $dbh->prepare($q);
-          $qh->execute($pool_ID);
-          $result = $qh->fetchrow_hashref();
-
-          my $json = "{";
-          foreach ( keys %$result ) {
-  #             $$result{$_} = deApostrophisise( $$result{$_} );
-              $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
-          }
-          $json =~ s/,$//;    #remove final comma
-          $json .= "}";
-          print $json;
-          print FILE $json;
-        }
-    }
-    elsif ( uc $action eq DELETE ) {
-        $q = "DELETE FROM pools WHERE pool_ID=?;";
-        my $qh = $dbh->prepare($q);
-        $result = $qh->execute($pool_ID);
-        $result = "OK" if ( $result == 1 );
-        my $json = "{${quoteJSON}result${quoteJSON}:${quoteJSON}" . $result . "${quoteJSON}}";
-        print $json;
-    }
+#     elsif ( uc $action eq GET ) {
+#         
+#         if ( ($driver_pID ne "") && ($navigator_pID ne "") && ($rID ne "") ) {
+#           $q =
+#             "SELECT pool_ID FROM pools WHERE (driver_pID=?) AND (navigator_pID=?) AND (rID=?);";
+#             my $qh = $dbh->prepare($q);
+#           $qh->execute($driver_pID, $navigator_pID, $rID);
+#           $result = $qh->fetchrow_hashref();
+# 
+#           my $json = "{";
+#           foreach ( keys %$result ) {
+#               $$result{$_} = deApostrophisise( $$result{$_} );
+#               $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
+#           }
+#           $json =~ s/,$//;    #remove final comma
+#           $json .= "}";
+#           print $json;
+#           print FILE $json;
+#         }
+#         else {
+#           $q =
+#             "SELECT driver_pID, navigator_pID, rID FROM pools WHERE pool_ID=?;";my $qh = $dbh->prepare($q);
+#           $qh->execute($pool_ID);
+#           $result = $qh->fetchrow_hashref();
+# 
+#           my $json = "{";
+#           foreach ( keys %$result ) {
+#               $$result{$_} = deApostrophisise( $$result{$_} );
+#               $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
+#           }
+#           $json =~ s/,$//;    #remove final comma
+#           $json .= "}";
+#           print $json;
+#           print FILE $json;
+#         }
+#     }
+#     elsif ( uc $action eq DELETE ) {
+#         $q = "DELETE FROM pools WHERE pool_ID=?;";
+#         my $qh = $dbh->prepare($q);
+#         $result = $qh->execute($pool_ID);
+#         $result = "OK" if ( $result == 1 );
+#         my $json = "{${quoteJSON}result${quoteJSON}:${quoteJSON}" . $result . "${quoteJSON}}";
+#         print $json;
+#     }
     elsif ( uc $action eq LIST ) {
 
         if ( !$showHtml ) {    # if not showing html, do the JSON dump
@@ -1400,7 +1453,7 @@ sub link_list {
     $q="";
     $q_reverse="";
     if (lc $status eq "open") {
-      $q = "SELECT link_ID FROM links WHERE status='open' AND ((first=?) OR (second=?));"; 
+      $q = "SELECT link_ID FROM links WHERE (status='open' OR status='pool') AND ((first=?) OR (second=?));"; 
       $qh = $dbh->prepare($q);
       $qh->execute($iam, $iam);
     }
@@ -1549,6 +1602,8 @@ sub discline_ID_list {
 }
 
 sub discussions {
+
+
     my ( $q, $result, $json );
     my $discline_ID   = $cgi->param('discline_ID');
     my $link_ID   = $cgi->param('link_ID');
@@ -1707,6 +1762,72 @@ sub discussions {
     print FILE $json;
 }
 
+sub directory_GET {
+
+    # usage:   
+    # purpose: get details of one person, based on pID
+
+    my ( $q, $param );
+    
+    $q = "SELECT pID, CONCAT(first, family) AS realName, nickname FROM persons WHERE pID=?;";
+    my $pID=shift;
+    my $qh = $dbh->prepare($q);
+    $qh->execute($pID);
+    my $result = $qh->fetchrow_hashref();
+    my $json   = "{";
+    foreach ( keys %$result ) {
+#         $$result{$_} = deApostrophisise( $$result{$_} );
+        $json .= "${quoteJSON}$_${quoteJSON}:${quoteJSON}" . $$result{$_} . "${quoteJSON},";
+    }
+    $json =~ s/,$//;    #remove final comma
+    $json .= "}";
+    return $json;
+}
+
+sub directory_ID_list {
+
+    # purpose: get list of pID's
+    # usage:   persons_ID_list()
+    my $pID = shift;
+    my $q   = "SELECT pID FROM persons WHERE (listInDirectory='Y') AND (pID != ?);";
+    my $qh  = $dbh->prepare($q);
+    $qh->execute($pID);
+    my $result = $qh->fetchall_arrayref();
+
+    # Cast address as array
+    return @{$result};
+}
+
+sub directory_list () {
+    my ( $q, $result );
+#     print "A";
+#     print directory_GET();
+#     print "B";
+#     return;
+
+    # read the CGI input from the browser request
+    my $pID    = $cgi->param('pID');
+    if ( uc $action eq LIST ) {
+        
+            my @list = directory_ID_list($pID);
+#             print "[A]",@list,"[B]";
+            print " { ${quoteJSON}directory${quoteJSON}:[";
+            foreach (@list) {
+                my $text= directory_GET(@$_);
+                print $text;
+                if ( \$_ != \$list[-1] ) {
+                    # if not at end of list
+                    if ($text ne '') {
+                        print ",";
+                    }
+                }
+            }
+            print "]} ";      # end the JSON array
+            return;            # end of JSON dump, return;    
+    }
+    
+}
+
 sub termsAndConditions {
   my $html=<<__TNCS_END;
 <!DOCTYPE html><html><link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"><link href="https://fachtnaroe.net/node/style_4567.css" rel="stylesheet"><script src='https://fachtnaroe.net/node/jquery-3.3.1.js'></script><style>*, .terms, h2, p, .middlin{color: white; background-color:#113508; font-family: 'Raleway', sans-serif;} h2 {font-size: 20px; margin-bottom: 15px; text-align: center; } p { font-size: 14px; line-height: 18px; margin-bottom: 10px; text-align: justify;padding-left: 5px;padding-right: 5px; } .middlin{text-align: center; color: inherit;}</style><span class="terms"><h2>Use this <u>at your own risk</u></h2><p>You must use this App only in the manner intended.</p><p>Even then there is no guarantee  the App will work as expected, if at all. In fact, no guarantee or warranty of <u>any</u> kind is provided. Neither will any liability be accepted for any result of the use of the App, even if used as intended.</p><p>This is <b>experimental software</b>; use this <u>at your own risk</u>.<p>Please be <i>very</i> cautious about your physical safety, including &mdash; but not limited to &mdash; whether any travel is safe or is required to be undertaken.</p><p>There is no guarantee that any other user of this App is reliable or trustworthy; neither should their use of this App be seen as implying that they are.</p><p>As anyone may use this App, there is no vetting of users. Please ensure that a trusted friend is aware of where you are, and that you have a charged mobile phone with you at all times.<h2>Use this <u>at your own risk</u></h2><p class="middlin">Backend program version is $progamVersion.</p></span></html>
@@ -1714,6 +1835,43 @@ __TNCS_END
   return $html;
 }
 
+sub messageCheck {
+ my $html="{ ${quoteJSON}result${quoteJSON}:${quoteJSON}OK${quoteJSON}}";
+ return $html;
+}
+
+sub messageForAndroid {
+  my $version= shift;
+  my  $width=shift;
+  my $height= shift;
+  my $fontsize=$height/2;
+ my $html=<<__MSG_END;
+<!DOCTYPE html><html><link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"><link href="https://fachtnaroe.net/node/style_4567.css" rel="stylesheet"><script src='https://fachtnaroe.net/node/jquery-3.3.1.js'></script>
+<style>
+* {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background-color:red;
+}
+span {
+  color: white;
+  background-color:red;
+  font-family: 'Raleway', sans-serif;
+  width: $width;
+  height: $height; 
+  font-size: ${fontsize}px;
+  line-height: 18px;
+  text-align: center;
+  vertical-align: middle;
+} 
+</style>
+<span>
+<a href="https://fachtnaroe.net/apks/CoverSheetGenerator_013.apk">There's a new version available</a>
+</span>
+__MSG_END
+  return $html;
+}
 # Version 0.5 Added code to return JSON array of people instead of text dump
 # Version 0.8 Added chat code, passwording, converted passwording to cmd from entity
 # Version 0.8.1 re-added pID my $q="SELECT pID, first, family, phone, email, spaces, driver FROM persons WHERE pID=?;";
@@ -1746,3 +1904,5 @@ __TNCS_END
 # version 21: Pools can only be amended by pool_Status
 # version 24: added code to facilitate links/discussion in stead of using chat for both entities.
 # version 26: Added TERMS + other additions
+
+# version 31: Added msg and msgcheck to allow front end to see if updates are available

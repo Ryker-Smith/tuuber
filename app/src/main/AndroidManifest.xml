@@ -20,28 +20,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screen05_Conversations"
-            android:label="screen05_Conversations"
-            android:theme="@style/AppTheme.NoActionBar" />
         <!-- To control the action of the soft keyboard
         and how the background is rendered use:
         android:windowSoftInputMode="stateVisible|adjustPan" -->
         <activity android:name=".screen02_Login"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".screen03_MainMenu"
             android:label="@string/title_activity_screen03__main_menu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen04_Matches"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name=".screen05_Conversations"
+            android:label="screen05_Conversations"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screen06_Register"
             android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".screen07_Routes"/>
         <activity android:name=".screen08_ChatWith"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".screen07_Routes"/>
         <activity
             android:name=".screen09_Settings"
             android:label="@string/title_activity_screen09__settings"
