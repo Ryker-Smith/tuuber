@@ -9,7 +9,14 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.TinyDB;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class tuuber_Settings {
 
@@ -40,6 +47,9 @@ public class tuuber_Settings {
     public String string_TextColor="#FFFFFF";
     public Integer int_ButtonTextSize=12;
     public Integer minimimum_intListViewsize=5;
+    public String txt;
+
+//    private tuuberCommonSubroutines t;
 
     final String default_baseURL="https://fachtnaroe.net/tuuber";
     final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
@@ -59,6 +69,7 @@ public class tuuber_Settings {
     Integer default_ButtonTextSize=12;
 
     HashMap<String,String> messages;
+    HashMap<String, JSONArray> json_Words;
 
     TinyDB localDB;
 
@@ -76,9 +87,10 @@ public class tuuber_Settings {
         SavePassword=default_SavePassword;
         string_PreferredLanguage=default_PreferredLanguage;
         TermsAndConditions_URL=baseURL + "?cmd=TERMS";
-
+//        t=new tuuberCommonSubroutines(screenName);
         messages=new HashMap<String,String>();
-        messages.put("login","Ag fáil data");
+//        messages.put("login","Ag fáil data");
+        json_Words=new HashMap<String, JSONArray>();
     }
 
     public String get () {
@@ -96,7 +108,6 @@ public class tuuber_Settings {
         string_PreferredLanguage =(String) localDB.GetValue("string_PreferredLanguage", default_PreferredLanguage);
         string_ButtonColor=(String) localDB.GetValue("string_ButtonColor", default_ButtonColor);
         int_ButtonTextSize=(Integer) localDB.GetValue("int_ButtonTextSize", default_ButtonTextSize);
-
         if (IsDeveloperSession) {
             baseURL=debug_baseURL;
         }
@@ -104,6 +115,24 @@ public class tuuber_Settings {
             string_SavedPassword=(String) localDB.GetValue("string_SavedPassword",string_SavedPassword);
         }
         TermsAndConditions_URL=baseURL + "?cmd=TERMS";
+
+        try {
+            String raw=(String)localDB.GetValue("json_Words", null).toString();
+            JSONObject parser = new JSONObject(raw);
+            json_Words.put(string_PreferredLanguage,parser.getJSONArray(string_PreferredLanguage));
+        }
+        catch (JSONException e){
+
+        }
+
+        Set set = json_Words.entrySet();
+        Iterator iterator = set.iterator();
+        while(iterator.hasNext()) {
+            Map.Entry mentry = (Map.Entry)iterator.next();
+            tuuberCommonSubroutines.dbg("XX: "+(String)mentry.getKey());
+            messages.put((String)mentry.getKey(),(String)mentry.getValue());
+        }
+
         return "OK";
     }
 
@@ -122,6 +151,9 @@ public class tuuber_Settings {
         localDB.StoreValue("string_PreferredLanguage", string_PreferredLanguage);
         localDB.StoreValue("string_ButtonColor", string_ButtonColor);
         localDB.StoreValue("int_ButtonTextSize", int_ButtonTextSize);
+        localDB.StoreValue("json_Words", json_Words.get(string_PreferredLanguage).toString());
+
+
         if (SavePassword) {
             localDB.StoreValue("string_SavedPassword", string_SavedPassword);
         }

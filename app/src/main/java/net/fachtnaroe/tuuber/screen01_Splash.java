@@ -117,12 +117,13 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         t.dbg(status);
         t.dbg(textOfResponse);
         t.dbg("B "+applicationSettings.string_PreferredLanguage);
-        t.dbg("AAA");
+        t.dbg("DDD");
         //https://beginnersbook.com/2013/12/hashmap-in-java-with-example/
 
         if (status.equals("200" )) try {
 
             JSONObject parser = new JSONObject(textOfResponse);
+            applicationSettings.txt=textOfResponse;
             t.dbg(applicationSettings.string_PreferredLanguage);
             t.dbg(parser.getString(applicationSettings.string_PreferredLanguage));
             if (!parser.getString(applicationSettings.string_PreferredLanguage ).equals("")) {
@@ -136,6 +137,9 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
                     t.dbg(words_Array.getJSONObject(i).getString("keyC" ));
                     t.dbg(words_Array.getJSONObject(i).getString("value" ));
                 }
+                applicationSettings.json_Words.put(applicationSettings.string_PreferredLanguage,parser.getJSONArray(applicationSettings.string_PreferredLanguage));
+//                t.dbg(parser.getJSONArray("ZZ: "+applicationSettings.string_PreferredLanguage).toString());
+                applicationSettings.set();
            }
             else {
                 notifier_Messages.ShowAlert("Problem 1.137");
@@ -143,10 +147,10 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         }
         catch (JSONException e) {
             // if an exception occurs, code for it in here
-            notifier_Messages.ShowAlert("error 1.142");
+            notifier_Messages.ShowAlert("error 1.142 (json)");
         }
         else {
-            notifier_Messages.ShowAlert("problem 1.145");
+            notifier_Messages.ShowAlert("problem 1.145 (server)");
         }
     }
 

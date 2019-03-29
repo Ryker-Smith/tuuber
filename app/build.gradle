@@ -22,7 +22,7 @@ android {
         applicationId "net.fachtnaroe.tuuber"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 32
+        versionCode code
         versionName '0.'
         archivesBaseName="tuuber"
         //-$versionName$versionCode"

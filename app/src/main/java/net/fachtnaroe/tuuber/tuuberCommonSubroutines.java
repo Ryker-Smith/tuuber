@@ -36,7 +36,7 @@ public class tuuberCommonSubroutines {
         return lbl;
     }
 
-    public void dbg (String debugMsg) {
+    public static void dbg (String debugMsg) {
         System.err.print( "~~~> " + debugMsg + " <~~~\n");
     }
 
