@@ -9,12 +9,15 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.TinyDB;
 
+import java.util.HashMap;
+
 public class tuuber_Settings {
 
     public final String versionCode=Integer.toString(BuildConfig.VERSION_CODE);
     public final String versionName=BuildConfig.VERSION_NAME;
     public final String appName="túber";
     public final String Endpoint="Templemore";
+    public final String localisationBaseUrl="https://fachtnaroe.net/aist";
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
@@ -38,22 +41,24 @@ public class tuuber_Settings {
     public Integer int_ButtonTextSize=12;
     public Integer minimimum_intListViewsize=5;
 
-    private final String default_baseURL="https://fachtnaroe.net/tuuber";
-    private final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
-    private final String default_sessionID="a1b2c3d4";
-    private String default_pID="-1";
-    private String default_otherpIDforChat ="-1";
-    private String default_backgroundImageName="tuuberBackdrop-07.png";
+    final String default_baseURL="https://fachtnaroe.net/tuuber";
+    final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
+    final String default_sessionID="a1b2c3d4";
+    String default_pID="-1";
+    String default_otherpIDforChat ="-1";
+    String default_backgroundImageName="tuuberBackdrop-07.png";
     public String default_lastLogin="";
-    private String default_notificationSoundFileName="";
-    private Integer default_intListViewsize=40;
+    String default_notificationSoundFileName="";
+    Integer default_intListViewsize=40;
 
-    private boolean default_IsDeveloperSession =false;
-    private boolean default_IsAdminSession =false;
-    private boolean default_SavePassword=true;
-    private String default_PreferredLanguage="ga";
-    private String default_ButtonColor="#113508";
-    private Integer default_ButtonTextSize=12;
+    boolean default_IsDeveloperSession =false;
+    boolean default_IsAdminSession =false;
+    boolean default_SavePassword=true;
+    String default_PreferredLanguage="ga";
+    String default_ButtonColor="#113508";
+    Integer default_ButtonTextSize=12;
+
+    HashMap<String,String> messages;
 
     TinyDB localDB;
 
@@ -71,6 +76,9 @@ public class tuuber_Settings {
         SavePassword=default_SavePassword;
         string_PreferredLanguage=default_PreferredLanguage;
         TermsAndConditions_URL=baseURL + "?cmd=TERMS";
+
+        messages=new HashMap<String,String>();
+        messages.put("login","Ag fáil data");
     }
 
     public String get () {

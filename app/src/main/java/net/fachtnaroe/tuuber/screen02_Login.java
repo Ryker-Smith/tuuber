@@ -125,7 +125,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
 
 //        loginHz = new HorizontalArrangement(Login);
         button_Login = new Button (menu);
-        button_Login.Text("Login");
+        button_Login.Text( tools.fn_téacs_aistriú("login"));
         button_Login.Column(1);
         button_Login.Row(0);
 
@@ -137,7 +137,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         button_Pad.Row(1);
 
         button_Register = new Button(menu);
-        button_Register.Text("Register");
+        button_Register.Text(tools.fn_téacs_aistriú("register"));
         button_Register.Column(1);
         button_Register.Row(2);
 
