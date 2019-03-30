@@ -49,8 +49,6 @@ public class tuuber_Settings {
     public Integer minimimum_intListViewsize=5;
     public String rawtxt;
 
-//    private tuuberCommonSubroutines t;
-
     final String default_baseURL="https://fachtnaroe.net/tuuber";
     final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
     final String default_sessionID="a1b2c3d4";
@@ -156,6 +154,5 @@ public class tuuber_Settings {
         }
         return "OK";
     }
-
 }
 
