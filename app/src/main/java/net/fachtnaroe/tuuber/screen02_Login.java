@@ -31,7 +31,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     private Button button_Login, button_Register;
-//    private Image Header;
 
     private Web web_Login;
     private VerticalScrollArrangement Login;
@@ -67,7 +66,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         usernameHz = new HorizontalArrangement(Login);
         usernameHz.WidthPercent(100);
         UserNameLabel= new Label (usernameHz);
-        UserNameLabel.Text("Username:");
+        UserNameLabel.Text(tools.fn_téacs_aistriú("username")+": ");
         UserNameLabel.FontBold(true);
         UserNameLabel.WidthPercent(25);
         UserNameLabel.TextAlignment(Component.ALIGNMENT_OPPOSITE);
@@ -85,7 +84,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         passwordHz = new HorizontalArrangement(Login);
         passwordHz.WidthPercent(100);
         PasswordLabel = new Label(passwordHz);
-        PasswordLabel.Text("Password:");
+        PasswordLabel.Text(tools.fn_téacs_aistriú("password")+": ");
         PasswordLabel.FontBold(true);
         PasswordLabel.WidthPercent(25);
         PasswordLabel.TextAlignment(Component.ALIGNMENT_OPPOSITE);
@@ -151,15 +150,15 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         ourLogo.WidthPercent(100);
 
         checkbox_SavePassword = new CheckBox(Login);
-        checkbox_SavePassword.Text("Save password");
+        checkbox_SavePassword.Text(tools.fn_téacs_aistriú("save_password"));
         checkbox_SavePassword.Checked(applicationSettings.SavePassword);
 
         checkbox_IsDeveloperSession = new CheckBox(Login);
-        checkbox_IsDeveloperSession.Text("Developer session");
+        checkbox_IsDeveloperSession.Text(tools.fn_téacs_aistriú("developer_session"));
         checkbox_IsDeveloperSession.Checked(applicationSettings.IsDeveloperSession);
 
         checkbox_IsAdminSession = new CheckBox(Login);
-        checkbox_IsAdminSession.Text("Administrative session (if permitted)");
+        checkbox_IsAdminSession.Text(tools.fn_téacs_aistriú("administrative_session"));
         checkbox_IsAdminSession.Checked(applicationSettings.IsAdminSession);
 
         Button pdp=(Button)tools.padding(Login,10,15);

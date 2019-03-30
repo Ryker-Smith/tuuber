@@ -114,16 +114,16 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
 
     void fn_GotText_LocalizeText (String status, String textOfResponse) {
 
-        t.dbg(status);
-        t.dbg(textOfResponse);
-        t.dbg("B "+applicationSettings.string_PreferredLanguage);
-        t.dbg("DDD");
+//        t.dbg(status);
+//        t.dbg(textOfResponse);
+//        t.dbg("B "+applicationSettings.string_PreferredLanguage);
+//        t.dbg("DDD");
         //https://beginnersbook.com/2013/12/hashmap-in-java-with-example/
 
         if (status.equals("200" )) try {
 
             JSONObject parser = new JSONObject(textOfResponse);
-            applicationSettings.txt=textOfResponse;
+            applicationSettings.rawtxt=textOfResponse;
             t.dbg(applicationSettings.string_PreferredLanguage);
             t.dbg(parser.getString(applicationSettings.string_PreferredLanguage));
             if (!parser.getString(applicationSettings.string_PreferredLanguage ).equals("")) {
@@ -134,11 +134,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
                             words_Array.getJSONObject(i).getString("keyC" ),
                             words_Array.getJSONObject(i).getString("value" )
                     );
-                    t.dbg(words_Array.getJSONObject(i).getString("keyC" ));
-                    t.dbg(words_Array.getJSONObject(i).getString("value" ));
                 }
-                applicationSettings.json_Words.put(applicationSettings.string_PreferredLanguage,parser.getJSONArray(applicationSettings.string_PreferredLanguage));
-//                t.dbg(parser.getJSONArray("ZZ: "+applicationSettings.string_PreferredLanguage).toString());
                 applicationSettings.set();
            }
             else {
@@ -152,6 +148,9 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         else {
             notifier_Messages.ShowAlert("problem 1.145 (server)");
         }
+        spacer.Text(
+                t.fn_téacs_aistriú("loading" + "..." )
+        );
     }
 
 }

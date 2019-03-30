@@ -61,7 +61,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         menu.HeightPercent(50);
 
         TelephoneLabel = new Label(menu);
-        TelephoneLabel.Text ("Phone number: ");
+        TelephoneLabel.Text (tools.fn_téacs_aistriú("phone_number")+": ");
         TelephoneLabel.Column(0);
         TelephoneLabel.Row(2);
         Telephone = new TextBox(menu);
@@ -70,7 +70,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Telephone.Row(2);
 
         eMailLabel = new Label(menu);
-        eMailLabel.Text ("Email: ");
+        eMailLabel.Text ( tools.fn_téacs_aistriú("email")+": ");
         eMailLabel.Column(0);
         eMailLabel.Row(3);
         eMail = new TextBox(menu);
@@ -79,7 +79,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         eMail.Row(3);
 
         FirstNameLabel = new Label (menu);
-        FirstNameLabel.Text ("First name: ");
+        FirstNameLabel.Text (tools.fn_téacs_aistriú("first_name")+": ");
         FirstNameLabel.Column(0);
         FirstNameLabel.Row(0);
         FirstName = new TextBox (menu);
@@ -88,7 +88,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         FirstName.Row(0);
 
         LastNameLabel = new Label(menu);
-        LastNameLabel.Text ("Family name: ");
+        LastNameLabel.Text (tools.fn_téacs_aistriú("family_name")+": ");
         LastNameLabel.Column(0);
         LastNameLabel.Row(1);
         LastName = new TextBox (menu);
@@ -97,7 +97,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         LastName.Row(1);
 
         PasswordLabel = new Label (menu);
-        PasswordLabel.Text ("Password: ");
+        PasswordLabel.Text (tools.fn_téacs_aistriú("password")+": ");
         PasswordLabel.Column(0);
         PasswordLabel.Row(4);
         Password = new PasswordTextBox (menu);
@@ -106,7 +106,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Password.Row(4);
 
         ConfirmPasswordLabel = new Label (menu);
-        ConfirmPasswordLabel.Text ("Confirm password: ");
+        ConfirmPasswordLabel.Text (tools.fn_téacs_aistriú("confirm_password")+": ");
         ConfirmPasswordLabel.Column(0);
         ConfirmPasswordLabel.Row(5);
         ConfirmPassword = new PasswordTextBox (menu);
@@ -116,9 +116,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         TermsConditionsHZ = new HorizontalArrangement(Register);
         button_TermsConditions = new Button(TermsConditionsHZ);
-        button_TermsConditions.Text ("Terms & Conditions");
+        button_TermsConditions.Text (tools.fn_téacs_aistriú("terms_and_conditions"));
         TCAgree = new CheckBox(TermsConditionsHZ);
-        TCAgree.Text ("Agree?");
+        TCAgree.Text (tools.fn_téacs_aistriú("agree")+"?");
         TCAgree.Enabled(false);
         TCLabel = new Label(TermsConditionsHZ);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
@@ -132,7 +132,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         CreateHZ = new HorizontalArrangement(Register);
         button_Create = new Button(CreateHZ);
-        button_Create.Text ("Create");
+        button_Create.Text (tools.fn_téacs_aistriú("create"));
 
         web_CreateUser = new Web(Register);
         notifier_MessagesPopUp = new Notifier(Register);
