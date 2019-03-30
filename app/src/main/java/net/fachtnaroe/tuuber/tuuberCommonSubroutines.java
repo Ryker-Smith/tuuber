@@ -98,6 +98,19 @@ public class tuuberCommonSubroutines {
         return translation;
     }
 
+    String fn_téacs_aistriú(String t, Integer formatting){
+        final Integer capitalize =2;
+        final Integer capitalize_each =4;
+        String translation=applicationSettings.messages.get(t);
+        if (formatting == capitalize) {
+
+        }
+        else if (formatting == capitalize_each) {
+
+        }
+        return translation;
+    }
+
     boolean binary_same_as(Integer first, Integer second) {
 //        dbg("Compare: "+first.toString() + " " + second.toString());
         if ((first & second) == second) {
