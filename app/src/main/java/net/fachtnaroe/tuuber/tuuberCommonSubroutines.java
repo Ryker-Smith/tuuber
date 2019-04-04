@@ -9,8 +9,9 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.TextBox;
 
 import static com.google.appinventor.components.runtime.Component.BUTTON_SHAPE_ROUNDED;
-import static com.google.appinventor.components.runtime.Component.COLOR_NONE;
-import static com.google.appinventor.components.runtime.Component.DEFAULT_VALUE_COLOR_NONE;
+import org.apache.commons.lang3.StringUtils;
+//import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 
 public class tuuberCommonSubroutines {
 
@@ -18,6 +19,10 @@ public class tuuberCommonSubroutines {
     public final Integer role_Tester=2;
     public final Integer role_Developer=4;
     public final Integer role_Administrator=128;
+    public final Integer capitalize_none =0; // shouldn't do anything
+    public final Integer capitalize_first =2;
+    public final Integer capitalize_each =4;
+    public final Integer capitalize_all =8;
 
 
     public tuuberCommonSubroutines(ComponentContainer screenName){
@@ -96,7 +101,7 @@ public class tuuberCommonSubroutines {
     String fn_téacs_aistriú(String t){
         // Purpose: takes a string, and matches it to text for
         // the corresponding language
-        String translation;//=applicationSettings.messages.get(t.toLowerCase());
+        String translation;//=applicationSettings.notifier_Messages.get(t.toLowerCase());
         if (applicationSettings.messages.containsKey(t.toLowerCase())) {
             translation=applicationSettings.messages.get(t.toLowerCase());
         }
@@ -107,14 +112,20 @@ public class tuuberCommonSubroutines {
     }
 
     String fn_téacs_aistriú(String t, Integer formatting){
-        final Integer capitalize =2;
-        final Integer capitalize_each =4;
-        String translation=applicationSettings.messages.get(t);
-        if (formatting == capitalize) {
-
+        // first get the text from other language
+        String translation=fn_téacs_aistriú(t); // call 'tother version
+        // then decide the capitalization action, as all translations are in lowercase
+        if (binary_same_as(capitalize_first,formatting )) {
+            return StringUtils.capitalize(translation);
         }
-        else if (formatting == capitalize_each) {
-
+        else if (binary_same_as(capitalize_each,formatting )) {
+            return WordUtils.capitalizeFully(translation);
+        }
+        else if (binary_same_as(capitalize_all,formatting )) {
+            return translation.toUpperCase();
+        }
+        else if (binary_same_as(capitalize_none,formatting )) {
+            return translation.toLowerCase();
         }
         return translation;
     }

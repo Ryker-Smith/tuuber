@@ -88,8 +88,6 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_PadTop.Visible(true);
         button_PadTop.BackgroundColor(Component.COLOR_NONE);
         button_PadTop.WidthPercent(25);
-        //
-
         Image img_logo = new Image(menu);
         img_logo.Picture(applicationSettings.ourLogo);
         img_logo.Width(100);
@@ -119,9 +117,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_PadRight.WidthPercent(25);
 
         button_Routes = new Button(menu);
-        button_Routes.Text("Routes");
         button_Routes.Row(int_MenuStartRow);
-
         button_Pad=new Button[int_NumButtonsToPad];
         for (int i=0;i< int_NumButtonsToPad; i++) {
             button_Pad[i] = new Button(menu);
@@ -135,35 +131,22 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         }
 
         button_Matches = new Button(menu);
-        button_Matches.Text("Matches");
         button_Matches.Row(int_MenuStartRow+2);
-
         button_Conversations = new Button(menu);
-        button_Conversations.Text("Conversations");
         button_Conversations.Row(int_MenuStartRow+4);
-
         button_Pools= new Button(menu);
-        button_Pools.Text("Pools");
         button_Pools.Row(int_MenuStartRow+6);
-
         button_Settings = new Button(menu);
-        button_Settings.Text("Settings");
         button_Settings.Row(int_MenuStartRow+8);
-
         button_TsAndCs = new Button(menu);
-        button_TsAndCs.Text("Terms & Conditions");
         button_TsAndCs.Row(int_MenuStartRow+10);
-
         button_Experimental = new Button(menu);
-        button_Experimental.Text("Experimental Stuff");
         button_Experimental.Row(int_MenuStartRow+12);
-
         if (!(applicationSettings.IsDeveloperSession || applicationSettings.IsAdminSession)) {
             button_Experimental.Visible(false);
         }
 
         button_LogOut = new Button(menu);
-        button_LogOut.Text("Log Out");
         button_LogOut.Row(int_MenuStartRow+14);
 
         tools.button_CommonFormatting(50,
@@ -182,6 +165,18 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
         fn_VersionCheck();
+        fn_UI_Text();
+    }
+
+    void fn_UI_Text() {
+        button_Routes.Text(tools.fn_téacs_aistriú("routes"));
+        button_Matches.Text(tools.fn_téacs_aistriú("matches"));
+        button_Conversations.Text(tools.fn_téacs_aistriú("conversations"));
+        button_Pools.Text(tools.fn_téacs_aistriú("pools"));
+        button_Settings.Text(tools.fn_téacs_aistriú("settings"));
+        button_TsAndCs.Text(tools.fn_téacs_aistriú("terms_and_conditions"));
+        button_Experimental.Text(tools.fn_téacs_aistriú("experimental"));
+        button_LogOut.Text(tools.fn_téacs_aistriú("logout"));
     }
 
     void fn_VersionCheck() {
@@ -208,10 +203,12 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("OtherScreenClosed")) {
-            if (params[0].equals("screen09_Settings")) {
+//            if (params[0].equals("screen09_Settings")) {
                 applicationSettings.get();
+                fn_UI_Text();
+                this.recreate();
                 return true;
-            }
+//            }
         }
         else if (eventName.equals("Click")) {
             // component.toString()
@@ -233,6 +230,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             }
             else if (component.equals(button_Settings)) {
                 switchFormWithStartValue("screen09_Settings",null);
+                this.recreate();
                 return true;
             }
             else if (component.equals(button_TsAndCs)) {

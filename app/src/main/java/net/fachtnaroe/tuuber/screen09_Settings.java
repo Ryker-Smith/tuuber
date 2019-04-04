@@ -4,7 +4,6 @@ package net.fachtnaroe.tuuber;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Environment;
-import android.provider.ContactsContract;
 
 import com.google.appinventor.components.runtime.CheckBox;
 import com.google.appinventor.components.runtime.Component;
@@ -13,7 +12,6 @@ import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
 import com.google.appinventor.components.runtime.HandlesEventDispatching;
 import com.google.appinventor.components.runtime.HorizontalArrangement;
-import com.google.appinventor.components.runtime.ImagePicker;
 import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.PasswordTextBox;
@@ -35,8 +33,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
     aPerson thisPersonsDetails = new aPerson();
-    Web web_GetMyDetails, web_SaveMyDetails,  web_PasswordSave;
-    Notifier messages;
+    Web web_GetMyDetails, web_SaveMyDetails,  web_PasswordSave, web_RequestLocalizedText;
+    Notifier notifier_Messages;
     TextBox textbox_ListViewSize, textbox_PhoneNumber, textbox_eMail, textbox_UserFirstName, textbox_UserFamilyName, backgroundImageTextBox;
     PasswordTextBox textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword;
     Button button_SaveMyDetails, button_SubmitPassword, button_MainMenu, button_Refresh, button_SubmitCustomisation;
@@ -47,6 +45,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fachtnaSlider slider_FontSize;
     CheckBox checkbox_GA, checkbox_EN, checkbox_PO;
     VerticalScrollArrangement Settings;
+    Label versionCode;
 
     protected void $define() {
 
@@ -65,48 +64,38 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         button_MainMenu.Width(40);
         button_MainMenu.Height(40);
         button_MainMenu.Image(applicationSettings.ourLogo);
-        label_pID =tools.fn_HeadingLabel(hz_toolbar, label_pID, applicationSettings.pID,"Settings");
         button_Refresh = new Button(hz_toolbar);
         button_Refresh.Width(40);
         button_Refresh.Height(40);
         button_Refresh.FontSize(8);
         button_Refresh.Image("buttonRefresh.png");
-
         Settings = new VerticalScrollArrangement(this);
         Settings.WidthPercent(100);
         Settings.HeightPercent(100);
-        Label versionCode=new Label(Settings);
+        versionCode=new Label(Settings);
         versionCode.FontSize(10);
         versionCode.TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
         versionCode.BackgroundColor(Component.COLOR_NONE);
         versionCode.HTMLFormat(true);
-        versionCode.Text("Version: <b>" + applicationSettings.versionCode + "</b>");
         vt_Customisation = new VerticalArrangement(Settings);
         vt_Customisation.BackgroundColor(Component.COLOR_NONE);
         vt_Customisation.WidthPercent(100);
-
         HorizontalArrangement hz_ImageTextBox=new HorizontalArrangement(vt_Customisation);
-
         myImagePicker = new fachtnaImagePicker(hz_ImageTextBox);
-        myImagePicker.Text("Picker");
         myImagePicker.FontBold(true);
         myImagePicker.FontSize(12);
         myImagePicker.Height(40);
         myImagePicker.WidthPercent(20);
         backgroundImageTextBox = new TextBox(hz_ImageTextBox);
         backgroundImageTextBox.WidthPercent(80);
-
         listViewSizeHz=new HorizontalArrangement(vt_Customisation);
         listViewSizeLabel=new Label(listViewSizeHz);
         listViewSizeLabel.HTMLFormat(true);
-        listViewSizeLabel.Text("Font size in lists:");
         listViewSizeLabel.WidthPercent(15);
-
         textbox_ListViewSize = new TextBox(listViewSizeHz);
         textbox_ListViewSize.NumbersOnly(true);
         textbox_ListViewSize.WidthPercent(15);
         textbox_ListViewSize.TextAlignment(Component.ALIGNMENT_CENTER);
-
         slider_FontSize= new fachtnaSlider(listViewSizeHz);
         slider_FontSize.WidthPercent(70);
         slider_FontSize.MinValue(1);
@@ -114,7 +103,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         slider_FontSize.ColorLeft(Component.COLOR_RED);
         slider_FontSize.ColorRight(Component.COLOR_RED);
         slider_FontSize.ThumbEnabled(true);
-
         HorizontalArrangement hz_Languages = new HorizontalArrangement(vt_Customisation);
         checkbox_GA = new CheckBox(hz_Languages);
         checkbox_GA.Text("Gaeilge");
@@ -122,79 +110,57 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         checkbox_EN.Text("English");
         checkbox_PO = new CheckBox(hz_Languages);
         checkbox_PO.Text("Polski (Nie)");
-
         button_SubmitCustomisation = new Button(vt_Customisation);
-        button_SubmitCustomisation.Text("Save program settings");
-
         detailsVt = new VerticalArrangement(Settings);
         detailsVt.BackgroundColor(Component.COLOR_NONE);
-
         TableArrangement tabla_Sonraí = new TableArrangement(detailsVt);
         tabla_Sonraí.WidthPercent(100);
         tabla_Sonraí.Columns(2);
         tabla_Sonraí.Rows(4);
-
         label_UserFirstName = new Label(tabla_Sonraí);
         label_UserFirstName.HTMLFormat(true);
-        label_UserFirstName.Text("first name:");
         label_UserFirstName.Row(0);
         label_UserFirstName.Column(0);
         textbox_UserFirstName = new TextBox(tabla_Sonraí);
         textbox_UserFirstName.Row(0);
         textbox_UserFirstName.Column(1);
-
         label_UserFamilyName = new Label(tabla_Sonraí);
-        label_UserFamilyName.Text("family name:");
         label_UserFamilyName.HTMLFormat(true);
         label_UserFamilyName.Row(1);
         label_UserFamilyName.Column(0);
-
         textbox_UserFamilyName = new TextBox(tabla_Sonraí);
         textbox_UserFamilyName.Row(1);
         textbox_UserFamilyName.Column(1);
-
         label_PhoneNumber = new Label(tabla_Sonraí);
-        label_PhoneNumber.Text("Phone:");
         label_PhoneNumber.Row(2);
         label_PhoneNumber.Column(0);
         textbox_PhoneNumber = new TextBox(tabla_Sonraí);
         textbox_PhoneNumber.Row(2);
         textbox_PhoneNumber.Column(1);
-
         label_eMail = new Label(tabla_Sonraí);
-        label_eMail.Text("email:");
         label_eMail.Row(3);
         label_eMail.Column(0);
         textbox_eMail = new TextBox(tabla_Sonraí);
         textbox_eMail.Row(3);
         textbox_eMail.Column(1);
-
         button_SaveMyDetails = new Button(detailsVt);
-        button_SaveMyDetails.Text("Save detail changes");
-
         vt_Password = new VerticalArrangement(Settings);
         vt_Password.BackgroundColor(Component.COLOR_NONE);
         oldPassHz = new HorizontalArrangement(vt_Password);
         label_OldPassword = new Label(oldPassHz);
-        label_OldPassword.Text("Old password:");
         textbox_OldPassword = new PasswordTextBox(oldPassHz);
         newPassHz = new HorizontalArrangement(vt_Password);
         label_NewPassword = new Label(newPassHz);
-        label_NewPassword.Text("New password:");
         textbox_NewPassword = new PasswordTextBox(newPassHz);
         confirmHz = new HorizontalArrangement(vt_Password);
         label_ConfirmPassword = new Label(confirmHz);
-        label_ConfirmPassword.Text("Confirm new:");
         textbox_ConfirmPassword = new PasswordTextBox(confirmHz);
-
         button_SubmitPassword = new Button(vt_Password);
-        button_SubmitPassword.Text("Change password now");
         Label pad_Bottom = new Label(Settings);
         pad_Bottom.Height(50);
         pad_Bottom.Text("");
         pad_Bottom.BackgroundColor(Component.COLOR_NONE);
-
-        messages = new Notifier(Settings);
+        notifier_Messages = new Notifier(Settings);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -208,7 +174,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         web_GetMyDetails = new Web(this);
         web_SaveMyDetails = new Web(this);
-
+        web_RequestLocalizedText = new Web(this);
         web_PasswordSave = new Web(this);
 
         password_CommonFormatting(textbox_OldPassword, textbox_NewPassword, textbox_ConfirmPassword);
@@ -217,18 +183,51 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         button_CommonFormatting(button_SubmitCustomisation, button_SaveMyDetails, button_SubmitPassword);
         checkbox_CommonFormatting(checkbox_GA, checkbox_EN, checkbox_PO);
         checkbox_PO.Enabled(false);
+        if (applicationSettings.string_PreferredLanguage.equals("ga")) {
+            checkbox_GA.Checked(true);
+        }
+        else if (applicationSettings.string_PreferredLanguage.equals("en")) {
+            checkbox_EN.Checked(true);
+        }
+        else if (applicationSettings.string_PreferredLanguage.equals("po")) {
+            checkbox_PO.Checked(true);
+        }
 
         myImagePicker.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         myImagePicker.TextColor(Component.COLOR_WHITE);
         myImagePicker.Shape(BUTTON_SHAPE_ROUNDED);
         myImagePicker.FontSize(12);
 
+        fn_UI_Text();
         fn_GetMyDetails();
         fn_GetProgramSettings();
     }
 
+    void fn_UI_Text() {
+        tools.dbg("IN");
+        label_pID =tools.fn_HeadingLabel(
+                hz_toolbar, label_pID, applicationSettings.pID,
+                tools.fn_téacs_aistriú("settings",tools.capitalize_first)
+        );
+        versionCode.Text(tools.fn_téacs_aistriú("version")+": <b>" + applicationSettings.versionCode + "</b>");
+        myImagePicker.Text(tools.fn_téacs_aistriú("picker",tools.capitalize_first));
+        listViewSizeLabel.Text(tools.fn_téacs_aistriú("font_size_in_lists",tools.capitalize_each)+":");
+        button_SubmitCustomisation.Text(tools.fn_téacs_aistriú("save_program_settings",tools.capitalize_first));
+        label_UserFirstName.Text(tools.fn_téacs_aistriú("first_name",tools.capitalize_first)+":");
+        label_UserFamilyName.Text(tools.fn_téacs_aistriú("family_name",tools.capitalize_first)+":");
+        label_PhoneNumber.Text(tools.fn_téacs_aistriú("phone",tools.capitalize_first)+":");
+        label_eMail.Text(tools.fn_téacs_aistriú("email",tools.capitalize_none)+":");
+        button_SaveMyDetails.Text(tools.fn_téacs_aistriú("save_detail_changes",tools.capitalize_none));
+        label_OldPassword.Text(tools.fn_téacs_aistriú("old_password",tools.capitalize_none)+":");
+        label_NewPassword.Text(tools.fn_téacs_aistriú("new_password",tools.capitalize_none)+":");
+        label_ConfirmPassword.Text(tools.fn_téacs_aistriú("confirm_password",tools.capitalize_none)+":");
+        button_SubmitPassword.Text(tools.fn_téacs_aistriú("change_password_now",tools.capitalize_none));
+
+        tools.dbg("OUT");
+    }
+
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
-        dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
+        tools.dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
 
         if (eventName.equals("BackPressed")) {
             finish();
@@ -257,25 +256,69 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                     checkbox_EN.Checked(false);
                     checkbox_PO.Checked(false);
                     applicationSettings.string_PreferredLanguage="ga";
+                    applicationSettings.set();
+                    web_RequestLocalizedText.Url(
+                            applicationSettings.localisationBaseUrl +
+                                    "?s=" +
+                                    applicationSettings.default_sessionID +
+                                    "&app=túber"+
+                                    "&f=json" +
+                                    "&a=gettext" +
+                                    "&l=" +
+                                    applicationSettings.string_PreferredLanguage
+                    );
+                    //applicationSettings.set(); // save the new preferred language
+                    web_RequestLocalizedText.Get();
+                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+                    return true;
                 }
-                return true;
             }
             else if (component.equals(checkbox_EN)) {
                 if (checkbox_EN.Checked() == true) {
                     checkbox_GA.Checked(false);
                     checkbox_PO.Checked(false);
                     applicationSettings.string_PreferredLanguage="en";
+                    applicationSettings.set();
+                    web_RequestLocalizedText.Url(
+                            applicationSettings.localisationBaseUrl +
+                                    "?s=" +
+                                    applicationSettings.default_sessionID +
+                                    "&app=túber"+
+                                    "&f=json" +
+                                    "&a=gettext" +
+                                    "&l=" +
+                                    applicationSettings.string_PreferredLanguage
+                    );
+                    //applicationSettings.set(); // save the new preferred language
+                    web_RequestLocalizedText.Get();
+                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+                    return true;
                 }
-                return true;
             }
             else if (component.equals(checkbox_PO)) {
                 if (checkbox_PO.Checked() == true) {
                     checkbox_GA.Checked(false);
                     checkbox_EN.Checked(false);
                     applicationSettings.string_PreferredLanguage="po";
+                    applicationSettings.set();
+                    web_RequestLocalizedText.Url(
+                            applicationSettings.localisationBaseUrl +
+                                    "?s=" +
+                                    applicationSettings.default_sessionID +
+                                    "&app=túber"+
+                                    "&f=json" +
+                                    "&a=gettext" +
+                                    "&l=" +
+                                    applicationSettings.string_PreferredLanguage
+                    );
+                    //applicationSettings.set(); // save the new preferred language
+                    web_RequestLocalizedText.Get();
+                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+                    return true;
                 }
-                return true;
             }
+
+            return true;
         }
         else if (eventName.equals("AfterPicking")) {
             if (component.equals(myImagePicker)) {
@@ -385,9 +428,41 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 passwordSaveGotText(status, textOfResponse);
                 return true;
             }
-            return false;
+            else if (component.equals(web_RequestLocalizedText)) {
+                String status = params[1].toString();
+                String textOfResponse = (String) params[3];
+                fn_GotText_LocalizeText(status, textOfResponse);
+                return false;
+            }
         }
         return false;
+    }
+
+    void fn_GotText_LocalizeText (String status, String textOfResponse) {
+
+        tools.dbg("GOT: "+textOfResponse);
+        if (status.equals("200" )) try {
+
+            JSONObject parser = new JSONObject(textOfResponse);
+            applicationSettings.rawtxt=textOfResponse;
+            if (!parser.getString(applicationSettings.string_PreferredLanguage ).equals("")) {
+                applicationSettings.messages=applicationSettings.fn_unpack_messages_from_string(applicationSettings.string_PreferredLanguage,applicationSettings.rawtxt,notifier_Messages);
+                tools.dbg("LANG: "+applicationSettings.string_PreferredLanguage );
+                fn_UI_Text();
+                applicationSettings.set();
+                this.recreate();
+            }
+            else {
+                notifier_Messages.ShowAlert("Problem 9.409");
+            }
+        }
+        catch (JSONException e) {
+            // if an exception occurs, code for it in here
+            notifier_Messages.ShowAlert("error 9.414 (json)("+applicationSettings.string_PreferredLanguage+")"+applicationSettings.rawtxt);
+        }
+        else {
+            notifier_Messages.ShowAlert("problem 9.417 (server)");
+        }
     }
 
     void fn_GetMyDetails() {
@@ -427,14 +502,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 textbox_UserFamilyName.Text(thisPersonsDetails.family);
 
             } else {
-                messages.ShowMessageDialog("Error getting details", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error getting details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog(textOfResponse + "JSON Exception [pID=" + applicationSettings.pID + "]", "Information", "OK");
+            notifier_Messages.ShowMessageDialog(textOfResponse + "JSON Exception [pID=" + applicationSettings.pID + "]", "Information", "OK");
         }
         else {
-            messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
         }
     }
 
@@ -444,14 +519,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             if (parser.getString("result").equals("OK")) {
                 finish();
             } else {
-                messages.ShowMessageDialog("Error saving details", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error saving details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog("JSON Exception", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("JSON Exception", "Information", "OK");
         }
         else {
-            messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
         }
     }
 
@@ -463,14 +538,14 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 // do something
                 finish();
             } else {
-                messages.ShowMessageDialog("Error changing password", "Information", "OK");
+                notifier_Messages.ShowMessageDialog("Error changing password", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messages.ShowMessageDialog("Server says: password not changed", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("Server says: password not changed", "Information", "OK");
         }
         else {
-            messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
+            notifier_Messages.ShowMessageDialog("Problem connecting with server", "Information", "OK");
         }
     }
 
