@@ -287,7 +287,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
             JSONObject parser = new JSONObject(textOfResponse);
             if (parser.getString("result").equals("OK")) {
 //                notifier_EmailActivationPopUp.ShowMessageDialog("User created. Please check your email for an activation message *before* you can use " + applicationSettings.appName, "Success!", "Grand");
-                notifier_EmailActivationPopUp.ShowChooseDialog("User created. Please check your email for an activation message *before* you can use " + applicationSettings.appName, "Success!", "Grand","",false);
+                notifier_EmailActivationPopUp.ShowChooseDialog("User created. Please check your email for an activation message *before* you can use " + applicationSettings.appName + " (but don't forget to look in your SPAM folder)", "Success!", "Grand","",false);
             } else {
                 notifier_MessagesPopUp.ShowMessageDialog("Create failed, check details (1)(" + textOfResponse +")", "Information", "OK");
             }

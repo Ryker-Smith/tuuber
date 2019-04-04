@@ -7,6 +7,7 @@ http://www.java2s.com/Tutorial/Java/0320__Network/ReadingAWebResourceOpeningaURL
 */
 
 import com.google.appinventor.components.runtime.ComponentContainer;
+import com.google.appinventor.components.runtime.Notifier;
 import com.google.appinventor.components.runtime.TinyDB;
 
 import org.json.JSONArray;
@@ -112,23 +113,11 @@ public class tuuber_Settings {
         TermsAndConditions_URL=baseURL + "?cmd=TERMS";
 
         if (rawtxt != null) {
-                try {
-                    String raw = (String) localDB.GetValue("rawtxt", null);
-                    JSONObject parser = new JSONObject(raw);
-                    JSONArray words_Array = parser.getJSONArray(string_PreferredLanguage);
-                    for (int i = 0; i < words_Array.length(); i++) {
-                        if (words_Array.getJSONObject(i).toString().equals("{}")) break;
-                        messages.put(
-                                words_Array.getJSONObject(i).getString("keyC"),
-                                words_Array.getJSONObject(i).getString("value")
-                        );
-                    }
-                } catch(JSONException e){
-                        tuuberCommonSubroutines.dbg("JSON error 135");
-                }
+            String raw = (String) localDB.GetValue("rawtxt", null);
+            messages=fn_unpack_messages_from_string(string_PreferredLanguage,raw,null);
         }
         else {
-           tuuberCommonSubroutines.dbg("NULL");
+           tuuberCommonSubroutines.dbg("NULL/language unpack");
         }
         return "OK";
     }
@@ -153,6 +142,30 @@ public class tuuber_Settings {
             localDB.StoreValue("string_SavedPassword", string_SavedPassword);
         }
         return "OK";
+    }
+
+    HashMap<String, String> fn_unpack_messages_from_string(String language, String s, Notifier n) {
+        // Purpose: Given a string known to contain a JSON array of terms, unpack
+        // those terms in a more accessible HashMap
+        HashMap<String,String> t = new HashMap<String, String>();
+        try {
+            JSONObject parser = new JSONObject(s);
+            JSONArray words_Array = parser.getJSONArray(language);
+            for (int i = 0; i < words_Array.length(); i++) {
+                if (words_Array.getJSONObject(i).toString().equals("{}")) break;
+                t.put(
+                        words_Array.getJSONObject(i).getString("keyC"),
+                        words_Array.getJSONObject(i).getString("value")
+                );
+            }
+        }
+        catch (JSONException e) {
+            if (n != null) {
+                // fail silently if null, otherwise:
+                n.ShowAlert("error 0.176 (json/language unpack)");
+            }
+        }
+        return t;
     }
 }
 

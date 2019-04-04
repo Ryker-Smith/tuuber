@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class screen01_Splash extends Form implements HandlesEventDispatching {
 
     tuuberCommonSubroutines t;
@@ -42,12 +44,13 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         notifier_Messages.BackgroundColor(Color.parseColor(applicationSettings.string_ColorBad));
         web_RequestLocalizedText.Url(
                 applicationSettings.localisationBaseUrl +
-                "?l=" +
-                applicationSettings.string_PreferredLanguage +
-                "&s=" +
+                "?s=" +
                 applicationSettings.default_sessionID +
-                "&a=listall" +
-                "&f=json"
+                "&app=túber"+
+                "&f=json" +
+                "&a=gettext" +
+                "&l=" +
+                applicationSettings.string_PreferredLanguage
         );
         web_RequestLocalizedText.Get();
         t.dbg(web_RequestLocalizedText.Url());
@@ -72,9 +75,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         spacer.FontTypeface(Ev3Constants.FontType.NORMAL_FONT);
         spacer.TextAlignment(Component.ALIGNMENT_CENTER);
 
-        spacer.Text(
-                t.fn_téacs_aistriú("loading" + "..." )
-        );
+        spacer.Text( "ag obair ..."); //
         timerNextScreen = new Clock(SplashScreen);
         timerNextScreen.TimerEnabled(false);
         timerNextScreen.TimerInterval(another_Bad_Idea_SettingTheTimerThisWay);
@@ -114,27 +115,14 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
 
     void fn_GotText_LocalizeText (String status, String textOfResponse) {
 
-//        t.dbg(status);
-//        t.dbg(textOfResponse);
-//        t.dbg("B "+applicationSettings.string_PreferredLanguage);
-//        t.dbg("DDD");
         //https://beginnersbook.com/2013/12/hashmap-in-java-with-example/
-
         if (status.equals("200" )) try {
 
             JSONObject parser = new JSONObject(textOfResponse);
             applicationSettings.rawtxt=textOfResponse;
-            t.dbg(applicationSettings.string_PreferredLanguage);
-            t.dbg(parser.getString(applicationSettings.string_PreferredLanguage));
+
             if (!parser.getString(applicationSettings.string_PreferredLanguage ).equals("")) {
-                JSONArray words_Array = parser.getJSONArray(applicationSettings.string_PreferredLanguage);
-                for (int i = 0; i < words_Array.length(); i++) {
-                    if (words_Array.getJSONObject(i).toString().equals("{}")) break;
-                    applicationSettings.messages.put(
-                            words_Array.getJSONObject(i).getString("keyC" ),
-                            words_Array.getJSONObject(i).getString("value" )
-                    );
-                }
+                applicationSettings.messages=applicationSettings.fn_unpack_messages_from_string(applicationSettings.string_PreferredLanguage,applicationSettings.rawtxt,notifier_Messages);
                 applicationSettings.set();
            }
             else {
@@ -148,9 +136,6 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         else {
             notifier_Messages.ShowAlert("problem 1.145 (server)");
         }
-        spacer.Text(
-                t.fn_téacs_aistriú("loading" + "..." )
-        );
     }
 
 }

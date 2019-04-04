@@ -117,9 +117,9 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
         HorizontalArrangement hz_Languages = new HorizontalArrangement(vt_Customisation);
         checkbox_GA = new CheckBox(hz_Languages);
-        checkbox_GA.Text("Gaeilge (Níl)");
+        checkbox_GA.Text("Gaeilge");
         checkbox_EN = new CheckBox(hz_Languages);
-        checkbox_EN.Text("English (No)");
+        checkbox_EN.Text("English");
         checkbox_PO = new CheckBox(hz_Languages);
         checkbox_PO.Text("Polski (Nie)");
 
@@ -216,6 +216,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         label_CommonFormatting(label_eMail, label_PhoneNumber, label_UserFamilyName, label_UserFirstName);
         button_CommonFormatting(button_SubmitCustomisation, button_SaveMyDetails, button_SubmitPassword);
         checkbox_CommonFormatting(checkbox_GA, checkbox_EN, checkbox_PO);
+        checkbox_PO.Enabled(false);
 
         myImagePicker.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         myImagePicker.TextColor(Component.COLOR_WHITE);
@@ -255,6 +256,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 if (checkbox_GA.Checked() == true) {
                     checkbox_EN.Checked(false);
                     checkbox_PO.Checked(false);
+                    applicationSettings.string_PreferredLanguage="ga";
                 }
                 return true;
             }
@@ -262,6 +264,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 if (checkbox_EN.Checked() == true) {
                     checkbox_GA.Checked(false);
                     checkbox_PO.Checked(false);
+                    applicationSettings.string_PreferredLanguage="en";
                 }
                 return true;
             }
@@ -269,6 +272,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 if (checkbox_PO.Checked() == true) {
                     checkbox_GA.Checked(false);
                     checkbox_EN.Checked(false);
+                    applicationSettings.string_PreferredLanguage="po";
                 }
                 return true;
             }
@@ -545,7 +549,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             c[i].Height(40);
             c[i].WidthPercent(33);
             c[i].Checked(false);
-            c[i].Enabled(false);
+            c[i].Enabled(true);
             i++;
         }
 
