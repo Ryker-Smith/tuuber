@@ -33,7 +33,7 @@ public class tuuberCommonSubroutines {
     public Label fn_HeadingLabel(ComponentContainer parent, Label lbl, String pID, String heading) {
         lbl = new Label(parent);
         lbl.HTMLFormat(true);
-        lbl.Text("<small>I am user: #" + pID + "</small><br><small><small>"+heading+"</small></small>");
+        lbl.Text("<small>"+ fn_téacs_aistriú("i_am_user", capitalize_first)+": #" + pID + "</small><br><small><small>"+heading+"</small></small>");
         lbl.Height(40);
         lbl.FontSize(20);
         lbl.WidthPercent(70);

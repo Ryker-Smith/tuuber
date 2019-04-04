@@ -55,7 +55,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             this.BackgroundImage(applicationSettings.backgroundImageName);
         }
         catch (Exception e) {
-            dbg(e.toString());
+            tools.dbg(e.toString());
         }
         tools = new tuuberCommonSubroutines(this);
         // The 'toolbar'
@@ -182,7 +182,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         label_CommonFormatting(label_eMail, label_PhoneNumber, label_UserFamilyName, label_UserFirstName);
         button_CommonFormatting(button_SubmitCustomisation, button_SaveMyDetails, button_SubmitPassword);
         checkbox_CommonFormatting(checkbox_GA, checkbox_EN, checkbox_PO);
-        checkbox_PO.Enabled(false);
+//        checkbox_PO.Enabled(false);
         if (applicationSettings.string_PreferredLanguage.equals("ga")) {
             checkbox_GA.Checked(true);
         }
@@ -204,7 +204,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     }
 
     void fn_UI_Text() {
-        tools.dbg("IN");
         label_pID =tools.fn_HeadingLabel(
                 hz_toolbar, label_pID, applicationSettings.pID,
                 tools.fn_téacs_aistriú("settings",tools.capitalize_first)
@@ -222,13 +221,10 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         label_NewPassword.Text(tools.fn_téacs_aistriú("new_password",tools.capitalize_none)+":");
         label_ConfirmPassword.Text(tools.fn_téacs_aistriú("confirm_password",tools.capitalize_none)+":");
         button_SubmitPassword.Text(tools.fn_téacs_aistriú("change_password_now",tools.capitalize_none));
-
-        tools.dbg("OUT");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         tools.dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
-
         if (eventName.equals("BackPressed")) {
             finish();
             return true;
@@ -241,7 +237,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("BeforePicking")) {
-            dbg(Environment.getExternalStorageDirectory().toString());
+            tools.dbg(Environment.getExternalStorageDirectory().toString());
             myImagePicker.Image( backgroundImageTextBox.Text() );
             if (component.equals(myImagePicker)) {
 //                myImagePicker.
@@ -269,7 +265,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                     );
                     //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -289,9 +285,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                                     "&l=" +
                                     applicationSettings.string_PreferredLanguage
                     );
-                    //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -313,7 +308,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                     );
                     //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -405,24 +400,24 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("GotText") ) {
             if (component.equals(web_GetMyDetails)) {
-                dbg((String) params[0]);
-                dbg(this.formName + " web_GetMyDetails");
+                tools.dbg((String) params[0]);
+                tools.dbg(this.formName + " web_GetMyDetails");
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 detailsGotText(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_SaveMyDetails)) {
-                dbg((String) params[0]);
-                dbg(this.formName + " web_SaveMyDetails");
+                tools.dbg((String) params[0]);
+                tools.dbg(this.formName + " web_SaveMyDetails");
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 detailsSaveGotText(status, textOfResponse);
                 return true;
             }
             else if (component.equals(web_PasswordSave)) {
-                dbg((String) params[0]);
-                dbg(this.formName + " web_PasswordSave");
+                tools.dbg((String) params[0]);
+                tools.dbg(this.formName + " web_PasswordSave");
                 String status = params[1].toString();
                 String textOfResponse = (String) params[3];
                 passwordSaveGotText(status, textOfResponse);
@@ -479,12 +474,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         backgroundImageTextBox.Text(applicationSettings.backgroundImageName);
         textbox_ListViewSize.Text(applicationSettings.intListViewsize.toString());
         slider_FontSize.ThumbPosition(Integer.valueOf(textbox_ListViewSize.Text()));
-        fn_preferredLanguage(applicationSettings.string_PreferredLanguage, checkbox_GA, checkbox_EN, checkbox_PO);
+//        fn_preferredLanguage(applicationSettings.string_PreferredLanguage, checkbox_GA, checkbox_EN, checkbox_PO);
     }
 
-    void fn_preferredLanguage (String lang, CheckBox... cb){
-
-    }
+//    void fn_preferredLanguage (String lang, CheckBox... cb){
+//
+//    }
 
     public void detailsGotText(String status, String textOfResponse) {
         if (status.equals("200")) try {
@@ -549,7 +544,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
     }
 
-    void dbg(String debugMsg) { System.err.print("~~~> " + debugMsg + " <~~~\n");  }
 
     void label_CommonFormatting(Label... lbl) {
         // This function takes a list of TextBox'es and sets them to 100% width
@@ -564,15 +558,15 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         }
     }
 
-    void textbox_CommonFormatting(TextBox... t) {
+    void textbox_CommonFormatting(TextBox... tb) {
         // This function takes a list of TextBox'es and sets them to 100% width
         // Other common applicationSettings may be applied this way.
         int i = 0;
-        int len = t.length;
-        while ((i < len) && (t[i] != null)) {
-            t[i].WidthPercent(75);
-            t[i].BackgroundColor(Component.COLOR_NONE);
-            t[i].FontBold(true);
+        int len = tb.length;
+        while ((i < len) && (tb[i] != null)) {
+            tb[i].WidthPercent(75);
+            tb[i].BackgroundColor(Component.COLOR_NONE);
+            tb[i].FontBold(true);
             i++;
         }
     }
@@ -610,21 +604,21 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
 
     }
 
-    void checkbox_CommonFormatting(CheckBox... c) {
+    void checkbox_CommonFormatting(CheckBox... cb) {
         // This function takes a list of TextBox'es and sets them to 100% width
         // Other common applicationSettings may be applied this way.
         int i=0;
-        int len = c.length;
+        int len = cb.length;
 //        https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
-        while ((i < len) && (c[i] != null)) {
-            c[i].BackgroundColor(Component.COLOR_NONE);
-            c[i].FontBold(true);
-            c[i].TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
-            c[i].FontSize(12);
-            c[i].Height(40);
-            c[i].WidthPercent(33);
-            c[i].Checked(false);
-            c[i].Enabled(true);
+        while ((i < len) && (cb[i] != null)) {
+            cb[i].BackgroundColor(Component.COLOR_NONE);
+            cb[i].FontBold(true);
+            cb[i].TextColor(Color.parseColor(applicationSettings.string_ButtonColor));
+            cb[i].FontSize(12);
+            cb[i].Height(40);
+            cb[i].WidthPercent(33);
+            cb[i].Checked(false);
+            cb[i].Enabled(true);
             i++;
         }
 

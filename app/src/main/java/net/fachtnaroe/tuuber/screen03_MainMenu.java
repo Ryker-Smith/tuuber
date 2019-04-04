@@ -203,15 +203,12 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             return true;
         }
         else if (eventName.equals("OtherScreenClosed")) {
-//            if (params[0].equals("screen09_Settings")) {
                 applicationSettings.get();
                 fn_UI_Text();
                 this.recreate();
                 return true;
-//            }
         }
         else if (eventName.equals("Click")) {
-            // component.toString()
             if (component.equals(button_Matches)) {
                 switchFormWithStartValue("screen04_Matches",null   );
                 return true;
