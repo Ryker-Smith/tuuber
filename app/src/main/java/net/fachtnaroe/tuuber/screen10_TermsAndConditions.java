@@ -60,10 +60,10 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         Label flogginpadalso=(Label)tools.padding(TermsAndConditions,1,1);
         HorizontalArrangement hz_AcceptDecline = new HorizontalArrangement(TermsAndConditions);
         button_Accept = new Button(hz_AcceptDecline);
-        button_Accept.Text("Accept");
+        button_Accept.Text(tools.fn_téacs_aistriú("accept"));
         if (!this.startupValue.toString().equals("\"1\"")){ // apparently the quotes are part of what's passed!
             button_Decline = new Button(hz_AcceptDecline);
-            button_Decline.Text("Decline");
+            button_Decline.Text(tools.fn_téacs_aistriú("decline"));
         }
         tools.dbg("Start Value ["+this.startupValue.toString()+"]");
 

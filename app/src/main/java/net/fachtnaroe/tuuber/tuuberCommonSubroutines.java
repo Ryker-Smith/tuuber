@@ -94,7 +94,15 @@ public class tuuberCommonSubroutines {
     }
 
     String fn_téacs_aistriú(String t){
-        String translation=applicationSettings.messages.get(t);
+        // Purpose: takes a string, and matches it to text for
+        // the corresponding language
+        String translation;//=applicationSettings.messages.get(t.toLowerCase());
+        if (applicationSettings.messages.containsKey(t.toLowerCase())) {
+            translation=applicationSettings.messages.get(t.toLowerCase());
+        }
+        else {
+            translation = applicationSettings.messages.get("error");
+        }
         return translation;
     }
 
