@@ -167,6 +167,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 User.first = FirstName.Text();
                 User.family = LastName.Text();
                 User.password = Password.Text();
+                button_Create.Enabled(false);
 
                 if (!User.validPhone()) {
                     TelephoneLabel.TextColor(Color.RED);
@@ -177,6 +178,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Invalid Phone Number", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
                 if (!User.validEmail()) {
@@ -188,6 +190,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Invalid Email", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
 
@@ -200,6 +203,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Invalid FirstName", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
                 if (!User.valid_family()) {
@@ -211,6 +215,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Invalid LastName", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
                 if (!User.valid_password()) {
@@ -222,6 +227,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     LastNameLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Invalid Password", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
                 if (!Password.Text().equals(ConfirmPassword.Text())) {
@@ -233,6 +239,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     LastNameLabel.TextColor(Color.BLACK);
                     TCAgree.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Passwords Don't Match", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
                 if (!TCAgree.Checked()) {
@@ -244,6 +251,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                     PasswordLabel.TextColor(Color.BLACK);
                     ConfirmPasswordLabel.TextColor(Color.BLACK);
                     notifier_MessagesPopUp.ShowMessageDialog("Please agree to the Terms and Conditions, or cease using this App", "Error", "OK");
+                    button_Create.Enabled(true);
                     return true;
                 }
                 web_CreateUser.Url(
@@ -290,13 +298,17 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 notifier_EmailActivationPopUp.ShowChooseDialog("User created. Please check your email for an activation message *before* you can use " + applicationSettings.appName + " (but don't forget to look in your SPAM folder)", "Success!", "Grand","",false);
             } else {
                 notifier_MessagesPopUp.ShowMessageDialog("Create failed, check details (1)(" + textOfResponse +")", "Information", "OK");
+                button_Create.Enabled(true);
             }
+
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
             notifier_MessagesPopUp.ShowMessageDialog("Create failed, check details (2)(" + textOfResponse +")", "Information", "OK");
+            button_Create.Enabled(true);
         }
         else {
             notifier_MessagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            button_Create.Enabled(true);
         }
     }
     public void thisOtherScreenClosed(String otherScreenName, Object result) {
