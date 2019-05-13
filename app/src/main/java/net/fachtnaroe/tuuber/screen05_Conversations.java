@@ -77,7 +77,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         label_Open.Text("Open Conversations");
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
-        listview_Open.HeightPercent(100);
+        listview_Open.HeightPercent(20);
         listview_Open.WidthPercent(100);
         listview_Open.SelectionColor(Component.COLOR_DKGRAY);
         listview_Open.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));

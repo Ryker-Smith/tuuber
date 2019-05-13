@@ -40,7 +40,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
     Web web_ChatLine, web_PoolMakeNew, web_PoolNavigator, web_NoPoolCreated, web_PoolCreated, web_GetTheRouteId;
     WebViewer webview_Chat;
     int int_RefreshBackendTimeInterval = 5000;
-    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolDriverID, string_ThisPoolNavigatorID, string_DriverOrNavigator, WhoIsDriving;;
+    String string_URLOfConversation, string_URLOfLink, string_ThisRouteId, string_ThisPoolDriverID, string_ThisPoolNavigatorID, string_DriverOrNavigator, string_Precautions, WhoIsDriving;;
     Integer int_ClockCount=0;
 
     protected void $define() {
@@ -152,7 +152,6 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 string_DriverOrNavigator=(String)params[0];
                 if (string_DriverOrNavigator.equals("Driver")) {
                     string_Precautions= "I am a licenced driver; the vehicle I will use is fully insured and is roadworthy.";
-                    string_Precautions=tools.fn_téacs_aistriú(string_Precautions);
                     WhoIsDriving = applicationSettings.pID;
                 }
                 else {
