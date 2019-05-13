@@ -32,9 +32,9 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     tuuberCommonSubroutines tools;
     private Web web_MyRoutes, Routes, web_MatchesFound, web_InitiateChat;
     private Notifier messagesPopUp;
-    private Button button_InitiateChat, MainMenu, Refresh, button_FindMatches;
+    private Button button_InitiateChat, MainMenu, Refresh;
     private VerticalArrangement Matches;
-    private HorizontalArrangement MatchesButtons, MenuButtons, hz_Arrangement3;
+    private HorizontalArrangement MenuButtons, hz_Arrangement3;
     private ListView list_MyRoutes, list_MatchesFound;
     private Label User_ID,seperation;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
@@ -61,7 +61,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MainMenu.Width(40);
         MainMenu.Image(applicationSettings.ourLogo);
 
-        User_ID =tools.fn_HeadingLabel(MenuButtons, User_ID, applicationSettings.pID,"Matches");
+        User_ID =tools.fn_HeadingLabel(MenuButtons, User_ID, applicationSettings.pID,"Your Routes");
 
         Refresh = new Button(MenuButtons);
         Refresh.Image("buttonRefresh.png");
@@ -74,12 +74,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 
         Label pad=(Label)tools.padding(Matches,5,1);
 
-        MatchesButtons = new HorizontalArrangement(Matches);
-        button_FindMatches = new Button(MatchesButtons);
-        button_FindMatches.Text("Click to see Matches");
-        tools.buttonOnOff(button_FindMatches,false);
-        Label padalso=(Label)tools.padding(Matches,5,1);
-//        button_FindMatches.Visible(false);
 
         list_MatchesFound = new ListView(Matches);
         list_MatchesFound.HeightPercent(35);
@@ -101,8 +95,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         web_MyRoutes = new Web(Matches);
         web_MatchesFound = new Web(Matches);
 //        web_MatchesFound = new Web(Matches);
-        tools.button_CommonFormatting(50, button_FindMatches,button_InitiateChat );
-        tools.buttonOnOff(button_FindMatches, false);
+        tools.button_CommonFormatting(50,button_InitiateChat );
         tools.buttonOnOff(button_InitiateChat, false);
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "AfterPicking");
@@ -128,7 +121,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 switchForm("screen03_MainMenu");
                 return true;
             } else if (component.equals(Refresh)) {
-                tools.buttonOnOff(button_FindMatches, false);
                 tools.buttonOnOff(button_InitiateChat,false);
                 YailList temp = new YailList();
                 list_MatchesFound.Elements(temp);
@@ -168,23 +160,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 web_InitiateChat.Get();
                 tools.dbg(web_InitiateChat.Url());
                 return true;
-            } else if (component.equals(button_FindMatches)) {
-                if (component.equals(button_FindMatches)) {
-                    web_MatchesFound.Url(
-                            applicationSettings.baseURL
-                                    + "?action=GET"
-                                    + "&entity=Match"
-                                    + "&sessionID="
-                                    + applicationSettings.sessionID
-                                    + "&iam="
-                                    + applicationSettings.pID
-                                    + "&rID="
-                                    + int_SelectedRoute.toString()
-                    );
-                    tools.dbg(web_MatchesFound.Url());
-                    web_MatchesFound.Get();
-                    return true;
-                }
             }
         } else if (eventName.equals("AfterPicking")) {
             if (component.equals(list_MyRoutes)) {
@@ -192,7 +167,6 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
                 temp[1] = temp[1].replace(")", "");
                 int_SelectedRoute = Integer.valueOf(temp[1]);
 //                tools.dbg(int_SelectedRoute.toString());
-                tools.buttonOnOff(button_FindMatches,true);
                 web_MatchesFound.Url(
                         applicationSettings.baseURL
                                 + "?action=GET"
@@ -337,7 +311,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Data Error" + temp, "Information", "OK");
+            messagesPopUp.ShowMessageDialog("Chat already initiated" + temp, "Information", "OK");
         }
         else {
             messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK");
