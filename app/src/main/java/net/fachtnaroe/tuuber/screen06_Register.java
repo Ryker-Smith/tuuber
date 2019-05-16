@@ -28,8 +28,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
     private Button button_Create, button_TermsConditions;
     private VerticalArrangement Register;
-    private HorizontalArrangement TermsConditionsHZ, CreateHZ, PaddingHZ;
-    private CheckBox TCAgree;
+    private HorizontalArrangement TermsConditionsHZ, OverEighteenHZ, CreateHZ, PaddingHZ;
+    private CheckBox TCAgree, OverEighteen;
     private Label TelephoneLabel, eMailLabel, LastNameLabel, FirstNameLabel, ConfirmPasswordLabel, PasswordLabel, TCLabel;
     private TextBox Telephone,eMail, LastName, FirstName;
     private Web web_CreateUser;
@@ -123,6 +123,10 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         TCLabel = new Label(TermsConditionsHZ);
         TCLabel.BackgroundColor(Component.COLOR_BLUE);
         TCLabel.Visible(false);
+
+        OverEighteenHZ = new HorizontalArrangement(Register);
+        OverEighteen = new CheckBox(OverEighteenHZ);
+        OverEighteen.Text("Are You Over 18?");
 
         PaddingHZ = new HorizontalArrangement(Register);
         Button button_Pad = new Button(PaddingHZ);
