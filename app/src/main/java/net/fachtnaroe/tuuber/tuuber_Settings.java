@@ -25,7 +25,7 @@ public class tuuber_Settings {
     public final String versionName=BuildConfig.VERSION_NAME;
     public final String appName="túber";
     public final String Endpoint="Templemore";
-    public final String localisationBaseUrl="https://fachtnaroe.net/aist";
+    public final String localisationBaseUrl="https://tuuber.fachtnaroe.net/aist";
     public String baseURL = "";
     public String sessionID="";
     public String pID="";
@@ -51,7 +51,7 @@ public class tuuber_Settings {
     public String rawtxt;
 
     final String default_baseURL="https://fachtnaroe.net/tuuber";
-    final String debug_baseURL="https://fachtnaroe.net/tuuber-test";
+    final String debug_baseURL="https://tuuber.fachtnaroe.net/tuuber-test";
     final String default_sessionID="a1b2c3d4";
     String default_pID="-1";
     String default_otherpIDforChat ="-1";
@@ -63,7 +63,7 @@ public class tuuber_Settings {
     boolean default_IsDeveloperSession =false;
     boolean default_IsAdminSession =false;
     boolean default_SavePassword=true;
-    String default_PreferredLanguage="ga";
+    String default_PreferredLanguage="en";
     String default_ButtonColor="#113508";
     Integer default_ButtonTextSize=12;
 
@@ -84,7 +84,7 @@ public class tuuber_Settings {
         IsDeveloperSession = default_IsDeveloperSession;
         SavePassword=default_SavePassword;
         string_PreferredLanguage=default_PreferredLanguage;
-        TermsAndConditions_URL=baseURL + "?cmd=TERMS";
+        TermsAndConditions_URL=baseURL + "?cmd=TERMS&lang=";
         messages=new HashMap<String,String>();
     }
 

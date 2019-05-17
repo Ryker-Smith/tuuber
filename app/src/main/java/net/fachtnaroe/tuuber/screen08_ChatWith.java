@@ -113,7 +113,7 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
 
         hz_PoolLine = new HorizontalArrangement(ChatWith);
         button_MakePool = new Button(hz_PoolLine);
-        button_MakePool.Text("Make Pool");
+        button_MakePool.Text(tools.fn_téacs_aistriú("make_pool",tools.capitalize_none));
 
         notifier_Drive_OR_Navigate_Choice = new Notifier(ChatWith);
         notifier_MessageError = new Notifier(ChatWith);
@@ -151,20 +151,25 @@ public class screen08_ChatWith extends Form implements HandlesEventDispatching {
                 String string_Precautions;
                 string_DriverOrNavigator=(String)params[0];
                 if (string_DriverOrNavigator.equals("Driver")) {
-                    string_Precautions= "I am a licenced driver; the vehicle I will use is fully insured and is roadworthy.";
+                    string_Precautions= tools.fn_téacs_aistriú("túber_precautions_driver",tools.capitalize_none);
                     WhoIsDriving = applicationSettings.pID;
                 }
                 else {
-                    string_Precautions="I acknowledge that it is my responsibility to verify the identity of the driver, and that it is my responsibility to confirm that the vehicle is insured and roadworthy.";
+                    string_Precautions=tools.fn_téacs_aistriú("túber_precautions_navigator",tools.capitalize_none);
                     WhoIsDriving="other";
                 }
-                notifier_PrecautionsTaken.ShowChooseDialog(string_Precautions, "Question:", "I accept", "Cancel", false);
-
+//                notifier_PrecautionsTaken.ShowChooseDialog(string_Precautions, "Question:", "I accept", "Cancel", false);
+                notifier_PrecautionsTaken.ShowChooseDialog(
+                        string_Precautions,
+                        tools.fn_téacs_aistriú("question",tools.capitalize_first),
+                        tools.fn_téacs_aistriú("i_accept",tools.capitalize_none),
+                        tools.fn_téacs_aistriú("cancel",tools.capitalize_none),
+                        false);
             }
             else if (component.equals(notifier_PrecautionsTaken)) {
                 String string_PrecautionsTaken=(String)params[0];
                 // better handling of responses to questions is required, esp re localization
-                if (string_PrecautionsTaken.equals("I accept")) {
+                if (string_PrecautionsTaken.equals(tools.fn_téacs_aistriú("i_accept",tools.capitalize_none))) {
                     notifier_MessageError.BackgroundColor(Color.parseColor(applicationSettings.string_ColorGood));
                     notifier_MessageError.ShowAlert("You're the " + string_DriverOrNavigator + "\nSaving your preference now.");
                     web_PoolMakeNew.Url(
