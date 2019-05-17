@@ -55,7 +55,9 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         button_Refresh.Image("buttonRefresh.png");
 
         webviewer_TextOfTermsAndConditions = new fachtnaWebViewer(TermsAndConditions);
-        webviewer_TextOfTermsAndConditions.HomeUrl(applicationSettings.TermsAndConditions_URL);
+        webviewer_TextOfTermsAndConditions.HomeUrl(
+                applicationSettings.TermsAndConditions_URL  +
+                applicationSettings.string_PreferredLanguage);
         webviewer_TextOfTermsAndConditions.HeightPercent(70);
         Label flogginpadalso=(Label)tools.padding(TermsAndConditions,1,1);
         HorizontalArrangement hz_AcceptDecline = new HorizontalArrangement(TermsAndConditions);
