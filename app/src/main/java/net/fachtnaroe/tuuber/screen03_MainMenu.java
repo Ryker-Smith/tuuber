@@ -72,7 +72,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             label_ScreenName.Text("__Developer__");
         }
         else {
-            label_ScreenName.Text("Main Menu");
+            label_ScreenName.Text(tools.fn_téacs_aistriú("main_menu"));
         }
         label_ScreenName.TextAlignment(Component.ALIGNMENT_CENTER);
         label_ScreenName.TextColor(Color.parseColor(applicationSettings.string_ButtonColor));

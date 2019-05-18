@@ -126,7 +126,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         OverEighteenHZ = new HorizontalArrangement(Register);
         OverEighteen = new CheckBox(OverEighteenHZ);
-        OverEighteen.Text("Are You Over 18?");
+        OverEighteen.Text (tools.fn_téacs_aistriú("over_eighteen")+"?");
 
         PaddingHZ = new HorizontalArrangement(Register);
         Button button_Pad = new Button(PaddingHZ);
