@@ -85,7 +85,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
 
         hz_Arrangement3 = new HorizontalArrangement(Matches);
         button_InitiateChat = new Button(hz_Arrangement3);
-        button_InitiateChat.Text("Initiate Chat");
+        button_InitiateChat.Text(tools.fn_téacs_aistriú("initiate_chat"));
         tools.buttonOnOff(button_InitiateChat,false);
         hz_Arrangement3.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
