@@ -126,15 +126,15 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
                 applicationSettings.set();
            }
             else {
-                notifier_Messages.ShowAlert("Problem 1.137");
+                notifier_Messages.ShowAlert("Error 1.137");
             }
         }
         catch (JSONException e) {
             // if an exception occurs, code for it in here
-            notifier_Messages.ShowAlert("error 1.142 (json)");
+            notifier_Messages.ShowAlert("Error 1.142 (json)");
         }
         else {
-            notifier_Messages.ShowAlert("problem 1.145 (server)");
+            notifier_Messages.ShowAlert("Error 1.145 (server)");
         }
     }
 

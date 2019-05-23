@@ -90,14 +90,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         buttonRefresh.Image("buttonRefresh.png");
 
         myRoutes = new Label(RoutesScreen);
-        myRoutes.Text("My Routes:");
+        myRoutes.Text(tools.fn_téacs_aistriú("my_routes")+":");
 
         list_MyRoutes = new ListView(RoutesScreen);
         list_MyRoutes.HeightPercent(30);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         routesDescription = new Label(RoutesScreen);
-        routesDescription.Text("Route description area:");
+        routesDescription.Text(tools.fn_téacs_aistriú("route_description"));
 
 //        ListofDDT = new VerticalArrangement(RoutesScreen);
 //        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
@@ -110,8 +110,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         listpicker_From = new ListPicker(hz_JourneyDetails);
         img_DirectionArrow = new ImagePicker(hz_JourneyDetails);
         listpicker_To = new ListPicker(hz_JourneyDetails);
-        listpicker_From.Text("origin");
-        listpicker_To.Text("destination");
+        listpicker_From.Text(tools.fn_téacs_aistriú("origin"));
+        listpicker_To.Text(tools.fn_téacs_aistriú("destination"));
 
         hz_Days = new HorizontalArrangement(RoutesScreen);
         checkbox_Mon = new CheckBox(hz_Days);
@@ -121,12 +121,12 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         checkbox_Fri = new CheckBox(hz_Days);
         checkbox_IsDriver = new CheckBox(hz_Days);
 
-        checkbox_Mon.Text("M");
-        checkbox_Tues.Text("T");
-        checkbox_Weds.Text("W");
-        checkbox_Thurs.Text("Th");
-        checkbox_Fri.Text("F");
-        checkbox_IsDriver.Text("Press Yes if Driver");
+        checkbox_Mon.Text(tools.fn_téacs_aistriú("m"));
+        checkbox_Tues.Text(tools.fn_téacs_aistriú("t"));
+        checkbox_Weds.Text(tools.fn_téacs_aistriú("w"));
+        checkbox_Thurs.Text(tools.fn_téacs_aistriú("Th"));
+        checkbox_Fri.Text(tools.fn_téacs_aistriú("f"));
+        checkbox_IsDriver.Text(tools.fn_téacs_aistriú("press_if_driver"));
 
         listpicker_From.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         listpicker_From.TextColor(Component.COLOR_WHITE);
@@ -142,17 +142,17 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //        listpicker_TravelVia.TextColor(Component.COLOR_WHITE);
 
         routesAction = new Label(RoutesScreen);
-        routesAction.Text("Route actions:");
+        routesAction.Text(tools.fn_téacs_aistriú("route_actions")+":");
         hz_SaveDelete_ButtonHolder = new HorizontalArrangement(RoutesScreen);
 //        hz_SaveDelete_ButtonHolder.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz_SaveDelete_ButtonHolder.WidthPercent(100);
 
         Label paddy1=(Label)tools.padding(hz_SaveDelete_ButtonHolder,2,1);
         button_Save = new Button(hz_SaveDelete_ButtonHolder);
-        button_Save.Text("Save");
+        button_Save.Text(tools.fn_téacs_aistriú("save"));
         Label paddy2=(Label)tools.padding(hz_SaveDelete_ButtonHolder,6,1);
         button_Delete = new Button(hz_SaveDelete_ButtonHolder);
-        button_Delete.Text("Delete");
+        button_Delete.Text(tools.fn_téacs_aistriú("delete"));
         Label paddy3=(Label)tools.padding(hz_SaveDelete_ButtonHolder,1,1);
 
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
@@ -307,8 +307,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 tools.buttonOnOff(button_Save,false);
                 tools.buttonOnOff(button_Delete,false);
                 checkbox_IsDriver.Checked(false);
-                listpicker_To.Text("destination");
-                listpicker_From.Text("origin");
+                listpicker_To.Text(tools.fn_téacs_aistriú("destination"));
+                listpicker_From.Text(tools.fn_téacs_aistriú("origin"));
                 fn_GetTowns();
                 fn_GetMyRoutesFromBackEnd();
                 return true;
@@ -330,8 +330,8 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_Save)) {
-                if (listpicker_To.Text().equals("origin") || listpicker_To.Text().equals("destination")
-                    || listpicker_From.Text().equals("origin") || listpicker_From.Text().equals("destination")
+                if (listpicker_To.Text().equals(tools.fn_téacs_aistriú("origin")) || listpicker_To.Text().equals(tools.fn_téacs_aistriú("destination"))
+                    || listpicker_From.Text().equals(tools.fn_téacs_aistriú("origin")) || listpicker_From.Text().equals(tools.fn_téacs_aistriú("destination"))
                 ) {
                     // if for any reason the town names aren't properly populated, don't try to save them
                     return true;
@@ -431,30 +431,30 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 for (int i = 0; i < routesArray.length(); i++) {
                     String temp = "";
                     if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2)) {
-                        temp = "Monday";
+                        temp = tools.fn_téacs_aistriú("monday");
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4)) {
-                        temp = "Tuesday";
+                        temp = tools.fn_téacs_aistriú("tuesday");
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8)) {
-                        temp = "Wednesday";
+                        temp = tools.fn_téacs_aistriú("wednesday");
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16)) {
-                        temp = "Thursday";
+                        temp = tools.fn_téacs_aistriú("thursday");
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32)) {
-                        temp = "Friday";
+                        temp = tools.fn_téacs_aistriú("friday");
                     }
                     String string_driverStatus;
                     if ( (routesArray.getJSONObject(i).getString("driver").equals(("Y")))) {
-                        string_driverStatus="Driving";
+                        string_driverStatus=tools.fn_téacs_aistriú("driving");
                     }
                     else {
-                        string_driverStatus="Going";
+                        string_driverStatus=tools.fn_téacs_aistriú("going");
                     }
                     ListOfRoutesFromWeb.add(
                             string_driverStatus
-                                    + " from "
+                                    + " " + tools.fn_téacs_aistriú("from") + " "
                                     + routesArray.getJSONObject(i).getString("origin")
-                                    + " to "
+                                    + " " + tools.fn_téacs_aistriú("to") + " "
                                     + routesArray.getJSONObject(i).getString("destination" )
-                                    + " on "
+                                    + " " + tools.fn_téacs_aistriú("on") + " "
                                     + temp
                                     + " (rID="  + routesArray.getJSONObject(i).getString("rID") + ")"
 
@@ -463,14 +463,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 YailList tempData = YailList.makeList(ListOfRoutesFromWeb);
                 list_MyRoutes.Elements(tempData);
             } else {
-                messagesPopUp.ShowMessageDialog("Error getting details", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.466 getting details", tools.fn_téacs_aistriú("information"), "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            messagesPopUp.ShowMessageDialog("Error 7.470 JSON Exception", tools.fn_téacs_aistriú("information"), "OK");
         }
         else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server", "Information", "OK");
+            messagesPopUp.ShowMessageDialog("Error 7.473 Problem connecting with server", tools.fn_téacs_aistriú("information"), "OK");
         }
     }
 
@@ -494,14 +494,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //                listpicker_TravelVia.Elements(tempData);
 
             } else {
-                messagesPopUp.ShowMessageDialog("Error getting town details", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.497 getting town details", tools.fn_téacs_aistriú("information"), "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+            messagesPopUp.ShowMessageDialog("Error 7.501 JSON Exception", tools.fn_téacs_aistriú("information"), "OK");
         }
         else {
-            messagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            messagesPopUp.ShowMessageDialog("Error 7.504 Problem connecting with server",tools.fn_téacs_aistriú("information"), "OK");
         }
     }
 
@@ -520,15 +520,15 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             try {
                 JSONObject parser = new JSONObject(textOfResponse);
                 if (parser.getString("result").equals("OK")) {
-                    messagesPopUp.ShowAlert("Saved");
+                    messagesPopUp.ShowAlert(tools.fn_téacs_aistriú("saved"));
                     web_GetMyRoutes.Get();
                 }
                 else {
-                    messagesPopUp.ShowMessageDialog("Error saving changes (" + textOfResponse + ")", "Information", "OK");
+                    messagesPopUp.ShowMessageDialog("Error 7.527 saving changes (" + textOfResponse + ")", tools.fn_téacs_aistriú("information"), "OK");
                 }
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception (" + textOfResponse + ")", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.531 JSON Exception (" + textOfResponse + ")", tools.fn_téacs_aistriú("information"), "OK");
             }
         }
     }
@@ -542,11 +542,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                     web_GetMyRoutes.Get();
                 }
                 else {
-                    messagesPopUp.ShowMessageDialog("Error saving changes (" + textOfResponse + ")", "Information", "OK");
+                    messagesPopUp.ShowMessageDialog("Error 7.545 saving changes (" + textOfResponse + ")", tools.fn_téacs_aistriú("information"), "OK");
                 }
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception (" + textOfResponse + ")", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.549 JSON Exception (" + textOfResponse + ")", tools.fn_téacs_aistriú("information"), "OK");
             }
         }
     }
@@ -559,7 +559,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 setday(day);
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.562 JSON Exception", tools.fn_téacs_aistriú("information"), "OK");
             }
         }
     }
@@ -572,7 +572,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 setdriver(driver);
             } catch (JSONException e) {
                 // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.575 JSON Exception", tools.fn_téacs_aistriú("information"), "OK");
             }
         }
     }
@@ -588,7 +588,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             }
             catch (JSONException e) {
                 // if an exception occurs, code for it in here
-                messagesPopUp.ShowMessageDialog("JSON Exception", "Information", "OK");
+                messagesPopUp.ShowMessageDialog("Error 7.591 JSON Exception", tools.fn_téacs_aistriú("information"), "OK");
             }
         }
     }
