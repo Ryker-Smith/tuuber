@@ -112,7 +112,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
-        button_AcceptInbound.Text("Accept inbound");
+        button_AcceptInbound.Text(tools.fn_téacs_aistriú("accept_inbound",tools.capitalize_none));
         tools.buttonOnOff(button_AcceptInbound,false);
 
         Button button_Pad_Separate_Accept_Decline = new Button (InboundButtonsHZ);
