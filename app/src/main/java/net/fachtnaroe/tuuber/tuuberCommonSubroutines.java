@@ -131,11 +131,9 @@ public class tuuberCommonSubroutines {
     }
 
     boolean binary_same_as(Integer first, Integer second) {
-//        dbg("Compare: "+first.toString() + " " + second.toString());
         if ((first & second) == second) {
             return true;
         } else {
-            //dbg("false" + Integer.toString(first & second));
             return false;
         }
     }

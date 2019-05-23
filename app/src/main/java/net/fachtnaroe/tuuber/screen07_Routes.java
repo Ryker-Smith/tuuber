@@ -90,14 +90,14 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         buttonRefresh.Image("buttonRefresh.png");
 
         myRoutes = new Label(RoutesScreen);
-        myRoutes.Text(tools.fn_téacs_aistriú("my_routes")+":");
+        myRoutes.Text(tools.fn_téacs_aistriú("my_routes",tools.capitalize_first)+":");
 
         list_MyRoutes = new ListView(RoutesScreen);
         list_MyRoutes.HeightPercent(30);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
 
         routesDescription = new Label(RoutesScreen);
-        routesDescription.Text(tools.fn_téacs_aistriú("route_description"));
+        routesDescription.Text(tools.fn_téacs_aistriú("route_description",tools.capitalize_first));
 
 //        ListofDDT = new VerticalArrangement(RoutesScreen);
 //        ListofDDT.BackgroundColor(Component.COLOR_WHITE);
@@ -121,11 +121,11 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         checkbox_Fri = new CheckBox(hz_Days);
         checkbox_IsDriver = new CheckBox(hz_Days);
 
-        checkbox_Mon.Text(tools.fn_téacs_aistriú("m"));
-        checkbox_Tues.Text(tools.fn_téacs_aistriú("t"));
-        checkbox_Weds.Text(tools.fn_téacs_aistriú("w"));
-        checkbox_Thurs.Text(tools.fn_téacs_aistriú("Th"));
-        checkbox_Fri.Text(tools.fn_téacs_aistriú("f"));
+        checkbox_Mon.Text(tools.fn_téacs_aistriú("m",tools.capitalize_all));
+        checkbox_Tues.Text(tools.fn_téacs_aistriú("t",tools.capitalize_all));
+        checkbox_Weds.Text(tools.fn_téacs_aistriú("w",tools.capitalize_all));
+        checkbox_Thurs.Text(tools.fn_téacs_aistriú("th",tools.capitalize_all));
+        checkbox_Fri.Text(tools.fn_téacs_aistriú("fr",tools.capitalize_all));
         checkbox_IsDriver.Text(tools.fn_téacs_aistriú("press_if_driver"));
 
         listpicker_From.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
@@ -142,7 +142,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //        listpicker_TravelVia.TextColor(Component.COLOR_WHITE);
 
         routesAction = new Label(RoutesScreen);
-        routesAction.Text(tools.fn_téacs_aistriú("route_actions")+":");
+        routesAction.Text(tools.fn_téacs_aistriú("route_actions",tools.capitalize_first)+":");
         hz_SaveDelete_ButtonHolder = new HorizontalArrangement(RoutesScreen);
 //        hz_SaveDelete_ButtonHolder.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz_SaveDelete_ButtonHolder.WidthPercent(100);
@@ -431,22 +431,22 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
                 for (int i = 0; i < routesArray.length(); i++) {
                     String temp = "";
                     if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 2)) {
-                        temp = tools.fn_téacs_aistriú("monday");
+                        temp = tools.fn_téacs_aistriú("monday",tools.capitalize_first);
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 4)) {
-                        temp = tools.fn_téacs_aistriú("tuesday");
+                        temp = tools.fn_téacs_aistriú("tuesday",tools.capitalize_first);
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 8)) {
-                        temp = tools.fn_téacs_aistriú("wednesday");
+                        temp = tools.fn_téacs_aistriú("wednesday",tools.capitalize_first);
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 16)) {
-                        temp = tools.fn_téacs_aistriú("thursday");
+                        temp = tools.fn_téacs_aistriú("thursday",tools.capitalize_first);
                     } else if (tools.binary_same_as(Integer.valueOf(routesArray.getJSONObject(i).getString("day")), 32)) {
-                        temp = tools.fn_téacs_aistriú("friday");
+                        temp = tools.fn_téacs_aistriú("friday",tools.capitalize_first);
                     }
                     String string_driverStatus;
                     if ( (routesArray.getJSONObject(i).getString("driver").equals(("Y")))) {
-                        string_driverStatus=tools.fn_téacs_aistriú("driving");
+                        string_driverStatus=tools.fn_téacs_aistriú("driving",tools.capitalize_first);
                     }
                     else {
-                        string_driverStatus=tools.fn_téacs_aistriú("going");
+                        string_driverStatus=tools.fn_téacs_aistriú("going",tools.capitalize_first);
                     }
                     ListOfRoutesFromWeb.add(
                             string_driverStatus
@@ -538,7 +538,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
             try {
                 JSONObject parser = new JSONObject(textOfResponse);
                 if (parser.getString("result").equals("OK")) {
-                    messagesPopUp.ShowAlert("Deleted");
+                    messagesPopUp.ShowAlert(tools.fn_téacs_aistriú("deleted"));
                     web_GetMyRoutes.Get();
                 }
                 else {
