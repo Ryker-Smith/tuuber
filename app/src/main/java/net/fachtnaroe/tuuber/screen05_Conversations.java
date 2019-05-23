@@ -90,7 +90,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         ChatsScreenHZ = new HorizontalArrangement(Conversations);
         button_OpenChatScreen = new Button(ChatsScreenHZ);
-        button_OpenChatScreen.Text("Chat");
+        button_OpenChatScreen.Text(tools.fn_téacs_aistriú("chat"));
         tools.buttonOnOff(button_OpenChatScreen,false);
 
         vt_In = new VerticalArrangement(Conversations);
