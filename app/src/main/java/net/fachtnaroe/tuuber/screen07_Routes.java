@@ -105,7 +105,7 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
         hz_JourneyDetails.WidthPercent(100);
         hz_JourneyDetails.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz_JourneyDetails.BackgroundColor(Component.COLOR_WHITE);
-        Button paddy5=(Button)tools.padding(hz_JourneyDetails,2,1);
+//        Button paddy5=(Button)tools.padding(hz_JourneyDetails,2,1);
 
         listpicker_From = new ListPicker(hz_JourneyDetails);
         img_DirectionArrow = new ImagePicker(hz_JourneyDetails);
@@ -147,13 +147,13 @@ public class screen07_Routes extends Form implements HandlesEventDispatching {
 //        hz_SaveDelete_ButtonHolder.AlignHorizontal(Component.ALIGNMENT_CENTER);
         hz_SaveDelete_ButtonHolder.WidthPercent(100);
 
-        Button paddy1=(Button)tools.padding(hz_SaveDelete_ButtonHolder,2,1);
+//        Button paddy1=(Button)tools.padding(hz_SaveDelete_ButtonHolder,2,1);
         button_Save = new Button(hz_SaveDelete_ButtonHolder);
         button_Save.Text("Save");
-        Button paddy2=(Button)tools.padding(hz_SaveDelete_ButtonHolder,6,1);
+//        Button paddy2=(Button)tools.padding(hz_SaveDelete_ButtonHolder,6,1);
         button_Delete = new Button(hz_SaveDelete_ButtonHolder);
         button_Delete.Text("Delete");
-        Button paddy3=(Button)tools.padding(hz_SaveDelete_ButtonHolder,1,1);
+//        Button paddy3=(Button)tools.padding(hz_SaveDelete_ButtonHolder,1,1);
 
         list_MyRoutes.TextSize(applicationSettings.intListViewsize);
         list_MyRoutes.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));

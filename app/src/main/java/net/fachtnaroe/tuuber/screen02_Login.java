@@ -161,7 +161,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         checkbox_IsAdminSession.Text(tools.fn_téacs_aistriú("administrative_session"));
         checkbox_IsAdminSession.Checked(applicationSettings.IsAdminSession);
 
-        Button pdp=(Button)tools.padding(Login,10,15);
+//        Button pdp=(Button)tools.padding(Login,10,15);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -239,14 +239,14 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
                 applicationSettings.set();
                 switchForm("screen03_MainMenu");
             } else {
-                notifier_MessagesPopUp.ShowMessageDialog("Login failed, check details", "Information", "OK");
+                notifier_MessagesPopUp.ShowMessageDialog("Error 2.242; Login failed, check details", "Information", "OK");
             }
         } catch (JSONException e) {
             // if an exception occurs, code for it in here
-            notifier_MessagesPopUp.ShowMessageDialog("JSON Exception (check password) " + temp, "Information", "OK");
+            notifier_MessagesPopUp.ShowMessageDialog("Error 2.246; JSON Exception (check password) " + temp, "Information", "OK");
         }
         else {
-            notifier_MessagesPopUp.ShowMessageDialog("Problem connecting with server","Information", "OK");
+            notifier_MessagesPopUp.ShowMessageDialog("Error 2.249; Problem connecting with server","Information", "OK");
         }
     }
 
