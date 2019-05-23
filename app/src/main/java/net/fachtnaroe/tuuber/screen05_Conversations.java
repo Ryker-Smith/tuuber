@@ -122,7 +122,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_Pad_Separate_Accept_Decline.Width(5);
 
         button_DeclineInbound = new Button(InboundButtonsHZ);
-        button_DeclineInbound.Text("Decline inbound");
+        button_DeclineInbound.Text(tools.fn_téacs_aistriú("decline_inbound",tools.capitalize_none));
         tools.buttonOnOff(button_DeclineInbound,false);
 
         vt_Out = new VerticalArrangement(Conversations);
