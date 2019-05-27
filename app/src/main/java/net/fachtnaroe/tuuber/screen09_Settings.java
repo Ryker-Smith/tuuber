@@ -43,7 +43,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     VerticalArrangement detailsVt, vt_Password, vt_Customisation;
     fachtnaImagePicker myImagePicker;
     fachtnaSlider slider_FontSize;
-    CheckBox checkbox_GA, checkbox_EN, checkbox_PO;
+    CheckBox checkbox_GA, checkbox_EN, checkbox_PO, checkbox_FR, checkbox_ES;
     VerticalScrollArrangement Settings;
     Label versionCode;
 
@@ -109,7 +109,11 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         checkbox_EN = new CheckBox(hz_Languages);
         checkbox_EN.Text("English");
         checkbox_PO = new CheckBox(hz_Languages);
-        checkbox_PO.Text("Polski (Nie)");
+        checkbox_PO.Text("Polski");
+        checkbox_FR = new CheckBox(hz_Languages);
+        checkbox_FR.Text("Français");
+        checkbox_ES = new CheckBox(hz_Languages);
+        checkbox_ES.Text("Español");
         button_SubmitCustomisation = new Button(vt_Customisation);
         detailsVt = new VerticalArrangement(Settings);
         detailsVt.BackgroundColor(Component.COLOR_NONE);
@@ -192,7 +196,12 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         else if (applicationSettings.string_PreferredLanguage.equals("po")) {
             checkbox_PO.Checked(true);
         }
-
+        else if (applicationSettings.string_PreferredLanguage.equals("fr")) {
+            checkbox_FR.Checked(true);
+        }
+        else if (applicationSettings.string_PreferredLanguage.equals("es")) {
+            checkbox_ES.Checked(true);
+        }
         myImagePicker.BackgroundColor(Color.parseColor(applicationSettings.string_ButtonColor));
         myImagePicker.TextColor(Component.COLOR_WHITE);
         myImagePicker.Shape(BUTTON_SHAPE_ROUNDED);
@@ -251,6 +260,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 if (checkbox_GA.Checked() == true) {
                     checkbox_EN.Checked(false);
                     checkbox_PO.Checked(false);
+                    checkbox_FR.Checked(false);
+                    checkbox_ES.Checked(false);
                     applicationSettings.string_PreferredLanguage="ga";
                     applicationSettings.set();
                     web_RequestLocalizedText.Url(
@@ -273,6 +284,8 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 if (checkbox_EN.Checked() == true) {
                     checkbox_GA.Checked(false);
                     checkbox_PO.Checked(false);
+                    checkbox_FR.Checked(false);
+                    checkbox_ES.Checked(false);
                     applicationSettings.string_PreferredLanguage="en";
                     applicationSettings.set();
                     web_RequestLocalizedText.Url(
@@ -294,7 +307,57 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 if (checkbox_PO.Checked() == true) {
                     checkbox_GA.Checked(false);
                     checkbox_EN.Checked(false);
+                    checkbox_FR.Checked(false);
+                    checkbox_ES.Checked(false);
                     applicationSettings.string_PreferredLanguage="po";
+                    applicationSettings.set();
+                    web_RequestLocalizedText.Url(
+                            applicationSettings.localisationBaseUrl +
+                                    "?s=" +
+                                    applicationSettings.default_sessionID +
+                                    "&app=túber"+
+                                    "&f=json" +
+                                    "&a=gettext" +
+                                    "&l=" +
+                                    applicationSettings.string_PreferredLanguage
+                    );
+                    //applicationSettings.set(); // save the new preferred language
+                    web_RequestLocalizedText.Get();
+//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+                    return true;
+                }
+            }
+            else if (component.equals(checkbox_FR)) {
+                if (checkbox_FR.Checked() == true) {
+                    checkbox_GA.Checked(false);
+                    checkbox_EN.Checked(false);
+                    checkbox_PO.Checked(false);
+                    checkbox_ES.Checked(false);
+                    applicationSettings.string_PreferredLanguage="fr";
+                    applicationSettings.set();
+                    web_RequestLocalizedText.Url(
+                            applicationSettings.localisationBaseUrl +
+                                    "?s=" +
+                                    applicationSettings.default_sessionID +
+                                    "&app=túber"+
+                                    "&f=json" +
+                                    "&a=gettext" +
+                                    "&l=" +
+                                    applicationSettings.string_PreferredLanguage
+                    );
+                    //applicationSettings.set(); // save the new preferred language
+                    web_RequestLocalizedText.Get();
+//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
+                    return true;
+                }
+            }
+            else if (component.equals(checkbox_ES)) {
+                if (checkbox_ES.Checked() == true) {
+                    checkbox_GA.Checked(false);
+                    checkbox_EN.Checked(false);
+                    checkbox_FR.Checked(false);
+                    checkbox_PO.Checked(false);
+                    applicationSettings.string_PreferredLanguage="es";
                     applicationSettings.set();
                     web_RequestLocalizedText.Url(
                             applicationSettings.localisationBaseUrl +

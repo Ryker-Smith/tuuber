@@ -161,7 +161,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         checkbox_IsAdminSession.Text(tools.fn_téacs_aistriú("administrative_session"));
         checkbox_IsAdminSession.Checked(applicationSettings.IsAdminSession);
 
-//        Button pdp=(Button)tools.padding(Login,10,15);
+        Label pdp=(Label)tools.padding(Login,10,15);
 
         EventDispatcher.registerEventForDelegation(this, formName, "BackPressed");
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
@@ -184,6 +184,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Click")) {
             if (component.equals(button_Login)) {
+                switchForm("screen03_MainMenu");
                 web_Login.Url(
                         applicationSettings.baseURL
                                 + "?cmd=LOGIN"

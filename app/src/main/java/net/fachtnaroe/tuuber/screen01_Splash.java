@@ -33,6 +33,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
     int another_Bad_Idea_SettingTheTimerThisWay = 3000;
     Notifier notifier_Messages;
     boolean boolean_LocalizedText_OK=false;
+    int int_TimerCounter=0;
 
     protected void $define(){
 
@@ -75,7 +76,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         spacer.FontTypeface(Ev3Constants.FontType.NORMAL_FONT);
         spacer.TextAlignment(Component.ALIGNMENT_CENTER);
 
-        spacer.Text( "ag obair ..."); //
+        spacer.Text( "ag obair ...[]"); //
         timerNextScreen = new Clock(SplashScreen);
         timerNextScreen.TimerEnabled(false);
         timerNextScreen.TimerInterval(another_Bad_Idea_SettingTheTimerThisWay);
@@ -84,11 +85,17 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this,formName,"Timer");
         EventDispatcher.registerEventForDelegation(this,formName,"Click");
         EventDispatcher.registerEventForDelegation(this,formName,"GotText");
+        EventDispatcher.registerEventForDelegation(this,formName,"ErrorOccurred");
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         t.dbg("dispatchEvent: " + formName + " [" +component.toString() + "] [" + componentName + "] " + eventName);
-           if (eventName.equals("Timer")) {
+        if (eventName.equals("ErrorOccurred")) {
+            notifier_Messages.ShowAlert("Error 1.094 (connection: proceeding anyway)");
+            timerNextScreen.TimerEnabled(false);
+            switchForm("screen02_Login");
+        }
+         else  if (eventName.equals("Timer")) {
                if (boolean_LocalizedText_OK) {
                    timerNextScreen.TimerEnabled(false);
                    switchForm("screen02_Login");
@@ -103,13 +110,15 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
                return true;
            }
            else if (eventName.equals("GotText")) {
-            if (component.equals(web_RequestLocalizedText)) {
-                String status = params[1].toString();
-                String textOfResponse = (String) params[3];
-                fn_GotText_LocalizeText(status, textOfResponse);
-                boolean_LocalizedText_OK=true;
+                if (component.equals(web_RequestLocalizedText)) {
+                    String status = params[1].toString();
+                    String textOfResponse = (String) params[3];
+                    fn_GotText_LocalizeText(status, textOfResponse);
+                }
             }
-            }
+           if (component.equals(web_RequestLocalizedText) && !eventName.equals("GotText")) {
+               notifier_Messages.ShowAlert("Error 1.114 (connection)");
+           }
             return false; // event not handled
     }
 
@@ -124,6 +133,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
             if (!parser.getString(applicationSettings.string_PreferredLanguage ).equals("")) {
                 applicationSettings.messages=applicationSettings.fn_unpack_messages_from_string(applicationSettings.string_PreferredLanguage,applicationSettings.rawtxt,notifier_Messages);
                 applicationSettings.set();
+                boolean_LocalizedText_OK=true;
            }
             else {
                 notifier_Messages.ShowAlert("Error 1.137");
@@ -135,6 +145,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         }
         else {
             notifier_Messages.ShowAlert("Error 1.145 (server)");
+            web_RequestLocalizedText.Get();
         }
     }
 

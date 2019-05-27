@@ -61,7 +61,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
         MainMenu.Width(40);
         MainMenu.Image(applicationSettings.ourLogo);
 
-        User_ID =tools.fn_HeadingLabel(MenuButtons, User_ID, applicationSettings.pID,"Your Routes");
+        User_ID =tools.fn_HeadingLabel(MenuButtons, User_ID, applicationSettings.pID,tools.fn_téacs_aistriú("your_routes"));
 
         Refresh = new Button(MenuButtons);
         Refresh.Image("buttonRefresh.png");
