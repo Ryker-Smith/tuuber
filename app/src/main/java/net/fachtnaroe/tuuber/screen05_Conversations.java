@@ -96,6 +96,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         vt_In = new VerticalArrangement(Conversations);
         vt_In.HeightPercent(20);
         label_In = new Label(vt_In);
+
+        // not translated yet
         label_In.Text(tools.fn_téacs_aistriú("pending_inbound",tools.capitalize_none));
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
@@ -112,6 +114,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         InboundButtonsHZ = new HorizontalArrangement(Conversations);
         button_AcceptInbound = new Button(InboundButtonsHZ);
+
+        //not translated yet
         button_AcceptInbound.Text(tools.fn_téacs_aistriú("accept_inbound",tools.capitalize_none));
         tools.buttonOnOff(button_AcceptInbound,false);
 
@@ -122,6 +126,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         button_Pad_Separate_Accept_Decline.Width(5);
 
         button_DeclineInbound = new Button(InboundButtonsHZ);
+
+        //not translated yet
         button_DeclineInbound.Text(tools.fn_téacs_aistriú("decline_inbound",tools.capitalize_none));
         tools.buttonOnOff(button_DeclineInbound,false);
 
@@ -148,6 +154,8 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         tools.buttonOnOff(button_CancelOutbound,false);
         button_CancelOutbound.Enabled(false);
         listpicker_UserDirectory = new ListPicker(OutboundInitiationButtonHZ);
+
+        //not translated yet
         listpicker_UserDirectory.Text(tools.fn_téacs_aistriú("user_directory",tools.capitalize_none));
         listpicker_UserDirectory.Selection();
         listpicker_UserDirectory.Shape(BUTTON_SHAPE_ROUNDED);
