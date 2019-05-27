@@ -69,7 +69,9 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         vt_Open = new VerticalArrangement(Pools);
         vt_Open.HeightPercent(40);
         label_Open = new Label(vt_Open);
-        label_Open.Text("Pools I'm in");
+
+        //not translated yet
+        label_Open.Text(tools.fn_téacs_aistriú("pools_im_in",tools.capitalize_none));
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.HeightPercent(100);
@@ -81,14 +83,16 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         ChatsScreenHZ.WidthPercent(100);
 
         button_OpenChatScreen = new Button(ChatsScreenHZ);
-        button_OpenChatScreen.Text("Chat");
+        button_OpenChatScreen.Text(tools.fn_téacs_aistriú("chat",tools.capitalize_none));
         tools.buttonOnOff(button_OpenChatScreen,false);
         ChatsScreenHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
         vt_In = new VerticalArrangement(Pools);
         vt_In.HeightPercent(30);
         label_In = new Label(vt_In);
-        label_In.Text("Pools pending");
+
+        // not translated yet
+        label_In.Text(tools.fn_téacs_aistriú("pools_pending",tools.capitalize_none));
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Height(100);
@@ -100,11 +104,15 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         InboundButtonsHZ = new HorizontalArrangement(Pools);
 
         button_AcceptInbound = new Button(InboundButtonsHZ);
-        button_AcceptInbound.Text("Accept");
+
+        //possibly not translated yet
+        button_AcceptInbound.Text(tools.fn_téacs_aistriú("accept",tools.capitalize_none));
         tools.buttonOnOff(button_AcceptInbound,false);
         Label deggh=(Label)tools.padding(InboundButtonsHZ,1,1);
         button_DeclineInbound = new Button(InboundButtonsHZ);
-        button_DeclineInbound.Text("Decline");
+
+        //possibly not translated yet
+        button_DeclineInbound.Text(tools.fn_téacs_aistriú("decline",tools.capitalize_none));
         tools.buttonOnOff(button_DeclineInbound,false);
         InboundButtonsHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
         InboundButtonsHZ.WidthPercent(100);
