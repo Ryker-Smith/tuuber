@@ -36,7 +36,7 @@ public class screen04_Matches extends Form implements HandlesEventDispatching {
     private VerticalArrangement Matches;
     private HorizontalArrangement MenuButtons, hz_Arrangement3;
     private ListView list_MyRoutes, list_MatchesFound;
-    private Label User_ID,seperation;
+    private Label User_ID, seperation;
     private List<String> ListOfRoutesFromWeb, ListOfMatchesFromWeb;
 
     private Integer int_SelectedRoute = -1;
