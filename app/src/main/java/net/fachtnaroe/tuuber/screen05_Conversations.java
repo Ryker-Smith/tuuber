@@ -96,7 +96,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         vt_In = new VerticalArrangement(Conversations);
         vt_In.HeightPercent(20);
         label_In = new Label(vt_In);
-        label_In.Text("Pending (Inbound)");
+        label_In.Text(tools.fn_téacs_aistriú("pending_inbound",tools.capitalize_none));
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Height(100);
@@ -128,7 +128,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         vt_Out = new VerticalArrangement(Conversations);
         vt_Out.HeightPercent(20);
         label_Out = new Label(vt_Out);
-        label_Out.Text("Pending (Outbound)");
+        label_Out.Text(tools.fn_téacs_aistriú("pending_outbound",tools.capitalize_none));
         listview_Out = new ListView(vt_Out);
         listview_Out.TextSize(applicationSettings.intListViewsize);
         listview_Out.Height(100);
@@ -144,11 +144,11 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
 
         OutboundInitiationButtonHZ = new HorizontalArrangement(Conversations);
         button_CancelOutbound = new Button(OutboundInitiationButtonHZ);
-        button_CancelOutbound.Text("Cancel Outbound");
+        button_CancelOutbound.Text(tools.fn_téacs_aistriú("cancel_outbound",tools.capitalize_none));
         tools.buttonOnOff(button_CancelOutbound,false);
         button_CancelOutbound.Enabled(false);
         listpicker_UserDirectory = new ListPicker(OutboundInitiationButtonHZ);
-        listpicker_UserDirectory.Text("User Directory");
+        listpicker_UserDirectory.Text(tools.fn_téacs_aistriú("user_directory",tools.capitalize_none));
         listpicker_UserDirectory.Selection();
         listpicker_UserDirectory.Shape(BUTTON_SHAPE_ROUNDED);
         listpicker_UserDirectory.TextColor(Component.COLOR_WHITE);
