@@ -69,7 +69,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         vt_Open = new VerticalArrangement(Pools);
         vt_Open.HeightPercent(40);
         label_Open = new Label(vt_Open);
-        label_Open.Text("Pools I'm in");
+        label_Open.Text(tools.fn_téacs_aistriú("pools_im_in",tools.capitalize_none));
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.HeightPercent(100);
@@ -81,7 +81,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         ChatsScreenHZ.WidthPercent(100);
 
         button_OpenChatScreen = new Button(ChatsScreenHZ);
-        button_OpenChatScreen.Text("Chat");
+        button_OpenChatScreen.Text(tools.fn_téacs_aistriú("chat",tools.capitalize_none));
         tools.buttonOnOff(button_OpenChatScreen,false);
         ChatsScreenHZ.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
