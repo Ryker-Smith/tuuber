@@ -59,7 +59,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         MainMenu.Width(40);
         MainMenu.Height(40);
         MainMenu.Image(applicationSettings.ourLogo);
-        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Pools");
+        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,(tools.fn_téacs_aistriú("pools")));
         Refresh = new Button(toolbarHz);
         Refresh.Width(40);
         Refresh.Height(40);
