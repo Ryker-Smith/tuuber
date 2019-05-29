@@ -63,7 +63,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         MainMenu.Image(applicationSettings.ourLogo);
 
 
-        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID, "Conversations");
+        label_pID =tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID, (tools.fn_téacs_aistriú("conversations")));
 
         Refresh = new Button(toolbarHz);
         Refresh.Width(40);

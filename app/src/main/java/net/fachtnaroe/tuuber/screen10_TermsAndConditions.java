@@ -46,7 +46,7 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         button_MainMenu.Height(40);
         button_MainMenu.Image(applicationSettings.ourLogo);
 
-        label_pID=tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,"Terms & Conditions");
+        label_pID=tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,(tools.fn_téacs_aistriú("terms_and_conditions")));
 
         button_Refresh = new Button(toolbarHz);
         button_Refresh.Width(40);
