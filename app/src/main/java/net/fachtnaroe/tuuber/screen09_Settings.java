@@ -45,7 +45,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
     fachtnaSlider slider_FontSize;
     CheckBox checkbox_GA, checkbox_EN, checkbox_PO, checkbox_FR, checkbox_ES;
     VerticalScrollArrangement Settings;
-    Label versionCode;
+    Label versionCode, label_SystemEndPoint;
 
     protected void $define() {
 
@@ -165,6 +165,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         pad_Bottom.Height(50);
         pad_Bottom.Text("");
         pad_Bottom.BackgroundColor(Component.COLOR_NONE);
+        label_SystemEndPoint= new Label(Settings);
         notifier_Messages = new Notifier(Settings);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
@@ -186,7 +187,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         textbox_CommonFormatting(textbox_eMail, textbox_PhoneNumber, textbox_UserFamilyName, textbox_UserFirstName);
         label_CommonFormatting(label_eMail, label_PhoneNumber, label_UserFamilyName, label_UserFirstName);
         button_CommonFormatting(button_SubmitCustomisation, button_SaveMyDetails, button_SubmitPassword);
-        checkbox_CommonFormatting(checkbox_GA, checkbox_EN, checkbox_PO);
+        checkbox_CommonFormatting(checkbox_GA, checkbox_EN, checkbox_PO, checkbox_ES, checkbox_FR);
 //        checkbox_PO.Enabled(false);
         if (applicationSettings.string_PreferredLanguage.equals("ga")) {
             checkbox_GA.Checked(true);
@@ -207,6 +208,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         myImagePicker.TextColor(Component.COLOR_WHITE);
         myImagePicker.Shape(BUTTON_SHAPE_ROUNDED);
         myImagePicker.FontSize(12);
+        myImagePicker.Enabled(false);
 
         fn_UI_Text();
         fn_GetMyDetails();
@@ -231,6 +233,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
         label_NewPassword.Text(tools.fn_téacs_aistriú("new_password",tools.capitalize_none)+":");
         label_ConfirmPassword.Text(tools.fn_téacs_aistriú("confirm_password",tools.capitalize_none)+":");
         button_SubmitPassword.Text(tools.fn_téacs_aistriú("change_password_now",tools.capitalize_none));
+        label_SystemEndPoint.Text(tools.fn_téacs_aistriú("system_endpoint",tools.capitalize_first) + ": " + applicationSettings.Endpoint);
     }
 
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
@@ -250,7 +253,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
             tools.dbg(Environment.getExternalStorageDirectory().toString());
             myImagePicker.Image( backgroundImageTextBox.Text() );
             if (component.equals(myImagePicker)) {
-//                myImagePicker.
                 this.BackgroundImage(myImagePicker.Selection());
                 return true;
             }
@@ -275,9 +277,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                                     "&l=" +
                                     applicationSettings.string_PreferredLanguage
                     );
-                    //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -300,7 +300,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                                     applicationSettings.string_PreferredLanguage
                     );
                     web_RequestLocalizedText.Get();
-//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -322,9 +321,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                                     "&l=" +
                                     applicationSettings.string_PreferredLanguage
                     );
-                    //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -346,9 +343,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                                     "&l=" +
                                     applicationSettings.string_PreferredLanguage
                     );
-                    //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -370,9 +365,7 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                                     "&l=" +
                                     applicationSettings.string_PreferredLanguage
                     );
-                    //applicationSettings.set(); // save the new preferred language
                     web_RequestLocalizedText.Get();
-//                    tools.dbg("Sent: " + web_RequestLocalizedText.Url());
                     return true;
                 }
             }
@@ -387,7 +380,6 @@ public class screen09_Settings extends Form implements HandlesEventDispatching {
                 Intent i;
                 i=this.getIntent();
                 myImagePicker.resultReturned(request,result,i);
-//                myImagePicker.r;
                 return true;
             }
             return false;
