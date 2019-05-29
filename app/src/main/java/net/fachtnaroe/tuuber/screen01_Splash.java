@@ -76,7 +76,7 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
         spacer.FontTypeface(Ev3Constants.FontType.NORMAL_FONT);
         spacer.TextAlignment(Component.ALIGNMENT_CENTER);
 
-        spacer.Text( "ag obair ...[]"); //
+        spacer.Text( "ag obair ...[0]"); //
         timerNextScreen = new Clock(SplashScreen);
         timerNextScreen.TimerEnabled(false);
         timerNextScreen.TimerInterval(another_Bad_Idea_SettingTheTimerThisWay);
@@ -96,6 +96,10 @@ public class screen01_Splash extends Form implements HandlesEventDispatching {
             switchForm("screen02_Login");
         }
          else  if (eventName.equals("Timer")) {
+               int_TimerCounter++;
+               spacer.Text(
+                       "ag obair [" + int_TimerCounter +"]"
+               );
                if (boolean_LocalizedText_OK) {
                    timerNextScreen.TimerEnabled(false);
                    switchForm("screen02_Login");

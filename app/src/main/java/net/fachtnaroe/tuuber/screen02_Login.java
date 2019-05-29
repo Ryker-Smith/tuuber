@@ -184,7 +184,6 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         }
         else if (eventName.equals("Click")) {
             if (component.equals(button_Login)) {
-                switchForm("screen03_MainMenu");
                 web_Login.Url(
                         applicationSettings.baseURL
                                 + "?cmd=LOGIN"
