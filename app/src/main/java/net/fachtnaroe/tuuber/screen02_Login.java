@@ -158,6 +158,7 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         checkbox_IsDeveloperSession.Checked(applicationSettings.IsDeveloperSession);
 
         checkbox_IsAdminSession = new CheckBox(Login);
+        checkbox_IsAdminSession.Enabled(false);
         checkbox_IsAdminSession.Text(tools.fn_téacs_aistriú("administrative_session"));
         checkbox_IsAdminSession.Checked(applicationSettings.IsAdminSession);
 
