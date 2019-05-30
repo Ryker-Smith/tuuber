@@ -74,7 +74,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         vt_Open = new VerticalArrangement(Conversations);
         vt_Open.HeightPercent(20);
         label_Open = new Label(vt_Open);
-        label_Open.Text(tools.fn_téacs_aistriú("open_conversations"));
+        label_Open.Text(tools.fn_téacs_aistriú("open_conversations",tools.capitalize_first));
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.HeightPercent(20);
@@ -98,7 +98,7 @@ public class screen05_Conversations extends Form implements HandlesEventDispatch
         label_In = new Label(vt_In);
 
         // not translated yet
-        label_In.Text(tools.fn_téacs_aistriú("pending_inbound",tools.capitalize_none));
+        label_In.Text(tools.fn_téacs_aistriú("pending_inbound",tools.capitalize_first));
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Height(100);

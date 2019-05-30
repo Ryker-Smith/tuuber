@@ -52,6 +52,7 @@ public class tuuber_Settings {
 
     final String default_baseURL="https://fachtnaroe.net/tuuber";
     final String debug_baseURL="https://tuuber.fachtnaroe.net/tuuber-test";
+    final String Feedback_URL="https://tuuber.fachtnaroe.net/feedback";
     final String default_sessionID="a1b2c3d4";
     String default_pID="-1";
     String default_otherpIDforChat ="-1";

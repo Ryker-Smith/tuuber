@@ -14,15 +14,15 @@ import com.google.appinventor.components.runtime.Label;
 import com.google.appinventor.components.runtime.VerticalArrangement;
 //import com.google.appinventor.components.runtime.util;
 
-public class screen10_TermsAndConditions extends Form implements HandlesEventDispatching {
+public class screen12_Feedback extends Form implements HandlesEventDispatching {
 
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
 
-    private VerticalArrangement TermsAndConditions;
-    private Button button_Accept, button_Decline, button_MainMenu, button_Refresh;
+    private VerticalArrangement Feedback;
+    private Button button_Done, button_MainMenu, button_Refresh;
     private Label label_pID;
-    private fachtnaWebViewer webviewer_TextOfTermsAndConditions;
+    private fachtnaWebViewer webviewer_FeedbackForm;
 
 
     protected void $define() {
@@ -36,17 +36,17 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         }
         tools= new tuuberCommonSubroutines(this);
 
-        TermsAndConditions = new VerticalArrangement(this);
-        TermsAndConditions.WidthPercent(100);
-        TermsAndConditions.HeightPercent(100);
+        Feedback = new VerticalArrangement(this);
+        Feedback.WidthPercent(100);
+        Feedback.HeightPercent(100);
 
-        HorizontalArrangement toolbarHz = new HorizontalArrangement(TermsAndConditions);
+        HorizontalArrangement toolbarHz = new HorizontalArrangement(Feedback);
         button_MainMenu = new Button(toolbarHz);
         button_MainMenu.Width(40);
         button_MainMenu.Height(40);
         button_MainMenu.Image(applicationSettings.ourLogo);
 
-        label_pID=tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,(tools.fn_téacs_aistriú("terms_and_conditions")));
+        label_pID=tools.fn_HeadingLabel(toolbarHz, label_pID, applicationSettings.pID,(tools.fn_téacs_aistriú("feedback")));
 
         button_Refresh = new Button(toolbarHz);
         button_Refresh.Width(40);
@@ -54,24 +54,20 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
         button_Refresh.FontSize(8);
         button_Refresh.Image("buttonRefresh.png");
 
-        webviewer_TextOfTermsAndConditions = new fachtnaWebViewer(TermsAndConditions);
-        webviewer_TextOfTermsAndConditions.HomeUrl(
-                applicationSettings.TermsAndConditions_URL  +
-                "&l=" + applicationSettings.string_PreferredLanguage +
-                "&sessionID=" +applicationSettings.default_sessionID);
-        webviewer_TextOfTermsAndConditions.HeightPercent(70);
-        Label flogginpadalso=(Label)tools.padding(TermsAndConditions,1,1);
-        HorizontalArrangement hz_AcceptDecline = new HorizontalArrangement(TermsAndConditions);
-        button_Accept = new Button(hz_AcceptDecline);
-        button_Accept.Text(tools.fn_téacs_aistriú("accept"));
-        if (!this.startupValue.toString().equals("\"1\"")){ // apparently the quotes are part of what's passed!
-            button_Decline = new Button(hz_AcceptDecline);
-            button_Decline.Text(tools.fn_téacs_aistriú("decline"));
-        }
-        tools.dbg("Start Value ["+this.startupValue.toString()+"]");
+        webviewer_FeedbackForm = new fachtnaWebViewer(Feedback);
+        webviewer_FeedbackForm.HomeUrl(
+                applicationSettings.Feedback_URL  +
+                "?l=" + applicationSettings.string_PreferredLanguage +
+                "&sessionID=" +applicationSettings.default_sessionID +
+                "&f=embed");
+        webviewer_FeedbackForm.HeightPercent(80);
+        Label flogginpadalso=(Label)tools.padding(Feedback,1,1);
+        HorizontalArrangement hz_AcceptDecline = new HorizontalArrangement(Feedback);
+        button_Done = new Button(hz_AcceptDecline);
+        button_Done.Text(tools.fn_téacs_aistriú("go_back"));
 
-        button_CommonFormatting(button_Accept, button_Decline);
-        TermsAndConditions.AlignHorizontal(Component.ALIGNMENT_CENTER);
+        button_CommonFormatting(button_Done);
+        Feedback.AlignHorizontal(Component.ALIGNMENT_CENTER);
 
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
     }
@@ -79,7 +75,7 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
     public boolean dispatchEvent(Component component, String componentName, String eventName, Object[] params) {
         tools.dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
         if (eventName.equals("BackPressed")) {
-            finishActivityWithTextResult("Bad");
+            finishActivityWithTextResult("");
             return true;
         }
         else if(eventName.equals("Click")){
@@ -87,18 +83,12 @@ public class screen10_TermsAndConditions extends Form implements HandlesEventDis
                 finish();
                 return true;
             }
-            else if (component.equals(button_Accept)){
-                finishActivityWithTextResult("Good");
-                tools.dbg("Good");
-                return true;
-            }
-            else if(component.equals(button_Decline)){
-                tools.dbg("Bad");
-                finishActivityWithTextResult("Bad");
+            else if (component.equals(button_Done)){
+                finishActivityWithTextResult("");
                 return true;
             }
             if (component.equals(button_Refresh)) {
-                webviewer_TextOfTermsAndConditions.GoToUrl(applicationSettings.TermsAndConditions_URL);
+                webviewer_FeedbackForm.GoToUrl(webviewer_FeedbackForm.HomeUrl());
                 return true;
             }
         }

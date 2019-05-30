@@ -1,6 +1,8 @@
 package net.fachtnaroe.tuuber;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 
 import com.google.appinventor.components.runtime.Button;
 import com.google.appinventor.components.runtime.Clock;
@@ -15,13 +17,14 @@ import com.google.appinventor.components.runtime.TableArrangement;
 import com.google.appinventor.components.runtime.VerticalScrollArrangement;
 import com.google.appinventor.components.runtime.Web;
 import com.google.appinventor.components.runtime.WebViewer;
+import net.fachtnaroe.tuuber.fachtnaWebViewer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class screen03_MainMenu extends Form implements HandlesEventDispatching {
 
-    private Button button_Routes, button_Matches, button_Pools, button_Conversations, button_Settings, button_TsAndCs, button_Experimental, button_LogOut;
+    private Button button_Routes, button_Matches, button_Pools, button_Conversations, button_Settings, button_TsAndCs, button_Experimental, button_Feedback, button_LogOut;
 
     tuuber_Settings applicationSettings;
     tuuberCommonSubroutines tools;
@@ -31,8 +34,9 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
     Web web_VersionCheck, web_MessageCheck;
     TableArrangement menu;
     Button[] button_Pad;
-    WebViewer webview_Message;
+    fachtnaWebViewer webview_Message;
     Clock clock_Main;
+    Label label_ScreenName;
 
     protected void $define() {
 
@@ -57,14 +61,14 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         int_MenuStartRow=3;
 
         menu.Columns(3);
-        menu.Rows(16 + (int_MenuStartRow-1) );
-        int int_NumButtonsToPad=7;
+        menu.Rows(18 + (int_MenuStartRow-1) );
+        int int_NumButtonsToPad=8;
 
         menu.WidthPercent(100);
         menu.HeightPercent(100);
 
         //
-        Label label_ScreenName = new Label(menu);
+        label_ScreenName = new Label(menu);
         if (applicationSettings.IsAdminSession) {
             label_ScreenName.Text("__Administrator__");
         }
@@ -124,7 +128,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
             button_Pad[i].BackgroundColor(Component.COLOR_NONE);
             button_Pad[i].TextColor(Component.COLOR_BLACK);
             button_Pad[i].Text(String.valueOf(i));
-            button_Pad[i].Height(10);
+            button_Pad[i].Height(6);
             button_Pad[i].Width(20);
             button_Pad[i].Column(1);
             button_Pad[i].Row(( int_MenuStartRow+1) + (i*2) );
@@ -142,18 +146,23 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_TsAndCs.Row(int_MenuStartRow+10);
         button_Experimental = new Button(menu);
         button_Experimental.Row(int_MenuStartRow+12);
-        if (!(applicationSettings.IsDeveloperSession || applicationSettings.IsAdminSession)) {
+        button_Feedback = new Button (menu);
+        button_Feedback.Row(int_MenuStartRow+14);
+        if (!(applicationSettings.IsAdminSession)) {
             button_Experimental.Visible(false);
         }
-
+        if (!(applicationSettings.IsDeveloperSession)) {
+            button_Feedback.Visible(false);
+        }
         button_LogOut = new Button(menu);
-        button_LogOut.Row(int_MenuStartRow+14);
+        button_LogOut.Row(int_MenuStartRow+16);
 
         tools.button_CommonFormatting(50,
                 button_Routes, button_Matches,
                 button_Conversations, button_Settings,
                 button_Pools,
                 button_TsAndCs, button_Experimental,
+                button_Feedback,
                 button_LogOut);
 
         MainMenu.AlignHorizontal(Component.ALIGNMENT_CENTER);
@@ -164,6 +173,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         EventDispatcher.registerEventForDelegation(this, formName, "GotText");
         EventDispatcher.registerEventForDelegation(this, formName, "Click");
         EventDispatcher.registerEventForDelegation(this, formName, "OtherScreenClosed" );
+        EventDispatcher.registerEventForDelegation(this, formName, "fachtnaWebViewStringChange");
         fn_VersionCheck();
         fn_UI_Text();
     }
@@ -176,17 +186,11 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
         button_Settings.Text(tools.fn_téacs_aistriú("settings"));
         button_TsAndCs.Text(tools.fn_téacs_aistriú("terms_and_conditions"));
         button_Experimental.Text(tools.fn_téacs_aistriú("experimental"));
+        button_Feedback.Text(tools.fn_téacs_aistriú("feedback"));
         button_LogOut.Text(tools.fn_téacs_aistriú("logout"));
     }
 
     void fn_VersionCheck() {
-//        web_VersionCheck.Url(
-//                applicationSettings.baseURL
-//                        +"&cmd=vercheck"
-//                        + "&ver="
-//                        + applicationSettings.versionCode
-//                );
-//        web_VersionCheck.Get();
         web_MessageCheck.Url(
                 applicationSettings.baseURL
                         +"?cmd=msgchk"
@@ -238,6 +242,10 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 switchFormWithStartValue("experimental_doNotUseThis",null);
                 return true;
             }
+            else if (component.equals(button_Feedback)) {
+                switchFormWithStartValue("screen12_Feedback",null);
+                return true;
+            }
             else if (component.equals(button_LogOut)) {
                 screen01_Splash.finishApplication();
                 screen02_Login.finishApplication();
@@ -248,6 +256,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 screen07_Routes.finishApplication();
                 screen08_ChatWith.finishApplication();
                 screen09_Settings.finishApplication();
+                screen12_Feedback.finishApplication();
                 this.finishApplication();
                 switchForm("screen02_Login");
                 System.exit(0);
@@ -261,9 +270,43 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                 fn_GotText_VersionOrMessage (component, status, textOfResponse);
             }
         }
+        else if( eventName.equals("fachtnaWebViewStringChange") ) {
+            if (component.equals(webview_Message)) {
+                webView_Clicked(webview_Message.WebViewString());
+                return true;
+            }
+        }
         return false;
     }
 
+    public void webView_Clicked (final String theString) {
+        if (theString.equals("update")) {
+            // https://stackoverflow.com/questions/5161951/android-only-the-original-thread-that-created-a-view-hierarchy-can-touch-its-vi
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=net.fachtnaroe.tuuber"));
+                    startActivity(browserIntent);
+            finishActivityWithTextResult("");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // Stuff that updates the UI
+                    //
+//                    webview_Message = new fachtnaWebViewer(MainMenu);
+//                    webview_Message.HomeUrl(
+//                            "https://play.google.com/store/apps/details?id=net.fachtnaroe.tuuber"
+//                    );
+//
+//                    webview_Message.WidthPercent(100);
+//                    webview_Message.HeightPercent(100);
+//                    webview_Message.GoHome();
+
+//                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(base_url+theString));
+//                    startActivity(browserIntent);
+                }
+            });
+
+        }
+
+    }
     void fn_GotText_VersionOrMessage(Component c, String status, String textOfResponse){
         tools.dbg(status);
         if (status.equals("200") ) try {
@@ -275,7 +318,7 @@ public class screen03_MainMenu extends Form implements HandlesEventDispatching {
                     // add another row to the table,
 
                     menu.Rows( menu.Rows()  + 1);
-                    webview_Message = new WebViewer(menu);
+                    webview_Message = new fachtnaWebViewer(menu);
                     webview_Message.HomeUrl(
                             applicationSettings.baseURL
                                     +"?cmd=msg"

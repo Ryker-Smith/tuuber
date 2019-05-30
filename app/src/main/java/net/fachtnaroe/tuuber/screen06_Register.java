@@ -61,7 +61,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         menu.HeightPercent(50);
 
         TelephoneLabel = new Label(menu);
-        TelephoneLabel.Text (tools.fn_téacs_aistriú("phone_number")+": ");
+        TelephoneLabel.Text (tools.fn_téacs_aistriú("phone_number",tools.capitalize_first)+": ");
         TelephoneLabel.Column(0);
         TelephoneLabel.Row(2);
         Telephone = new TextBox(menu);
@@ -79,7 +79,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         eMail.Row(3);
 
         FirstNameLabel = new Label (menu);
-        FirstNameLabel.Text (tools.fn_téacs_aistriú("first_name")+": ");
+        FirstNameLabel.Text (tools.fn_téacs_aistriú("first_name",tools.capitalize_first)+": ");
         FirstNameLabel.Column(0);
         FirstNameLabel.Row(0);
         FirstName = new TextBox (menu);
@@ -88,7 +88,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         FirstName.Row(0);
 
         LastNameLabel = new Label(menu);
-        LastNameLabel.Text (tools.fn_téacs_aistriú("family_name")+": ");
+        LastNameLabel.Text (tools.fn_téacs_aistriú("family_name",tools.capitalize_first)+": ");
         LastNameLabel.Column(0);
         LastNameLabel.Row(1);
         LastName = new TextBox (menu);
@@ -97,7 +97,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         LastName.Row(1);
 
         PasswordLabel = new Label (menu);
-        PasswordLabel.Text (tools.fn_téacs_aistriú("password")+": ");
+        PasswordLabel.Text (tools.fn_téacs_aistriú("password",tools.capitalize_first)+": ");
         PasswordLabel.Column(0);
         PasswordLabel.Row(4);
         Password = new PasswordTextBox (menu);
@@ -106,7 +106,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         Password.Row(4);
 
         ConfirmPasswordLabel = new Label (menu);
-        ConfirmPasswordLabel.Text (tools.fn_téacs_aistriú("confirm_password")+": ");
+        ConfirmPasswordLabel.Text (tools.fn_téacs_aistriú("confirm_password",tools.capitalize_first)+": ");
         ConfirmPasswordLabel.Column(0);
         ConfirmPasswordLabel.Row(5);
         ConfirmPassword = new PasswordTextBox (menu);
@@ -126,6 +126,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
 
         OverEighteenHZ = new HorizontalArrangement(Register);
         OverEighteen = new CheckBox(OverEighteenHZ);
+        OverEighteen.Checked(false);
         OverEighteen.Text (tools.fn_téacs_aistriú("over_eighteen")+"?");
 
         PaddingHZ = new HorizontalArrangement(Register);
@@ -137,6 +138,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         CreateHZ = new HorizontalArrangement(Register);
         button_Create = new Button(CreateHZ);
         button_Create.Text (tools.fn_téacs_aistriú("create"));
+        button_Create.Enabled(false);
 
         web_CreateUser = new Web(Register);
         notifier_MessagesPopUp = new Notifier(Register);
@@ -276,8 +278,11 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                 return true;
             }
             else if (component.equals(button_TermsConditions)) {
-                dbg("error");
                 switchForm("screen10_TermsAndConditions");
+                return true;
+            }
+            else if (component.equals(OverEighteen)) {
+                button_Create.Enabled(OverEighteen.Enabled());
                 return true;
             }
         }

@@ -80,7 +80,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         debug_FancyList=new Label(screenArrangement);
         debug_FancyList.Text("Debug");
         testFancyList_Web = new Web(screenArrangement);
-        //testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22&displaymode=fancy1");
+        testFancyList_Web.Url("https://fachtnaroe.net/tuuber-test?action=LIST&entity=chat&sessionID=a1b2c3d4&initiator_pID=15&respondent_pID=22&displaymode=fancy1");
 
         aiWebViewer = new fachtnaWebViewer(screenArrangement);
         aiWebViewer.HomeUrl(
@@ -112,7 +112,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         hm.put("it","Italy");
         hm.put("po","Poland");
         hm.put("fr","France");
-//        debug_FancyList.Text(aiWebViewer.HomeUrl());
+        debug_FancyList.Text(aiWebViewer.HomeUrl());
 
     }
 
@@ -121,8 +121,7 @@ public class experimental_doNotUseThis extends Form implements HandlesEventDispa
         String w;
         dbg("dispatchEvent: " + formName + " " + componentName + " " + eventName);
 
-            if (eventName.contains("WebViewStringChange")) {
-                //aiWebViewer.WebViewString()
+            if (eventName.contains("fachtnaWebViewStringChange")) {
                 messagesPopUp.ShowAlert("You selected: " + hm.get(aiWebViewer.WebViewString()));
                 debug_FancyList.Text(
                         aiWebViewer.WebViewString()

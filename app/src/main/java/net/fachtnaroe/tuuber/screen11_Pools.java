@@ -71,7 +71,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         label_Open = new Label(vt_Open);
 
         //not translated yet
-        label_Open.Text(tools.fn_téacs_aistriú("pools_im_in",tools.capitalize_none));
+        label_Open.Text(tools.fn_téacs_aistriú("pools_im_in",tools.capitalize_first));
         listview_Open = new ListView(vt_Open);
         listview_Open.TextSize(applicationSettings.intListViewsize);
         listview_Open.HeightPercent(100);
@@ -92,7 +92,7 @@ public class screen11_Pools extends Form implements HandlesEventDispatching {
         label_In = new Label(vt_In);
 
         // not translated yet
-        label_In.Text(tools.fn_téacs_aistriú("pools_pending",tools.capitalize_none));
+        label_In.Text(tools.fn_téacs_aistriú("pools_pending",tools.capitalize_first));
         listview_In = new ListView(vt_In);
         listview_In.TextSize(applicationSettings.intListViewsize);
         listview_In.Height(100);
