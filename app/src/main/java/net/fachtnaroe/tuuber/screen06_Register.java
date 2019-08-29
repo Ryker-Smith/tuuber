@@ -36,6 +36,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
     private Notifier notifier_MessagesPopUp, notifier_EmailActivationPopUp;
     private PasswordTextBox Password, ConfirmPassword;
     private dd_aPerson User;
+    private String flag_OverEighteen="N";
 
     protected void $define() {
 
@@ -127,7 +128,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         OverEighteenHZ = new HorizontalArrangement(Register);
         OverEighteen = new CheckBox(OverEighteenHZ);
         OverEighteen.Checked(false);
-        OverEighteen.Text (tools.fn_téacs_aistriú("over_eighteen")+"?");
+        OverEighteen.Text (tools.fn_téacs_aistriú("am_over_eighteen"));
 
         PaddingHZ = new HorizontalArrangement(Register);
         Button button_Pad = new Button(PaddingHZ);
@@ -138,7 +139,8 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         CreateHZ = new HorizontalArrangement(Register);
         button_Create = new Button(CreateHZ);
         button_Create.Text (tools.fn_téacs_aistriú("create"));
-        button_Create.Enabled(false);
+        // 2019-08-29 CHANGE THIS BACK????
+        button_Create.Enabled(true);
 
         web_CreateUser = new Web(Register);
         notifier_MessagesPopUp = new Notifier(Register);
@@ -165,6 +167,12 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
         else if (eventName.equals("Changed")) {
             if (component.equals(OverEighteen)) {
                 button_Create.Enabled(OverEighteen.Checked());
+                if (OverEighteen.Checked()) {
+                    flag_OverEighteen="Y";
+                }
+                else {
+                    flag_OverEighteen="N";
+                }
                 return true;
             }
         }
@@ -267,7 +275,7 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                         button_Create.Enabled(true);
                         return true;
                     }
-                    notifier_MessagesPopUp.ShowAlert("Ag obair");
+                    notifier_MessagesPopUp.ShowAlert("This will take about 3 minutes...");
                     web_CreateUser.Url(
                             applicationSettings.baseURL +
                                     "?entity=person&action=POST&first=" +
@@ -279,7 +287,9 @@ public class screen06_Register extends Form implements HandlesEventDispatching {
                                     "&email=" +
                                     eMail.Text() +
                                     "&pw=" +
-                                    ConfirmPassword.Text()
+                                    ConfirmPassword.Text() +
+                                    "&adult=" +
+                                    flag_OverEighteen
                     );
                     web_CreateUser.Get();
 

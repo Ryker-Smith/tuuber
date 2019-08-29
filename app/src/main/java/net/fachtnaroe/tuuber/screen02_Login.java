@@ -180,6 +180,12 @@ public class screen02_Login extends Form implements HandlesEventDispatching {
         else if (eventName.equals("Changed")) {
             // for debugging session
             applicationSettings.IsDeveloperSession = checkbox_IsDeveloperSession.Checked();
+            if (applicationSettings.IsDeveloperSession) {
+                applicationSettings.baseURL= applicationSettings.debug_baseURL;
+            }
+            else {
+                applicationSettings.baseURL=applicationSettings.default_baseURL;
+            }
             applicationSettings.IsAdminSession= checkbox_IsAdminSession.Checked();
             return true;
         }
